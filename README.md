@@ -1,5 +1,18 @@
 # The Tarot Club — 22 Major Arcana Origins
 
+> **Current: V3 Path of Ascension (ALPHA)** — Adds a tested-in-code (not yet tested in-game) Sequence 9→0 advancement system, acting-method quests, a second unlockable Arcana, controlled switching, minor Echo powers, and curated high-sequence Resonance. **18 native Elytra gliders and the 22 V2 base origins remain unchanged.**
+
+### Install the latest V3
+
+1. Back up your **world, playerdata, scoreboard.dat, and the working V2 ZIP**. Stop the server.
+2. From [GitHub Actions: Build Tarot Club V3 Path of Ascension](../../actions/workflows/ascension.yml), download the latest successful **tarot-club-v3-ascension** artifact and extract its *outer* artifact ZIP.
+3. Choose exactly one *inner* datapack: `The_Tarot_Club_V3_Ascension_ONLY_1.18.2.zip` or `The_Tarot_Club_V3_Ascension_ADDON_1.18.2.zip`.
+4. **Remove the V2 ZIP** from `<world>/datapacks/`, upload your chosen V3 ZIP there without extracting it, and start the server.
+5. In-game use `/trigger tc_help`, `/trigger tc_status`, and follow [the complete V3 installation, quest and ritual guide](docs/ASCENSION.md).
+
+**V3 does not require KubeJS**, and this repository merge does **not** deploy to your hosted Minecraft server. The following V2 documentation remains useful for the underlying 22 playable origin abilities.
+
+
 > A lore-inspired Minecraft Origins datapack featuring **22 passive-first Major Arcana**, **44 retained signature abilities**, distinctive situational drawbacks, and **18 native Elytra-gliding builds**.
 
 **Compatibility:** Minecraft Java **1.18.2** · Fabric · Origins **1.4.1** · `pack_format: 9`  
