@@ -1,0 +1,58 @@
+name: Build and validate Tarot Club origins
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test and build both variants
+        run: python3 -m unittest discover -s tests -v
+      - name: Check generated source is extractable
+        run: python3 tools/unpack_generated.py
+      - name: Publish ready-to-install ZIPs
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarot-club-datapacks
+          path: |
+            output/The_Tarot_Club_22_Arcana_1.18.2.zip
+            output/The_Tarot_Club_22_Arcana_Only_1.18.2.zip
+          if-no-files-found: error
+
+  sync-generated:
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate readable JSON source for both variants
+        run: |
+          python3 generate.py
+          python3 tools/unpack_generated.py
+      - name: Commit deterministic generated sources when they change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A datapacks/
+          if ! git diff --cached --quiet; then
+            git commit -m "build: synchronize generated Tarot origins datapacks"
+            git push origin HEAD:main
+          fi
