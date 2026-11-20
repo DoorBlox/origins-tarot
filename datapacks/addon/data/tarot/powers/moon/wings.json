@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "name": "The Moon: Astral Wings",
+  "description": "Built-in Elytra gliding, even without an Elytra item. Jump while falling to unfold your astral wings. This is gliding, not creative flight.",
+  "render_elytra": true
+}

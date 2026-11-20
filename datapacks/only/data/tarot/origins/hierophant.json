@@ -1,0 +1,13 @@
+{
+  "powers": [
+    "tarot:hierophant/primary",
+    "tarot:hierophant/secondary",
+    "tarot:hierophant/passive",
+    "tarot:hierophant/drawback"
+  ],
+  "icon": "minecraft:enchanting_table",
+  "name": "The Hierophant",
+  "description": "Stationary support scholar who sees the enemy and grants blessings. Inspired by Original card archetype (Original).",
+  "impact": 3,
+  "order": 5
+}

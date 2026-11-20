@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_dealt",
+  "name": "Price: Reluctant Fighter",
+  "description": "Drawback: You deal 17% less melee damage.",
+  "modifier": {
+    "name": "Price: Reluctant Fighter",
+    "operation": "multiply_total",
+    "value": -0.17
+  }
+}

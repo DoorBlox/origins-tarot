@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Experienced Sailor",
+  "description": "You travel 9% faster across land.",
+  "modifier": {
+    "attribute": "minecraft:generic.movement_speed",
+    "name": "Experienced Sailor",
+    "value": 0.09,
+    "operation": "multiply_total"
+  }
+}

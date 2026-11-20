@@ -1,0 +1,19 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Price: Drowned Flame",
+  "description": "Drawback: While submerged in water, you suffer Slowness II.",
+  "interval": 20,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:slowness",
+      "duration": 60,
+      "amplifier": 1,
+      "show_particles": true
+    }
+  },
+  "condition": {
+    "type": "origins:submerged_in",
+    "fluid": "minecraft:water"
+  }
+}

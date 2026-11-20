@@ -1,0 +1,39 @@
+{
+  "type": "origins:active_self",
+  "name": "Nightwatcher's Refuge",
+  "description": "V: Invisibility and Night Vision for 8s.",
+  "cooldown": 480,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:invisibility",
+            "duration": 160,
+            "amplifier": 0,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:night_vision",
+            "duration": 160,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:empress/primary",
+    "tarot:empress/secondary",
+    "tarot:empress/passive",
+    "tarot:empress/drawback",
+    "tarot:empress/wings"
+  ],
+  "icon": "minecraft:rose_bush",
+  "name": "The Empress",
+  "description": "Mirror-themed witch of toxins, beauty, misdirection and vulnerability. Inspired by Franca Roland (Canon (Book Two)).",
+  "impact": 3,
+  "order": 3
+}

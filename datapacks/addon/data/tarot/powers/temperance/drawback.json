@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Price: Hollow Body",
+  "description": "Drawback: 2 fewer hearts.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Price: Hollow Body",
+    "value": -4,
+    "operation": "addition"
+  }
+}

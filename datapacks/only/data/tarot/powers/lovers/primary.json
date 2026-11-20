@@ -1,0 +1,39 @@
+{
+  "type": "origins:active_self",
+  "name": "Promise of Hearts",
+  "description": "G: Regeneration II to living entities within 7 blocks, friend or foe. A tactical choice.",
+  "cooldown": 500,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:area_of_effect",
+        "radius": 7,
+        "bientity_action": {
+          "type": "origins:target_action",
+          "action": {
+            "type": "origins:apply_effect",
+            "effect": {
+              "effect": "minecraft:regeneration",
+              "duration": 120,
+              "amplifier": 1,
+              "show_particles": true
+            }
+          }
+        },
+        "include_target": false
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 2
+      }
+    ]
+  }
+}

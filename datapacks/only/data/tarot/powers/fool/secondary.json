@@ -1,0 +1,48 @@
+{
+  "type": "origins:active_self",
+  "name": "Marionette Thread",
+  "description": "V: Sightline curse on one target within 14 blocks: heavy slowness and glowing.",
+  "cooldown": 340,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:raycast",
+        "distance": 14,
+        "block": true,
+        "entity": true,
+        "bientity_action": {
+          "type": "origins:target_action",
+          "action": {
+            "type": "origins:apply_effect",
+            "effects": [
+              {
+                "effect": "minecraft:slowness",
+                "duration": 100,
+                "amplifier": 2,
+                "show_particles": true
+              },
+              {
+                "effect": "minecraft:glowing",
+                "duration": 120,
+                "amplifier": 0,
+                "show_particles": true
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 1.2
+      }
+    ]
+  }
+}

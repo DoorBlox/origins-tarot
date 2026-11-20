@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Price: Glass Foundation",
+  "description": "Drawback: You take 20% more damage.",
+  "modifier": {
+    "name": "Price: Glass Foundation",
+    "operation": "multiply_total",
+    "value": 0.2
+  }
+}

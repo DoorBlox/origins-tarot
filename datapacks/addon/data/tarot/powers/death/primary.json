@@ -1,0 +1,39 @@
+{
+  "type": "origins:active_self",
+  "name": "Grave Quietus",
+  "description": "G: Send out an aura of Wither I for 4s, affecting everyone nearby.",
+  "cooldown": 500,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:area_of_effect",
+        "radius": 5,
+        "bientity_action": {
+          "type": "origins:target_action",
+          "action": {
+            "type": "origins:apply_effect",
+            "effect": {
+              "effect": "minecraft:wither",
+              "duration": 80,
+              "amplifier": 0,
+              "show_particles": true
+            }
+          }
+        },
+        "include_target": false
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 2.2
+      }
+    ]
+  }
+}

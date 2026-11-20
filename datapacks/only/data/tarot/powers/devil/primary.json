@@ -1,0 +1,45 @@
+{
+  "type": "origins:active_self",
+  "name": "Forbidden Bargain",
+  "description": "G: Strength III and Speed II for 7s, but suffer Poison I and exhausting hunger.",
+  "cooldown": 600,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:strength",
+            "duration": 140,
+            "amplifier": 2,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:speed",
+            "duration": 140,
+            "amplifier": 1,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:poison",
+            "duration": 80,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 5
+      }
+    ]
+  }
+}

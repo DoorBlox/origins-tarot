@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:world/primary",
+    "tarot:world/secondary",
+    "tarot:world/passive",
+    "tarot:world/drawback",
+    "tarot:world/wings"
+  ],
+  "icon": "minecraft:compass",
+  "name": "The World",
+  "description": "Aggressive hunter persona of Klein: enemy marks, precision and evasion. Inspired by Klein Moretti as Gehrman Sparrow (Canon (same person as Fool)).",
+  "impact": 3,
+  "order": 21
+}

@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Measured Heart",
+  "description": "A calm mind grants +1 heart.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Measured Heart",
+    "value": 2,
+    "operation": "addition"
+  }
+}

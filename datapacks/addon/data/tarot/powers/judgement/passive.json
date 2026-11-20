@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Marshal's Plate",
+  "description": "Gain +3 armor points.",
+  "modifier": {
+    "attribute": "minecraft:generic.armor",
+    "name": "Marshal's Plate",
+    "value": 3,
+    "operation": "addition"
+  }
+}

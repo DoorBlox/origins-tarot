@@ -1,0 +1,42 @@
+{
+  "type": "origins:active_self",
+  "name": "Borrowed Luck",
+  "description": "V: Risk a second, milder gamble (either Resistance I or Slowness II).",
+  "cooldown": 380,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:choice",
+    "actions": [
+      {
+        "weight": 3,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:resistance",
+            "duration": 180,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        }
+      },
+      {
+        "weight": 2,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:slowness",
+            "duration": 180,
+            "amplifier": 1,
+            "show_particles": true
+          }
+        }
+      }
+    ]
+  }
+}

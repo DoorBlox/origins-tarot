@@ -1,0 +1,18 @@
+{
+  "type": "origins:fire_projectile",
+  "name": "Astral Scriptorium",
+  "description": "V: Manifest two spectral arrows of starlight.",
+  "entity_type": "minecraft:spectral_arrow",
+  "cooldown": 380,
+  "count": 2,
+  "speed": 1.5,
+  "divergence": 3.0,
+  "tag": "{pickup:0b}",
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:temperance/primary",
+    "tarot:temperance/secondary",
+    "tarot:temperance/passive",
+    "tarot:temperance/drawback",
+    "tarot:temperance/wings"
+  ],
+  "icon": "minecraft:glass_bottle",
+  "name": "Temperance",
+  "description": "Wraith tactician who fades from sight but suffers a frail body. Inspired by Sharron (Canon (Book Two)).",
+  "impact": 3,
+  "order": 14
+}

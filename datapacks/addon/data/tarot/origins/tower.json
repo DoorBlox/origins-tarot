@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:tower/primary",
+    "tarot:tower/secondary",
+    "tarot:tower/passive",
+    "tarot:tower/drawback",
+    "tarot:tower/wings"
+  ],
+  "icon": "minecraft:cracked_stone_bricks",
+  "name": "The Tower",
+  "description": "Disaster-themed crowd-control specialist who pays for recklessness. Inspired by Original card archetype (Original).",
+  "impact": 3,
+  "order": 16
+}

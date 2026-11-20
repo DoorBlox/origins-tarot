@@ -1,0 +1,48 @@
+{
+  "type": "origins:active_self",
+  "name": "Unshadowed Pulse",
+  "description": "G: Glowing on nearby creatures and Strength I for yourself. Allies are visible too.",
+  "cooldown": 420,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:area_of_effect",
+        "radius": 10,
+        "bientity_action": {
+          "type": "origins:target_action",
+          "action": {
+            "type": "origins:apply_effect",
+            "effect": {
+              "effect": "minecraft:glowing",
+              "duration": 200,
+              "amplifier": 0,
+              "show_particles": true
+            }
+          }
+        },
+        "include_target": false
+      },
+      {
+        "type": "origins:apply_effect",
+        "effect": {
+          "effect": "minecraft:strength",
+          "duration": 160,
+          "amplifier": 0,
+          "show_particles": true
+        }
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 2
+      }
+    ]
+  }
+}

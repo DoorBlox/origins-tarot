@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:devil/primary",
+    "tarot:devil/secondary",
+    "tarot:devil/passive",
+    "tarot:devil/drawback",
+    "tarot:devil/wings"
+  ],
+  "icon": "minecraft:nether_wart",
+  "name": "The Devil",
+  "description": "A risky infernal bargain: short power spikes, hunger and sunlight curses. Inspired by Original card archetype (Original).",
+  "impact": 3,
+  "order": 15
+}

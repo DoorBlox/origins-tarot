@@ -1,0 +1,18 @@
+{
+  "type": "origins:target_action_on_hit",
+  "name": "Seer Instinct",
+  "description": "Every 14s, your next successful melee hit briefly weakens its target.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:weakness",
+      "duration": 80,
+      "amplifier": 0,
+      "show_particles": true
+    }
+  },
+  "cooldown": 280,
+  "hud_render": {
+    "should_render": false
+  }
+}

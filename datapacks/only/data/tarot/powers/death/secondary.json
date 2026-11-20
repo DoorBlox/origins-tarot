@@ -1,0 +1,39 @@
+{
+  "type": "origins:active_self",
+  "name": "Return from the Brink",
+  "description": "V: Regeneration II and Resistance I for 7s; costs a heavy portion of hunger.",
+  "cooldown": 620,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:regeneration",
+            "duration": 140,
+            "amplifier": 1,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:resistance",
+            "duration": 140,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 3
+      }
+    ]
+  }
+}

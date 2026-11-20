@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Price: Forbidden Knowing",
+  "description": "Drawback: 1 fewer heart.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Price: Forbidden Knowing",
+    "value": -2,
+    "operation": "addition"
+  }
+}

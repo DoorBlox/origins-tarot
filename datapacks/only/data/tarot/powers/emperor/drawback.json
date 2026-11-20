@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Price: Weight of Law",
+  "description": "Drawback: Your speed is reduced by 12%. No astral wings.",
+  "modifier": {
+    "attribute": "minecraft:generic.movement_speed",
+    "name": "Price: Weight of Law",
+    "value": -0.12,
+    "operation": "multiply_total"
+  }
+}

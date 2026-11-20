@@ -1,0 +1,15 @@
+{
+  "powers": [
+    "tarot:hanged_man/primary",
+    "tarot:hanged_man/secondary",
+    "tarot:hanged_man/passive",
+    "tarot:hanged_man/drawback",
+    "tarot:hanged_man/extra_1",
+    "tarot:hanged_man/wings"
+  ],
+  "icon": "minecraft:trident",
+  "name": "The Hanged Man",
+  "description": "Storm-call that slows foes, keen in water, vulnerable in direct combat. Inspired by Alger Wilson (Canon).",
+  "impact": 3,
+  "order": 12
+}

@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:moon/primary",
+    "tarot:moon/secondary",
+    "tarot:moon/passive",
+    "tarot:moon/drawback",
+    "tarot:moon/wings"
+  ],
+  "icon": "minecraft:glistering_melon_slice",
+  "name": "The Moon",
+  "description": "Sanguine medicine and nocturnal mastery, weakened beneath the sun. Inspired by Emlyn White (Canon).",
+  "impact": 3,
+  "order": 18
+}

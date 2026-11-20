@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Armored Sovereign",
+  "description": "Permanent +3 armor points.",
+  "modifier": {
+    "attribute": "minecraft:generic.armor",
+    "name": "Armored Sovereign",
+    "value": 3,
+    "operation": "addition"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Price: Ascetic Discipline",
+  "description": "Drawback: 2 fewer hearts; no astral wings.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Price: Ascetic Discipline",
+    "value": -4,
+    "operation": "addition"
+  }
+}

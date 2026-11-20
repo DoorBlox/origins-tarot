@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Price: Unstable Odds",
+  "description": "Drawback: Receive 12% more damage.",
+  "modifier": {
+    "name": "Price: Unstable Odds",
+    "operation": "multiply_total",
+    "value": 0.12
+  }
+}

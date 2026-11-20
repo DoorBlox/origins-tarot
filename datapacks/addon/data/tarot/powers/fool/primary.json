@@ -1,0 +1,39 @@
+{
+  "type": "origins:active_self",
+  "name": "Gray Fog Masquerade",
+  "description": "G: Hide yourself for 6s, gain Speed I for 6s; costs hunger.",
+  "cooldown": 420,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:invisibility",
+            "duration": 120,
+            "amplifier": 0,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:speed",
+            "duration": 120,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Giant Blood",
+  "description": "Permanent +3 hearts.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Giant Blood",
+    "value": 6,
+    "operation": "addition"
+  }
+}

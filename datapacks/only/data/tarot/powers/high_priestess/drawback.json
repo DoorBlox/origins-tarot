@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Price: Mortal Shell",
+  "description": "Drawback: 2 hearts fewer maximum health.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Price: Mortal Shell",
+    "value": -4,
+    "operation": "addition"
+  }
+}

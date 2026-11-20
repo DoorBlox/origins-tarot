@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Price: Cracked Mirror",
+  "description": "Drawback: Take 16% more damage from attacks.",
+  "modifier": {
+    "name": "Price: Cracked Mirror",
+    "operation": "multiply_total",
+    "value": 0.16
+  }
+}

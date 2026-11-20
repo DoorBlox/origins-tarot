@@ -1,0 +1,18 @@
+{
+  "type": "origins:fire_projectile",
+  "name": "Ironblood Volley",
+  "description": "V: Fire three non-retrievable arrows in a rapid volley.",
+  "entity_type": "minecraft:arrow",
+  "cooldown": 320,
+  "count": 3,
+  "speed": 1.7,
+  "divergence": 3.0,
+  "tag": "{pickup:0b}",
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  }
+}

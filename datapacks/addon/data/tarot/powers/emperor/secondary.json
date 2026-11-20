@@ -1,0 +1,39 @@
+{
+  "type": "origins:active_self",
+  "name": "Royal Bulwark",
+  "description": "V: Resistance II for 8s; movement slows during the decree.",
+  "cooldown": 520,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:resistance",
+            "duration": 160,
+            "amplifier": 1,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:slowness",
+            "duration": 120,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 2.3
+      }
+    ]
+  }
+}

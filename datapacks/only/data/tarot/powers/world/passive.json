@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_dealt",
+  "name": "Bounty Hunter",
+  "description": "You strike 10% harder in melee.",
+  "modifier": {
+    "name": "Bounty Hunter",
+    "operation": "multiply_total",
+    "value": 0.1
+  }
+}

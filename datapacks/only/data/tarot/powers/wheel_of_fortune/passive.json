@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Fortune's Step",
+  "description": "Permanent +7% walking speed.",
+  "modifier": {
+    "attribute": "minecraft:generic.movement_speed",
+    "name": "Fortune's Step",
+    "value": 0.07,
+    "operation": "multiply_total"
+  }
+}

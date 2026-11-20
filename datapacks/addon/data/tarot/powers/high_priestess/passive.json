@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_xp_gain",
+  "name": "Arcane Literacy",
+  "description": "Gain 25% more experience from orbs.",
+  "modifier": {
+    "name": "Arcane Literacy",
+    "operation": "multiply_total",
+    "value": 0.25
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_dealt",
+  "name": "Price: Untrained Duelist",
+  "description": "Drawback: You deal 12% less melee damage.",
+  "modifier": {
+    "name": "Price: Untrained Duelist",
+    "operation": "multiply_total",
+    "value": -0.12
+  }
+}

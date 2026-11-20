@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_xp_gain",
+  "name": "Ritual Scholar",
+  "description": "You learn 35% faster from experience orbs.",
+  "modifier": {
+    "name": "Ritual Scholar",
+    "operation": "multiply_total",
+    "value": 0.35
+  }
+}

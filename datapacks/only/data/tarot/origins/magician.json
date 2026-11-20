@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:magician/primary",
+    "tarot:magician/secondary",
+    "tarot:magician/passive",
+    "tarot:magician/drawback",
+    "tarot:magician/wings"
+  ],
+  "icon": "minecraft:ender_pearl",
+  "name": "The Magician",
+  "description": "Portal traveler with a reliable short-range escape and vertical mobility. Inspired by Fors Wall (Canon).",
+  "impact": 3,
+  "order": 1
+}

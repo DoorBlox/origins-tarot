@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "origins": [
+    "tarot:fool",
+    "tarot:magician",
+    "tarot:high_priestess",
+    "tarot:empress",
+    "tarot:emperor",
+    "tarot:hierophant",
+    "tarot:lovers",
+    "tarot:chariot",
+    "tarot:strength",
+    "tarot:hermit",
+    "tarot:wheel_of_fortune",
+    "tarot:justice",
+    "tarot:hanged_man",
+    "tarot:death",
+    "tarot:temperance",
+    "tarot:devil",
+    "tarot:tower",
+    "tarot:star",
+    "tarot:moon",
+    "tarot:sun",
+    "tarot:judgement",
+    "tarot:world"
+  ]
+}

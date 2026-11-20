@@ -1,0 +1,48 @@
+{
+  "type": "origins:active_self",
+  "name": "Hunting Notice",
+  "description": "G: Mark a target within 16 blocks with Glowing and Weakness II.",
+  "cooldown": 260,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:raycast",
+        "distance": 16,
+        "block": true,
+        "entity": true,
+        "bientity_action": {
+          "type": "origins:target_action",
+          "action": {
+            "type": "origins:apply_effect",
+            "effects": [
+              {
+                "effect": "minecraft:glowing",
+                "duration": 240,
+                "amplifier": 0,
+                "show_particles": true
+              },
+              {
+                "effect": "minecraft:weakness",
+                "duration": 120,
+                "amplifier": 1,
+                "show_particles": true
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 1
+      }
+    ]
+  }
+}

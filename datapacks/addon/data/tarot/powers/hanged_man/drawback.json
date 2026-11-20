@@ -1,0 +1,18 @@
+{
+  "type": "origins:target_action_on_hit",
+  "name": "Sea Pressure",
+  "description": "Successful strikes briefly slow victims, 11s internal cooldown.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:slowness",
+      "duration": 60,
+      "amplifier": 0,
+      "show_particles": true
+    }
+  },
+  "cooldown": 220,
+  "hud_render": {
+    "should_render": false
+  }
+}

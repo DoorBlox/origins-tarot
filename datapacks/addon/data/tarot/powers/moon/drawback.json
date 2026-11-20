@@ -1,0 +1,18 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Price: Crimson Daylight",
+  "description": "Drawback: In direct sun, you are weakened.",
+  "interval": 20,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:weakness",
+      "duration": 60,
+      "amplifier": 0,
+      "show_particles": true
+    }
+  },
+  "condition": {
+    "type": "origins:exposed_to_sun"
+  }
+}

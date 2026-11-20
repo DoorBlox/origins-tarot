@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_dealt",
+  "name": "Price: Pacifist Heart",
+  "description": "Drawback: Melee attacks inflict 20% less damage.",
+  "modifier": {
+    "name": "Price: Pacifist Heart",
+    "operation": "multiply_total",
+    "value": -0.2
+  }
+}

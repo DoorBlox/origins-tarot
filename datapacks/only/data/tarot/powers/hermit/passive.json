@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_xp_gain",
+  "name": "Hidden Scholarship",
+  "description": "Gain 30% more experience from orbs.",
+  "modifier": {
+    "name": "Hidden Scholarship",
+    "operation": "multiply_total",
+    "value": 0.3
+  }
+}

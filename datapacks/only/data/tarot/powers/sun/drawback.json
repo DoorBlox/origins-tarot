@@ -1,0 +1,19 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Price: Lightless Heart",
+  "description": "Drawback: Whenever you are away from sunlight, you suffer Slowness I.",
+  "interval": 20,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:slowness",
+      "duration": 60,
+      "amplifier": 0,
+      "show_particles": true
+    }
+  },
+  "condition": {
+    "type": "origins:exposed_to_sun",
+    "inverted": true
+  }
+}

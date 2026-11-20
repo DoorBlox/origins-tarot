@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:justice/primary",
+    "tarot:justice/secondary",
+    "tarot:justice/passive",
+    "tarot:justice/drawback",
+    "tarot:justice/wings"
+  ],
+  "icon": "minecraft:emerald",
+  "name": "Justice",
+  "description": "Mental restraint and group support, but weak direct melee damage. Inspired by Audrey Hall (Canon).",
+  "impact": 3,
+  "order": 11
+}

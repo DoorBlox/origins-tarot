@@ -1,0 +1,13 @@
+{
+  "powers": [
+    "tarot:judgement/primary",
+    "tarot:judgement/secondary",
+    "tarot:judgement/passive",
+    "tarot:judgement/drawback"
+  ],
+  "icon": "minecraft:iron_sword",
+  "name": "Judgement",
+  "description": "Grounded arbiter who marks targets and stands her ground. Inspired by Xio Derecha (Canon).",
+  "impact": 3,
+  "order": 20
+}

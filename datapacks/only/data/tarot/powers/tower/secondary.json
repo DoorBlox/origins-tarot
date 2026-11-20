@@ -1,0 +1,15 @@
+{
+  "type": "origins:launch",
+  "name": "Rising Ruin",
+  "description": "V: Violent skyward launch, usable before gliding.",
+  "cooldown": 420,
+  "speed": 1.1,
+  "sound": "minecraft:entity.phantom.flap",
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  }
+}

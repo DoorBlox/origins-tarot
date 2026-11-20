@@ -1,0 +1,45 @@
+{
+  "type": "origins:active_self",
+  "name": "Lionheart",
+  "description": "G: Strength II and Resistance II for 8s; you also become slow for 7s.",
+  "cooldown": 560,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:strength",
+            "duration": 160,
+            "amplifier": 1,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:resistance",
+            "duration": 160,
+            "amplifier": 1,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:slowness",
+            "duration": 140,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 3.0
+      }
+    ]
+  }
+}

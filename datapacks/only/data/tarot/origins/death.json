@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:death/primary",
+    "tarot:death/secondary",
+    "tarot:death/passive",
+    "tarot:death/drawback",
+    "tarot:death/wings"
+  ],
+  "icon": "minecraft:bone",
+  "name": "Death",
+  "description": "Soul-harvesting survivor who recovers by defeating threats. Inspired by Original card archetype (Original).",
+  "impact": 3,
+  "order": 13
+}

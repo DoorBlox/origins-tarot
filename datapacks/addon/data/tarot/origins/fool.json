@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:fool/primary",
+    "tarot:fool/secondary",
+    "tarot:fool/passive",
+    "tarot:fool/drawback",
+    "tarot:fool/wings"
+  ],
+  "icon": "minecraft:totem_of_undying",
+  "name": "The Fool",
+  "description": "Cautious trickster and escape artist who manipulates the fight without dominating it. Inspired by Klein Moretti (Canon).",
+  "impact": 3,
+  "order": 0
+}

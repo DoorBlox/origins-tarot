@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:high_priestess/primary",
+    "tarot:high_priestess/secondary",
+    "tarot:high_priestess/passive",
+    "tarot:high_priestess/drawback",
+    "tarot:high_priestess/wings"
+  ],
+  "icon": "minecraft:amethyst_shard",
+  "name": "The High Priestess",
+  "description": "Knowledge and enemy revelation, balanced by fragility. Inspired by Original card archetype (Original).",
+  "impact": 3,
+  "order": 2
+}

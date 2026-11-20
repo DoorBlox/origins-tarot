@@ -1,0 +1,47 @@
+{
+  "type": "origins:active_self",
+  "name": "Midnight Poetry",
+  "description": "G: Blindness and Slowness I to nearby targets, revealing the advantage of darkness.",
+  "cooldown": 420,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:area_of_effect",
+        "radius": 8,
+        "bientity_action": {
+          "type": "origins:target_action",
+          "action": {
+            "type": "origins:apply_effect",
+            "effects": [
+              {
+                "effect": "minecraft:blindness",
+                "duration": 80,
+                "amplifier": 0,
+                "show_particles": true
+              },
+              {
+                "effect": "minecraft:slowness",
+                "duration": 100,
+                "amplifier": 0,
+                "show_particles": true
+              }
+            ]
+          }
+        },
+        "include_target": false
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 1.6
+      }
+    ]
+  }
+}

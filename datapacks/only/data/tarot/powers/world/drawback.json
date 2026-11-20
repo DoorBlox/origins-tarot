@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Price: Mortal Hunter",
+  "description": "Drawback: One fewer heart.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Price: Mortal Hunter",
+    "value": -2,
+    "operation": "addition"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Light of Togetherness",
+  "description": "A modest +1 heart of resilience.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Light of Togetherness",
+    "value": 2,
+    "operation": "addition"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:chariot/primary",
+    "tarot:chariot/secondary",
+    "tarot:chariot/passive",
+    "tarot:chariot/drawback",
+    "tarot:chariot/wings"
+  ],
+  "icon": "minecraft:blaze_rod",
+  "name": "The Chariot",
+  "description": "High-mobility warlock whose powerful assault demands food and restraint. Inspired by Lumian Lee (Canon (Book Two)).",
+  "impact": 3,
+  "order": 7
+}

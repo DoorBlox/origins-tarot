@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:hermit/primary",
+    "tarot:hermit/secondary",
+    "tarot:hermit/passive",
+    "tarot:hermit/drawback",
+    "tarot:hermit/wings"
+  ],
+  "icon": "minecraft:enchanted_book",
+  "name": "The Hermit",
+  "description": "Fragile investigator who marks enemies and commands star-bolts. Inspired by Cattleya (Canon).",
+  "impact": 3,
+  "order": 9
+}

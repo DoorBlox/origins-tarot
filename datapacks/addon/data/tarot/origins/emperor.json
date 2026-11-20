@@ -1,0 +1,13 @@
+{
+  "powers": [
+    "tarot:emperor/primary",
+    "tarot:emperor/secondary",
+    "tarot:emperor/passive",
+    "tarot:emperor/drawback"
+  ],
+  "icon": "minecraft:golden_helmet",
+  "name": "The Emperor",
+  "description": "Grounded tank who controls crowds and resists retaliation. Inspired by Original card archetype (Original).",
+  "impact": 3,
+  "order": 4
+}

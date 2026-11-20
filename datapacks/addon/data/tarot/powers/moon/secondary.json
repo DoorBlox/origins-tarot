@@ -1,0 +1,64 @@
+{
+  "type": "origins:active_self",
+  "name": "Blood Moon Awakening",
+  "description": "V: Strength II and Night Vision at night or indoors; in direct sun, only Resistance I.",
+  "cooldown": 480,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 3
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:if_else",
+    "condition": {
+      "type": "origins:exposed_to_sun",
+      "inverted": true
+    },
+    "if_action": {
+      "type": "origins:and",
+      "actions": [
+        {
+          "type": "origins:apply_effect",
+          "effects": [
+            {
+              "effect": "minecraft:strength",
+              "duration": 160,
+              "amplifier": 1,
+              "show_particles": true
+            },
+            {
+              "effect": "minecraft:night_vision",
+              "duration": 160,
+              "amplifier": 0,
+              "show_particles": true
+            }
+          ]
+        },
+        {
+          "type": "origins:exhaust",
+          "amount": 2
+        }
+      ]
+    },
+    "else_action": {
+      "type": "origins:and",
+      "actions": [
+        {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:resistance",
+            "duration": 120,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        },
+        {
+          "type": "origins:exhaust",
+          "amount": 2
+        }
+      ]
+    }
+  }
+}

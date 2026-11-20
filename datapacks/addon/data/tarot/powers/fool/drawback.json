@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Price: Frail Body",
+  "description": "Drawback: Your cautious body has one fewer heart.",
+  "modifier": {
+    "attribute": "minecraft:generic.max_health",
+    "name": "Price: Frail Body",
+    "value": -2,
+    "operation": "addition"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:sun/primary",
+    "tarot:sun/secondary",
+    "tarot:sun/passive",
+    "tarot:sun/drawback",
+    "tarot:sun/wings"
+  ],
+  "icon": "minecraft:sunflower",
+  "name": "The Sun",
+  "description": "Purifying defender whose radiance falters away from sunlight. Inspired by Derrick Berg (Canon).",
+  "impact": 3,
+  "order": 19
+}

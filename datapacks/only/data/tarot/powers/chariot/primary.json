@@ -1,0 +1,39 @@
+{
+  "type": "origins:active_self",
+  "name": "War March",
+  "description": "G: Strength II and Speed II for 9s, at a serious hunger cost.",
+  "cooldown": 500,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:strength",
+            "duration": 180,
+            "amplifier": 1,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:speed",
+            "duration": 180,
+            "amplifier": 1,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 4.5
+      }
+    ]
+  }
+}

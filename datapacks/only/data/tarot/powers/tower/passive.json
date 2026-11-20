@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Shatterer",
+  "description": "Your melee blows are 9% stronger.",
+  "modifier": {
+    "attribute": "minecraft:generic.attack_damage",
+    "name": "Shatterer",
+    "value": 0.09,
+    "operation": "multiply_total"
+  }
+}

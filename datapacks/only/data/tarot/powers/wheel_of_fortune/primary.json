@@ -1,0 +1,99 @@
+{
+  "type": "origins:active_self",
+  "name": "Fate's Sixfold Cast",
+  "description": "G: Roll one of six equal outcomes: Speed II, Strength II, Regeneration II, Blindness, Hunger II, or Poison I.",
+  "cooldown": 280,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:choice",
+        "actions": [
+          {
+            "weight": 1,
+            "element": {
+              "type": "origins:apply_effect",
+              "effect": {
+                "effect": "minecraft:speed",
+                "duration": 240,
+                "amplifier": 1,
+                "show_particles": true
+              }
+            }
+          },
+          {
+            "weight": 1,
+            "element": {
+              "type": "origins:apply_effect",
+              "effect": {
+                "effect": "minecraft:strength",
+                "duration": 180,
+                "amplifier": 1,
+                "show_particles": true
+              }
+            }
+          },
+          {
+            "weight": 1,
+            "element": {
+              "type": "origins:apply_effect",
+              "effect": {
+                "effect": "minecraft:regeneration",
+                "duration": 140,
+                "amplifier": 1,
+                "show_particles": true
+              }
+            }
+          },
+          {
+            "weight": 1,
+            "element": {
+              "type": "origins:apply_effect",
+              "effect": {
+                "effect": "minecraft:blindness",
+                "duration": 100,
+                "amplifier": 0,
+                "show_particles": true
+              }
+            }
+          },
+          {
+            "weight": 1,
+            "element": {
+              "type": "origins:apply_effect",
+              "effect": {
+                "effect": "minecraft:hunger",
+                "duration": 240,
+                "amplifier": 1,
+                "show_particles": true
+              }
+            }
+          },
+          {
+            "weight": 1,
+            "element": {
+              "type": "origins:apply_effect",
+              "effect": {
+                "effect": "minecraft:poison",
+                "duration": 120,
+                "amplifier": 0,
+                "show_particles": true
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 1
+      }
+    ]
+  }
+}

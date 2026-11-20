@@ -1,0 +1,31 @@
+{
+  "type": "origins:active_self",
+  "name": "Scarlet Medicine",
+  "description": "G: Regeneration II for 9s, but must spend substantial energy.",
+  "cooldown": 480,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effect": {
+          "effect": "minecraft:regeneration",
+          "duration": 180,
+          "amplifier": 1,
+          "show_particles": true
+        }
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 2.5
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "type": "origins:active_self",
+  "name": "Wraith Form",
+  "description": "G: Invisibility and Resistance I for 6s, but self-inflicted Weakness for 6s.",
+  "cooldown": 430,
+  "hud_render": {
+    "should_render": true,
+    "bar_index": 2
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:apply_effect",
+        "effects": [
+          {
+            "effect": "minecraft:invisibility",
+            "duration": 120,
+            "amplifier": 0,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:resistance",
+            "duration": 120,
+            "amplifier": 0,
+            "show_particles": true
+          },
+          {
+            "effect": "minecraft:weakness",
+            "duration": 120,
+            "amplifier": 0,
+            "show_particles": true
+          }
+        ]
+      },
+      {
+        "type": "origins:exhaust",
+        "amount": 1.6
+      }
+    ]
+  }
+}

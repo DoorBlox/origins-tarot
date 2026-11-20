@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:star/primary",
+    "tarot:star/secondary",
+    "tarot:star/passive",
+    "tarot:star/drawback",
+    "tarot:star/wings"
+  ],
+  "icon": "minecraft:nether_star",
+  "name": "The Star",
+  "description": "Nightwatcher who obscures enemies and thrives beyond daylight. Inspired by Leonard Mitchell (Canon).",
+  "impact": 3,
+  "order": 17
+}
