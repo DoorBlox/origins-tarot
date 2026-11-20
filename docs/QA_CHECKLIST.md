@@ -16,7 +16,7 @@ Run on **Minecraft Java 1.18.2, Fabric, Origins 1.4.1**. A passing Python test o
 - [ ] Acquire the listed A item; receive exactly one Acting mark, only with the matching active Arcana.
 - [ ] Repeating A immediately gives no marks; after the 120-second cooldown, perform B, then A again.
 - [ ] Acting marks persist after death and relog.
-- [ ] Build a lodestone over crying obsidian; Sequence 9 -> 8 consumes exactly 6 amethyst and 8 lapis, one mark, and 12 stability.
+- [ ] Build a lectern over crying obsidian; Sequence 9 -> 8 consumes exactly 6 amethyst and 8 lapis, one mark, and 12 stability.
 - [ ] Without enough items, marks, stability, or altar, no items are consumed and no level change occurs.
 - [ ] One command invocation **never** advances multiple levels, even if a player has materials for more than one tier.
 - [ ] Upgrade powers appear after ascent, and on logout/relog; no duplicate attribute stacking.

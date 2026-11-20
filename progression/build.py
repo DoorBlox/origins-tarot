@@ -33,7 +33,7 @@ def selector_range(obj,n):return f'if score @s {obj} matches {n}'
 def score_matches(obj,lo,hi=None):
     if hi is None:return f'if score @s {obj} matches {lo}'
     return f'if score @s {obj} matches {lo}..{hi}'
-def altar():return 'if block ~ ~-1 ~ minecraft:lodestone if block ~ ~-2 ~ minecraft:crying_obsidian'
+def altar():return 'if block ~ ~-1 ~ minecraft:lectern if block ~ ~-2 ~ minecraft:crying_obsidian'
 def secure():return 'if score @s tc_combat matches 0 if entity @s[nbt={OnGround:1b}] unless entity @s[nbt={FallFlying:1b}]'
 
 class Writer:
@@ -296,7 +296,7 @@ def core(w):
        tell('/trigger tc_unlock  - after four alternating trial acts, pay at altar.','aqua'),
        tell('/trigger tc_swap set 1  OR  /trigger tc_swap set 2  - swap when permitted.','aqua'),
        tell('/trigger tc_meditate  - spend 4 amethyst at the altar to restore stability.','aqua'),
-       tell('ALTAR: stand on a LODESTONE directly above CRYING OBSIDIAN. No flight or combat.','yellow'),
+       tell('ALTAR: stand on a LECTERN directly above CRYING OBSIDIAN. No flight or combat.','yellow'),
        tell('S3 enables portable swaps, S2 a minor Echo, S1 a Resonance, S0 prestige.','yellow'))
     w.func('info/status',
        'tellraw @s '+js([{'text':'[Tarot] Primary card ID: ','color':'gold'},name_score('tc_primary'),

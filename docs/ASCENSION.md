@@ -18,7 +18,7 @@
 
 ### Ritual altar
 
-Place a **lodestone directly on top of crying obsidian**. Stand on the lodestone while grounded. You cannot perform ascension, attunement or altar switches while in combat or while fall-flying. This is a check on the actual blocks underneath the player, not a decorative structure generated in the world.
+Place a **lectern directly on top of crying obsidian**. Stand on the lectern while grounded. Unlike a lodestone, a lectern is accessible for early-Sequence ritual play. You cannot perform ascension, attunement or altar switches while in combat or while fall-flying. This is a check on the actual blocks underneath the player, not a decorative structure generated in the world.
 
 ## Player commands (no OP permissions needed)
 
