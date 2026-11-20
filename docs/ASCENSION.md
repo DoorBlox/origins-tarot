@@ -20,6 +20,8 @@
 
 Place a **lectern directly on top of crying obsidian**. Stand on the lectern while grounded. Unlike a lodestone, a lectern is accessible for early-Sequence ritual play. You cannot perform ascension, attunement or altar switches while in combat or while fall-flying. This is a check on the actual blocks underneath the player, not a decorative structure generated in the world.
 
+**Origins Orb safeguard:** After enrollment, the server checks the current Arcana approximately every 20 seconds and restores the last authorized Arcana if another mod or an Orb of Origin changes it. Use the listed `/trigger tc_swap` commands to switch properly. A failed Origins switch does not consume stability or start a cooldown.
+
 ## Player commands (no OP permissions needed)
 
 | Command | Purpose |

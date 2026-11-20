@@ -191,3 +191,32 @@ class AscensionBuildTests(unittest.TestCase):
                 self.assertNotIn('kill @',txt)
 
 if __name__=='__main__':unittest.main()
+
+
+class SafetyRegressionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.zips=build.build_all(Path(__file__).resolve().parent.parent)
+        cls.z=ZipFile(cls.zips['only'])
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.z.close()
+
+    def test_failed_origin_switch_does_not_consume_progression(self):
+        for slot in ('primary','secondary'):
+            switch=self.z.read(f'data/tarot_progress/functions/swap/{slot}.mcfunction').decode()
+            self.assertIn('store success score @s tc_ok run origin set',switch)
+            self.assertIn(f'execute if score @s tc_ok matches 1 run function tarot_progress:swap/commit_{slot}',switch)
+            commit=self.z.read(f'data/tarot_progress/functions/swap/commit_{slot}.mcfunction').decode()
+            self.assertIn('scoreboard players set @s tc_swapcd 12000',commit)
+            self.assertNotIn('origin set',commit)
+
+    def test_external_origin_changes_are_resynchronized(self):
+        tick=self.z.read('data/tarot_progress/functions/tick/slow.mcfunction').decode()
+        self.assertIn('function tarot_progress:register/verify_all',tick)
+        verify=self.z.read('data/tarot_progress/functions/register/verify_all.mcfunction').decode()
+        self.assertIn('function tarot_progress:register/verify',verify)
+        player=self.z.read('data/tarot_progress/functions/register/verify.mcfunction').decode()
+        self.assertIn('origin has origin @s origins:origin tarot:',player)
+        self.assertIn('origin set @s origins:origin tarot:',player)
