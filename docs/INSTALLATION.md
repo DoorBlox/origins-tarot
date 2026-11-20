@@ -1,3 +1,5 @@
+> **V2 ALPHA:** the 22 passive-first builds require their own in-game testing. Back up the world and the previously working V1 ZIP. Replacing a datapack on GitHub is not a hosted server deployment.
+
 # Installation and first-run acceptance
 
 ## Compatibility

@@ -329,10 +329,13 @@ assert len(GLIDERS)==18
 assert all(len(BUILD[c[0]])>=4 for c in CARDS)
 
 
+from passive_v2 import apply_v2
+BUILD = apply_v2(BUILD)
+
 def jtxt(obj): return json.dumps(obj,ensure_ascii=False,indent=2)+'\n'
 
 def make():
-    contents={'pack.mcmeta':jtxt({'pack':{'pack_format':9,'description':'The Tarot Club | 22 Arcana Origins | 1.18.2'}})}
+    contents={'pack.mcmeta':jtxt({'pack':{'pack_format':9,'description':'The Tarot Club | Passive-first V2 Alpha | 1.18.2'}})}
     contents['data/origins/origin_layers/origin.json']=jtxt({'replace':False,'origins':['tarot:'+c[0] for c in CARDS]})
     docs=['# The Tarot Club — 22 Major Arcana Origins', '',
      '**Minecraft 1.18.2 • Fabric • Origins 1.4.1 • pack_format 9**', '',
@@ -354,6 +357,8 @@ def make():
      '- The Fool and the World represent two personae of the **same** character, Klein Moretti, but are deliberately distinct playable builds.',
      '- The Empress and Chariot references are Book Two / *Circle of Inevitability* spoilers.',
      '- **Area-of-effect abilities affect all nearby living targets, including teammates, villagers, pets, and enemy players.** This deliberate cost matters in SMP battles; use cautiously.',
+     '- **V2 ALPHA:** passive traits and unique drawbacks are new and have not been tested on this server. Keep the working V1 ZIP for rollback.',
+     '- Lunar-cycle-only effects and team-only soul bonds require optional scripting and are not implemented here.',
      '- **16 out of 22? No:** exactly 18 wings, four grounded cards (Emperor, Hierophant, Strength, Judgement).',
      '- No admin command execution, item duplication, terrain destruction, or KubeJS privileges are used by this datapack.',
      '- This pack appends all 22 cards to the existing Origins selection layer (`replace:false`). It will not replace existing vanilla or other custom Origins.',
