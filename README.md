@@ -1,11 +1,21 @@
 # The Tarot Club — 22 Major Arcana Origins
 
-> A lore-inspired, multiplayer-focused Minecraft Origins datapack featuring **all 22 Major Arcana**, **44 active abilities**, distinctive drawbacks and **18 native Elytra-gliding builds**.
+> A lore-inspired Minecraft Origins datapack featuring **22 passive-first Major Arcana**, **44 retained signature abilities**, distinctive situational drawbacks, and **18 native Elytra-gliding builds**.
 
 **Compatibility:** Minecraft Java **1.18.2** · Fabric · Origins **1.4.1** · `pack_format: 9`  
-**Status:** **Alpha / server playtest required**. Automated JSON/reference checks are not a substitute for in-game behavior testing.
+**Status:** **V2 Alpha / not yet live-playtested**. V1 was confirmed working by the server owner; V2 has additional passives and needs its own acceptance test. Automated JSON/reference checks do not replace gameplay verification.
 
 This is a **fan-made** adaptation of concepts from *Lord of the Mysteries* and *Circle of Inevitability*, not an official product. The Tarot Club's card codenames are **not** identical to the novel's 22 Standard Pathways. Some cards are based on canon characters; others are original pathway-inspired interpretations. **Book Two spoilers** appear in the Empress and Chariot.
+
+## What's new in V2 Alpha
+
+V2 shifts each Arcana's identity toward **automatic everyday effects** rather than relying on pressing G or V. Active abilities remain available, but the buffs and drawbacks now affect ordinary survival, exploring, mining, trade, combat, day/night cycles and food choices.
+
+Examples: Star cannot sleep but sees perfectly at night; Moon has a Sanguine meat-only diet; Hermit gets exceptional XP but struggles while hoarding levels; Sun constantly glows and purifies darkness; World cannot trade with villagers; Death cannot naturally regenerate; Magician is punished by exposure to nighttime skies.
+
+Read the [full passive-first design rationale](docs/ARCANA_V2_PASSIVE_REDESIGN.md). The [generated Arcana guide](ARCANA_GUIDE.md) lists the exact **implemented Alpha** effects. Some ambitious mechanics from the design—team-only psychic bonds, full-moon-only ravings and true Wraith phasing—are **not in this datapack-only build**.
+
+**Back up your working V1 pack and world** before installing V2. This repository change does not automatically deploy anything to your Minecraft host.
 
 ## Quick start
 
@@ -60,7 +70,7 @@ The short summaries below are for choosing a playstyle. The [full card guide](AR
 ## Project structure
 
 ```text
-generate.py                 Original deterministic Python source generator
+generate.py                 Deterministic Python source generator, with passive_v2.py trait definitions
 ARCANA_GUIDE.md             Full 22-card lore, personalities and ability descriptions
 docs/INSTALLATION.md        Server installation, controls and troubleshooting
 docs/BALANCE.md             Combat, gliding and multiplayer balance notes
@@ -82,13 +92,13 @@ python3 -m unittest discover -s tests -v
 python3 tools/unpack_generated.py
 ```
 
-Build outputs are under `output/`. Source JSON copies under `datapacks/` are generated from `generate.py`; **edit the generator**, not the generated copies, to avoid changes being overwritten. GitHub Actions validates changes and publishes a downloadable artifact for each successful run.
+Build outputs are under `output/`. Edit V2 traits in `passive_v2.py` and the original G/V skills in `generate.py`. Source JSON copies under `datapacks/` are generated from `generate.py`; **edit the generator**, not the generated copies, to avoid changes being overwritten. GitHub Actions validates changes and publishes a downloadable artifact for each successful run.
 
 ## What this pack does and does not do
 
-- Does: vanilla-compatible Origins/Apoli datapack powers, 22 distinct origins, active G/V abilities, strengths/weaknesses, gliding, area effects, projectiles and chance-based effects.
+- Does: vanilla-compatible Origins/Apoli datapack powers, 22 distinct origins, passive traits, situational drawbacks, retained active G/V abilities, gliding, area effects, projectiles and chance-based effects.
 - Does not: add new Fabric mod jars, new mobs/models/textures, admin command execution, true puppet AI, creative flight, or cinematic client-only visual effects.
-- Testing: structural tests passed locally, but **we have not yet run a full in-game Fabric/Origins 1.4.1 acceptance test**. Verify abilities on a **backup test world** before using on an established multiplayer save.
+- Testing: the previous V1 pack loaded for the user. **V2 requires a separate in-game Fabric/Origins 1.4.1 acceptance test**; structural CI alone is not gameplay verification. Test on a backup world before using it in a multiplayer save.
 
 ## References and acknowledgements
 

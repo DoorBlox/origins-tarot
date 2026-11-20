@@ -1,6 +1,6 @@
 # The Tarot Club — Passive-First Arcana V2 (Design RFC)
 
-> **Status: DESIGN PROPOSAL, NOT IMPLEMENTED OR MERGED.** This document defines the future balance contract; the current 22-origin datapack remains functional and unchanged on main.
+> **Status: DESIGN REFERENCE.** A datapack-only V2 Alpha implements the supported passives and fallbacks in `passive_v2.py` while preserving the original G/V signature skills. The more ambitious `[S]` script-dependent concepts remain **unimplemented**. The currently published GitHub source is not evidence of hosted Minecraft gameplay verification.
 
 Minecraft Java 1.18.2 · Fabric · Origins 1.4.1 · 22 cards · 18 native Elytra gliders.
 

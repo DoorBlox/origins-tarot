@@ -1,7 +1,7 @@
 # Development guide
 
 ## Edit the source of truth
-`generate.py` owns the **22 card records**, `BUILD` action definitions, JSON assembly and ZIP packaging. `ARCANA_GUIDE.md` and `datapacks/*` are generated outputs. Make changes in `generate.py` before rebuilding; direct edits to the generated JSON will be overwritten by the next sync.
+`generate.py` owns the **22 card records**, base G/V actions, JSON assembly and ZIP packaging. `passive_v2.py` owns the **V2 automatic traits and drawbacks** and replaces the previous generic passive/drawback powers during generation. `ARCANA_GUIDE.md` and `datapacks/*` are generated outputs. Make changes in `generate.py` before rebuilding; direct edits to the generated JSON will be overwritten by the next sync.
 
 ### Commands
 ```bash

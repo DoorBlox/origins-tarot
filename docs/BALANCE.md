@@ -1,3 +1,5 @@
+> **V2 ALPHA:** the buffs and drawbacks in `passive_v2.py` are now built by `generate.py`. The document below describes general design intent; verify actual generated JSON and test food restrictions, visibility, villagers, night exposure, hunger and defensive effects. Do not claim that unimplemented soul links or lunar-cycle checks are shipped.
+
 # Gameplay balance, limitations, and acceptance plan
 
 ## Philosophy
