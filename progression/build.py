@@ -222,6 +222,7 @@ def core(w):
         kind='trigger' if name in TRIGGERS else 'dummy'
         load.append(f'scoreboard objectives add {name} {kind}')
     load += ['scoreboard players set #clock tc_clock 0',
+             'scoreboard players set #verify tc_clock 0',
              'tellraw @a '+js({'text':'[Tarot] Ascension V3 datapack loaded. Run /trigger tc_help.','color':'dark_aqua'})]
     w.func('load',load)
     w.json('tags/functions/_unused',{'values':[]}) if False else None
@@ -235,6 +236,9 @@ def core(w):
            'scoreboard players remove @a[scores={tc_medcd=1..}] tc_medcd 1',
            'execute if score #clock tc_clock matches 20.. run '+function('tick/slow'))
     slow=['scoreboard players set #clock tc_clock 0',
+          'scoreboard players add #verify tc_clock 1',
+          'execute if score #verify tc_clock matches 20.. run '+function('register/verify_all'),
+          'execute if score #verify tc_clock matches 20.. run scoreboard players set #verify tc_clock 0',
           'scoreboard players add @a tc_init 0',
           f'execute as @a[scores={{tc_init=0}}] at @s run {function("register/scan")}',
           'scoreboard players enable @a tc_ascend',
@@ -286,6 +290,17 @@ def core(w):
             tell('Alternate tasks every 2 minutes; then /trigger tc_ascend at a ritual altar. See /trigger tc_help.','green')]
         w.func('register/'+slug,register)
     w.func('register/scan',scan)
+
+    # Reconcile authorized Arcana against Orbs of Origin and unrelated origin selectors.
+    # Prevent a player bypassing sequence-gated switching through the GUI.
+    w.func('register/verify_all',
+           'execute as @a[scores={tc_init=1}] at @s run '+function('register/verify'))
+    verification=[]
+    for card in CARDS:
+        slug,num=card['slug'],card['id']
+        verification.append(f'execute if score @s tc_current matches {num} store success score @s tc_probe run origin has origin @s origins:origin tarot:{slug}')
+        verification.append(f'execute if score @s tc_current matches {num} if score @s tc_probe matches 0 run origin set @s origins:origin tarot:{slug}')
+    w.func('register/verify',verification)
 
     w.func('info/help',
        tell('PATH OF ASCENSION | Levels 9 down to 0. One full Arcana equipped at a time.','light_purple'),
@@ -432,18 +447,22 @@ def swapping(w):
        'execute if score @s tc_swap matches 1 run '+function('swap/primary'),
        'execute if score @s tc_swap matches 2 run '+function('swap/secondary'))
     for slot,obj,seqobj in [(1,'tc_primary','tc_pseq'),(2,'tc_secondary','tc_sseq')]:
-        lines=[]
+        mode='primary' if slot==1 else 'secondary'
+        lines=['scoreboard players set @s tc_ok 0']
         for card in CARDS:
-            lines.append(f'execute if score @s {obj} matches {card["id"]} run origin set @s origins:origin tarot:{card["slug"]}')
-        lines += [f'scoreboard players set @s tc_slot {slot}',
-                  f'scoreboard players operation @s tc_current = @s {obj}',
-                  f'scoreboard players operation @s tc_curseq = @s {seqobj}',
-                  'scoreboard players set @s tc_swapcd 12000',
-                  'scoreboard players remove @s tc_stab 4',
-                  'execute if score @s tc_stab matches ..0 run scoreboard players set @s tc_stab 0',
-                  function('powers/refresh'),
-                  tell('Attunement changed. Old Arcana passives removed; new Arcana activated. Switch cooldown: 10 online minutes.','green')]
-        w.func('swap/'+('primary' if slot==1 else 'secondary'),lines)
+            lines.append(f'execute if score @s {obj} matches {card["id"]} store success score @s tc_ok run origin set @s origins:origin tarot:{card["slug"]}')
+        lines.append(f'execute if score @s tc_ok matches 1 run {function("swap/commit_"+mode)}')
+        lines.append('execute if score @s tc_ok matches 0 run '+tell('Origin switch failed: no progression or cooldown was changed. Ask an admin to inspect the server log.','red'))
+        w.func('swap/'+mode,lines)
+        w.func('swap/commit_'+mode,
+               f'scoreboard players set @s tc_slot {slot}',
+               f'scoreboard players operation @s tc_current = @s {obj}',
+               f'scoreboard players operation @s tc_curseq = @s {seqobj}',
+               'scoreboard players set @s tc_swapcd 12000',
+               'scoreboard players remove @s tc_stab 4',
+               'execute if score @s tc_stab matches ..0 run scoreboard players set @s tc_stab 0',
+               function('powers/refresh'),
+               tell('Attunement changed. Old Arcana passives removed; new Arcana activated. Switch cooldown: 10 online minutes.','green'))
 
 
 def powers(w):
