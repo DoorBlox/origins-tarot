@@ -1,11 +1,10 @@
 {
-  "type": "origins:attribute",
-  "name": "Iron Hide",
-  "description": "Additional +2 armor points.",
+  "type": "origins:modify_swim_speed",
+  "name": "Price: Heavy Swimmer",
+  "description": "Swim 45% slower.",
   "modifier": {
-    "attribute": "minecraft:generic.armor",
-    "name": "Iron Hide",
-    "value": 2,
-    "operation": "addition"
+    "value": -0.45,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
   }
 }

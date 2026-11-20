@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_jump",
+  "name": "Clown Reflex",
+  "description": "Jump 15% higher.",
+  "modifier": {
+    "value": 0.15,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  }
+}

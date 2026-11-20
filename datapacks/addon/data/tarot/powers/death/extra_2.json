@@ -1,0 +1,6 @@
+{
+  "type": "origins:night_vision",
+  "name": "Grave Sight",
+  "description": "Permanent night vision.",
+  "strength": 1.0
+}

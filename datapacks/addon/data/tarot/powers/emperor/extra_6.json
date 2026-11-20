@@ -1,0 +1,13 @@
+{
+  "type": "origins:modify_exhaustion",
+  "name": "Heavy Armor Tax",
+  "description": "Sprinting consumes 45% more exhaustion.",
+  "modifier": {
+    "value": 0.45,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:sprinting"
+  }
+}

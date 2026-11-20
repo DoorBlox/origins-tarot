@@ -1,11 +1,11 @@
 {
   "type": "origins:attribute",
-  "name": "Marshal's Plate",
-  "description": "Gain +3 armor points.",
+  "name": "Law Weight",
+  "description": "Gain two armor points.",
   "modifier": {
-    "attribute": "minecraft:generic.armor",
-    "name": "Marshal's Plate",
-    "value": 3,
-    "operation": "addition"
+    "value": 2,
+    "operation": "addition",
+    "name": "Law Weight",
+    "attribute": "minecraft:generic.armor"
   }
 }

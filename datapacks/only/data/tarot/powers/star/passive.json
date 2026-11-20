@@ -1,6 +1,6 @@
 {
   "type": "origins:night_vision",
-  "name": "Sleepless Gaze",
-  "description": "You see clearly in darkness.",
+  "name": "Sleepless Sight",
+  "description": "Permanent night vision.",
   "strength": 1.0
 }

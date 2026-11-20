@@ -1,10 +1,10 @@
 {
-  "type": "origins:modify_damage_dealt",
-  "name": "Bounty Hunter",
-  "description": "You strike 10% harder in melee.",
+  "type": "origins:modify_projectile_damage",
+  "name": "Cold Precision",
+  "description": "Ranged projectiles deal 25% more damage.",
   "modifier": {
-    "name": "Bounty Hunter",
+    "value": 0.25,
     "operation": "multiply_total",
-    "value": 0.1
+    "name": "Tarot V2"
   }
 }

@@ -1,0 +1,35 @@
+{
+  "type": "origins:modify_break_speed",
+  "name": "Ritual Focus",
+  "description": "Mine 25% faster with a book in your offhand.",
+  "modifier": {
+    "value": 0.25,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:or",
+    "conditions": [
+      {
+        "type": "origins:equipped_item",
+        "equipment_slot": "offhand",
+        "item_condition": {
+          "type": "origins:ingredient",
+          "ingredient": {
+            "item": "minecraft:book"
+          }
+        }
+      },
+      {
+        "type": "origins:equipped_item",
+        "equipment_slot": "offhand",
+        "item_condition": {
+          "type": "origins:ingredient",
+          "ingredient": {
+            "item": "minecraft:enchanted_book"
+          }
+        }
+      }
+    ]
+  }
+}

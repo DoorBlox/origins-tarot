@@ -1,0 +1,13 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Patient Observation",
+  "description": "When sneaking, incoming damage is reduced by 12%.",
+  "modifier": {
+    "value": -0.12,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:sneaking"
+  }
+}

@@ -4,6 +4,9 @@
     "tarot:empress/secondary",
     "tarot:empress/passive",
     "tarot:empress/drawback",
+    "tarot:empress/extra_1",
+    "tarot:empress/extra_2",
+    "tarot:empress/extra_6",
     "tarot:empress/wings"
   ],
   "icon": "minecraft:rose_bush",

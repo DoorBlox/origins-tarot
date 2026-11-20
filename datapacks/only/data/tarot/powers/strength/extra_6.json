@@ -1,0 +1,14 @@
+{
+  "type": "origins:modify_break_speed",
+  "name": "Quarry Hands",
+  "description": "Mine stone 35% faster.",
+  "modifier": {
+    "value": 0.35,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "block_condition": {
+    "type": "origins:block",
+    "block": "minecraft:stone"
+  }
+}

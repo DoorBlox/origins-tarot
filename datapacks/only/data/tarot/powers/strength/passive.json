@@ -1,11 +1,10 @@
 {
-  "type": "origins:attribute",
-  "name": "Giant Blood",
-  "description": "Permanent +3 hearts.",
+  "type": "origins:modify_damage_dealt",
+  "name": "Giants Grip",
+  "description": "Melee attacks deal 18% more damage.",
   "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Giant Blood",
-    "value": 6,
-    "operation": "addition"
+    "value": 0.18,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
   }
 }

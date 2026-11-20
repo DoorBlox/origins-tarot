@@ -1,0 +1,18 @@
+{
+  "type": "origins:target_action_on_hit",
+  "name": "Marked Prey",
+  "description": "Hits mark targets with Glowing for six seconds, cooldown 10 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:glowing",
+      "duration": 120,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 200,
+  "hud_render": {
+    "should_render": false
+  }
+}

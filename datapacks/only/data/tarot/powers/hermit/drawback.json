@@ -1,11 +1,20 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Forbidden Knowing",
-  "description": "Drawback: 1 fewer heart.",
-  "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Price: Forbidden Knowing",
-    "value": -2,
-    "operation": "addition"
+  "type": "origins:action_over_time",
+  "name": "Price: Forbidden Knowledge",
+  "description": "At level 30 or above, suffer Mining Fatigue until you spend experience.",
+  "interval": 80,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:mining_fatigue",
+      "duration": 100,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "condition": {
+    "type": "origins:xp_levels",
+    "comparison": ">=",
+    "compare_to": 30
   }
 }

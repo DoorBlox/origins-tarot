@@ -1,11 +1,12 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Mortal Hunter",
-  "description": "Drawback: One fewer heart.",
-  "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Price: Mortal Hunter",
-    "value": -2,
-    "operation": "addition"
+  "type": "origins:prevent_entity_use",
+  "name": "Price: Infamous Hunter",
+  "description": "Cannot interact with villagers to trade.",
+  "bientity_condition": {
+    "type": "origins:target_condition",
+    "condition": {
+      "type": "origins:entity_type",
+      "entity_type": "minecraft:villager"
+    }
   }
 }

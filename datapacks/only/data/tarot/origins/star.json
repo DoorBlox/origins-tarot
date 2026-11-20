@@ -4,6 +4,8 @@
     "tarot:star/secondary",
     "tarot:star/passive",
     "tarot:star/drawback",
+    "tarot:star/extra_1",
+    "tarot:star/extra_2",
     "tarot:star/wings"
   ],
   "icon": "minecraft:nether_star",

@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_projectile_damage",
+  "name": "Astral Calculation",
+  "description": "Deal 20% more projectile damage.",
+  "modifier": {
+    "value": 0.2,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Immovable",
+  "description": "Resist 55% of knockback.",
+  "modifier": {
+    "value": 0.55,
+    "operation": "addition",
+    "name": "Immovable",
+    "attribute": "minecraft:generic.knockback_resistance"
+  }
+}

@@ -3,7 +3,10 @@
     "tarot:judgement/primary",
     "tarot:judgement/secondary",
     "tarot:judgement/passive",
-    "tarot:judgement/drawback"
+    "tarot:judgement/drawback",
+    "tarot:judgement/extra_1",
+    "tarot:judgement/extra_2",
+    "tarot:judgement/extra_6"
   ],
   "icon": "minecraft:iron_sword",
   "name": "Judgement",

@@ -1,0 +1,22 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Quiet Benediction",
+  "description": "Every 40 seconds, nearby living creatures receive Regeneration I, including enemies.",
+  "interval": 800,
+  "entity_action": {
+    "type": "origins:area_of_effect",
+    "radius": 5,
+    "bientity_action": {
+      "type": "origins:target_action",
+      "action": {
+        "type": "origins:apply_effect",
+        "effect": {
+          "effect": "minecraft:regeneration",
+          "duration": 80,
+          "amplifier": 0,
+          "show_particles": false
+        }
+      }
+    }
+  }
+}

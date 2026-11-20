@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Compassionate Steps",
+  "description": "Move 8% faster.",
+  "modifier": {
+    "value": 0.08,
+    "operation": "multiply_total",
+    "name": "Compassionate Steps",
+    "attribute": "minecraft:generic.movement_speed"
+  }
+}

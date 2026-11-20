@@ -1,0 +1,18 @@
+{
+  "type": "origins:attacker_action_when_hit",
+  "name": "Distorted Authority",
+  "description": "Attacks on you slow the aggressor for two seconds every 14 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:slowness",
+      "duration": 40,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 280,
+  "hud_render": {
+    "should_render": false
+  }
+}

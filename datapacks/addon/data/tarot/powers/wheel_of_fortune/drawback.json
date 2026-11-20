@@ -1,10 +1,83 @@
 {
-  "type": "origins:modify_damage_taken",
-  "name": "Price: Unstable Odds",
-  "description": "Drawback: Receive 12% more damage.",
-  "modifier": {
-    "name": "Price: Unstable Odds",
-    "operation": "multiply_total",
-    "value": 0.12
+  "type": "origins:action_over_time",
+  "name": "Price: Fate Debt",
+  "description": "Every 90 seconds a random fate roll yields one of three boons or three punishments.",
+  "interval": 1800,
+  "entity_action": {
+    "type": "origins:choice",
+    "actions": [
+      {
+        "weight": 1,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:speed",
+            "duration": 240,
+            "amplifier": 0,
+            "show_particles": false
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:haste",
+            "duration": 240,
+            "amplifier": 0,
+            "show_particles": false
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:absorption",
+            "duration": 240,
+            "amplifier": 0,
+            "show_particles": false
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:hunger",
+            "duration": 240,
+            "amplifier": 0,
+            "show_particles": false
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:slowness",
+            "duration": 240,
+            "amplifier": 0,
+            "show_particles": false
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "element": {
+          "type": "origins:apply_effect",
+          "effect": {
+            "effect": "minecraft:mining_fatigue",
+            "duration": 240,
+            "amplifier": 0,
+            "show_particles": false
+          }
+        }
+      }
+    ]
   }
 }

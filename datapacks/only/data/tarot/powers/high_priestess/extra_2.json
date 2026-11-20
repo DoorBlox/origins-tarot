@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_projectile_damage",
+  "name": "Calculated Arrows",
+  "description": "Ranged attacks deal 15% more damage.",
+  "modifier": {
+    "value": 0.15,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  }
+}

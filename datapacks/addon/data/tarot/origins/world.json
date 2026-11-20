@@ -4,6 +4,8 @@
     "tarot:world/secondary",
     "tarot:world/passive",
     "tarot:world/drawback",
+    "tarot:world/extra_1",
+    "tarot:world/extra_2",
     "tarot:world/wings"
   ],
   "icon": "minecraft:compass",

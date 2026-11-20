@@ -1,0 +1,14 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Calm Stance",
+  "description": "Take 12% less damage while not sprinting.",
+  "modifier": {
+    "value": -0.12,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:sprinting",
+    "inverted": true
+  }
+}

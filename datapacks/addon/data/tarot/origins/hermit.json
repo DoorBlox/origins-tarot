@@ -4,6 +4,9 @@
     "tarot:hermit/secondary",
     "tarot:hermit/passive",
     "tarot:hermit/drawback",
+    "tarot:hermit/extra_1",
+    "tarot:hermit/extra_2",
+    "tarot:hermit/extra_6",
     "tarot:hermit/wings"
   ],
   "icon": "minecraft:enchanted_book",

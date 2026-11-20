@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Hold the Line",
+  "description": "Resist 45% knockback.",
+  "modifier": {
+    "value": 0.45,
+    "operation": "addition",
+    "name": "Hold the Line",
+    "attribute": "minecraft:generic.knockback_resistance"
+  }
+}

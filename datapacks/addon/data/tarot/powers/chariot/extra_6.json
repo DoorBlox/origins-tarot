@@ -1,0 +1,19 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Drenched Powder",
+  "description": "Underwater, suffer Mining Fatigue I.",
+  "interval": 60,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:mining_fatigue",
+      "duration": 80,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "condition": {
+    "type": "origins:submerged_in",
+    "fluid": "minecraft:water"
+  }
+}

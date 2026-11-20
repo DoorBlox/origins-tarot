@@ -1,10 +1,10 @@
 {
-  "type": "origins:modify_damage_dealt",
-  "name": "Price: Reluctant Fighter",
-  "description": "Drawback: You deal 17% less melee damage.",
-  "modifier": {
-    "name": "Price: Reluctant Fighter",
-    "operation": "multiply_total",
-    "value": -0.17
+  "type": "origins:disable_regen",
+  "name": "Price: Sacrificial Healing",
+  "description": "At seven hunger shanks or fewer, you stop regenerating naturally.",
+  "condition": {
+    "type": "origins:food_level",
+    "comparison": "<=",
+    "compare_to": 14
   }
 }

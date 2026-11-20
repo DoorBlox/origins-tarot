@@ -1,11 +1,11 @@
 {
   "type": "origins:attribute",
-  "name": "Armored Sovereign",
-  "description": "Permanent +3 armor points.",
+  "name": "Sovereign Plate",
+  "description": "Gain three armor points.",
   "modifier": {
-    "attribute": "minecraft:generic.armor",
-    "name": "Armored Sovereign",
     "value": 3,
-    "operation": "addition"
+    "operation": "addition",
+    "name": "Sovereign Plate",
+    "attribute": "minecraft:generic.armor"
   }
 }

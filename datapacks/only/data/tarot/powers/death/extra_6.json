@@ -1,0 +1,18 @@
+{
+  "type": "origins:target_action_on_hit",
+  "name": "Reapers Chill",
+  "description": "Successful hits slow enemies for three seconds; cooldown 10 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:slowness",
+      "duration": 60,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 200,
+  "hud_render": {
+    "should_render": false
+  }
+}

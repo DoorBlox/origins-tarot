@@ -1,15 +1,15 @@
 {
   "type": "origins:action_over_time",
-  "name": "Price: Drowned Flame",
-  "description": "Drawback: While submerged in water, you suffer Slowness II.",
-  "interval": 20,
+  "name": "Price: Extinguished Fury",
+  "description": "Underwater, suffer Weakness I.",
+  "interval": 60,
   "entity_action": {
     "type": "origins:apply_effect",
     "effect": {
-      "effect": "minecraft:slowness",
-      "duration": 60,
-      "amplifier": 1,
-      "show_particles": true
+      "effect": "minecraft:weakness",
+      "duration": 80,
+      "amplifier": 0,
+      "show_particles": false
     }
   },
   "condition": {

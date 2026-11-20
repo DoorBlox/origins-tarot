@@ -4,6 +4,8 @@
     "tarot:devil/secondary",
     "tarot:devil/passive",
     "tarot:devil/drawback",
+    "tarot:devil/extra_1",
+    "tarot:devil/extra_2",
     "tarot:devil/wings"
   ],
   "icon": "minecraft:nether_wart",

@@ -1,0 +1,31 @@
+{
+  "type": "origins:night_vision",
+  "name": "Low-Light Reading",
+  "description": "Holding a book grants night vision.",
+  "strength": 1.0,
+  "condition": {
+    "type": "origins:or",
+    "conditions": [
+      {
+        "type": "origins:equipped_item",
+        "equipment_slot": "offhand",
+        "item_condition": {
+          "type": "origins:ingredient",
+          "ingredient": {
+            "item": "minecraft:book"
+          }
+        }
+      },
+      {
+        "type": "origins:equipped_item",
+        "equipment_slot": "offhand",
+        "item_condition": {
+          "type": "origins:ingredient",
+          "ingredient": {
+            "item": "minecraft:enchanted_book"
+          }
+        }
+      }
+    ]
+  }
+}

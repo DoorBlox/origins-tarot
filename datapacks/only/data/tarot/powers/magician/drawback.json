@@ -1,10 +1,27 @@
 {
-  "type": "origins:modify_damage_dealt",
-  "name": "Price: Untrained Duelist",
-  "description": "Drawback: You deal 12% less melee damage.",
-  "modifier": {
-    "name": "Price: Untrained Duelist",
-    "operation": "multiply_total",
-    "value": -0.12
+  "type": "origins:action_over_time",
+  "name": "Price: Moon Ravings",
+  "description": "When exposed to the nighttime sky, periodically suffer Mining Fatigue I. Full-moon detection is not implemented.",
+  "interval": 100,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:mining_fatigue",
+      "duration": 120,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "condition": {
+    "type": "origins:and",
+    "conditions": [
+      {
+        "type": "origins:daytime",
+        "inverted": true
+      },
+      {
+        "type": "origins:exposed_to_sky"
+      }
+    ]
   }
 }

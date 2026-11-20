@@ -1,11 +1,22 @@
 {
-  "type": "origins:attribute",
-  "name": "Light of Togetherness",
-  "description": "A modest +1 heart of resilience.",
-  "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Light of Togetherness",
-    "value": 2,
-    "operation": "addition"
+  "type": "origins:action_over_time",
+  "name": "Shared Pulse",
+  "description": "Every 30 seconds nearby living creatures receive Regeneration I, including enemies.",
+  "interval": 600,
+  "entity_action": {
+    "type": "origins:area_of_effect",
+    "radius": 6,
+    "bientity_action": {
+      "type": "origins:target_action",
+      "action": {
+        "type": "origins:apply_effect",
+        "effect": {
+          "effect": "minecraft:regeneration",
+          "duration": 80,
+          "amplifier": 0,
+          "show_particles": false
+        }
+      }
+    }
   }
 }

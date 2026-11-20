@@ -1,0 +1,18 @@
+{
+  "type": "origins:attacker_action_when_hit",
+  "name": "Retaliatory Sentence",
+  "description": "Attackers are slowed for three seconds; cooldown 14 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:slowness",
+      "duration": 60,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 280,
+  "hud_render": {
+    "should_render": false
+  }
+}

@@ -1,5 +1,17 @@
 {
-  "type": "origins:fire_immunity",
-  "name": "Vessel of Dawn",
-  "description": "Fire has no power over you."
+  "type": "origins:modify_damage_dealt",
+  "name": "Unshadowed",
+  "description": "Deal 40% more damage to undead.",
+  "modifier": {
+    "value": 0.4,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "bientity_condition": {
+    "type": "origins:target_condition",
+    "condition": {
+      "type": "origins:entity_group",
+      "group": "undead"
+    }
+  }
 }

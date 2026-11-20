@@ -1,0 +1,14 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Clown Balance",
+  "description": "Take 35% less fall damage.",
+  "modifier": {
+    "value": -0.35,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "damage_condition": {
+    "type": "origins:name",
+    "name": "fall"
+  }
+}

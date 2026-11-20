@@ -1,18 +1,7 @@
 {
-  "type": "origins:action_over_time",
-  "name": "Price: Morning Sorrow",
-  "description": "Drawback: Direct sunlight gives Slowness I.",
-  "interval": 20,
-  "entity_action": {
-    "type": "origins:apply_effect",
-    "effect": {
-      "effect": "minecraft:slowness",
-      "duration": 60,
-      "amplifier": 0,
-      "show_particles": true
-    }
-  },
-  "condition": {
-    "type": "origins:exposed_to_sun"
-  }
+  "type": "origins:prevent_sleep",
+  "name": "Price: True Sleeplessness",
+  "description": "Cannot sleep, but beds can still set your spawn.",
+  "message": "A Sleepless never rests under the Evernight.",
+  "set_spawn_point": true
 }

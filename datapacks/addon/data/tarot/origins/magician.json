@@ -4,6 +4,9 @@
     "tarot:magician/secondary",
     "tarot:magician/passive",
     "tarot:magician/drawback",
+    "tarot:magician/extra_1",
+    "tarot:magician/extra_2",
+    "tarot:magician/extra_6",
     "tarot:magician/wings"
   ],
   "icon": "minecraft:ender_pearl",

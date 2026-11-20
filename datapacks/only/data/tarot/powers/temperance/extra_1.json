@@ -1,0 +1,14 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Ethereal Landing",
+  "description": "Take 60% less fall damage.",
+  "modifier": {
+    "value": -0.6,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "damage_condition": {
+    "type": "origins:name",
+    "name": "fall"
+  }
+}

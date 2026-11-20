@@ -1,11 +1,11 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Ascetic Discipline",
-  "description": "Drawback: 2 fewer hearts; no astral wings.",
-  "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Price: Ascetic Discipline",
-    "value": -4,
-    "operation": "addition"
+  "type": "origins:prevent_item_use",
+  "name": "Price: Sacred Dietary Vow",
+  "description": "Cannot eat meat or fish.",
+  "item_condition": {
+    "type": "origins:ingredient",
+    "ingredient": {
+      "tag": "origins:meat"
+    }
   }
 }

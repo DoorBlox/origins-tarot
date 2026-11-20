@@ -1,10 +1,10 @@
 {
   "type": "origins:modify_xp_gain",
-  "name": "Arcane Literacy",
-  "description": "Gain 25% more experience from orbs.",
+  "name": "Reader Aptitude",
+  "description": "Gain 35% more experience from orbs.",
   "modifier": {
-    "name": "Arcane Literacy",
+    "value": 0.35,
     "operation": "multiply_total",
-    "value": 0.25
+    "name": "Tarot V2"
   }
 }

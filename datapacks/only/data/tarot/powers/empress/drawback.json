@@ -1,10 +1,16 @@
 {
   "type": "origins:modify_damage_taken",
-  "name": "Price: Cracked Mirror",
-  "description": "Drawback: Take 16% more damage from attacks.",
+  "name": "Price: Exposed Reflection",
+  "description": "Sunlight makes incoming projectiles 25% more dangerous.",
   "modifier": {
-    "name": "Price: Cracked Mirror",
+    "value": 0.25,
     "operation": "multiply_total",
-    "value": 0.16
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:exposed_to_sun"
+  },
+  "damage_condition": {
+    "type": "origins:projectile"
   }
 }

@@ -3,7 +3,10 @@
     "tarot:emperor/primary",
     "tarot:emperor/secondary",
     "tarot:emperor/passive",
-    "tarot:emperor/drawback"
+    "tarot:emperor/drawback",
+    "tarot:emperor/extra_1",
+    "tarot:emperor/extra_2",
+    "tarot:emperor/extra_6"
   ],
   "icon": "minecraft:golden_helmet",
   "name": "The Emperor",

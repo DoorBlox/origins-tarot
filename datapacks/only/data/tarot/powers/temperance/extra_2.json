@@ -1,0 +1,14 @@
+{
+  "type": "origins:conditioned_attribute",
+  "name": "Silent Crossing",
+  "description": "Move 20% faster while sneaking.",
+  "modifier": {
+    "value": 0.2,
+    "operation": "multiply_total",
+    "name": "Silent Crossing",
+    "attribute": "minecraft:generic.movement_speed"
+  },
+  "condition": {
+    "type": "origins:sneaking"
+  }
+}

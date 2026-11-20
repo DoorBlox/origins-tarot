@@ -1,0 +1,8 @@
+{
+  "type": "origins:effect_immunity",
+  "name": "Wraith Resistance",
+  "description": "Immune to Slowness.",
+  "effects": [
+    "minecraft:slowness"
+  ]
+}

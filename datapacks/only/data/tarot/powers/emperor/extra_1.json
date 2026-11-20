@@ -1,0 +1,11 @@
+{
+  "type": "origins:attribute",
+  "name": "Iron Edict",
+  "description": "Resist 40% of knockback.",
+  "modifier": {
+    "value": 0.4,
+    "operation": "addition",
+    "name": "Iron Edict",
+    "attribute": "minecraft:generic.knockback_resistance"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Surprising Protection",
+  "description": "Take 10% less damage from ordinary attacks.",
+  "modifier": {
+    "value": -0.1,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  }
+}

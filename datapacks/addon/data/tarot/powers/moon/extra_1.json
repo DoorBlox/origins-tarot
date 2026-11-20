@@ -1,0 +1,14 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Bloods Renewal",
+  "description": "At night, heal half a heart every 30 seconds.",
+  "interval": 600,
+  "entity_action": {
+    "type": "origins:heal",
+    "amount": 1
+  },
+  "condition": {
+    "type": "origins:daytime",
+    "inverted": true
+  }
+}

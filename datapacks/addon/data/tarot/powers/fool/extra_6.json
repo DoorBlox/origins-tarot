@@ -1,0 +1,18 @@
+{
+  "type": "origins:self_action_when_hit",
+  "name": "Danger Premonition",
+  "description": "After being struck, gain Speed I for three seconds; 45-second cooldown.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:speed",
+      "duration": 60,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 900,
+  "hud_render": {
+    "should_render": false
+  }
+}

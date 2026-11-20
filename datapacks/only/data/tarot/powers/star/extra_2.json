@@ -1,0 +1,8 @@
+{
+  "type": "origins:effect_immunity",
+  "name": "Undisturbed Mind",
+  "description": "Immune to Blindness.",
+  "effects": [
+    "minecraft:blindness"
+  ]
+}

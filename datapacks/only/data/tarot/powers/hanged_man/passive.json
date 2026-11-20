@@ -1,11 +1,19 @@
 {
-  "type": "origins:attribute",
-  "name": "Experienced Sailor",
-  "description": "You travel 9% faster across land.",
-  "modifier": {
-    "attribute": "minecraft:generic.movement_speed",
-    "name": "Experienced Sailor",
-    "value": 0.09,
-    "operation": "multiply_total"
+  "type": "origins:action_over_time",
+  "name": "Sea Lords Lungs",
+  "description": "Underwater, continuously refresh Water Breathing.",
+  "interval": 60,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:water_breathing",
+      "duration": 80,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "condition": {
+    "type": "origins:submerged_in",
+    "fluid": "minecraft:water"
   }
 }

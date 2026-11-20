@@ -1,0 +1,16 @@
+{
+  "type": "origins:conditioned_attribute",
+  "name": "Desperate Malice",
+  "description": "When below 40% health, attack damage rises 15%.",
+  "modifier": {
+    "value": 0.15,
+    "operation": "multiply_total",
+    "name": "Desperate Malice",
+    "attribute": "minecraft:generic.attack_damage"
+  },
+  "condition": {
+    "type": "origins:relative_health",
+    "comparison": "<=",
+    "compare_to": 0.4
+  }
+}

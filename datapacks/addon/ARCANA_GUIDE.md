@@ -27,6 +27,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - The Fool and the World represent two personae of the **same** character, Klein Moretti, but are deliberately distinct playable builds.
 - The Empress and Chariot references are Book Two / *Circle of Inevitability* spoilers.
 - **Area-of-effect abilities affect all nearby living targets, including teammates, villagers, pets, and enemy players.** This deliberate cost matters in SMP battles; use cautiously.
+- **V2 ALPHA:** passive traits and unique drawbacks are new and have not been tested on this server. Keep the working V1 ZIP for rollback.
+- Lunar-cycle-only effects and team-only soul bonds require optional scripting and are not implemented here.
 - No admin command execution, item duplication, terrain destruction, or KubeJS privileges are used by this datapack.
 - This pack appends all 22 cards to the existing Origins selection layer (`replace:false`). It will not replace existing vanilla or other custom Origins.
 - The pack has been structurally checked; **live in-game behavior has not been tested in your server**. Begin with your temporary test world, inspect the server log, and test abilities one by one.
@@ -40,8 +42,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Cautious trickster and escape artist who manipulates the fight without dominating it.
 - **Primary (G):** Gray Fog Masquerade — G: Hide yourself for 6s, gain Speed I for 6s; costs hunger. Cooldown: 21s.
 - **Secondary (V):** Marionette Thread — V: Sightline curse on one target within 14 blocks: heavy slowness and glowing. Cooldown: 17s.
-- **Special traits:** Seer Instinct — Every 14s, your next successful melee hit briefly weakens its target.
-- **Weakness:** Drawback: Your cautious body has one fewer heart.
+- **Special traits:** Spirit Vision — While sneaking, reveal nearby living beings for two seconds every eight seconds. The glow may be visible to others.; Clown Reflex — Jump 15% higher.; Clown Balance — Take 35% less fall damage.; Danger Premonition — After being struck, gain Speed I for three seconds; 45-second cooldown.
+- **Weakness:** Sprinting consumes 40% more hunger; careful preparation is essential.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 01 — The Magician (`tarot:magician`)
@@ -51,8 +53,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Portal traveler with a reliable short-range escape and vertical mobility.
 - **Primary (G):** Doorstep — G: Throw a summoned ender pearl to travel through space. The normal ender-pearl damage still applies. Cooldown: 21s.
 - **Secondary (V):** Traveler's Updraft — V: Leap upward into an Elytra glide; 24s cooldown. Cooldown: 24s.
-- **Special traits:** Traveler's Stride — Travelers move 10% faster on land.
-- **Weakness:** Drawback: You deal 12% less melee damage.
+- **Special traits:** Wayfarer — Move 12% faster on land.; Traveler Jump — Jump 20% higher.; Safe Arrival — Take 70% less fall damage.; Door Instinct — An ambush gives brief Resistance I, once every 120 seconds.
+- **Weakness:** When exposed to the nighttime sky, periodically suffer Mining Fatigue I. Full-moon detection is not implemented.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 02 — The High Priestess (`tarot:high_priestess`)
@@ -62,8 +64,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Knowledge and enemy revelation, balanced by fragility.
 - **Primary (G):** Unsealed Sight — G: Illuminate nearby living creatures with Glowing for 9s; may reveal allies. Cooldown: 15s.
 - **Secondary (V):** Foreknowledge — V: Gain Night Vision and Resistance I for 10s. Cooldown: 23s.
-- **Special traits:** Arcane Literacy — Gain 25% more experience from orbs.
-- **Weakness:** Drawback: 2 hearts fewer maximum health.
+- **Special traits:** Reader Aptitude — Gain 35% more experience from orbs.; Ritual Focus — Mine 25% faster with a book in your offhand.; Calculated Arrows — Ranged attacks deal 15% more damage.; Low-Light Reading — Holding a book grants night vision.
+- **Weakness:** Mine 20% slower unless a book is held in your offhand.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 03 — The Empress (`tarot:empress`)
@@ -73,8 +75,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Mirror-themed witch of toxins, beauty, misdirection and vulnerability.
 - **Primary (G):** Mirror Plague — G: Afflict nearby living entities with Poison I and Slowness I. Allies are not protected. Cooldown: 22.5s.
 - **Secondary (V):** Glass Reflection — V: Vanish for 6s and gain Speed II for 5s. Cooldown: 25s.
-- **Special traits:** Witch's Grace — Movement is 8% faster.
-- **Weakness:** Drawback: Take 16% more damage from attacks.
+- **Special traits:** Witch Venom — Melee strikes inflict Poison I for three seconds, at most once every 12 seconds.; Mirror Veil — Sneaking in dim light makes your body invisible. Armor may still show.; Witch Grace — Movement speed is 10% faster.; Venom Immunity — Immune to Poison.
+- **Weakness:** Sunlight makes incoming projectiles 25% more dangerous.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 04 — The Emperor (`tarot:emperor`)
@@ -84,8 +86,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Grounded tank who controls crowds and resists retaliation.
 - **Primary (G):** Imperial Decree — G: Slowness II and Weakness I to nearby creatures. Everyone nearby pays for disobedience. Cooldown: 21s.
 - **Secondary (V):** Royal Bulwark — V: Resistance II for 8s; movement slows during the decree. Cooldown: 26s.
-- **Special traits:** Armored Sovereign — Permanent +3 armor points.
-- **Weakness:** Drawback: Your speed is reduced by 12%. No astral wings.
+- **Special traits:** Sovereign Plate — Gain three armor points.; Iron Edict — Resist 40% of knockback.; Distorted Authority — Attacks on you slow the aggressor for two seconds every 14 seconds.; Heavy Armor Tax — Sprinting consumes 45% more exhaustion.
+- **Weakness:** Holding a shield in the offhand slows you by 25%.
 - **Movement:** **Grounded (no built-in glide)**.
 
 ### 05 — The Hierophant (`tarot:hierophant`)
@@ -95,8 +97,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Stationary support scholar who sees the enemy and grants blessings.
 - **Primary (G):** Sacred Reading — G: Reveal nearby living beings and give yourself Haste II for 12s. Cooldown: 23s.
 - **Secondary (V):** Shared Blessing — V: Grant Regeneration I for 6s to everyone within 6 blocks, including enemies; heal yourself by 1 heart. Cooldown: 30s.
-- **Special traits:** Ritual Scholar — You learn 35% faster from experience orbs.
-- **Weakness:** Drawback: 2 fewer hearts; no astral wings.
+- **Special traits:** Scripture and Study — Earn 40% more XP from orbs.; Consecrated Study — Gain Haste I pulses when within three blocks of a lectern.; Quiet Benediction — Every 40 seconds, nearby living creatures receive Regeneration I, including enemies.; Measured Routine — Exhaustion is 15% lower.
+- **Weakness:** Cannot eat meat or fish.
 - **Movement:** **Grounded (no built-in glide)**.
 
 ### 06 — The Lovers (`tarot:lovers`)
@@ -106,8 +108,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Support guardian whose healing also benefits enemies if carelessly used.
 - **Primary (G):** Promise of Hearts — G: Regeneration II to living entities within 7 blocks, friend or foe. A tactical choice. Cooldown: 25s.
 - **Secondary (V):** Sacrificial Vow — V: Gain Absorption II for 10s but Weakness I for 6s; costs hunger. Cooldown: 23s.
-- **Special traits:** Light of Togetherness — A modest +1 heart of resilience.
-- **Weakness:** Drawback: You deal 17% less melee damage.
+- **Special traits:** Shared Pulse — Every 30 seconds nearby living creatures receive Regeneration I, including enemies.; Mother Embrace — Recover half a heart every 30 seconds when well-fed.; Compassionate Steps — Move 8% faster.
+- **Weakness:** At seven hunger shanks or fewer, you stop regenerating naturally.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 07 — The Chariot (`tarot:chariot`)
@@ -117,8 +119,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** High-mobility warlock whose powerful assault demands food and restraint.
 - **Primary (G):** War March — G: Strength II and Speed II for 9s, at a serious hunger cost. Cooldown: 25s.
 - **Secondary (V):** Ironblood Volley — V: Fire three non-retrievable arrows in a rapid volley. Cooldown: 16s.
-- **Special traits:** Flame Within — Fire cannot burn a veteran of the Red Priest.
-- **Weakness:** Drawback: While submerged in water, you suffer Slowness II.
+- **Special traits:** Flame Within — Immune to fire damage.; Hunter Momentum — Sprinting melee hits deal 15% more damage.; War Rush — Kills grant Speed I for eight seconds; cooldown 18 seconds.; Drenched Powder — Underwater, suffer Mining Fatigue I.
+- **Weakness:** Underwater, suffer Weakness I.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 08 — Strength (`tarot:strength`)
@@ -128,8 +130,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Unflying juggernaut with immense health but slower movement.
 - **Primary (G):** Lionheart — G: Strength II and Resistance II for 8s; you also become slow for 7s. Cooldown: 28s.
 - **Secondary (V):** Earthshaker — V: Stagger nearby creatures with Slowness III and Weakness I. Cooldown: 20s.
-- **Special traits:** Giant Blood — Permanent +3 hearts.; Iron Hide — Additional +2 armor points.
-- **Weakness:** Drawback: Move 16% slower. You cannot glide without an item.
+- **Special traits:** Giants Grip — Melee attacks deal 18% more damage.; Steel Frame — Gain two armor points.; Immovable — Resist 55% of knockback.; Quarry Hands — Mine stone 35% faster.
+- **Weakness:** Swim 45% slower.; Cannot use bows or crossbows.
 - **Movement:** **Grounded (no built-in glide)**.
 
 ### 09 — The Hermit (`tarot:hermit`)
@@ -139,8 +141,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Fragile investigator who marks enemies and commands star-bolts.
 - **Primary (G):** Eyes of Mystery Prying — G: Mark a creature at sightline range 18 with Glowing and Weakness II. Cooldown: 15s.
 - **Secondary (V):** Astral Scriptorium — V: Manifest two spectral arrows of starlight. Cooldown: 19s.
-- **Special traits:** Hidden Scholarship — Gain 30% more experience from orbs.
-- **Weakness:** Drawback: 1 fewer heart.
+- **Special traits:** Mystery Prying — Earn 35% more experience.; Astral Calculation — Deal 20% more projectile damage.; Occult Night Sight — Permanent night vision.; Prepared Investigator — Holding an enchanted book in your offhand boosts mining speed 20%.
+- **Weakness:** At level 30 or above, suffer Mining Fatigue until you spend experience.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 10 — Wheel of Fortune (`tarot:wheel_of_fortune`)
@@ -150,8 +152,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** True random fate-roll with both boons and punishing outcomes.
 - **Primary (G):** Fate's Sixfold Cast — G: Roll one of six equal outcomes: Speed II, Strength II, Regeneration II, Blindness, Hunger II, or Poison I. Cooldown: 14s.
 - **Secondary (V):** Borrowed Luck — V: Risk a second, milder gamble (either Resistance I or Slowness II). Cooldown: 19s.
-- **Special traits:** Fortune's Step — Permanent +7% walking speed.
-- **Weakness:** Drawback: Receive 12% more damage.
+- **Special traits:** Fortunate Soul — Luck increases by one where vanilla uses it.; Fortunes Bounty — Gain 10% more XP.; Surprising Protection — Take 10% less damage from ordinary attacks.
+- **Weakness:** Every 90 seconds a random fate roll yields one of three boons or three punishments.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 11 — Justice (`tarot:justice`)
@@ -161,8 +163,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Mental restraint and group support, but weak direct melee damage.
 - **Primary (G):** Psychological Stillness — G: Calm living entities within 8 blocks with Weakness II and Slowness I. Cooldown: 19s.
 - **Secondary (V):** Therapist's Shelter — V: Regeneration II for nearby living beings including foes; grant yourself Absorption I. Cooldown: 30s.
-- **Special traits:** Measured Heart — A calm mind grants +1 heart.
-- **Weakness:** Drawback: Melee attacks inflict 20% less damage.
+- **Special traits:** Emotional Recoil — Attackers receive Weakness I for four seconds; cooldown 18 seconds.; Patient Observation — When sneaking, incoming damage is reduced by 12%.; Therapists Presence — Nearby entities receive Regeneration I every 45 seconds, including foes.; Clear Head — Sneaking refreshes brief Night Vision.
+- **Weakness:** Deal 70% less damage to villagers.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 12 — The Hanged Man (`tarot:hanged_man`)
@@ -172,8 +174,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Storm-call that slows foes, keen in water, vulnerable in direct combat.
 - **Primary (G):** Tempest Canticle — G: The air thickens; Slowness II on nearby living entities while you gain Resistance I. Cooldown: 24s.
 - **Secondary (V):** Sea-Lord's Javelin — V: Fire two swift spectral bolts. Cooldown: 15s.
-- **Special traits:** Experienced Sailor — You travel 9% faster across land.; Sea Pressure — Successful strikes briefly slow victims, 11s internal cooldown.
-- **Weakness:** Drawback: One fewer heart.
+- **Special traits:** Sea Lords Lungs — Underwater, continuously refresh Water Breathing.; Sailors Speed — Swim 35% faster.; Storm Companion — In rain, move 20% faster.; Sea Lords Trident — Projectiles deal 20% more damage.
+- **Weakness:** Exhaustion doubles in the Nether.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 13 — Death (`tarot:death`)
@@ -183,8 +185,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Soul-harvesting survivor who recovers by defeating threats.
 - **Primary (G):** Grave Quietus — G: Send out an aura of Wither I for 4s, affecting everyone nearby. Cooldown: 25s.
 - **Secondary (V):** Return from the Brink — V: Regeneration II and Resistance I for 7s; costs a heavy portion of hunger. Cooldown: 31s.
-- **Special traits:** Harvest the Departed — Recover one heart whenever you defeat a creature, at most once per 8s.
-- **Weakness:** Drawback: In direct sunlight, you suffer Weakness I.
+- **Special traits:** Soul Harvest — Recover one heart when you defeat an entity; cooldown 10 seconds.; Grave Affinity — Take 20% less damage from undead enemies.; Grave Sight — Permanent night vision.; Reapers Chill — Successful hits slow enemies for three seconds; cooldown 10 seconds.
+- **Weakness:** Natural food regeneration is disabled; seek healing from kills, potions or allies.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 14 — Temperance (`tarot:temperance`)
@@ -194,8 +196,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Wraith tactician who fades from sight but suffers a frail body.
 - **Primary (G):** Wraith Form — G: Invisibility and Resistance I for 6s, but self-inflicted Weakness for 6s. Cooldown: 21.5s.
 - **Secondary (V):** Quiet Possession — V: Fix the target you face with Slowness III and Weakness II. Cooldown: 22.5s.
-- **Special traits:** Eyes Behind Glass — Permanent Night Vision.
-- **Weakness:** Drawback: 2 fewer hearts.
+- **Special traits:** Wraith Veil — Crouching in dim lighting gives invisibility. Held items and armor may remain visible.; Ethereal Landing — Take 60% less fall damage.; Silent Crossing — Move 20% faster while sneaking.; Wraith Resistance — Immune to Slowness.
+- **Weakness:** High-defense chestplates are forbidden.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 15 — The Devil (`tarot:devil`)
@@ -205,8 +207,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** A risky infernal bargain: short power spikes, hunger and sunlight curses.
 - **Primary (G):** Forbidden Bargain — G: Strength III and Speed II for 7s, but suffer Poison I and exhausting hunger. Cooldown: 30s.
 - **Secondary (V):** Tempting Whispers — V: Nearby beings suffer Weakness II and Hunger I; this affects allies. Cooldown: 19s.
-- **Special traits:** Infernal Heritage — You do not burn in fire.
-- **Weakness:** Drawback: Direct sunlight inflicts Weakness II.
+- **Special traits:** Hellborn — Immune to fire.; Corrupting Claws — Hits inflict Wither I for two seconds, cooldown 16 seconds.; Desperate Malice — When below 40% health, attack damage rises 15%.
+- **Weakness:** Cannot eat golden apples or enchanted golden apples.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 16 — The Tower (`tarot:tower`)
@@ -216,8 +218,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Disaster-themed crowd-control specialist who pays for recklessness.
 - **Primary (G):** Collapse of Certainty — G: Nearby targets become blind for 3s and slow for 5s. You are not protected from retaliation. Cooldown: 24s.
 - **Secondary (V):** Rising Ruin — V: Violent skyward launch, usable before gliding. Cooldown: 21s.
-- **Special traits:** Shatterer — Your melee blows are 9% stronger.
-- **Weakness:** Drawback: You take 20% more damage.
+- **Special traits:** Ruin Proof — Take 60% less explosion damage.; Cracked Foundations — Mine stone 30% faster.; Unstable Strike — Hits slow the enemy for two seconds, cooldown 13 seconds.
+- **Weakness:** Fall damage is 75% higher.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 17 — The Star (`tarot:star`)
@@ -227,8 +229,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Nightwatcher who obscures enemies and thrives beyond daylight.
 - **Primary (G):** Midnight Poetry — G: Blindness and Slowness I to nearby targets, revealing the advantage of darkness. Cooldown: 21s.
 - **Secondary (V):** Nightwatcher's Refuge — V: Invisibility and Night Vision for 8s. Cooldown: 24s.
-- **Special traits:** Sleepless Gaze — You see clearly in darkness.
-- **Weakness:** Drawback: Direct sunlight gives Slowness I.
+- **Special traits:** Sleepless Sight — Permanent night vision.; Nightwatch Stride — Move 15% faster at night.; Undisturbed Mind — Immune to Blindness.
+- **Weakness:** Cannot sleep, but beds can still set your spawn.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 18 — The Moon (`tarot:moon`)
@@ -238,8 +240,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Sanguine medicine and nocturnal mastery, weakened beneath the sun.
 - **Primary (G):** Scarlet Medicine — G: Regeneration II for 9s, but must spend substantial energy. Cooldown: 24s.
 - **Secondary (V):** Blood Moon Awakening — V: Strength II and Night Vision at night or indoors; in direct sun, only Resistance I. Cooldown: 24s.
-- **Special traits:** Sanguine Eyes — Permanent Night Vision.
-- **Weakness:** Drawback: In direct sun, you are weakened.
+- **Special traits:** Sanguine Sight — Permanent night vision.; Bloods Renewal — At night, heal half a heart every 30 seconds.; Nocturnal Blood — Move 15% faster at night.
+- **Weakness:** Cannot eat non-meat foods; all items in Origins meat tag are allowed.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 19 — The Sun (`tarot:sun`)
@@ -249,8 +251,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Purifying defender whose radiance falters away from sunlight.
 - **Primary (G):** Unshadowed Pulse — G: Glowing on nearby creatures and Strength I for yourself. Allies are visible too. Cooldown: 21s.
 - **Secondary (V):** Radiant Shelter — V: Regeneration II, Resistance I, and brief illumination (Night Vision). Cooldown: 27s.
-- **Special traits:** Vessel of Dawn — Fire has no power over you.
-- **Weakness:** Drawback: Whenever you are away from sunlight, you suffer Slowness I.
+- **Special traits:** Unshadowed — Deal 40% more damage to undead.; Inner Radiance — Permanent night vision, even underground.; Sun Fires — Fire cannot harm you.; Purification — Immune to Poison.
+- **Weakness:** Always Glow, revealing yourself to other players.
 - **Movement:** **Built-in Elytra glide**.
 
 ### 20 — Judgement (`tarot:judgement`)
@@ -260,8 +262,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Grounded arbiter who marks targets and stands her ground.
 - **Primary (G):** Sentence Pronounced — G: Target you are looking at becomes Slowness III and Glowing. Cooldown: 19s.
 - **Secondary (V):** Writ of Protection — V: Resistance II and Strength I for 7s. You must stand your ground. Cooldown: 25s.
-- **Special traits:** Marshal's Plate — Gain +3 armor points.
-- **Weakness:** Drawback: Move 10% slower; no astral wings.
+- **Special traits:** Law Weight — Gain two armor points.; Hold the Line — Resist 45% knockback.; Retaliatory Sentence — Attackers are slowed for three seconds; cooldown 14 seconds.; Calm Stance — Take 12% less damage while not sprinting.
+- **Weakness:** Cannot use ender pearls or chorus fruit.
 - **Movement:** **Grounded (no built-in glide)**.
 
 ### 21 — The World (`tarot:world`)
@@ -271,8 +273,8 @@ The power screen lists each benefit and drawback with its cooldown.
 - **Playstyle:** Aggressive hunter persona of Klein: enemy marks, precision and evasion.
 - **Primary (G):** Hunting Notice — G: Mark a target within 16 blocks with Glowing and Weakness II. Cooldown: 13s.
 - **Secondary (V):** Faceless Withdrawal — V: Vanish for 5s with Speed II and Absorption I, costing hunger. Cooldown: 24s.
-- **Special traits:** Bounty Hunter — You strike 10% harder in melee.
-- **Weakness:** Drawback: One fewer heart.
+- **Special traits:** Cold Precision — Ranged projectiles deal 25% more damage.; Marked Prey — Hits mark targets with Glowing for six seconds, cooldown 10 seconds.; Hunters Tempo — Kills grant Speed I for eight seconds, cooldown 18 seconds.
+- **Weakness:** Cannot interact with villagers to trade.
 - **Movement:** **Built-in Elytra glide**.
 
 ## How to make and modify a custom Origin

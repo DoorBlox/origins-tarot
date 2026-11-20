@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_exhaustion",
+  "name": "Measured Routine",
+  "description": "Exhaustion is 15% lower.",
+  "modifier": {
+    "value": -0.15,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  }
+}

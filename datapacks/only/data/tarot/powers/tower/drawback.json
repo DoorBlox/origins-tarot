@@ -1,10 +1,14 @@
 {
   "type": "origins:modify_damage_taken",
-  "name": "Price: Glass Foundation",
-  "description": "Drawback: You take 20% more damage.",
+  "name": "Price: Falling Tower",
+  "description": "Fall damage is 75% higher.",
   "modifier": {
-    "name": "Price: Glass Foundation",
+    "value": 0.75,
     "operation": "multiply_total",
-    "value": 0.2
+    "name": "Tarot V2"
+  },
+  "damage_condition": {
+    "type": "origins:name",
+    "name": "fall"
   }
 }

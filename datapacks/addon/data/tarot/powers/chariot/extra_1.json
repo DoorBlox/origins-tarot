@@ -1,0 +1,13 @@
+{
+  "type": "origins:modify_damage_dealt",
+  "name": "Hunter Momentum",
+  "description": "Sprinting melee hits deal 15% more damage.",
+  "modifier": {
+    "value": 0.15,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:sprinting"
+  }
+}

@@ -4,6 +4,9 @@
     "tarot:fool/secondary",
     "tarot:fool/passive",
     "tarot:fool/drawback",
+    "tarot:fool/extra_1",
+    "tarot:fool/extra_2",
+    "tarot:fool/extra_6",
     "tarot:fool/wings"
   ],
   "icon": "minecraft:totem_of_undying",

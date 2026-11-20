@@ -1,11 +1,22 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Heavy Duty",
-  "description": "Drawback: Move 10% slower; no astral wings.",
-  "modifier": {
-    "attribute": "minecraft:generic.movement_speed",
-    "name": "Price: Heavy Duty",
-    "value": -0.1,
-    "operation": "multiply_total"
+  "type": "origins:prevent_item_use",
+  "name": "Price: No Unlawful Escape",
+  "description": "Cannot use ender pearls or chorus fruit.",
+  "item_condition": {
+    "type": "origins:or",
+    "conditions": [
+      {
+        "type": "origins:ingredient",
+        "ingredient": {
+          "item": "minecraft:ender_pearl"
+        }
+      },
+      {
+        "type": "origins:ingredient",
+        "ingredient": {
+          "item": "minecraft:chorus_fruit"
+        }
+      }
+    ]
   }
 }

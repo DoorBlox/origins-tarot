@@ -3,7 +3,10 @@
     "tarot:hierophant/primary",
     "tarot:hierophant/secondary",
     "tarot:hierophant/passive",
-    "tarot:hierophant/drawback"
+    "tarot:hierophant/drawback",
+    "tarot:hierophant/extra_1",
+    "tarot:hierophant/extra_2",
+    "tarot:hierophant/extra_6"
   ],
   "icon": "minecraft:enchanting_table",
   "name": "The Hierophant",

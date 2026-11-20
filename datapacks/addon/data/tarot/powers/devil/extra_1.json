@@ -1,0 +1,18 @@
+{
+  "type": "origins:target_action_on_hit",
+  "name": "Corrupting Claws",
+  "description": "Hits inflict Wither I for two seconds, cooldown 16 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:wither",
+      "duration": 40,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 320,
+  "hud_render": {
+    "should_render": false
+  }
+}

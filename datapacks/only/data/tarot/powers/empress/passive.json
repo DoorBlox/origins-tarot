@@ -1,11 +1,18 @@
 {
-  "type": "origins:attribute",
-  "name": "Witch's Grace",
-  "description": "Movement is 8% faster.",
-  "modifier": {
-    "attribute": "minecraft:generic.movement_speed",
-    "name": "Witch's Grace",
-    "value": 0.08,
-    "operation": "multiply_total"
+  "type": "origins:target_action_on_hit",
+  "name": "Witch Venom",
+  "description": "Melee strikes inflict Poison I for three seconds, at most once every 12 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:poison",
+      "duration": 60,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 240,
+  "hud_render": {
+    "should_render": false
   }
 }

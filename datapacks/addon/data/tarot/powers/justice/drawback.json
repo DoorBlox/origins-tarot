@@ -1,10 +1,17 @@
 {
   "type": "origins:modify_damage_dealt",
-  "name": "Price: Pacifist Heart",
-  "description": "Drawback: Melee attacks inflict 20% less damage.",
+  "name": "Price: Compassionate Restraint",
+  "description": "Deal 70% less damage to villagers.",
   "modifier": {
-    "name": "Price: Pacifist Heart",
+    "value": -0.7,
     "operation": "multiply_total",
-    "value": -0.2
+    "name": "Tarot V2"
+  },
+  "bientity_condition": {
+    "type": "origins:target_condition",
+    "condition": {
+      "type": "origins:entity_type",
+      "entity_type": "minecraft:villager"
+    }
   }
 }

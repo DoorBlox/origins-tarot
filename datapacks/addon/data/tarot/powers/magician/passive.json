@@ -1,11 +1,11 @@
 {
   "type": "origins:attribute",
-  "name": "Traveler's Stride",
-  "description": "Travelers move 10% faster on land.",
+  "name": "Wayfarer",
+  "description": "Move 12% faster on land.",
   "modifier": {
-    "attribute": "minecraft:generic.movement_speed",
-    "name": "Traveler's Stride",
-    "value": 0.1,
-    "operation": "multiply_total"
+    "value": 0.12,
+    "operation": "multiply_total",
+    "name": "Wayfarer",
+    "attribute": "minecraft:generic.movement_speed"
   }
 }

@@ -1,0 +1,17 @@
+{
+  "type": "origins:modify_damage_taken",
+  "name": "Grave Affinity",
+  "description": "Take 20% less damage from undead enemies.",
+  "modifier": {
+    "value": -0.2,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "bientity_condition": {
+    "type": "origins:actor_condition",
+    "condition": {
+      "type": "origins:entity_group",
+      "group": "undead"
+    }
+  }
+}

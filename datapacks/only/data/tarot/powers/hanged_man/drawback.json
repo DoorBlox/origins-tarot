@@ -1,18 +1,14 @@
 {
-  "type": "origins:target_action_on_hit",
-  "name": "Sea Pressure",
-  "description": "Successful strikes briefly slow victims, 11s internal cooldown.",
-  "entity_action": {
-    "type": "origins:apply_effect",
-    "effect": {
-      "effect": "minecraft:slowness",
-      "duration": 60,
-      "amplifier": 0,
-      "show_particles": true
-    }
+  "type": "origins:modify_exhaustion",
+  "name": "Price: Drought of the Sailor",
+  "description": "Exhaustion doubles in the Nether.",
+  "modifier": {
+    "value": 1.0,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
   },
-  "cooldown": 220,
-  "hud_render": {
-    "should_render": false
+  "condition": {
+    "type": "origins:dimension",
+    "dimension": "minecraft:the_nether"
   }
 }

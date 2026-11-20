@@ -1,0 +1,15 @@
+{
+  "type": "origins:conditioned_attribute",
+  "name": "Nocturnal Blood",
+  "description": "Move 15% faster at night.",
+  "modifier": {
+    "value": 0.15,
+    "operation": "multiply_total",
+    "name": "Nocturnal Blood",
+    "attribute": "minecraft:generic.movement_speed"
+  },
+  "condition": {
+    "type": "origins:daytime",
+    "inverted": true
+  }
+}

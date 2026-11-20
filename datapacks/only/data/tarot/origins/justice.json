@@ -4,6 +4,9 @@
     "tarot:justice/secondary",
     "tarot:justice/passive",
     "tarot:justice/drawback",
+    "tarot:justice/extra_1",
+    "tarot:justice/extra_2",
+    "tarot:justice/extra_6",
     "tarot:justice/wings"
   ],
   "icon": "minecraft:emerald",

@@ -1,0 +1,8 @@
+{
+  "type": "origins:effect_immunity",
+  "name": "Purification",
+  "description": "Immune to Poison.",
+  "effects": [
+    "minecraft:poison"
+  ]
+}

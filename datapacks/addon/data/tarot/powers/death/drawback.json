@@ -1,18 +1,5 @@
 {
-  "type": "origins:action_over_time",
-  "name": "Price: Dawn's Reminder",
-  "description": "Drawback: In direct sunlight, you suffer Weakness I.",
-  "interval": 20,
-  "entity_action": {
-    "type": "origins:apply_effect",
-    "effect": {
-      "effect": "minecraft:weakness",
-      "duration": 60,
-      "amplifier": 0,
-      "show_particles": true
-    }
-  },
-  "condition": {
-    "type": "origins:exposed_to_sun"
-  }
+  "type": "origins:disable_regen",
+  "name": "Price: Severed Vitality",
+  "description": "Natural food regeneration is disabled; seek healing from kills, potions or allies."
 }

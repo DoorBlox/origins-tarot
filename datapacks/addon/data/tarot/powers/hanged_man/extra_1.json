@@ -1,11 +1,10 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Unsteady Flesh",
-  "description": "Drawback: One fewer heart.",
+  "type": "origins:modify_swim_speed",
+  "name": "Sailors Speed",
+  "description": "Swim 35% faster.",
   "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Price: Unsteady Flesh",
-    "value": -2,
-    "operation": "addition"
+    "value": 0.35,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
   }
 }

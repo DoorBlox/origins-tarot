@@ -4,6 +4,9 @@
     "tarot:sun/secondary",
     "tarot:sun/passive",
     "tarot:sun/drawback",
+    "tarot:sun/extra_1",
+    "tarot:sun/extra_2",
+    "tarot:sun/extra_6",
     "tarot:sun/wings"
   ],
   "icon": "minecraft:sunflower",

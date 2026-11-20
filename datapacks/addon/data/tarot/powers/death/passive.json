@@ -1,12 +1,12 @@
 {
   "type": "origins:self_action_on_kill",
-  "name": "Harvest the Departed",
-  "description": "Recover one heart whenever you defeat a creature, at most once per 8s.",
+  "name": "Soul Harvest",
+  "description": "Recover one heart when you defeat an entity; cooldown 10 seconds.",
   "entity_action": {
     "type": "origins:heal",
     "amount": 2
   },
-  "cooldown": 160,
+  "cooldown": 200,
   "hud_render": {
     "should_render": false
   }

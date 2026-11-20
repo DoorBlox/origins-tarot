@@ -4,6 +4,8 @@
     "tarot:wheel_of_fortune/secondary",
     "tarot:wheel_of_fortune/passive",
     "tarot:wheel_of_fortune/drawback",
+    "tarot:wheel_of_fortune/extra_1",
+    "tarot:wheel_of_fortune/extra_2",
     "tarot:wheel_of_fortune/wings"
   ],
   "icon": "minecraft:clock",

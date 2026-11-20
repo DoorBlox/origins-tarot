@@ -1,11 +1,14 @@
 {
-  "type": "origins:attribute",
-  "name": "Shatterer",
-  "description": "Your melee blows are 9% stronger.",
+  "type": "origins:modify_damage_taken",
+  "name": "Ruin Proof",
+  "description": "Take 60% less explosion damage.",
   "modifier": {
-    "attribute": "minecraft:generic.attack_damage",
-    "name": "Shatterer",
-    "value": 0.09,
-    "operation": "multiply_total"
+    "value": -0.6,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "damage_condition": {
+    "type": "origins:name",
+    "name": "explosion"
   }
 }

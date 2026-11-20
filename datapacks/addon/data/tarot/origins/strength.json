@@ -4,7 +4,10 @@
     "tarot:strength/secondary",
     "tarot:strength/passive",
     "tarot:strength/drawback",
-    "tarot:strength/extra_1"
+    "tarot:strength/extra_1",
+    "tarot:strength/extra_2",
+    "tarot:strength/extra_6",
+    "tarot:strength/extra_7"
   ],
   "icon": "minecraft:iron_axe",
   "name": "Strength",

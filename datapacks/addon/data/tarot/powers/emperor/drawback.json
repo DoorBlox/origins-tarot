@@ -1,11 +1,21 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Weight of Law",
-  "description": "Drawback: Your speed is reduced by 12%. No astral wings.",
+  "type": "origins:conditioned_attribute",
+  "name": "Price: Weight of the Crown",
+  "description": "Holding a shield in the offhand slows you by 25%.",
   "modifier": {
-    "attribute": "minecraft:generic.movement_speed",
-    "name": "Price: Weight of Law",
-    "value": -0.12,
-    "operation": "multiply_total"
+    "value": -0.25,
+    "operation": "multiply_total",
+    "name": "Price: Weight of the Crown",
+    "attribute": "minecraft:generic.movement_speed"
+  },
+  "condition": {
+    "type": "origins:equipped_item",
+    "equipment_slot": "offhand",
+    "item_condition": {
+      "type": "origins:ingredient",
+      "ingredient": {
+        "item": "minecraft:shield"
+      }
+    }
   }
 }

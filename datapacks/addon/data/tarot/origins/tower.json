@@ -4,6 +4,8 @@
     "tarot:tower/secondary",
     "tarot:tower/passive",
     "tarot:tower/drawback",
+    "tarot:tower/extra_1",
+    "tarot:tower/extra_2",
     "tarot:tower/wings"
   ],
   "icon": "minecraft:cracked_stone_bricks",

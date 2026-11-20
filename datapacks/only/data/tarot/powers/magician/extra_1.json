@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_jump",
+  "name": "Traveler Jump",
+  "description": "Jump 20% higher.",
+  "modifier": {
+    "value": 0.2,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  }
+}

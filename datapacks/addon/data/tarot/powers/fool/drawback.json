@@ -1,11 +1,13 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Frail Body",
-  "description": "Drawback: Your cautious body has one fewer heart.",
+  "type": "origins:modify_exhaustion",
+  "name": "Price: Spiritual Expenditure",
+  "description": "Sprinting consumes 40% more hunger; careful preparation is essential.",
   "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Price: Frail Body",
-    "value": -2,
-    "operation": "addition"
+    "value": 0.4,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:sprinting"
   }
 }

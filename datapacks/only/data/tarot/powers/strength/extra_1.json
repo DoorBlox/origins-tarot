@@ -1,11 +1,11 @@
 {
   "type": "origins:attribute",
-  "name": "Price: Mountain's Burden",
-  "description": "Drawback: Move 16% slower. You cannot glide without an item.",
+  "name": "Steel Frame",
+  "description": "Gain two armor points.",
   "modifier": {
-    "attribute": "minecraft:generic.movement_speed",
-    "name": "Price: Mountain's Burden",
-    "value": -0.16,
-    "operation": "multiply_total"
+    "value": 2,
+    "operation": "addition",
+    "name": "Steel Frame",
+    "attribute": "minecraft:generic.armor"
   }
 }

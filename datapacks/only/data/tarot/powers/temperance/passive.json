@@ -1,6 +1,18 @@
 {
-  "type": "origins:night_vision",
-  "name": "Eyes Behind Glass",
-  "description": "Permanent Night Vision.",
-  "strength": 1.0
+  "type": "origins:invisibility",
+  "name": "Wraith Veil",
+  "description": "Crouching in dim lighting gives invisibility. Held items and armor may remain visible.",
+  "condition": {
+    "type": "origins:and",
+    "conditions": [
+      {
+        "type": "origins:sneaking"
+      },
+      {
+        "type": "origins:brightness",
+        "comparison": "<=",
+        "compare_to": 7
+      }
+    ]
+  }
 }

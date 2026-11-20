@@ -1,0 +1,23 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Consecrated Study",
+  "description": "Gain Haste I pulses when within three blocks of a lectern.",
+  "interval": 100,
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:haste",
+      "duration": 120,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "condition": {
+    "type": "origins:block_in_radius",
+    "radius": 3,
+    "block_condition": {
+      "type": "origins:block",
+      "block": "minecraft:lectern"
+    }
+  }
+}

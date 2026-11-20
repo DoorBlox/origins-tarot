@@ -1,0 +1,10 @@
+{
+  "type": "origins:modify_xp_gain",
+  "name": "Fortunes Bounty",
+  "description": "Gain 10% more XP.",
+  "modifier": {
+    "value": 0.1,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  }
+}

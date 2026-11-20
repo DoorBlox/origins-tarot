@@ -1,0 +1,6 @@
+{
+  "type": "origins:night_vision",
+  "name": "Inner Radiance",
+  "description": "Permanent night vision, even underground.",
+  "strength": 1.0
+}

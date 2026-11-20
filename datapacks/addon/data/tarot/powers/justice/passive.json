@@ -1,11 +1,18 @@
 {
-  "type": "origins:attribute",
-  "name": "Measured Heart",
-  "description": "A calm mind grants +1 heart.",
-  "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Measured Heart",
-    "value": 2,
-    "operation": "addition"
+  "type": "origins:attacker_action_when_hit",
+  "name": "Emotional Recoil",
+  "description": "Attackers receive Weakness I for four seconds; cooldown 18 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:weakness",
+      "duration": 80,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 360,
+  "hud_render": {
+    "should_render": false
   }
 }

@@ -4,6 +4,9 @@
     "tarot:temperance/secondary",
     "tarot:temperance/passive",
     "tarot:temperance/drawback",
+    "tarot:temperance/extra_1",
+    "tarot:temperance/extra_2",
+    "tarot:temperance/extra_6",
     "tarot:temperance/wings"
   ],
   "icon": "minecraft:glass_bottle",

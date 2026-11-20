@@ -4,6 +4,9 @@
     "tarot:high_priestess/secondary",
     "tarot:high_priestess/passive",
     "tarot:high_priestess/drawback",
+    "tarot:high_priestess/extra_1",
+    "tarot:high_priestess/extra_2",
+    "tarot:high_priestess/extra_6",
     "tarot:high_priestess/wings"
   ],
   "icon": "minecraft:amethyst_shard",

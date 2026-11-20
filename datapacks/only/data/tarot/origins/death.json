@@ -4,6 +4,9 @@
     "tarot:death/secondary",
     "tarot:death/passive",
     "tarot:death/drawback",
+    "tarot:death/extra_1",
+    "tarot:death/extra_2",
+    "tarot:death/extra_6",
     "tarot:death/wings"
   ],
   "icon": "minecraft:bone",

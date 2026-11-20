@@ -1,11 +1,36 @@
 {
-  "type": "origins:attribute",
-  "name": "Price: Mortal Shell",
-  "description": "Drawback: 2 hearts fewer maximum health.",
+  "type": "origins:modify_break_speed",
+  "name": "Price: Unprepared Ritual",
+  "description": "Mine 20% slower unless a book is held in your offhand.",
   "modifier": {
-    "attribute": "minecraft:generic.max_health",
-    "name": "Price: Mortal Shell",
-    "value": -4,
-    "operation": "addition"
+    "value": -0.2,
+    "operation": "multiply_total",
+    "name": "Tarot V2"
+  },
+  "condition": {
+    "type": "origins:or",
+    "conditions": [
+      {
+        "type": "origins:equipped_item",
+        "equipment_slot": "offhand",
+        "item_condition": {
+          "type": "origins:ingredient",
+          "ingredient": {
+            "item": "minecraft:book"
+          }
+        }
+      },
+      {
+        "type": "origins:equipped_item",
+        "equipment_slot": "offhand",
+        "item_condition": {
+          "type": "origins:ingredient",
+          "ingredient": {
+            "item": "minecraft:enchanted_book"
+          }
+        }
+      }
+    ],
+    "inverted": true
   }
 }

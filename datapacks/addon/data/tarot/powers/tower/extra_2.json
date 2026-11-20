@@ -1,0 +1,18 @@
+{
+  "type": "origins:target_action_on_hit",
+  "name": "Unstable Strike",
+  "description": "Hits slow the enemy for two seconds, cooldown 13 seconds.",
+  "entity_action": {
+    "type": "origins:apply_effect",
+    "effect": {
+      "effect": "minecraft:slowness",
+      "duration": 40,
+      "amplifier": 0,
+      "show_particles": false
+    }
+  },
+  "cooldown": 260,
+  "hud_render": {
+    "should_render": false
+  }
+}

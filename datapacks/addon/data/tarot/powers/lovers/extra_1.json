@@ -1,0 +1,15 @@
+{
+  "type": "origins:action_over_time",
+  "name": "Mother Embrace",
+  "description": "Recover half a heart every 30 seconds when well-fed.",
+  "interval": 600,
+  "entity_action": {
+    "type": "origins:heal",
+    "amount": 1
+  },
+  "condition": {
+    "type": "origins:food_level",
+    "comparison": ">=",
+    "compare_to": 18
+  }
+}
