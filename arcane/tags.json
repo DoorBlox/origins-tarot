@@ -145,5 +145,26 @@
     "tropical_fish",
     "pufferfish",
     "rotten_flesh"
+  ],
+  "items/fish": [
+    "cod",
+    "cooked_cod",
+    "salmon",
+    "cooked_salmon",
+    "tropical_fish",
+    "pufferfish"
+  ],
+  "items/nonfish_meat": [
+    "beef",
+    "cooked_beef",
+    "porkchop",
+    "cooked_porkchop",
+    "chicken",
+    "cooked_chicken",
+    "mutton",
+    "cooked_mutton",
+    "rabbit",
+    "cooked_rabbit",
+    "rotten_flesh"
   ]
 }
