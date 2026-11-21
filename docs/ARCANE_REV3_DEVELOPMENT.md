@@ -42,6 +42,8 @@ All compiled abilities remain test-world-only until actual 1.18.2 Origins 1.4.1 
 
 ## Official 1.4.1 type compatibility gate
 
+The 1.4.1 audit caught a real earlier incompatibility: Lovers' Fertile Hands used `origins:modify_healing`, a newer-only power type. Its power now uses **native +20% crop-breaking speed** for seven vanilla crops, and its +25% self-healing enhancement is explicitly listed as unimplemented. No unverified healing API is emitted.
+
 The build regression suite now includes `tests/test_arcane_141_schema.py`: the official [Origins/Apoli 1.4.1 power registry](https://origins.readthedocs.io/en/1.4.1/types/power_types/) is baked into a checked allowlist for top-level and nested `origins:multiple` power types. It rejects newer-only power type identifiers and checks common required fields, cooldowns, player-owned grant references and hard-coded privileged action commands. Compatible JSON still needs an actual Minecraft 1.18.2 acceptance test, since type registration does not confirm effect semantics or config mod compatibility.
 
 ## Resonance wave 2 and individual combat wave: 37 additional powers
