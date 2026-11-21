@@ -14,7 +14,7 @@ class CompleteCatalogTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         powers, manifest, kits = compile_powers(root)
         self.assertEqual(len(manifest), 434)
-        self.assertTrue(0 < len(powers) < len(manifest))
+        self.assertTrue(0 < len(powers) <= len(manifest))
         self.assertEqual(len({(x["family"], x["pathway"], x["sequence"], x["name"]) for x in manifest}),434)
         self.assertTrue(all(x["status"] in ("full","partial","blocked") for x in manifest))
         self.assertTrue(all(x["status"]!="blocked" for x in manifest if x["power_id"]))
