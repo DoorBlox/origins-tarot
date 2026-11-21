@@ -114,13 +114,49 @@ class FullBuildTests(unittest.TestCase):
         self.assertTrue(layer["replace"])
         for name in PATHWAYS:
             origin=json.loads(self.z.read(f"data/tarot/origins/{name}.json"))
-            self.assertFalse(any("9_" in p for p in origin["powers"]),
-                             "Sequence powers must remain revocable on slot change")
+            from arcane_rev3.full_build import IDENTITY_DRAWBACK_NAMES
+            innate=[p for p in origin["powers"] if "/9_" in p]
+            self.assertLessEqual(len(innate),1)
+            if name in IDENTITY_DRAWBACK_NAMES:
+                self.assertEqual(len(innate),1)
+            else:
+                self.assertEqual(len(innate),0)
         gliders=sum("tarot:"+name+"/wings" in json.loads(
             self.z.read(f"data/tarot/origins/{name}.json"))["powers"] for name in PATHWAYS)
         self.assertEqual(gliders,18)
         for _,_,pair in PAIRS:
             self.assertEqual(json.loads(self.z.read(f"data/tarot/origins/{pair}.json"))["powers"],[])
+
+    def test_primary_identity_drawbacks_survive_slot_changes(self):
+        """Permanent penalties belong to Origin identity, not removable Seq9 kits."""
+        from arcane_rev3.full_build import IDENTITY_DRAWBACK_NAMES
+        from arcane_rev3.powers import compile_powers, norm
+        root=Path(__file__).resolve().parents[1]
+        compiled, manifest, original_kits=compile_powers(root)
+        self.assertEqual(len(IDENTITY_DRAWBACK_NAMES),17)
+        missing=set(PATHWAYS)-set(IDENTITY_DRAWBACK_NAMES)-{"fool"}
+        self.assertEqual(missing,
+                         {"lovers","wheel_of_fortune","justice","hanged_man"})
+        for slug,ability in IDENTITY_DRAWBACK_NAMES.items():
+            expected=[
+                item for item in manifest
+                if item["family"]=="individual" and item["pathway"]==slug
+                   and item["sequence"]==9 and norm(item["name"])==norm(ability)
+            ]
+            self.assertEqual(len(expected),1,(slug,ability))
+            ident=expected[0]["power_id"]
+            self.assertIn(ident,compiled)
+            self.assertIn(ident,original_kits[(slug,9)])
+            origin=json.loads(self.z.read(f"data/tarot/origins/{slug}.json"))
+            self.assertIn(ident,origin["powers"],(slug,ident))
+            kitfile=f"data/tarot_arcane/functions/kits/{slug}/s9.mcfunction"
+            if kitfile in self.z.namelist():
+                kit=self.z.read(kitfile).decode()
+                self.assertNotIn(f"power grant @s {ident} ",kit)
+            refresh=self.z.read("data/tarot_arcane/functions/powers/refresh.mcfunction").decode()
+            self.assertNotIn(f"power grant @s {ident} ",refresh)
+        fool=json.loads(self.z.read("data/tarot/origins/fool.json"))
+        self.assertIn("tarot:fool/identity_spiritual_expenditure",fool["powers"])
 
     def test_every_generated_json_valid_and_files_referenced(self):
         names=set(self.z.namelist())
