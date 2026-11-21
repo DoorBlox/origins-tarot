@@ -1,0 +1,30 @@
+name: Validate Arcane V2 Rev3 (isolated alpha)
+on:
+  push:
+    branches:
+      - 'feat/arcane-rev3-*'
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run isolated Rev3 contracts
+        run: python3 -m unittest discover -s tests -p 'test_arcane_rev3.py' -v
+      - name: Build downloadable test-only pack
+        run: python3 -m arcane_rev3.build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arcane-v2-rev3-fool-seq9-test-only
+          path: |
+            output/Arcane_V2_Rev3_Fool_Seq9_ONLY_1.18.2.zip
+            output/tarot.json
+          if-no-files-found: error
