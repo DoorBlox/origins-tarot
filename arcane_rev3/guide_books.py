@@ -77,7 +77,7 @@ def general_pages():
         "Use /trigger a_tome to obtain",
         "your own pathway's Tome.",
         "Use /trigger a_abilities to",
-        "inspect equipped kits in chat.",
+        "get your Pathway Tome.",
         "Use /trigger a_roadmap for",
         "your personal mark count."
     ], prev=2, next_=4))
@@ -100,7 +100,7 @@ def general_pages():
     ], prev=4, next_=6))
     pages.append(_page("SEQUENCES", [
         "9-5: kits auto equip.",
-        "4: fixed second path unlocks.",
+        "Sequence 4: second path.",
         "4: six editable slots.",
         "3: seven editable slots.",
         "2: eight editable slots.",
