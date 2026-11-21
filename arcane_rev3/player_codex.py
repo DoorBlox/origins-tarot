@@ -316,7 +316,56 @@ def emit_roadmap(w):
 
 
 def generate_player_manual(manifest, compiled, kits, innate):
-    """All 434 abilities, source-labelled and distinguishable from handbook intent."""
+    """Readable abilities and controls, with development diagnostics excluded."""
+    lines = [
+        "# Arcane Rev3 — Abilities & Pathways",
+        "",
+        "## How to play",
+        "",
+        "Choose an Arcana to begin at Sequence 9.",
+        "Use `/trigger a_book` for the Handbook or `/trigger a_tome` for your Pathway Tome.",
+        "Hold a written book and right-click to open it.",
+        "Check your active keys in Controls > Key Binds > Origins.",
+        "At Sequence 4, unlock your linked pathway and configure its kits with `/trigger a_slots`.",
+        "Use `/trigger a_roadmap` to see your next acting proof and ritual requirements.",
+        "Sequence 1 is not available through ordinary ascension.",
+        "",
+    ]
+    for family, title in (
+        ("individual", "22 Major Arcana pathways"),
+        ("resonance", "Resonance paths (not yet available)"),
+    ):
+        lines.extend(["## " + title, ""])
+        pathways = list(dict.fromkeys(
+            row["pathway"] for row in manifest if row["family"] == family
+        ))
+        for slug in pathways:
+            lines.extend(["### " + slug.replace("_", " ").title(), ""])
+            sequences = sorted(
+                {row["sequence"] for row in manifest
+                 if row["family"] == family and row["pathway"] == slug},
+                reverse=True,
+            )
+            for seq in sequences:
+                lines.extend(["#### Sequence " + str(seq), ""])
+                for row in manifest:
+                    if (row["family"], row["pathway"], row["sequence"]) != (family, slug, seq):
+                        continue
+                    power = compiled.get(row["power_id"], {})
+                    identity = (family == "individual" and seq == 9
+                                and innate.get(slug) == row["power_id"])
+                    lines.append("- **" + row["name"] + "**" +
+                                 (" (permanent Origin trait)" if identity else ""))
+                    lines.append("  - What it does: " +
+                                 str(power.get("description", "An ability of this pathway.")))
+                    if family == "individual":
+                        lines.append("  - How to use: " + how_to_use(power))
+                lines.append("")
+    return "\n".join(lines)
+
+
+def generate_developer_ability_report(manifest, compiled, kits, innate):
+    """Source comparison and missing mechanics, distributed only for developers."""
     source_full = sum(row["status"] == "full" for row in manifest)
     source_partial = sum(row["status"] == "partial" for row in manifest)
     b = chr(96)
