@@ -5,7 +5,7 @@
   function run(p,cmd){
     var name=username(p);
     if(!SAFE_NAME.test(name))throw Error('Unsafe player name');
-    return p.server.runCommandSilent('execute as '+name+' run '+cmd);
+    return p.server.runCommandSilent('execute as '+name+' at @s run '+cmd);
   }
   function powersFor(slug,seq){
     var m=global.TarotBatch1Registry.powers[slug];
