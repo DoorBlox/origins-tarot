@@ -18,6 +18,14 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 
 Structural CI does **not** prove compatibility in a live Minecraft 1.18.2 / Fabric / Origins 1.4.1 / Command Aliases 1.0.1 server. Gameplay, non-OP command parsing, party-team targeting, and world-reload verification are **NOT RUN**. The developer pack also does **not** migrate existing V3 `tc_*` progression scores or player save state.
 
+## Admin-only persistent pause and recovery
+
+The developer pack includes an emergency **slot-power pause** that persists across relogs, death, manual power refresh, and periodic reconciliation. It does not change the player's sequence or delete saved slot allocations. The persistent flag is a scoreboard objective named `a_paused`.
+
+From the **server console or as an OP**, use `/execute as <player> run function tarot_arcane:admin/rollback_player` to pause one player and revoke their Arcane slot powers. Use `/execute as <player> run function tarot_arcane:admin/resume_player` to restore that player's owned powers and original Tarot Origin. `/function tarot_arcane:admin/rollback_all` and `/function tarot_arcane:admin/resume_all` perform the same operations for every online player.
+
+None of these admin functions is exposed through player-level `/tarot` aliases. Rollback does **not** revoke innate identity drawbacks or wings inherited from the Origin, nor does it roll back the Minecraft world or existing V3. Test administrative behavior in a disposable world before depending on it.
+
 ## Build outputs
 
 From the successful **Build Arcane V2 Rev3 22-Origin Dev Pack** GitHub Actions workflow, download and extract the *outer* artifact ZIP. The enclosed files are:
@@ -29,4 +37,4 @@ From the successful **Build Arcane V2 Rev3 22-Origin Dev Pack** GitHub Actions w
 
 Use at most one inner ZIP, only in a **new disposable test world**. Never install this dev build alongside the current V2/V3 Tarot datapacks or copy it over a world containing existing progression. A separate test world and backup are mandatory for manual acceptance.
 
-**The user does not need to install anything now.** Keep this PR in draft until full compatibility and gameplay are verified. The owner did not authorize removing the no-KubeJS/no-custom-Java constraint, so exact completion of all 434 mechanics cannot yet be claimed.
+**The user does not need to install anything now.** Source integration may be merged without installing this developer pack on a Minecraft server. Full compatibility and gameplay verification are still required before an actual Arcane V2 release. The owner's no-KubeJS/no-custom-Java requirement remains active.
