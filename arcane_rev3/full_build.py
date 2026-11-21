@@ -364,36 +364,109 @@ def emit_slots(w,kits):
     w.f("slot/swap_ok",swap,F("powers/refresh"),msg("Slots swapped.","green"))
 
 
-def emit_grants(w,kits):
-    refresh=["power revokeall @s "+SOURCE]
-    repair=[]
-    for (slug,seq),powers in sorted(kits.items()):
+def emit_grants(w, kits, identity_powers):
+    """Refresh slot OR opt-in Seq1 sources while preserving native identities.
+
+    No player-facing trigger can toggle a_rtest or directly call these
+    functions: vanilla /function requires operator privileges. Primary Origin
+    remains the 22-way layer choice; its identity drawback is immutable.
+    """
+    refresh = ["power revokeall @s " + SOURCE,
+               "power revokeall @s " + RESONANCE_SOURCE,
+               "power revokeall @s " + PARTNER_IDENTITY_SOURCE]
+    repair = []
+    for (slug, seq), powers in sorted(kits.items()):
         if not powers or slug not in NUM:
             continue
-        code=NUM[slug]*100+seq
-        w.f(f"kits/{slug}/s{seq}",[f"power grant @s {id} {SOURCE}" for id in powers])
-        checks=[]
+        code = NUM[slug] * 100 + seq
+        w.f(f"kits/{slug}/s{seq}",
+            [f"power grant @s {ident} {SOURCE}" for ident in powers])
+        checks = []
         for ident in powers:
             checks += [
                 f"execute store success score @s a_has run power has @s {ident}",
                 f"execute if score @s a_has matches 0 run power grant @s {ident} {SOURCE}"]
-        w.f(f"kits/{slug}/repair_s{seq}",checks)
-        for i in range(1,9):
-            refresh.append(f"execute unless score @s a_paused matches 1 if score @s a_s{i} matches {code} run "+F(f"kits/{slug}/s{seq}"))
-            repair.append(f"execute unless score @s a_paused matches 1 if score @s a_s{i} matches {code} run "+F(f"kits/{slug}/repair_s{seq}"))
-    w.f("powers/refresh",refresh)
-    w.f("powers/reconcile",repair)
+        w.f(f"kits/{slug}/repair_s{seq}", checks)
+        for slot in range(1, 9):
+            guard = (f"execute unless score @s a_paused matches 1 "
+                     f"if score @s a_mode matches 0..1 "
+                     f"if score @s a_s{slot} matches {code} run ")
+            refresh.append(guard + F(f"kits/{slug}/s{seq}"))
+            repair.append(guard + F(f"kits/{slug}/repair_s{seq}"))
+
+    # The 11 pair records are fixed and disjoint, allowing a safe exact
+    # primary-partner comparison. All 110 source entries must exist before a
+    # test transition can be built; this is a structural gate, not gameplay QA.
+    for first, second, pair in PAIRS:
+        powers = [ident for seq in range(9, -1, -1)
+                  for ident in kits.get((pair, seq), [])]
+        if len(powers) != 10 or len(set(powers)) != 10:
+            raise ValueError(f"Resonance pair must compile exactly 10 powers: {pair}")
+        for primary, partner in ((first, second), (second, first)):
+            if partner == "fool":
+                partner_identity = "tarot:fool/identity_spiritual_expenditure"
+            else:
+                partner_identity = identity_powers[partner]
+            # Neither parent identity is allowed in the ordinary slot source.
+            grant = [f"power grant @s {ident} {RESONANCE_SOURCE}" for ident in powers]
+            grant.append(
+                f"power grant @s {partner_identity} {PARTNER_IDENTITY_SOURCE}")
+            w.f(f"resonance/{primary}/grant", grant)
+            checks = []
+            for ident in powers:
+                checks += [
+                    f"execute store success score @s a_has run power has @s {ident}",
+                    f"execute if score @s a_has matches 0 run power grant @s {ident} {RESONANCE_SOURCE}"]
+            checks += [
+                f"execute store success score @s a_has run power has @s {partner_identity}",
+                f"execute if score @s a_has matches 0 run power grant @s {partner_identity} {PARTNER_IDENTITY_SOURCE}"]
+            w.f(f"resonance/{primary}/repair", checks)
+            guard = (
+                "execute unless score @s a_paused matches 1 "
+                "if score @s a_init matches 1 "
+                "if score @s a_mode matches 2 "
+                "if score @s a_rtest matches 1 "
+                "if score @s a_seq matches 0..1 "
+                f"if score @s a_path matches {NUM[primary]} "
+                f"if score @s a_partner matches {NUM[partner]} run "
+            )
+            refresh.append(guard + F(f"resonance/{primary}/grant"))
+            repair.append(guard + F(f"resonance/{primary}/repair"))
+
+    w.f("powers/refresh", refresh)
+    w.f("powers/reconcile", repair)
     w.f("admin/rollback_player",
         "scoreboard players set @s a_paused 1",
-        "power revokeall @s "+SOURCE,
-        msg("Arcane runtime PAUSED by administrator; slot powers revoked until explicit resume.","yellow"))
-    w.f("admin/rollback_all","execute as @a run "+F("admin/rollback_player"))
+        "power revokeall @s " + SOURCE,
+        "power revokeall @s " + RESONANCE_SOURCE,
+        "power revokeall @s " + PARTNER_IDENTITY_SOURCE,
+        msg("Arcane PAUSED; slot and Resonance test sources revoked until admin resume.", "yellow"))
+    w.f("admin/rollback_all",
+        "execute as @a run " + F("admin/rollback_player"))
     w.f("admin/resume_player",
         "scoreboard players set @s a_paused 0",
-        "execute if score @s a_init matches 1 run "+F("player/verify"),
-        "execute if score @s a_init matches 1 run "+F("powers/refresh"),
-        msg("Arcane runtime RESUMED by administrator; owned kit restored.","green"))
-    w.f("admin/resume_all","execute as @a run "+F("admin/resume_player"))
+        "execute if score @s a_init matches 1 run " + F("player/verify"),
+        "execute if score @s a_init matches 1 run " + F("powers/refresh"),
+        msg("Arcane RESUMED; assigned source powers restored.", "green"))
+    w.f("admin/resume_all",
+        "execute as @a run " + F("admin/resume_player"))
+    # /function is inherently OP-only in 1.18.2. Do not add triggers or
+    # Command Alias entries for either admin test command.
+    w.f("admin/enable_seq1_dev",
+        "execute if score @s a_init matches 1 if score @s a_seq matches 2 "
+        "if score @s a_mode matches 1 unless score @s a_paused matches 1 "
+        "run scoreboard players set @s a_rtest 1",
+        "execute if score @s a_rtest matches 1 run " +
+        msg("OP TEST ONLY: Seq2->Seq1 may now be attempted with original altar, marks and offerings. Do not use on the SMP.", "yellow"),
+        "execute unless score @s a_rtest matches 1 run " +
+        msg("Test flag not enabled: requires initialized, unpaused Seq2 slot mode.", "red"))
+    w.f("admin/disable_seq1_dev",
+        "execute if score @s a_mode matches 0..1 run scoreboard players set @s a_rtest 0",
+        "execute if score @s a_mode matches 2 run " +
+        msg("Already in Seq1 preview! Admin rollback can pause. Restore a BACKUP to reverse this test progression.", "red"),
+        "execute if score @s a_mode matches 0..1 run " +
+        msg("Seq1 test permission revoked; normal progression remains locked.", "yellow"))
+
 
 
 def emit_ui(w):
@@ -670,7 +743,7 @@ def build(root=ROOT,output=None):
         emit_content(w,root,compiled,variant,innate)
         emit_player(w,kits,root)
         emit_slots(w,kits)
-        emit_grants(w,kits)
+        emit_grants(w,kits,innate)
         emit_ui(w)
         emit_progression(w)
         dest=output/f"Arcane_Rev3_22_Origins_{variant.upper()}_DEV_1.18.2.zip"
