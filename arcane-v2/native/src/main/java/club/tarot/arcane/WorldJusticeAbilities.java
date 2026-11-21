@@ -45,14 +45,10 @@ public final class WorldJusticeAbilities {
         return r!=null && r.originValid && r.profile.active("marked_verdict",seq);
     }
     public static boolean worldIdentity(ArcaneSave.Record r) {
-        return r!=null && r.originValid &&
-            (r.profile.primary().equals("world") || r.profile.mode().equals("resonance")
-                && r.profile.resonance().equals("marked_verdict"));
+        return r!=null && r.originValid && r.profile.identityActive("world");
     }
     public static boolean justiceIdentity(ArcaneSave.Record r) {
-        return r!=null && r.originValid &&
-            (r.profile.primary().equals("justice") || r.profile.mode().equals("resonance")
-                && r.profile.resonance().equals("marked_verdict"));
+        return r!=null && r.originValid && r.profile.identityActive("justice");
     }
     public static void register() {
         UseEntityCallback.EVENT.register((player,world,hand,entity,hitResult) -> {
@@ -114,12 +110,11 @@ public final class WorldJusticeAbilities {
             else if(victim instanceof PlayerEntity && FoolAbilities.enemy(owner,victim)
                 && now(owner)>r.provokedUntil)out*=.70f;
         }
-        if(world(r,1) && FoolAbilities.enemy(owner,victim) && !passive(victim))
-            out*=1.0f; // Cold Precision II is applied to projectile only.
-        if(damage.isProjectile()) {
-            if(world(r,9) || verdict(r,9))out*=1.25f;
-            if(world(r,1))out*=1.04f; // +30% total relative to base (1.25 * 1.04)
-            if(world(r,9) || verdict(r,7))out*=1f+Math.min(verdict(r,7)? .30f:.30f,
+        if(justice(r,1) && FoolAbilities.enemy(owner,victim))out*=1.10f;
+        if(damage.isProjectile() && FoolAbilities.enemy(owner,victim)) {
+            if(world(r,1))out*=1.30f;
+            else if(world(r,9) || verdict(r,9))out*=1.25f;
+            if(world(r,9) || verdict(r,7))out*=1f+Math.min(.30f,
                 r.bowStillTicks * (verdict(r,7)? .05f/30f:.05f/60f));
         }
         return MarkedVerdict.scaleOutgoing(owner,victim,damage,out);
@@ -188,7 +183,7 @@ public final class WorldJusticeAbilities {
         long t=now(p);
         if((world(r,9)||world(r,4)||verdict(r,4)) && r.ready("marked_prey",t,200)) {
             effect(victim,StatusEffects.GLOWING,world(r,4)?160:120,0);
-            r.markedEntity=victim.getUuid();r.markedUntil=t+160;
+            r.markedEntity=victim.getUuid();r.markedUntil=t+(world(r,4)?160:120);
             if(verdict(r,4))effect(victim,StatusEffects.WEAKNESS,120,0);
         }
         MarkedVerdict.onSuccessfulHit(p,victim,source,r);
@@ -200,7 +195,8 @@ public final class WorldJusticeAbilities {
         if(r==null || !FoolAbilities.enemy(p,victim))return;
         long t=now(p);
         if(world(r,9) && r.ready("hunters_tempo",t,360))effect(p,StatusEffects.SPEED,160,0);
-        if(verdict(r,2) && r.markedEntity!=null && r.markedEntity.equals(victim.getUuid())) {
+        if(verdict(r,2) && r.markedEntity!=null && t<=r.markedUntil
+            && r.markedEntity.equals(victim.getUuid())) {
             for(LivingEntity target:HangedAbilities.enemies(p,victim.getPos(),8)) {
                 effect(target,StatusEffects.SLOWNESS,60,255);
                 effect(target,StatusEffects.WEAKNESS,60,255);
@@ -281,13 +277,13 @@ public final class WorldJusticeAbilities {
                 break;
             }
             case "air_cannon": {
-                if(!world(r,7) || !r.ready(ability,t,160))return false;
+                if(!world(r,7))return false;
                 Vec3d start=p.getEyePos();
                 Vec3d aim=start.add(p.getRotationVec(1).multiply(14));
                 LivingEntity target=HangedAbilities.enemies(p,start.add(p.getRotationVec(1).multiply(7)),7)
                     .stream().filter(e->e.squaredDistanceTo(p)<=196)
                     .min(Comparator.comparingDouble(e->e.squaredDistanceTo(aim))).orElse(null);
-                if(target==null)return false;
+                if(target==null || !r.ready(ability,t,160))return false;
                 boolean player=target instanceof PlayerEntity;
                 target.damage(DamageSource.MAGIC,player?3f:4f);
                 Vec3d knock=target.getPos().subtract(p.getPos()).normalize().multiply(player?1.0:2.0);
@@ -300,9 +296,9 @@ public final class WorldJusticeAbilities {
                 break;
             }
             case "puppet_string": {
-                if(!world(r,5) || !p.isSneaking() || !r.ready(ability,t,400))return false;
+                if(!world(r,5) || !p.isSneaking())return false;
                 LivingEntity target=enemies(p,8).stream().min(Comparator.comparingDouble(p::squaredDistanceTo)).orElse(null);
-                if(target==null)return false;
+                if(target==null || !r.ready(ability,t,400))return false;
                 effect(target,StatusEffects.SLOWNESS,target instanceof PlayerEntity?40:80,1);
                 if(target instanceof PlayerEntity)ArcaneMod.info(p,"Puppet String target "+target.getBlockPos());
                 else effect(target,StatusEffects.WEAKNESS,80,0);
@@ -324,16 +320,17 @@ public final class WorldJusticeAbilities {
                 break;
             }
             case "suggestion": {
-                if(!justice(r,6)||!r.ready(ability,t,600))return false;
+                if(!justice(r,6))return false;
                 LivingEntity target=enemies(p,6).stream().min(Comparator.comparingDouble(p::squaredDistanceTo)).orElse(null);
-                if(target==null)return false;
+                if(target==null || !r.ready(ability,t,600))return false;
                 if(target instanceof MobEntity mob){mob.setTarget(null);mob.getNavigation().stop();}
                 else effect(target,StatusEffects.SLOWNESS,100,255);
                 break;
             }
             case "discern": {
-                if(!justice(r,2)||!r.ready(ability,t,3600))return false;
-                ServerPlayerEntity enemy=nearestEnemyPlayer(p,6);if(enemy==null)return false;
+                if(!justice(r,2))return false;
+                ServerPlayerEntity enemy=nearestEnemyPlayer(p,6);
+                if(enemy==null || !r.ready(ability,t,3600))return false;
                 List<String> inventory=new ArrayList<>();
                 for(int i=0;i<enemy.getInventory().size();i++){
                     ItemStack item=enemy.getInventory().getStack(i);

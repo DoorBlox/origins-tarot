@@ -36,6 +36,9 @@ progression model.
 The branch is a **development test build**, not a completed 434-power release.
 See `docs/BATCH_2_TEST.md` and `docs/BATCH_2_GAPS.md`. You may test on a
 private SMP before inviting friends, but back up the world and player files first.
-Only `/tarot debug sequence <level>` advances the Arcane V2 Sequence currently;
-that command requires OP. The prior V3 acting/ritual pipeline has not been
-rewired into the Rev3 shared-Sequence architecture.
+A new optional native survival progression bridge now supports `/tarot status`
+and `/tarot ascend` without OP: it reuses the existing repository's V3
+alternating Acting marks, 120-second online cooldown, and ritual offerings.
+All upgrades advance the Rev3 **single shared Sequence**. This is a port of
+the earlier V3 economy, not a claim that Rev2/Rev3 explicitly specify an
+Acting economy. Manual in-game confirmation remains necessary.

@@ -11,6 +11,23 @@ public class SlotModelTest {
         for (String p : SlotModel.PAIRS.keySet())
             assertEquals(p, SlotModel.paired(SlotModel.paired(p)));
     }
+    @Test public void secondaryIdentityUnlocksAtFourAndNeverNeedsASlot() {
+        for (String first: SlotModel.PAIRS.keySet()) {
+            SlotModel.Profile profile=new SlotModel.Profile(first);
+            String second=SlotModel.paired(first);
+            assertTrue(profile.identityActive(first));
+            assertFalse(profile.identityActive(second));
+            profile.onSequenceChange(4);
+            assertTrue(profile.identityActive(first));
+            assertTrue(profile.identityActive(second));
+            profile.clearSlot(1);
+            assertTrue("Identity is not a slot-managed power",profile.identityActive(first));
+            assertTrue("Second identity is never slotted",profile.identityActive(second));
+            profile.onSequenceChange(1);
+            assertTrue(profile.identityActive(first));
+            assertTrue(profile.identityActive(second));
+        }
+    }
     @Test public void singleSequenceKitsAreAutoFilled() {
         SlotModel.Profile p = new SlotModel.Profile("fool");
         assertEquals("single", p.mode());

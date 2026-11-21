@@ -50,7 +50,7 @@ public final class HangedAbilities {
     static boolean paper(ArcaneSave.Record r) { return r.profile.active("paper_martyr",9); }
     static boolean sinEnabled(ArcaneSave.Record r) { return has(r,9) || paper(r); }
     static boolean identity(ArcaneSave.Record r) {
-        return r.profile.primary().equals("hanged_man") || has(r,9) || paper(r);
+        return r.profile.identityActive("hanged_man");
     }
     static long now(ServerPlayerEntity p) { return p.getServer().getOverworld().getTime(); }
     public static float naturalRegenLimit(ServerPlayerEntity p) {

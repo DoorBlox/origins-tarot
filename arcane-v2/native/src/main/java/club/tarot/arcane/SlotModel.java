@@ -71,6 +71,9 @@ public final class SlotModel {
         }
         public String primary() { return primary; }
         public String secondary() { return sequence <= 4 ? PAIRS.get(primary) : null; }
+        public boolean identityActive(String pathway) {
+            return primary.equals(pathway) || (sequence<=4 && PAIRS.get(primary).equals(pathway));
+        }
         public String resonance() { return RESONANCES.get(primary); }
         public int sequence() { return sequence; }
         public String mode() { return sequence <= 1 ? "resonance" : (sequence <= 4 ? "slot" : "single"); }

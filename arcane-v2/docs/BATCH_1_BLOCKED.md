@@ -7,7 +7,7 @@ This draft branch **is not ready for release**. The native KubeJS replacement is
 - Fool Seq 0: Legend of the Fool now has a native 700-tick activation, flight, decoys, rewind, fire/fall immunity, hit debuffs and end effects. The exact 75% DR, +50% final damage, double mob loot and restart-safe persistence remain unfinished.
 - The remaining 20 individual pathways and 10 Resonance pairs are not implemented or granted in the native registry. The Hanged Man and Paper Martyr mechanics are being validated in Batch 2.
 - Native Origin callback, death/respawn/dimension refresh and sequence-up listeners are implemented but need live-world acceptance.
-- Original V3 ascension progression has **not** been migrated into the Rev3 paired-path synchronized Sequence model. Until then only an OP debug Sequence command changes levels.
+- A native survival Acting/ritual bridge now advances the shared Sequence with /tarot ascend. The altar/loot/kill/trade hooks and their Minecraft behavior still need manual test-world acceptance; original V3 trial-to-second-path mechanics are intentionally superseded by automatic second unlock at Seq4.
 - Activation of individual Fool Seq1/Seq0 in normal progression is intentionally excluded by Rev3 Seq1 Resonance timing.
 - CD/guard reset, cooldown effect cleanup, mob-specific targeting and per-path permanent identity drawbacks are incomplete outside initial Fool scope.
 

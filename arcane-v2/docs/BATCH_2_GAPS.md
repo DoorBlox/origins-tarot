@@ -15,7 +15,7 @@ are separate from live in-game acceptance.
 - Borrowed Sacrifice uses invisibility instead of a rendered borrowed identity.
 - Paper Martyr's Sin shadow detonation and summoned minion explosion use tagged entity damage interceptors. These are untested in a real Minecraft server.
 - The exact protection against other mod-owned flight during disconnect/restart is not yet established; avoid production use.
-- Handbooks do not define a standalone automatic Sequence-up economy. This branch exposes the OP-only debug Sequence command and an integration entrypoint; the previous V3 acting/ritual pipeline remains separate.
+- Handbooks do not define a standalone Acting economy. A new native bridge reuses earlier V3 item/kill/trade Acting, online cooldowns, altar and offerings for /tarot ascend, progressing one shared Sequence. This is an adaptation requiring live-world validation.
 - The remaining 20 pathways and 10 Resonance pairs have not been ported. **Do not present this build as all 434 abilities completed.**
 
 No KubeJS code or KubeJS dependency is included in this Arcane V2 runtime.

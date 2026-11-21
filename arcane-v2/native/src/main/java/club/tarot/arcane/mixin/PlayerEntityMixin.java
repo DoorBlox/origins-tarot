@@ -27,8 +27,7 @@ public abstract class PlayerEntityMixin {
         if (!((Object)this instanceof ServerPlayerEntity)) return amount;
         ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
         ArcaneSave.Record record=ArcaneSave.get(player.getServer()).getPlayer(player.getUuid());
-        if(record==null || !record.originValid || !(record.profile.primary().equals("fool")
-            || record.profile.active("paper_martyr",9))) return amount;
+        if(record==null || !record.originValid || !record.profile.identityActive("fool")) return amount;
         // Approx: while sprinting, other exhaustion sources share this multiplier.
         return player.isSprinting() || player.isFallFlying() ? amount * 1.25f : amount;
     }

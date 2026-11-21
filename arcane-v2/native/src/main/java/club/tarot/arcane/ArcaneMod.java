@@ -30,6 +30,8 @@ public final class ArcaneMod implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(
             literal("tarot")
                 .then(literal("slots").executes(c -> withPlayer(c, (p,s,r) -> { show(p,r); return 1; })))
+                .then(literal("status").executes(c -> withPlayer(c,Ascension::status)))
+                .then(literal("ascend").executes(c -> withPlayer(c,Ascension::ascend)))
                 .then(literal("slot")
                     .then(literal("auto").executes(c -> alter(c, r -> r.profile.auto())))
                     .then(literal("swap")
@@ -96,6 +98,7 @@ public final class ArcaneMod implements ModInitializer {
                 FoolAbilities.tick(player,state,record);
                 HangedAbilities.tick(player,state,record);
                 WorldJusticeAbilities.tick(player,state,record);
+                Ascension.tick(player,state,record);
             }
         });
         FoolAbilities.register();
@@ -311,6 +314,7 @@ public final class ArcaneMod implements ModInitializer {
         }
         for(String card:SlotModel.PAIRS.keySet()) if(originHas(p,card)>0) {
             ArcaneSave.Record r=state.enroll(p.getUuid(),card);
+            Ascension.registerNew(p,r);
             r.originValid=true;
             r.originChecked=true;
             grantInputKeys(p);

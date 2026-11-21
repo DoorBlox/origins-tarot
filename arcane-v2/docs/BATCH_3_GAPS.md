@@ -39,7 +39,7 @@ as proof of live ability implementation.
   navigation and cleared mob target. Some other-mod AI may ignore it.
 - The Marked Verdict is not fully source-faithful in visual particle effects,
   cinematic animations, specific mob goal behavior, and friendly marker indicators.
-- Sequence-up still requires OP debug; the complete Rev3 natural progression
+- Sequence-up now has a non-OP survival /tarot ascend path adapted from the repository's prior V3 Acting+ritual economy; live testing of item/kill/trade hooks and altar requirements is still necessary. The Rev3 natural progression
   economy has not been connected. Testing these modes as ordinary players requires
   implementing a validated ascension trigger.
 - Remaining: 18 individual pathways and 9 other Resonance forms (356 entries),

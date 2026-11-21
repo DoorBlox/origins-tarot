@@ -53,6 +53,13 @@ public final class ArcaneSave extends PersistentState {
                     record.markedEntity=n.getUuid("markedEntity");
                 record.markedUntil=n.getLong("markedUntil");
                 record.provokedUntil=n.getLong("provokedUntil");
+                record.actingMarks=n.getInt("actingMarks");
+                record.nextActA=!n.contains("nextActA") || n.getBoolean("nextActA");
+                record.onlineTicks=n.getLong("onlineTicks");
+                record.lastActingTick=n.contains("lastActingTick")
+                    ?n.getLong("lastActingTick"):-2400;
+                record.hadActingItem=n.getBoolean("hadActingItem");
+                record.lastTradeCount=n.getInt("lastTradeCount");
                 record.restoreFlightPending = n.getBoolean("restoreFlightPending");
                 record.legendPriorMayFly = n.getBoolean("legendPriorMayFly");
                 record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
@@ -97,6 +104,12 @@ public final class ArcaneSave extends PersistentState {
             if(record.markedEntity!=null)n.putUuid("markedEntity",record.markedEntity);
             n.putLong("markedUntil",record.markedUntil);
             n.putLong("provokedUntil",record.provokedUntil);
+            n.putInt("actingMarks",record.actingMarks);
+            n.putBoolean("nextActA",record.nextActA);
+            n.putLong("onlineTicks",record.onlineTicks);
+            n.putLong("lastActingTick",record.lastActingTick);
+            n.putBoolean("hadActingItem",record.hadActingItem);
+            n.putInt("lastTradeCount",record.lastTradeCount);
             n.putBoolean("restoreFlightPending",record.restoreFlightPending);
             n.putBoolean("legendPriorMayFly",record.legendPriorMayFly);
             n.putString("bindPrimary",record.primaryBinding);
@@ -135,6 +148,12 @@ public final class ArcaneSave extends PersistentState {
         public net.minecraft.util.math.BlockPos lastWorldPosition;
         public boolean wasSleeping;
         public int crouchTicks;
+        public int actingMarks;
+        public boolean nextActA=true;
+        public long onlineTicks;
+        public long lastActingTick=-2400;
+        public boolean hadActingItem;
+        public int lastTradeCount;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

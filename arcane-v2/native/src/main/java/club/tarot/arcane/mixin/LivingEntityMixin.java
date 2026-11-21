@@ -6,6 +6,9 @@ import club.tarot.arcane.HangedAbilities;
 import club.tarot.arcane.PaperMartyr;
 import club.tarot.arcane.WorldJusticeAbilities;
 import club.tarot.arcane.MarkedVerdict;
+import club.tarot.arcane.Ascension;
+import club.tarot.arcane.ArcaneMod;
+import club.tarot.arcane.ArcaneSave;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -69,6 +72,13 @@ public abstract class LivingEntityMixin {
         if (Boolean.TRUE.equals(cir.getReturnValue())) {
             FoolLegend.afterSuccessfulHit((LivingEntity)(Object)this,source);
             WorldJusticeAbilities.onSuccessfulHit((LivingEntity)(Object)this,source);
+            if(source.getAttacker() instanceof ServerPlayerEntity attacker) {
+                ArcaneSave.Record r=ArcaneSave.get(attacker.getServer()).getPlayer(attacker.getUuid());
+                if(r!=null&&r.originValid) {
+                    r.combat(attacker.getServer().getOverworld().getTime());
+                    ArcaneSave.get(attacker.getServer()).markDirty();
+                }
+            }
         }
         if (Boolean.TRUE.equals(cir.getReturnValue())
             && (Object)this instanceof ServerPlayerEntity) {
@@ -94,6 +104,7 @@ public abstract class LivingEntityMixin {
         if(source.getAttacker() instanceof ServerPlayerEntity attacker) {
             HangedAbilities.onKill(attacker,victim);
             WorldJusticeAbilities.onKill(attacker,victim);
+            Ascension.onKill(attacker,victim);
         }
     }
 }

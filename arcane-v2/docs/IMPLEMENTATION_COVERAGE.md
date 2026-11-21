@@ -23,3 +23,11 @@ live multiplayer/ability acceptance.
 
 Sources: `spec/REV2.txt` and `spec/REV3.txt`. Rev 3 controls the sequence
 and slot transitions; Rev2 controls ability mechanics and cooldowns.
+
+## Optional survival ascension bridge
+
+The native mod also includes /tarot status and /tarot ascend for the
+four implemented origins, using the previous V3 alternating Acting
+A/B and ritual costs. Sequence-up calls the same transition logic as
+the administrator's debug command. It is NOT included in the 78
+ability count, and does not claim to be a Rev3-specified Acting economy.
