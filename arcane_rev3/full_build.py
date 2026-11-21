@@ -26,6 +26,7 @@ IDENTITY_DRAWBACK_NAMES = {
     "empress": "Exposed Reflection",
     "emperor": "Weight of the Crown",
     "hierophant": "Sacred Dietary Vow",
+    "lovers": "Separation Anxiety",
     "justice": "Compassionate Restraint",
     "hanged_man": "Weight of Sin",
     "chariot": "Extinguished Fury",
@@ -60,7 +61,7 @@ def pin_identity_drawbacks(compiled, kits):
             raise ValueError(f"Identity drawback absent from original kit: {ident}")
         kits[key] = [power for power in kits[key] if power != ident]
         result[slug] = ident
-    if len(result) != 19:
+    if len(result) != 20:
         raise ValueError("Native identity drawback extraction incomplete")
     return result
 
@@ -70,7 +71,8 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_seen_bow","a_seen_crossbow","a_seen_trident","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8",
-        "a_view_slot","a_view_code","a_view_path","a_view_seq")
+        "a_view_slot","a_view_code","a_view_path","a_view_seq",
+        "a_alone_time")
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend")
 
@@ -177,8 +179,10 @@ def emit_player(w,kits):
         "scoreboard players add @s a_bow 0",
         "scoreboard players add @s a_crossbow 0",
         "scoreboard players add @s a_trident 0",
+        "scoreboard players add @s a_alone_time 0",
         "execute unless score @s a_init matches 1 unless score @s a_paused matches 1 run "+F("player/detect"),
         "execute if score @s a_init matches 1 run "+F("player/combat_stats"),
+        "execute if score @s a_init matches 1 run "+F("player/alone"),
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
@@ -210,6 +214,7 @@ def emit_player(w,kits):
             "scoreboard players set @s a_phase 0",
             "scoreboard players set @s a_actcd 0",
             "scoreboard players set @s a_combat 0",
+            "scoreboard players set @s a_alone_time 0",
             "scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",
             "scoreboard players operation @s a_seen_taken = @s a_dmg_taken",
             "scoreboard players operation @s a_seen_bow = @s a_bow",
@@ -227,6 +232,13 @@ def emit_player(w,kits):
             f"execute if score @s a_path matches {i} store success score @s a_probe run origin has origin @s origins:origin tarot:{slug}",
             f"execute if score @s a_path matches {i} if score @s a_probe matches 0 run origin set @s origins:origin tarot:{slug}"])
     w.f("player/verify",verify)
+    # Fixed per-player 600-tick proximity counter for Lovers' drawback.
+    # This intentionally counts *any* nearby player; the true same-team-only
+    # semantics remain explicitly partial until verified in 1.18.2.
+    w.f("player/alone",
+        "execute at @s if entity @a[distance=0.01..8] run scoreboard players set @s a_alone_time 0",
+        "execute at @s unless entity @a[distance=0.01..8] run scoreboard players add @s a_alone_time 1",
+        "execute if score @s a_alone_time matches 601.. run scoreboard players set @s a_alone_time 601")
     w.f("player/periodic","scoreboard players set @s a_clock 0",
         "execute unless score @s a_paused matches 1 run "+F("player/verify"),
         "execute unless score @s a_paused matches 1 run "+F("powers/reconcile"))

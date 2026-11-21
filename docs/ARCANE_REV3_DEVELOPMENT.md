@@ -9,22 +9,36 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 - 22 pathway Origins and 18 inherited Elytra gliders; 11 paired Resonance IDs are reserved, not activated.
 - Pure datapack/scoreboard runtime: Sequence 9 through 2, 22 distinct acting quest tracks, altar requirements, combat lock, fixed second pathway at Sequence 4, 6/7/8 editable slots, grant/revoke and re-login reconciliation. No KubeJS or custom Fabric mod.
 - Non-OP `/tarot`, `/tarot status`, `/tarot slots`, `/tarot ascend`, `/tarot slot N tarot:card S`, `/tarot slot N clear`, `/tarot slot auto`, `/tarot slot swap N M`, and `/tarot reset` via player-scoped CLIENT `/trigger` operations. Command Aliases schema uses permission 0. Both `/tarot status` and `/tarot slots` display actual Arcana titles and Sequence numbers rather than internal numeric kit codes; the partner is revealed at Sequence 4.
-- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **128 powers compiled (64 fully translated, 64 explicitly partial), 306 still blocked.** No fake `origins:simple` abilities are emitted.
-- Permanent primary-pathway drawbacks are innate Origin powers, **not removable Sequence-9 slot abilities**: Fool's +25% exhaustion plus 19 more compiled pathway drawbacks are attached directly to their Origins, outside the source-grant/revoke cycle.
+- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **166 powers compiled (69 source-complete, 97 partial), 268 still blocked.** No fake `origins:simple` abilities are emitted.
+- Permanent primary-pathway drawbacks are innate Origin powers, **not removable Sequence-9 slot abilities**: Fool's +25% exhaustion plus 20 more compiled pathway drawbacks are attached directly to their Origins, outside the source-grant/revoke cycle.
 
 ## Rev3 identity-drawback integrity
 
-The first version only pinned the Fool's Spiritual Expenditure permanently. This allowed players from 19 other pathways to remove the encoded Seq9 drawback when they switched slots at Sequence 4. The build now extracts the compiled penalty from each corresponding Seq9 kit and puts it into the **primary Origin's power list**. Every other Seq9 power remains in the removable slot kit. This also means administrators' `rollback_player` only revokes sequence-granted powers, not inherent identity penalties.
+The first version only pinned the Fool's Spiritual Expenditure permanently. This allowed players from 20 other pathways to remove the encoded Seq9 drawback when they switched slots at Sequence 4. The build now extracts the compiled penalty from each corresponding Seq9 kit and puts it into the **primary Origin's power list**. Every other Seq9 power remains in the removable slot kit. This also means administrators' `rollback_player` only revokes sequence-granted powers, not inherent identity penalties.
 
-**Two primary pathways still lack a native identity drawback:** Lovers (Separation Anxiety) and Wheel of Fortune (Debt of Fate). These remain visible release blockers. Justice (Compassionate Restraint) now enforces −70% damage against passive mobs but cannot distinguish unprovoked enemy players (partial). Hanged Man (Weight of Sin) prevents natural regeneration above eight hearts but does not yet support the three temporary cap-unlock events (partial). Do not claim all 22 drawbacks are faithful. The 434-ability source-manifest count is unchanged, because the fix rehomes existing powers rather than inventing new abilities.
+**Only Wheel of Fortune's Debt of Fate still lacks a separate native identity power.** Lovers' Separation Anxiety now uses a persistent 600-tick proximity counter, +35% exhaustion and −15% mining when alone; it is partial because the fallback measures all players nearby rather than only same-team allies. These remain visible release blockers. Justice (Compassionate Restraint) now enforces −70% damage against passive mobs but cannot distinguish unprovoked enemy players (partial). Hanged Man (Weight of Sin) prevents natural regeneration above eight hearts but does not yet support the three temporary cap-unlock events (partial). Do not claim all 22 drawbacks are faithful. The 434-ability source-manifest count is unchanged, because the fix rehomes existing powers rather than inventing new abilities.
 
-The Justice and Hanged Man penalties are now real native *partial* powers, attached to their Origins. The manifest distinguishes them from complete implementations. At present there are 20 Origins with some permanent drawback behavior (including Fool), and two without.
+The Justice and Hanged Man penalties are now real native *partial* powers, attached to their Origins. The manifest distinguishes them from complete implementations. At present there are 21 Origins with some permanent drawback behavior (including Fool), and one without.
 
 ## Additional source-traced abilities
 
 Batch 2 implements 13 more native or partial abilities across Empress, Emperor, Wheel of Fortune, Justice, Hanged Man, Sun, World, Tower, Star and Hermit. Examples include Mirror Veil invisibility, a six-way equally weighted Fate's Current, undead-only Solar Flare, active self-cleansing with Purify and upgraded retaliation effects.
 
 **Only Solar Flare is classified a complete Rev2 translation** in this batch. The other twelve retain detailed per-ability `missing` descriptions in `arcane_ability_manifest.json` (for example, Rev2 does not define Fate's Current effect durations, and team-aware PvP targeting cannot yet be reproduced exactly without scripting). Structural JSON/power tests do not establish in-game compatibility.
+
+## Parallel large-batch delivery (38 new powers)
+
+Three independent source modules, `arcane_rev3/batches/support.py`, `control.py` and `mobility.py`, add **38 unique, non-placeholder abilities** to the pre-existing 128. Their machine-readable manifest exposes all full/partial classifications and detailed limitations.
+
+- **14 support and identity skills:** regeneration circles and Benedictions, Hymn, Therapist's Presence, Rally, Shared Dream, Spirit Sense, Nightmare, Beauty, White Angel, Shared Refuge II, Grave Affinity II, Requiem, and Lovers' Separation Anxiety.
+- **17 hostile-mob control and retaliation skills:** Nature's Grasp, Withering, Bane, Cataclysm, Haunt, Misfortune, Petrifying Gaze, Abolish, Lullaby, Puppet String, Trickster's Escape, Paper Figurine Substitute, Flesh Creek, Profane Aura, Devil's Mark, Hex and Question.
+- **7 movement/stealth/defense skills:** Threshold Step, Doorstep, Sealed Room, Wraith's Veil II, Incorporeal, Shadow Whisper and Iron Fist.
+
+The 1.18.2-safe targeting helper emits **fixed server-side commands** with `@e[type=#tarot:hostile]`, `@e[type=#tarot:undead]` or players-only positive buffs; it does not interpolate player input. Enemy-player targeting, script-driven decoys, spell charging, missing cooldown resources, structural phasing, teleport raycasts and advanced mob AI remain **partial** where specified in Rev2. `action_on_entity_use` in 1.4.1 does not supply a built-in cooldown field, so right-click attacks are not misrepresented as fully rate-limited.
+
+Lovers' Separation Anxiety has a real per-player `a_alone_time` tick counter, capped at 601 and reset when any player enters eight blocks. After more than 600 ticks alone, the native scoreboard condition applies +35% exhaustion and −15% break speed. Its same-team qualifier is not yet implemented and is recorded as partial.
+
+All compiled abilities remain test-world-only until actual 1.18.2 Origins 1.4.1 testing.
 
 ## Retaliation team-safety gate
 
