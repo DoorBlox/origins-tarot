@@ -8,6 +8,7 @@ not been checked for the installed 1.18.2 mod versions.
 """
 from ..powers import apply, compound, mod, power
 from .shared import active, combined, effect, mobs, periodic
+from ..team_policy import enemy_effect, ally_effect
 
 
 HOSTILE = {"type": "origins:in_tag", "tag": "tarot:hostile"}
@@ -133,8 +134,10 @@ def register(add):
         cap("The Impossible Fist", 18000, 900,
             apply("strength", 900, 1),
             effect(mobs(15), "wither", 100, 1),
-            effect(mobs(15), "slowness", 100, 1)),
-        "partial", "Unrestricted phasing, halved armor, exact +30% damage, momentum stacks, through-wall melee and end shockwave omitted; initial debuffs target mobs only")
+            effect(mobs(15), "slowness", 100, 1),
+            enemy_effect("wither", 100, 15, 1),
+            enemy_effect("slowness", 100, 15, 1)),
+        "partial", "Unrestricted phasing, halved armor, +30% damage, momentum stacks, through-wall melee and end shockwave omitted; team-safe initial debuffs only target configured opponents")
 
     # Emperor + Lovers: always self-only until server-trusted same-team allies.
     add("benevolent_crown", 2, "Emperor's Hymn",
@@ -152,8 +155,10 @@ def register(add):
         cap("The Benevolent Crown", 18000, 1200,
             apply("resistance", 1200),
             apply("regeneration", 1200, 1),
-            effect(mobs(15), "slowness", 100)),
-        "partial", "No persistent 15-block domain, ally regeneration and speed, sprint/jump whitelist, consort, passive invulnerability, death healing or exact +20% damage and resistance")
+            effect(mobs(15), "slowness", 100),
+            ally_effect("regeneration", 1200, 15, 1),
+            ally_effect("speed", 1200, 15)),
+        "partial", "No persistent domain, sprint/jump whitelist, consort, invulnerability, death healing or exact +20% damage/resistance; allies on listed teams receive one-shot buffs")
 
     # Devil + Judgement. No coerced player contracts or unintended item drops.
     add("binding_contract", 1, "Chaos Law",
@@ -182,8 +187,10 @@ def register(add):
             apply("invisibility", 800),
             apply("speed", 800, 1),
             effect(mobs(30), "blindness", 60),
-            effect(mobs(30), "poison", 100, 1)),
-        "partial", "No 30-block world darkness, exact +20% damage, 60t repeating poison, poisoned bonus, attack visibility interruption, death cloud or end pulse; initial mob-only debuff")
+            effect(mobs(30), "poison", 100, 1),
+            enemy_effect("blindness", 60, 30),
+            enemy_effect("poison", 100, 30, 1)),
+        "partial", "No 30-block world darkness, +20% damage, repeating poison, poisoned bonus, attack visibility interruption, death cloud or end pulse; one-shot PvP effects target only configured opponents")
 
     # Sun + Moon; do not indiscriminately grant healing to enemy players.
     add("eclipse", 0, "The Eclipse",

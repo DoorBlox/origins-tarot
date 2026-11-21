@@ -163,4 +163,25 @@ class Origins141CompatibilityTests(unittest.TestCase):
                                  (path,command))
                 is_negative=any("minecraft:"+x in command for x in OFFENSIVE)
                 if is_negative and "effect give @a" in command:
-                    self.fail(f"Unsafe global player debuff in {path}: {command}")
+                    # Fail closed except for a *compile-time verified* vanilla
+                    # team-to-different-team selector with bounded radius.
+                    # Never allow global @a, same-team, unlisted or teamless
+                    # victims; do not weaken the hostile-player regression.
+                    from arcane_rev3.team_policy import team_names
+                    pattern = (
+                        r"execute if entity @s\[team=([a-z0-9_.-]+)\] at @s "
+                        r"run effect give @a\[team=([a-z0-9_.-]+),"
+                        r"distance=\.\.(\d+)\] minecraft:([a-z_]+) "
+                        r"(\d+) ([0-4]) true"
+                    )
+                    match = re.fullmatch(pattern, command)
+                    self.assertIsNotNone(
+                        match, f"Unsafe global player debuff in {path}: {command}")
+                    caster, target, radius, effect, seconds, amp = match.groups()
+                    self.assertIn(caster, team_names())
+                    self.assertIn(target, team_names())
+                    self.assertNotEqual(caster, target, path)
+                    self.assertGreaterEqual(int(radius), 1)
+                    self.assertLessEqual(int(radius), 64)
+                    self.assertGreaterEqual(int(seconds), 1)
+                    self.assertLessEqual(int(seconds), 120)

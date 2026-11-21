@@ -8,6 +8,7 @@ KubeJS. No power is claimed to have passed real 1.18.2 runtime acceptance.
 from ..powers import power, apply, mod
 from .shared import active, periodic, effect, mobs, combined
 from .resonance import night
+from ..team_policy import enemy_effect
 
 
 HOSTILE = {"type": "origins:in_tag", "tag": "tarot:hostile"}
@@ -104,15 +105,19 @@ def register(add):
     add("judgement", 1, "Order",
         active("Order", "Primary key: Slowness II and Weakness II 160t to nearby hostile mobs.",
                combined(effect(mobs(8), "slowness", 160, 1),
-                        effect(mobs(8), "weakness", 160, 1)),
+                        effect(mobs(8), "weakness", 160, 1),
+                        enemy_effect("slowness", 160, 8, 1),
+                        enemy_effect("weakness", 160, 8, 1)),
                1800, primary=True),
-        "partial", "Cannot include enemy players without teammate exclusion; next melee stun 40t not implemented")
+        "partial", "Next melee stun 40t not implemented; enemy-player debuffs require distinct configured vanilla teams, unassigned users neutral")
     add("devil", 1, "Chaos Unleashed",
         active("Chaos Unleashed", "Primary key: Slowness II and Weakness I 160t to hostile mobs.",
                combined(effect(mobs(10), "slowness", 160, 1),
-                        effect(mobs(10), "weakness", 160)),
+                        effect(mobs(10), "weakness", 160),
+                        enemy_effect("slowness", 160, 10, 1),
+                        enemy_effect("weakness", 160, 10)),
                1800, primary=True),
-        "partial", "Next-hit +50% and Wither II effects omitted; enemy players excluded for team safety")
+        "partial", "Next-hit +50% and Wither II effects omitted; enemy-player debuffs only on explicitly different configured vanilla teams")
     add("tower", 3, "Shockwave",
         power("Shockwave", "Land from 4+ blocks to deal two damage to nearby hostile mobs.",
               "origins:action_on_land",

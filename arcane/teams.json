@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "mode": "explicit_vanilla_teams",
+  "teams": [
+    "tarot_red",
+    "tarot_blue",
+    "tarot_green",
+    "tarot_gold"
+  ],
+  "unassigned_players": "neutral_no_player_damage_or_debuffs",
+  "notes": "Vanilla /team membership only. OP assigns teams; do not infer from Origin or LuckPerms. All negative PvP effects route ONLY between two different listed teams. Unlisted teams are neutral. Source-side tests validate exact generated commands."
+}

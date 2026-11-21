@@ -7,6 +7,7 @@ mutation or command requiring privileges is exposed to an ordinary user.
 """
 from ..powers import apply, compound, mod, power
 from .shared import active, combined, cmd, effect, mobs, periodic
+from ..team_policy import enemy_effect, ally_effect
 
 
 HOSTILE = {"type": "origins:in_tag", "tag": "tarot:hostile"}
@@ -103,8 +104,9 @@ def register(add):
         primary("The Battlefield", 18000,
                 apply("strength", 900, 1),
                 apply("speed", 900),
-                effect(mobs(20), "weakness", 100)),
-        "partial", "No forced hostility among tagged mobs or enemy players, exact +30% melee/+20% speed or 100t ignite-on-hit during 900t window")
+                effect(mobs(20), "weakness", 100),
+                enemy_effect("weakness", 100, 20)),
+        "partial", "No forced hostility among entities, exact +30% melee/+20% speed or 100t ignite-on-hit; Weakness reaches only listed opponent teams")
     add("strength", 9, "Grounded Slam",
         power("Grounded Slam", "After a >=3 block landing, slow nearby tagged hostiles.",
               "origins:action_on_land",
@@ -130,8 +132,10 @@ def register(add):
         primary("The Giant's Decay", 24000,
                 effect(mobs(15), "wither", 600, 1),
                 effect(mobs(15), "slowness", 600, 1),
+                enemy_effect("wither", 600, 15, 1),
+                enemy_effect("slowness", 600, 15, 1),
                 apply("strength", 600, 1)),
-        "partial", "Cannot halve victim armor or apply exact +30% damage only to affected targets; durations of enemy debuffs not explicitly given and enemy players excluded")
+        "partial", "Cannot halve armor or apply exact +30% damage only to affected targets; 600t fallback debuffs and listed-team-only PvP replace unspecified durations")
     add("hermit", 0, "The Unseen",
         primary("The Unseen", 24000,
                 effect("@a[distance=..100]", "glowing", 900),
@@ -179,14 +183,18 @@ def register(add):
                 apply("invisibility", 800),
                 apply("speed", 800, 1),
                 effect(mobs(30), "blindness", 100),
-                effect(mobs(30), "slowness", 100)),
-        "partial", "No light-extinguish, persistent debuff field, exact +20% damage or attack invisibility break behavior; enemy players excluded")
+                effect(mobs(30), "slowness", 100),
+                enemy_effect("blindness", 100, 30),
+                enemy_effect("slowness", 100, 30)),
+        "partial", "No light-extinguish, persistent field, exact +20% damage or invisibility break; team-safe PvP is a one-shot pulse, unassigned players neutral")
     add("sun", 0, "The Eternal Day",
         primary("The Eternal Day", 24000,
                 apply("regeneration", 2400),
                 apply("night_vision", 2400),
-                effect(mobs(30, "undead"), "wither", 300, 1)),
-        "partial", "Only self gains healing/vision, no persistent 30-block no-spawn zone, exact undead 6 damage/sec, ally-only healing or enemy-player damage")
+                effect(mobs(30, "undead"), "wither", 300, 1),
+                ally_effect("regeneration", 2400, 30),
+                ally_effect("night_vision", 2400, 30)),
+        "partial", "Same-team allies receive healing/vision once, but no persistent no-spawn zone, exact undead 6 damage/sec or enemy-player damage")
     add("temperance", 0, "The Unbound",
         primary("The Unbound", 24000,
                 {"type": "origins:clear_effect"},
