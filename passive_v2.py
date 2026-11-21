@@ -2,6 +2,10 @@
 from __future__ import annotations
 
 def p(name, desc, kind, **kwargs):
+    # Origins 1.4.1 / Apoli 2.3.3 rejects invisibility without this
+    # required serializer field. Preserve V2's intentionally visible armor.
+    if kind == 'origins:invisibility':
+        kwargs.setdefault('render_armor', True)
     return dict(type=kind, name=name, description=desc, **kwargs)
 def mod(value, operation='multiply_total', name='Tarot V2'):
     return dict(value=value, operation=operation, name=name)
