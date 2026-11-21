@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "origins": [
+    "tarot:fool"
+  ],
+  "enabled": true,
+  "order": 0
+}

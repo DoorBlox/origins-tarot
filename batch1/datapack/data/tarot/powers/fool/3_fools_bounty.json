@@ -1,0 +1,15 @@
+{
+  "type": "origins:modify_food",
+  "name": "Fool's Bounty",
+  "description": "+20% hunger/saturation; golden apples grant Speed I for 100 ticks.",
+  "food_modifier": {
+    "name": "Fool's Bounty Food",
+    "operation": "multiply_total",
+    "value": 0.2
+  },
+  "saturation_modifier": {
+    "name": "Fool's Bounty Saturation",
+    "operation": "multiply_total",
+    "value": 0.2
+  }
+}

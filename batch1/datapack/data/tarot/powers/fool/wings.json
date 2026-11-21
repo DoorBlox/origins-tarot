@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "render_elytra": true,
+  "name": "Gray Fog Wings",
+  "description": "An innate Elytra-style glide, not permanent creative flight."
+}

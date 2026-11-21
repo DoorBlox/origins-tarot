@@ -1,0 +1,17 @@
+{
+  "type": "origins:action_on_callback",
+  "name": "History Substitution",
+  "description": "On lethal attack, cancel damage, teleport twelve blocks away, restore 20 health, Invisibility I/Speed II 60 ticks, 7200 tick cooldown.",
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_1_history_substitution"
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_1_history_substitution"
+  },
+  "entity_action_lost": {
+    "type": "origins:execute_command",
+    "command": "tag @s remove tc_fool_1_history_substitution"
+  }
+}

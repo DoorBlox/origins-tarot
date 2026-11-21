@@ -1,0 +1,17 @@
+{
+  "type": "origins:action_on_callback",
+  "name": "Spiritual Overload",
+  "description": "Every 40 ticks, if three nearby hostiles or at least one enemy player within eight blocks, gain Nausea I for 100 ticks.",
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_9_spiritual_overload"
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_9_spiritual_overload"
+  },
+  "entity_action_lost": {
+    "type": "origins:execute_command",
+    "command": "tag @s remove tc_fool_9_spiritual_overload"
+  }
+}

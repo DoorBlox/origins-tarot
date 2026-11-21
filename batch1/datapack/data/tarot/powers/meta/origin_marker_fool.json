@@ -1,0 +1,26 @@
+{
+  "type": "origins:action_on_callback",
+  "name": "Fool identity",
+  "description": "Registers the selected Fool origin with the Arcane slot engine; not slot-managed.",
+  "hidden": true,
+  "entity_action_chosen": {
+    "type": "origins:execute_command",
+    "command": "function tarot_batch1:chosen/fool"
+  },
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "function tarot_batch1:chosen/fool"
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "function tarot_batch1:chosen/fool"
+  },
+  "entity_action_respawned": {
+    "type": "origins:execute_command",
+    "command": "function tarot_batch1:chosen/fool"
+  },
+  "entity_action_lost": {
+    "type": "origins:execute_command",
+    "command": "function tarot_batch1:chosen/lost_fool"
+  }
+}

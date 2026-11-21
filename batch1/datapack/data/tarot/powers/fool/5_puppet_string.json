@@ -1,0 +1,16 @@
+{
+  "type": "origins:active_self",
+  "name": "Puppet String",
+  "description": "Sneak + V when bound: Slowness II hostile mobs for 80 ticks or enemy players for 40; mob attack weakened, player sprint suppressed. 400 tick cooldown.",
+  "cooldown": 1,
+  "hud_render": {
+    "should_render": false
+  },
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:execute_command",
+    "command": "function tarot_batch1:request/v"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "powers": [
+    "tarot:meta/origin_marker_fool",
+    "tarot:fool/identity_spiritual_expenditure",
+    "tarot:fool/wings"
+  ],
+  "icon": {
+    "item": "minecraft:compass"
+  },
+  "name": "THE FOOL",
+  "description": "Rev 3. Identity is permanent; all Sequence powers are granted through the tarot_slot source.",
+  "impact": 3,
+  "order": 0
+}
