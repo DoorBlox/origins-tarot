@@ -685,6 +685,12 @@ def compile_powers(root):
     from .batches import individual5, resonance5
     individual5.register(add)
     resonance5.register(add)
+    # All 11 Resonance paths now have 10 source-mapped compiled definitions.
+    # Most are deliberately PARTIAL substitutes; normal Seq1 stays gated
+    # pending gameplay validation, resource state and full transition tests.
+    from .batches import individual6, resonance6
+    individual6.register(add)
+    resonance6.register(add)
     # The Rev3 slot system can equip both a source bonus and its explicit
     # replacement at once. Keep grant ownership unchanged, but condition the
     # superseded effect on absence of its source-scoped upgrade power.
