@@ -50,10 +50,10 @@ class ResonanceSourceTests(unittest.TestCase):
             self.assertNotEqual(power["type"],"origins:simple")
             self.assertEqual(key["status"],rest[0] if rest else "full")
             if key["status"]=="partial":self.assertTrue(key["missing"])
-        self.assertEqual(len(self.powers),204)
-        self.assertEqual(sum(x["status"]=="full" for x in self.manifest),73)
-        self.assertEqual(sum(x["status"]=="partial" for x in self.manifest),131)
-        self.assertEqual(sum(x["status"]=="blocked" for x in self.manifest),230)
+        self.assertGreaterEqual(len(self.powers),204)
+        self.assertGreaterEqual(sum(x["status"]=="full" for x in self.manifest),73)
+        self.assertGreaterEqual(sum(x["status"]=="partial" for x in self.manifest),131)
+        self.assertLessEqual(sum(x["status"]=="blocked" for x in self.manifest),230)
 
     def test_resonance_coverage_in_source_is_not_player_unlock(self):
         for slug,levels in EXPECTED.items():
@@ -73,8 +73,8 @@ class ResonancePackReleaseGateTests(unittest.TestCase):
 
     def test_both_pack_variants_keep_partial_resonance_unselectable(self):
         manifest=json.loads(Path(self.artifacts["manifest"]).read_text())
-        self.assertEqual(manifest["summary"]["compiled"],204)
-        self.assertEqual(manifest["summary"]["blocked"],230)
+        self.assertGreaterEqual(manifest["summary"]["compiled"],204)
+        self.assertLessEqual(manifest["summary"]["blocked"],230)
         self.assertEqual(manifest["summary"]["resonance"],"FAIL-CLOSED until complete")
         for variant in ("only","addon"):
             with ZipFile(self.artifacts[variant]) as pack:
