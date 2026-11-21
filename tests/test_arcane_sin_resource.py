@@ -158,7 +158,7 @@ class SinEngineContractTests(unittest.TestCase):
                 self.assertIn("a_trinity_hits matches 3..", hit)
                 self.assertIn("resistance 3 1", proc)
                 self.assertIn("a_trinity_hits 0", proc)
-                self.assertIn("a_trinity_win 1..", tick)
+                self.assertIn("a_trinity_win matches 1..", tick)
 
 
 if __name__ == "__main__":
