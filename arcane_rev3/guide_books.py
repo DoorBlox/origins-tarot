@@ -215,3 +215,48 @@ def book_nbt(title, pages, marker):
     return ("{" + marker + ",title:" + json.dumps(title) +
             ',author:"Tarot Club",generation:0,pages:[' +
             ",".join(page_strings) + "]}")
+
+
+def emit_books(w, compiled, manifest, kits):
+    """Give one guide/tome per player, without destroying inventory slots.
+
+    /trigger is processed as the player by tick.mcfunction; on 1.18.2 a
+    vanilla written book has to be opened by right-clicking it in hand.
+    """
+    from .model import PATHWAYS
+
+    guide = book_nbt("Arcane Rev3 Handbook", general_pages(),
+                     marker="tarotArcaneGuide:1b")
+    w.f("ui/book/give",
+        "execute store result score @s a_probe run clear @s minecraft:written_book{tarotArcaneGuide:1b} 0",
+        "execute if score @s a_probe matches 0 run give @s minecraft:written_book" +
+        guide + " 1",
+        "tellraw @s " + json.dumps({
+            "text": "[Tarot] Open the Arcane Handbook from your inventory. "
+                    "If you already have it, no duplicate is given.",
+            "color": "gold"}, separators=(",", ":")))
+
+    w.f("ui/book/tome",
+        "execute unless score @s a_init matches 1 run tellraw @s " +
+        json.dumps({"text": "[Tarot] Select a Tarot Origin before requesting your pathway tome.",
+                    "color": "red"}, separators=(",", ":")),
+        [f"execute if score @s a_init matches 1 if score @s a_path matches {card['id']} "
+         f"run function tarot_arcane:ui/book/path/{card['slug']}"
+         for card in CARDS])
+
+    for card in CARDS:
+        slug = card["slug"]
+        pages = pathway_pages(slug, compiled, manifest, kits)
+        nbt = book_nbt(card["name"] + " Tome", pages,
+                       marker="tarotArcaneTome:1b")
+        # One book per player at a time; its contents are fixed for the
+        # chosen primary pathway. If the pathway changes, the player must
+        # store or discard the old book and request the appropriate new one.
+        w.f(f"ui/book/path/{slug}",
+            "execute store result score @s a_probe run clear @s minecraft:written_book{tarotArcaneTome:1b} 0",
+            "execute if score @s a_probe matches 0 run give @s minecraft:written_book" +
+            nbt + " 1",
+            "tellraw @s " + json.dumps({
+                "text": "[Tarot] Open your Pathway Tome in hand. "
+                        "Use /trigger a_book for the general handbook.",
+                "color": "aqua"}, separators=(",", ":")))
