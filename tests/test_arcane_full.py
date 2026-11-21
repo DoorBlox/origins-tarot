@@ -120,6 +120,20 @@ class FullBuildTests(unittest.TestCase):
             {part["type"] for part in disadvantage["condition"]["conditions"]},
             {"origins:sprinting", "origins:fall_flying"})
 
+    def test_one_ascension_only_per_player_command(self):
+        """A player with banked marks and offerings cannot auto-chain levels."""
+        checks=self.z.read("data/tarot_arcane/functions/ascend/check.mcfunction").decode().splitlines()
+        self.assertIn("scoreboard players operation @s a_start_seq = @s a_seq",checks)
+        self.assertIn("scoreboard players set @s a_marks_ok 0",checks)
+        for seq in range(9,1,-1):
+            dispatch="run function tarot_arcane:ascend/check_s"+str(seq)
+            lines=[line for line in checks if dispatch in line]
+            self.assertEqual(len(lines),1,"exactly one dispatch per original sequence")
+            self.assertIn(f"if score @s a_start_seq matches {seq}",lines[0])
+            self.assertNotIn(f"if score @s a_seq matches {seq}",lines[0])
+        self.assertTrue(any("a_marks_ok matches 0 run tellraw" in line for line in checks),
+                        "inventory errors must not also report acting mark failure")
+
     def test_unavailable_seq_two_to_one_does_not_consume_offerings(self):
         s = self.z.read("data/tarot_arcane/functions/ascend/check_s2.mcfunction").decode()
         self.assertIn("Resonance is locked",s)
