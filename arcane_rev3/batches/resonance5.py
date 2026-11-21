@@ -5,6 +5,7 @@ persistent brew state, or cross-team health disclosure. The unsupported
 submechanics stay explicit in the manifest and Sequence 1 remains ungranted.
 """
 from ..powers import apply, power
+from ..team_policy import ally_effect
 from .shared import active, combined, effect, mobs, periodic
 
 
@@ -41,9 +42,10 @@ def register(add):
         "partial", "No Recorded Step location history/return and no actual radius-three light level 8 in the world")
     add("walking_sanctuary", 3, "Ghost Blessing",
         periodic("Ghost Blessing", "While invisible, refresh self Regeneration I.",
-                 apply("regeneration", 80), 80,
+                 combined(apply("regeneration", 80),
+                          ally_effect("regeneration", 80, 8)), 80,
                  condition={"type": "origins:invisible"}),
-        "partial", "Invisibility is used as a weaker proxy for actual phasing; allies do not receive Regeneration until a safe same-team filter exists")
+        "partial", "Invisibility approximates phasing; same-team allies within 8 blocks receive Regeneration I during the effect, but arbitrary unlisted players never qualify")
     add("eclipse", 6, "Witness Brew",
         active("Witness Brew", "Secondary highlights nearest tagged hostile mob for 600 ticks.",
                effect(mobs(10, nearest=True), "glowing", 600), 1200),

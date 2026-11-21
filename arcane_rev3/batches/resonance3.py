@@ -5,6 +5,7 @@ transition or slot. The Seq2->Seq1 ritual must remain fail-closed until the
 whole 110-ability kit and world/runtime acceptance are complete.
 """
 from ..powers import power, apply, mod, compound
+from ..team_policy import ally_effect
 from .shared import active, periodic, effect, mobs, combined, cmd
 from .resonance import attacked_by, night
 
@@ -96,9 +97,10 @@ def register(add):
                         "modifier": mod(-0.05), "condition": shield},
             repair=periodic("Linked Crown Repair",
                             "Heal self 1 HP every 200t while holding a shield.",
-                            {"type": "origins:heal", "amount": 1},
+                            combined({"type": "origins:heal", "amount": 1},
+                                     ally_effect("regeneration", 80, 8)),
                             200, condition=shield)),
-        "partial", "Self-only shield protection/half-heart heal; allies within eight blocks not targeted until same-team filter is verified")
+        "partial", "Allies within 8 blocks receive bounded Regeneration I every 200t while shield held, not exact +5% damage reduction or half-heart instant heal; unlisted and teamless players remain neutral")
     add("loaded_dice", 6, "Cross-Reference Clockwork",
         power("Cross-Reference Clockwork", "On kill, immediately grant one positive Fate boon.",
               "origins:self_action_on_kill", cooldown=1,
