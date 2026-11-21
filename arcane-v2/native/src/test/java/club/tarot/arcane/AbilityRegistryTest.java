@@ -17,6 +17,19 @@ public class AbilityRegistryTest {
         player.onSequenceChange(1);
         assertFalse(AbilityRegistry.isActive(player,"borrowed_face"));
     }
+    @Test public void removedSequencesAreNotStillActiveAfterSlotReassignment() {
+        SlotModel.Profile p=new SlotModel.Profile("fool");
+        p.onSequenceChange(4);
+        assertTrue(AbilityRegistry.isActive(p,"spirit_vision"));
+        p.clearSlot(1);
+        assertFalse(AbilityRegistry.isActive(p,"spirit_vision"));
+        p.setSlot(1,"hanged_man",9);
+        assertTrue(AbilityRegistry.isActive(p,"sin_bearing"));
+        assertFalse(AbilityRegistry.isActive(p,"spirit_vision"));
+        p.onSequenceChange(1);
+        assertTrue(AbilityRegistry.isActive(p,"burdened_beginning"));
+        assertFalse(AbilityRegistry.isActive(p,"sin_bearing"));
+    }
     @Test public void primaryAndSecondaryMetaBindingsArePackaged() {
         assertNotNull(getClass().getClassLoader().getResource("data/tarot/powers/meta/primary_key.json"));
         assertNotNull(getClass().getClassLoader().getResource("data/tarot/powers/meta/secondary_key.json"));

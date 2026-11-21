@@ -65,11 +65,11 @@ public final class HermitChariotAbilities {
         if(on)instance.addTemporaryModifier(new EntityAttributeModifier(id,name,
             amount,EntityAttributeModifier.Operation.ADDITION));
     }
-    static boolean fireImmune(ServerPlayerEntity p,DamageSource source) {
+    public static boolean fireImmune(ServerPlayerEntity p,DamageSource source) {
         ArcaneSave.Record r=ArcaneMod.profile(p);
         return r!=null && source.isFire() && (chariot(r,9)||archive(r,9));
     }
-    static int modifyXp(ServerPlayerEntity p,int amount) {
+    public static int modifyXp(ServerPlayerEntity p,int amount) {
         ArcaneSave state=ArcaneSave.get(p.getServer());
         ArcaneSave.Record r=ArcaneMod.profile(p);
         if(r==null || !(hermit(r,9)||archive(r,9)) || amount<=0)return amount;
@@ -79,7 +79,7 @@ public final class HermitChariotAbilities {
         state.markDirty();
         return amount+bonus;
     }
-    static float breakMultiplier(ServerPlayerEntity p) {
+    public static float breakMultiplier(ServerPlayerEntity p) {
         ArcaneSave.Record r=ArcaneMod.profile(p);
         return r!=null && hermit(r,9) && study(p)?1.2f:1f;
     }
@@ -197,7 +197,7 @@ public final class HermitChariotAbilities {
         if(r.profile.identityActive("hermit") && p.experienceLevel>=30 && !book(p.getOffHandStack()))
             effect(p,StatusEffects.MINING_FATIGUE,40,0);
         if(r.profile.identityActive("chariot") &&
-            (p.getWorld().isRainingAt(p.getBlockPos()) || p.isSubmergedInWater())) {
+            ((p.getWorld().isRaining() && p.getWorld().isSkyVisible(p.getBlockPos())) || p.isSubmergedInWater())) {
             effect(p,StatusEffects.WEAKNESS,40,0);
             effect(p,StatusEffects.MINING_FATIGUE,40,0);
         }

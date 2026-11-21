@@ -33,5 +33,5 @@ event ability, not proof of exact mechanics.
   exactly. Enemy players receive Glow without forced attacks.
 - Burning Archive critical-arrow radius ignition and Burn-stacks have
   server-side native logic but still need a live combat acceptance test.
-- There are 317 remaining ability entries across 14 individual pathways
-  and 7 Resonance pairs; these are NOT implemented in this development jar.
+- There are 317 remaining ability entries across 16 individual pathways
+  and 8 Resonance pairs; these are NOT implemented in this development jar.

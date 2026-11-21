@@ -17,6 +17,8 @@ import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -220,7 +222,9 @@ public final class ArcaneMod implements ModInitializer {
     private static int alter(CommandContext<ServerCommandSource> c, Mutation action) {
         return withPlayer(c,(p,s,r) -> {
             try {
+                Set<String> prior=managedSequencePowers(r.profile);
                 action.apply(r);
+                pruneRevokedPowers(p,r,prior);
                 s.markDirty();
                 refreshSlots(p,r);
                 show(p,r);
@@ -233,7 +237,9 @@ public final class ArcaneMod implements ModInitializer {
     private static int onSequenceChange(ServerPlayerEntity p, ArcaneSave s, ArcaneSave.Record r, int next) {
         int old = r.profile.sequence();
         try {
+            Set<String> prior=managedSequencePowers(r.profile);
             r.profile.onSequenceChange(next);
+            pruneRevokedPowers(p,r,prior);
             s.markDirty();
             refreshSlots(p,r);
             if (old >= 5 && next <= 4 && next > 1)
@@ -250,6 +256,43 @@ public final class ArcaneMod implements ModInitializer {
         ArcaneSave.Record record=state.getPlayer(player.getUuid());
         if(record==null || record.profile.sequence()!=oldSeq) return false;
         return onSequenceChange(player,state,record,newSeq)>0;
+    }
+    private static Set<String> managedSequencePowers(SlotModel.Profile profile) {
+        Set<String> out=new HashSet<>();
+        if("resonance".equals(profile.mode())) {
+            for(int seq=0;seq<=9;seq++)
+                out.addAll(AbilityRegistry.forSequence(profile.resonance(),seq));
+        } else for(SlotModel.Choice choice:profile.slots()) {
+            if(choice!=null)out.addAll(AbilityRegistry.forSequence(choice.pathway,choice.sequence));
+        }
+        return out;
+    }
+    private static void pruneRevokedPowers(ServerPlayerEntity player,ArcaneSave.Record r,
+                                           Set<String> before) {
+        Set<String> after=managedSequencePowers(r.profile);
+        before.removeAll(after);
+        if(before.isEmpty())return;
+        for(String id:before) {
+            int slash=id.indexOf('/');
+            int underscore=id.indexOf('_',slash+1);
+            if(underscore>=0)r.cooldowns.remove(id.substring(underscore+1));
+        }
+        // Fail closed: temporary effects must never survive revocation of
+        // their source sequence kit. Do not touch other mods' powers.
+        if(before.stream().anyMatch(id->id.contains("legend_of_the_fool")
+            || id.contains("the_paper_martyr")))FoolLegend.stopOnDisconnect(player);
+        if(before.stream().anyMatch(id->id.contains("hanged_man/")
+            || id.contains("paper_martyr/"))) {
+            HangedAbilities.stopOnDisconnect(player);
+            PaperMartyr.stopOnDisconnect(player);
+            r.sin=0f;
+        }
+        if(before.stream().anyMatch(id->id.contains("world/")
+            || id.contains("justice/") || id.contains("marked_verdict/")))
+            WorldJusticeAbilities.stopOnDisconnect(player);
+        if(before.stream().anyMatch(id->id.contains("hermit/")
+            || id.contains("chariot/") || id.contains("burning_archive/")))
+            BurningArchive.stopOnDisconnect(player);
     }
     static void run(ServerPlayerEntity player, String command) {
         MinecraftServer server=player.getServer();
