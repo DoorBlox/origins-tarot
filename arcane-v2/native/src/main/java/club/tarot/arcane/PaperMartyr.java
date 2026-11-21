@@ -190,5 +190,5 @@ public final class PaperMartyr {
                 && HangedAbilities.ally(p,e)))
             effect(ally,StatusEffects.ABSORPTION,200,3);
     }
-    static void stopOnDisconnect(ServerPlayerEntity p) { BORROWED.remove(p.getUuid()); }
+    public static void stopOnDisconnect(ServerPlayerEntity p) { BORROWED.remove(p.getUuid()); }
 }
