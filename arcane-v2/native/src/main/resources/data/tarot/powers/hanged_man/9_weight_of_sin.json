@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Weight of Sin",
+  "description": "No natural regen above 8 HP. Unlock: kill → 9; Healing potion → 10 for 1200t; still + light ≤ 9 for 160t → 10 for 600t."
+}

@@ -46,7 +46,7 @@ public final class ArcaneMod implements ModInitializer {
                                     IntegerArgumentType.getInteger(c,"sequence"))))))))
                 .then(literal("reset").executes(c -> alter(c,r -> r.profile.reset())))
                 .then(literal("cast").requires(src -> src.hasPermissionLevel(2)).then(argument("ability",StringArgumentType.word())
-                    .executes(c -> withPlayer(c,(p,s,r) -> FoolAbilities.cast(p,s,r,StringArgumentType.getString(c,"ability"))))))
+                    .executes(c -> withPlayer(c,(p,s,r) -> cast(p,s,r,StringArgumentType.getString(c,"ability"))))))
                 .then(literal("debug").requires(src -> src.hasPermissionLevel(2))
                     .then(literal("sequence").then(argument("level",IntegerArgumentType.integer(0,9))
                         .executes(c -> withPlayer(c,(p,s,r) -> onSequenceChange(p,s,r,IntegerArgumentType.getInteger(c,"level"))))))
@@ -88,10 +88,17 @@ public final class ArcaneMod implements ModInitializer {
                     continue;
                 }
                 FoolAbilities.tick(player,state,record);
+                HangedAbilities.tick(player,state,record);
             }
         });
         FoolAbilities.register();
         FoolLegend.register();
+        ServerPlayConnectionEvents.DISCONNECT.register((handler,server) ->
+            server.execute(() -> {
+                FoolLegend.stopOnDisconnect(handler.getPlayer());
+                HangedAbilities.stopOnDisconnect(handler.getPlayer());
+                PaperMartyr.stopOnDisconnect(handler.getPlayer());
+            }));
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
 
@@ -127,7 +134,7 @@ public final class ArcaneMod implements ModInitializer {
                             String binding,String ability) {
         binding=binding.toLowerCase(java.util.Locale.ROOT);
         ability=ability.toLowerCase(java.util.Locale.ROOT);
-        if(!FoolAbilities.supportsBinding(binding,ability)
+        if(!supportsBinding(binding,ability)
             || !AbilityRegistry.isActive(r.profile,ability)) {
             error(p,"Ability not unlocked, unsupported, or wrong key. Use /tarot slots.");
             return 0;
@@ -145,10 +152,29 @@ public final class ArcaneMod implements ModInitializer {
         if("primary".equals(binding)) ability=r.primaryBinding;
         else if("secondary".equals(binding)) ability=r.secondaryBinding;
         else { error(p,"Unknown Tarot key."); return 0; }
-        if(!FoolAbilities.supportsBinding(binding,ability)
+        if(!supportsBinding(binding,ability)
             || !AbilityRegistry.isActive(r.profile,ability)) {
             error(p,"No active "+binding+" skill. Use /tarot bind "+binding+" <ability>.");
             return 0;
+        }
+        return cast(p,state,r,ability);
+    }
+    private static boolean supportsBinding(String binding,String ability) {
+        if(FoolAbilities.supportsBinding(binding,ability))return true;
+        if("primary".equals(binding))
+            return "the_paper_martyr".equals(ability) || "weight_of_sin_made_manifest".equals(ability);
+        return "secondary".equals(binding) && (
+            "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
+            || "borrowed_sacrifice".equals(ability) || "gathering_of_martyrs".equals(ability));
+    }
+    private static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String ability) {
+        if(AbilityRegistry.isActive(r.profile,ability)) {
+            if(PaperMartyr.cast(p,state,r,ability)>0) {
+                info(p,"Cast "+ability);return 1;
+            }
+            if(HangedAbilities.cast(p,state,r,ability)) {
+                info(p,"Cast "+ability);return 1;
+            }
         }
         return FoolAbilities.cast(p,state,r,ability);
     }
@@ -208,11 +234,13 @@ public final class ArcaneMod implements ModInitializer {
         }
         // Clear stale input bindings when a Sequence has been removed.
         if(!AbilityRegistry.isActive(profile,r.primaryBinding))
-            r.primaryBinding=AbilityRegistry.isActive(profile,"full_faceless_disguise")
-                ?"full_faceless_disguise":"";
+            r.primaryBinding=AbilityRegistry.isActive(profile,"the_paper_martyr")
+                ?"the_paper_martyr":(AbilityRegistry.isActive(profile,"full_faceless_disguise")
+                    ?"full_faceless_disguise":"");
         if(!AbilityRegistry.isActive(profile,r.secondaryBinding))
-            r.secondaryBinding=AbilityRegistry.isActive(profile,"spirit_vision")
-                ?"spirit_vision":"";
+            r.secondaryBinding=AbilityRegistry.isActive(profile,"suffering_sight")
+                ?"suffering_sight":(AbilityRegistry.isActive(profile,"spirit_vision")
+                    ?"spirit_vision":"");
         ArcaneSave.get(p.getServer()).markDirty();
     }
     private static void grantInputKeys(ServerPlayerEntity p) {
@@ -249,6 +277,9 @@ public final class ArcaneMod implements ModInitializer {
     private static void show(ServerPlayerEntity p,ArcaneSave.Record r) {
         SlotModel.Profile model=r.profile;
         int filled=(int)model.slots().stream().filter(c->c!=null).count();
+        if(model.primary().equals("hanged_man") || model.active("hanged_man",9)
+            || model.resonance().equals("paper_martyr") && model.mode().equals("resonance"))
+            info(p,"Sin: "+String.format(java.util.Locale.ROOT,"%.1f",r.sin)+" HP");
         info(p,model.mode().toUpperCase()+" / Sequence "+model.sequence()
             +" / "+filled+"/"+model.maxSlots()+" slots");
         if(model.mode().equals("resonance")) { info(p,"Resonance: "+model.resonance()+" (Sequences 9-0)"); return; }

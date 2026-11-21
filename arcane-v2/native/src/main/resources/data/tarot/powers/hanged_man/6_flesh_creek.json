@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Flesh Creek",
+  "description": "20% chance on damage → heal 2 hearts (flagged non-Sin)."
+}

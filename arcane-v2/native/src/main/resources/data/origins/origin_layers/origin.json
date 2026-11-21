@@ -1,6 +1,7 @@
 {
   "replace": false,
   "origins": [
-    "tarot:fool"
+    "tarot:fool",
+    "tarot:hanged_man"
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "name": "The Paper Martyr",
+  "description": "The Fool and the Hanged Man united at Sequence 1. Resonance abilities are server-granted.",
+  "icon": "minecraft:paper",
+  "impact": 3,
+  "order": 22,
+  "powers": [
+    "tarot:paper_martyr/marker",
+    "tarot:fool/identity_spiritual_expenditure",
+    "tarot:hanged_man/identity_weight_of_sin",
+    "tarot:paper_martyr/identity_wings"
+  ]
+}

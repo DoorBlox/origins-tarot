@@ -26,6 +26,26 @@ public final class AbilityRegistry {
         path("fool", 2, "fools_gathering");
         path("fool", 1, "history_substitution", "paper_figurine_substitute");
         path("fool", 0, "legend_of_the_fool");
+        path("hanged_man", 9, "shadow_of_degeneration", "sin_bearing", "graze_the_soul", "weight_of_sin");
+        path("hanged_man", 8, "shadow_whisper");
+        path("hanged_man", 7, "shadow_cloak");
+        path("hanged_man", 6, "flesh_creek");
+        path("hanged_man", 5, "burden_bearer");
+        path("hanged_man", 4, "dark_blade");
+        path("hanged_man", 3, "trinity");
+        path("hanged_man", 2, "profane_aura");
+        path("hanged_man", 1, "sin_overflow", "depraved_dependent");
+        path("hanged_man", 0, "weight_of_sin_made_manifest");
+        path("paper_martyr", 9, "burdened_beginning");
+        path("paper_martyr", 8, "shadow_step");
+        path("paper_martyr", 7, "suffering_sight");
+        path("paper_martyr", 6, "borrowed_sacrifice");
+        path("paper_martyr", 5, "gathering_of_martyrs");
+        path("paper_martyr", 4, "burdened_trickster");
+        path("paper_martyr", 3, "suffering_sight_ii");
+        path("paper_martyr", 2, "sacrificial_gathering");
+        path("paper_martyr", 1, "martyrs_substitute");
+        path("paper_martyr", 0, "the_paper_martyr");
     }
 
     private static void path(String name, int sequence, String... ids) {

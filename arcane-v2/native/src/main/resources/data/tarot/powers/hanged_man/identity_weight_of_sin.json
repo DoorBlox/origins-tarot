@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Weight of Sin",
+  "description": "Natural regeneration cannot restore health past 8 hearts until the burden is lifted. The native Fabric runtime implements its exceptions."
+}

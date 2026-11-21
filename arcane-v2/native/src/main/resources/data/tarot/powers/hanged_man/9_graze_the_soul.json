@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Graze the Soul",
+  "description": "Kill **hostile mob OR enemy player** → heal 2 HP + Resistance I 60t. Cooldown 120t."
+}

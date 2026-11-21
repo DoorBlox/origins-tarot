@@ -28,7 +28,9 @@ public final class FoolLegend {
         final long expires;
         final boolean priorMayFly;
         long lastDecoy;
-        Active(ServerPlayerEntity p,long now) {
+        final boolean isPaper;
+        Active(ServerPlayerEntity p,long now,boolean paper) {
+            isPaper=paper;
             world=p.getWorld();
             x=p.getX(); y=p.getY(); z=p.getZ();
             yaw=p.getYaw(); pitch=p.getPitch();
@@ -51,21 +53,20 @@ public final class FoolLegend {
     }
 
     public static boolean cast(ServerPlayerEntity player,ArcaneSave state,ArcaneSave.Record record) {
-        if(!record.profile.active("fool",0)) return false;
+        boolean isPaper=record.profile.active("paper_martyr",0);
+        if(!isPaper && !record.profile.active("fool",0)) return false;
         long now=player.getWorld().getTime();
         if(ACTIVE.containsKey(player.getUuid())) return false;
         int cooldown=player.getHealth()<6f?12000:18000;
-        if(!record.ready("legend_of_the_fool",now,cooldown)) return false;
-        Active a=new Active(player,now);
+        if(!record.ready(isPaper?"the_paper_martyr":"legend_of_the_fool",now,cooldown)) return false;
+        Active a=new Active(player,now,isPaper);
         ACTIVE.put(player.getUuid(),a);
         player.getAbilities().allowFlying=true;
         player.sendAbilitiesUpdate();
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,700,0));
-        // APPROX: Resistance IV gives 80% reduction, not the exact 75% in Rev2.
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,700,3));
-        // APPROX: Strength I does not produce exactly +50% final damage.
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH,700,0));
-        FoolAbilities.decoy(player);
+        // Exact -75% incoming / +50% outgoing applies in the native damage mixin.
+        if(isPaper)PaperMartyr.spawnDecoy(player,3,3,3,100,false);
+        else FoolAbilities.decoy(player);
         state.markDirty();
         return true;
     }
@@ -79,8 +80,11 @@ public final class FoolLegend {
             expire(player,a);
             return;
         }
+        ArcaneSave.Record profile=ArcaneMod.profile(player);
+        if(a.isPaper && profile!=null)PaperMartyr.capstoneTick(player,profile,now);
         if(now-a.lastDecoy>=100) {
-            FoolAbilities.decoy(player);
+            if(a.isPaper)PaperMartyr.spawnDecoy(player,3,3,3,100,false);
+            else FoolAbilities.decoy(player);
             a.lastDecoy=now;
         }
     }
@@ -109,6 +113,8 @@ public final class FoolLegend {
 
     private static void expire(ServerPlayerEntity player,Active a) {
         restoreFlight(player,a);
+        ArcaneSave.Record r=ArcaneMod.profile(player);
+        if(a.isPaper && r!=null)PaperMartyr.capstoneExpire(player,r);
         if(!player.isAlive()) return;
         player.teleport(a.world,a.x,a.y,a.z,a.yaw,a.pitch);
         player.setHealth(20f);

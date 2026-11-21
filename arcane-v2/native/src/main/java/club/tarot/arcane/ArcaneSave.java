@@ -43,6 +43,12 @@ public final class ArcaneSave extends PersistentState {
                 for (String key : cooldowns.getKeys()) record.cooldowns.put(key, cooldowns.getLong(key));
                 record.combatUntil = n.getLong("combatUntil");
                 record.foodRemainder = n.getFloat("foodRemainder");
+                record.sin = Math.max(0f,n.getFloat("sin"));
+                record.lastSinDamage = n.getLong("sinDamageTick");
+                record.killedForRegen = n.getBoolean("killedForRegen");
+                record.healingPotionUntil = n.getLong("healingPotionUntil");
+                record.darkStillUntil = n.getLong("darkStillUntil");
+                record.darkStillTicks = n.getInt("darkStillTicks");
                 record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
                 record.secondaryBinding = n.contains("bindSecondary") ? n.getString("bindSecondary") : "spirit_vision";
                 state.players.put(n.getUuid("uuid"), record);
@@ -76,6 +82,12 @@ public final class ArcaneSave extends PersistentState {
             n.put("cooldowns", cds);
             n.putLong("combatUntil", record.combatUntil);
             n.putFloat("foodRemainder", record.foodRemainder);
+            n.putFloat("sin",record.sin);
+            n.putLong("sinDamageTick",record.lastSinDamage);
+            n.putBoolean("killedForRegen",record.killedForRegen);
+            n.putLong("healingPotionUntil",record.healingPotionUntil);
+            n.putLong("darkStillUntil",record.darkStillUntil);
+            n.putInt("darkStillTicks",record.darkStillTicks);
             n.putString("bindPrimary",record.primaryBinding);
             n.putString("bindSecondary",record.secondaryBinding);
             records.add(n);
@@ -96,6 +108,12 @@ public final class ArcaneSave extends PersistentState {
         public final Map<String, Long> cooldowns = new HashMap<>();
         public long combatUntil;
         public float foodRemainder;
+        public float sin;
+        public long lastSinDamage;
+        public boolean killedForRegen;
+        public long healingPotionUntil;
+        public long darkStillUntil;
+        public int darkStillTicks;
         public String primaryBinding="full_faceless_disguise";
         public String secondaryBinding="spirit_vision";
         private Record(SlotModel.Profile profile) { this.profile = profile; }

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Shadow Step",
+  "description": "25% chance on damage → decoy (armor stand, `tarot_decoy` tag). Decoy carries 1 Sin; on death deals 2 damage in 2 blocks. Cooldown 400t."
+}

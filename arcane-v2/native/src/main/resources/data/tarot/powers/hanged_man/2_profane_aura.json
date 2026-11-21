@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Profane Aura",
+  "description": "10% chance Weakness I 60t on attacker (**hostile mob OR enemy player**); kill applies Slowness I 40t to nearby entities within 5 blocks. Cooldown 100t."
+}
