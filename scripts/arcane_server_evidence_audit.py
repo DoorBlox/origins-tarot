@@ -106,6 +106,30 @@ def audit(log, remorphed=None, skinshifter=None, *,
         warn('info', 'brigadier_ambiguity', 'Brigadier command ambiguity warnings observed; successful registration is not gameplay acceptance')
     if "Couldn't get patreons" in text or 'UpdateChecker' in text:
         warn('info', 'external_update_fetch', 'Optional mod remote metadata/update checks failed; startup continued')
+    # Actual SMP user report: the server ran V2 after Arcane was removed.
+    # Neither a "Done" line nor mod-registry counts establish Arcane validity.
+    missing_arcane = bool(re.search(
+        r'Missing data pack file/Arcane_Rev3_[^\\s]+\\.zip', text))
+    loaded_arcane = bool(re.search(
+        r'Found new data pack file/Arcane_Rev3_[^\\s]+\\.zip', text))
+    loaded_legacy = bool(re.search(
+        r'Found new data pack file/The_Tarot_Club_[^\\s]+\\.zip', text))
+    if missing_arcane and not loaded_arcane:
+        warn('blocker', 'arcane_datapack_missing',
+             'World references Arcane Rev3, but its archive is missing; use the Arcane-specific build artifact, not the legacy V2 action.')
+    if loaded_legacy:
+        warn('blocker', 'legacy_tarot_pack_loaded',
+             'Legacy Tarot V2/V3 detected in this Arcane test; never mix it with Rev3.')
+    if re.search(r'There was a problem reading power file tarot:[^\\n]+\\(skipping\\)', text):
+        warn('blocker', 'tarot_power_decoder_error',
+             'At least one tarot power failed Apoli decoding; inspect the private log for the exact JSON error.')
+    if re.search(r'Origin \\"tarot:[^\\n]+contained unregistered power:', text):
+        warn('blocker', 'tarot_unregistered_power',
+             'An Arcana Origin references a skipped or missing power definition.')
+    if re.search(
+            r'Error while reading power holder data: Could not get power type from id [\\\'\\"]tarot:', text):
+        warn('blocker', 'saved_power_missing',
+             'Saved player data references a power not currently registered. Preserve backup; do not delete playerdata.')
     if remorphed is not None:
         if 'usePermissions' not in remorphed and versions.get('remorphed', '').startswith('4.2'):
             warn('warning', 'remorphed_legacy_permissions', 'ReMorphed 4.2 config lacks usePermissions; do not apply newer 7.1+ LuckPerms nodes to this installed version')
