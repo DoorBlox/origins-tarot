@@ -29,6 +29,7 @@ jobs:
           path: |
             output/Arcane_Rev3_22_Origins_ONLY_DEV_1.18.2.zip
             output/Arcane_Rev3_22_Origins_ADDON_DEV_1.18.2.zip
+            output/Arcane_Rev3_Resonance_Manual_Preview_TEST_ONLY_1.18.2.zip
             output/arcane_ability_manifest.json
             output/tarot.json
           if-no-files-found: error
