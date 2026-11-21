@@ -669,7 +669,11 @@ def compile_powers(root):
     # Resonance powers now compile into real JSON and manifest records.
     # Full-build intentionally never grants them until all 10 per pair exist.
     from .batches import resonance
+
     resonance.register(add)
+    from .batches import resonance2, individual3
+    resonance2.register(add)
+    individual3.register(add)
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}

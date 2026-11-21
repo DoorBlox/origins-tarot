@@ -9,7 +9,7 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 - 22 pathway Origins and 18 inherited Elytra gliders; 11 paired Resonance IDs are reserved, not activated.
 - Pure datapack/scoreboard runtime: Sequence 9 through 2, 22 distinct acting quest tracks, altar requirements, combat lock, fixed second pathway at Sequence 4, 6/7/8 editable slots, grant/revoke and re-login reconciliation. No KubeJS or custom Fabric mod.
 - Non-OP `/tarot`, `/tarot status`, `/tarot slots`, `/tarot ascend`, `/tarot slot N tarot:card S`, `/tarot slot N clear`, `/tarot slot auto`, `/tarot slot swap N M`, and `/tarot reset` via player-scoped CLIENT `/trigger` operations. Command Aliases schema uses permission 0. Both `/tarot status` and `/tarot slots` display actual Arcana titles and Sequence numbers rather than internal numeric kit codes; the partner is revealed at Sequence 4.
-- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **204 powers compiled (73 source-complete, 131 partial), 230 still blocked.** No fake `origins:simple` abilities are emitted.
+- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **241 powers compiled (73 source-complete, 168 explicitly partial), 193 still blocked.** No fake `origins:simple` abilities are emitted.
 - Permanent primary-pathway drawbacks are innate Origin powers, **not removable Sequence-9 slot abilities**: Fool's +25% exhaustion plus 20 more compiled pathway drawbacks are attached directly to their Origins, outside the source-grant/revoke cycle.
 
 ## Rev3 identity-drawback integrity
@@ -39,6 +39,14 @@ The 1.18.2-safe targeting helper emits **fixed server-side commands** with `@e[t
 Lovers' Separation Anxiety has a real per-player `a_alone_time` tick counter, capped at 601 and reset when any player enters eight blocks. After more than 600 ticks alone, the native scoreboard condition applies +35% exhaustion and −15% break speed. Its same-team qualifier is not yet implemented and is recorded as partial.
 
 All compiled abilities remain test-world-only until actual 1.18.2 Origins 1.4.1 testing.
+
+## Resonance wave 2 and individual combat wave: 37 additional powers
+
+A second independently auditable module `arcane_rev3/batches/resonance2.py` adds **28 named middle-sequence Resonance skills** across marked_verdict, burning_archive, crumbling_reaper, impossible_fist, benevolent_crown, binding_contract, starless_poison, eclipse, walking_sanctuary and loaded_dice. These include real tagged-hostile status effects, XP gains, undead-linked healing, sneak/bow conditions and fixed ability key cooldowns. The separate `individual3.py` adds **nine individual pathway combat/utility abilities**: Reap, Bulwark, Guide, Verdict, Grave Whisper, Twilight Blade, Sanguine Resilience, Nature's Step and Sanctify.
+
+**All 37 are explicitly PARTIAL.** The manifest records exactly which Rev2 effects cannot be reproduced faithfully, including enemy-player team safety, dynamic mob AI and targeting, next-hit damage modifiers, portal/terrain alteration, charge requirements and death-triggered location scans. Some are conservative non-equivalent analogues: e.g. Grave Whisper yields a rotten-flesh item rather than calculating actual entity loot. They are not presented as full, balanced abilities. Nonstandard 1.18.2 APIs, KubeJS and custom Java remain excluded.
+
+These 28 new Resonance definitions are compiled into JSON, but **all eleven Resonance Origins remain unchoosable and no pair grants or Sequence1 unlock have been added**. Full-kits and runtime validation remain release gates.
 
 ## Resonance progression: 23 genuine pair powers, still fail-closed
 
