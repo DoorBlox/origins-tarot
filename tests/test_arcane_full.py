@@ -169,12 +169,19 @@ class FullBuildTests(unittest.TestCase):
         load=self.z.read("data/tarot_arcane/functions/load.mcfunction").decode()
         self.assertIn("scoreboard objectives add a_dmg_dealt minecraft.custom:minecraft.damage_dealt",load)
         self.assertIn("scoreboard objectives add a_dmg_taken minecraft.custom:minecraft.damage_taken",load)
-        for obj in ("a_seen_dealt", "a_seen_taken"):
+        for obj in ("a_seen_dealt", "a_seen_taken",
+                    "a_seen_bow", "a_seen_crossbow", "a_seen_trident"):
             self.assertIn(f"scoreboard objectives add {obj} dummy",load)
+        for obj, weapon in (("a_bow","bow"), ("a_crossbow","crossbow"),
+                            ("a_trident","trident")):
+            self.assertIn(f"scoreboard objectives add {obj} minecraft.used:minecraft.{weapon}",load)
         stat=self.z.read("data/tarot_arcane/functions/player/combat_stats.mcfunction").decode()
         self.assertIn("if score @s a_dmg_dealt > @s a_seen_dealt",stat)
         self.assertIn("if score @s a_dmg_taken > @s a_seen_taken",stat)
-        self.assertEqual(stat.count("run scoreboard players set @s a_combat 200"),2)
+        self.assertEqual(stat.count("run scoreboard players set @s a_combat 200"),5)
+        for weapon in ("bow","crossbow","trident"):
+            self.assertIn(f"if score @s a_{weapon} > @s a_seen_{weapon}",stat)
+            self.assertIn(f"scoreboard players operation @s a_seen_{weapon} = @s a_{weapon}",stat)
         self.assertIn("scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",stat)
         self.assertIn("scoreboard players operation @s a_seen_taken = @s a_dmg_taken",stat)
         tick=self.z.read("data/tarot_arcane/functions/player/tick.mcfunction").decode()
@@ -182,6 +189,8 @@ class FullBuildTests(unittest.TestCase):
         init=self.z.read("data/tarot_arcane/functions/player/init/fool.mcfunction").decode()
         self.assertIn("scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",init)
         self.assertIn("scoreboard players operation @s a_seen_taken = @s a_dmg_taken",init)
+        for weapon in ("bow","crossbow","trident"):
+            self.assertIn(f"scoreboard players operation @s a_seen_{weapon} = @s a_{weapon}",init)
         for path in names:
             if "/advancements/" in path and path.endswith(".json"):
                 advancement=json.loads(self.z.read(path))
