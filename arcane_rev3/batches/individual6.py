@@ -43,11 +43,18 @@ def register(add):
         save("Undying", "a_cd_undying", 12000, 1, 0, chance=0.05),
         "partial", "5% chance on lethal, heals from half-heart to about one heart, with persistent 12000-online-tick cooldown; needs actual death-event game verification")
 
-    add("magician", 7, "Star Chart",
-        active("Star Chart", "Crouch + secondary at night: Night Vision and Luck.",
-               combined(apply("night_vision", 100),
-                        apply("luck", 100)), 1200, crouch=True),
-        "partial", "Does not raycast/locate nearest structure or draw a 100t directional particle line; night-only and world-navigation feedback absent")
+    star_chart = active(
+        "Star Chart", "Crouch + secondary at night: Night Vision and Luck.",
+        combined(apply("night_vision", 100), apply("luck", 100)),
+        1200, crouch=True)
+    # Rev2 specifically requires both crouching AND nighttime; the default
+    # shared active() builder only checked sneaking.
+    star_chart["condition"] = {
+        "type": "origins:and",
+        "conditions": [{"type": "origins:sneaking"}, night()],
+    }
+    add("magician", 7, "Star Chart", star_chart,
+        "partial", "Does not raycast/locate nearest structure or draw a 100t directional particle line; Night Vision/Luck only approximate the actual structure direction feedback")
     add("magician", 6, "Recorded Step",
         active("Recorded Step", "Crouch + secondary safely relocates up to six blocks.",
                {"type": "origins:random_teleport",
