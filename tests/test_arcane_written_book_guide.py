@@ -53,6 +53,23 @@ class BookContracts(unittest.TestCase):
         for page in pages:
             self.assertLess(len(json.dumps(page)), 4000)
 
+    def test_setup_tutorial_is_in_book_and_uses_only_player_triggers(self):
+        pages = general_pages()
+        text = json.dumps(pages)
+        for phrase in ("SET UP POWERS", "FOCUS AND KEYS",
+                       "SLOT EQUIPMENT", "PROGRESS DISPLAY",
+                       "/trigger a_slots", "/trigger a_focus_menu",
+                       "/trigger a_hud set 2"):
+            self.assertIn(phrase, text)
+        actions = [
+            part["clickEvent"]["value"]
+            for page in pages for part in page.get("extra", [])
+            if part.get("clickEvent", {}).get("action") == "run_command"
+        ]
+        self.assertGreaterEqual(len(actions), 3)
+        self.assertTrue(all(a.startswith("/trigger a_") for a in actions))
+        self.assertTrue(all("/function " not in a for a in actions))
+
     def test_pathway_books_cover_source_abilities_honestly(self):
         compiled, manifest, kits = compile_powers(Path(__file__).resolve().parents[1])
         for card in CARDS:
