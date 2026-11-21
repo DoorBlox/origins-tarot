@@ -140,7 +140,7 @@ def general_pages():
         ], prev=len(pages), next_=len(pages)+2))
     # Pages 17-38: all 22 individual pathway acting quests.
     for card in CARDS:
-        pages.append(_page(card["name"].upper(), [
+        pages.append(_page(card["name"], [
             f"Primary path: {card['slug']}",
             "Alternating proof tasks:",
             f"Item: {card['acting_item'].replace('_', ' ')}",
