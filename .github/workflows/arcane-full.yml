@@ -18,6 +18,22 @@ jobs:
           python-version: '3.12'
       - name: Build both 22-Origin developer variants and non-OP aliases
         run: python3 -m arcane_rev3.full_build
+      - name: Checkout exact Arcane PR base for compatibility comparison
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: baseline_source
+          persist-credentials: false
+      - name: Build original Arcane ZIP variants at PR base
+        if: github.event_name == 'pull_request'
+        working-directory: baseline_source
+        run: python3 -m arcane_rev3.full_build
+      - name: Fail closed on persisted state or power ID changes
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 -m scripts.arcane_ci_upgrade_guard --previous baseline_source/output/Arcane_Rev3_22_Origins_ONLY_DEV_1.18.2.zip --candidate output/Arcane_Rev3_22_Origins_ONLY_DEV_1.18.2.zip
+          python3 -m scripts.arcane_ci_upgrade_guard --previous baseline_source/output/Arcane_Rev3_22_Origins_ADDON_DEV_1.18.2.zip --candidate output/Arcane_Rev3_22_Origins_ADDON_DEV_1.18.2.zip
       - name: Attach exact source SHA to development artifact
         run: printf "%s\\n" "${GITHUB_SHA}" > output/ARCANE_REV3_BUILD_SHA.txt
       - name: Display exact ability implementation coverage
