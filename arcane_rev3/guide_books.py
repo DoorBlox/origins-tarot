@@ -149,6 +149,13 @@ def general_pages():
             "At Seq4, partner unlocks.",
             "For abilities: /trigger a_tome",
         ], prev=len(pages), next_=(len(pages)+2 if card is not CARDS[-1] else None)))
+    # Main-page jump links avoid clicking through 38 sequential pages.
+    pages[0]["extra"].extend([
+        _text("\n\n"),
+        _jump("[Getting Started]", 2), _text("\n"),
+        _jump("[Ascension Costs]", 9), _text("\n"),
+        _jump("[All 22 Pathways]", 17),
+    ])
     if len(pages) > 100:
         raise ValueError("Minecraft books allow at most 100 pages")
     return pages
@@ -193,6 +200,13 @@ def pathway_pages(slug, compiled, manifest, kits):
                 lines.append("Missing: " + _short(row["missing"], 110))
             pages.append(_page("ABILITY DETAILS", lines,
                                prev=len(pages), next_=len(pages)+2))
+    # Contents page shortcuts to each source-kit Sequence section, even
+    # when each section has a different number of ability detail pages.
+    target = 2
+    for seq in range(9, 1, -1):
+        chunk = [r for r in rows if r["sequence"] == seq]
+        pages[0]["extra"].extend([_text("\n"), _jump(f"[Sequence {seq}]", target)])
+        target += 1 + len(chunk)
     # Repair the last forward link so it does not point beyond this book.
     last = pages[-1]
     last["extra"] = [
