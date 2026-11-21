@@ -70,13 +70,13 @@ class WaveThreeTests(unittest.TestCase):
                 if m["status"] == "partial":
                     self.assertTrue(status[1] and m["missing"], (slug, name))
             self.assertEqual(seen, expected)
-        self.assertEqual(len(self.powers), 272)
+        self.assertEqual(len(self.powers), 301)
         self.assertEqual(len(self.manifest), 434)
         self.assertEqual({k: sum(m["status"] == k for m in self.manifest)
                           for k in ("full", "partial", "blocked")},
-                         {"full": 73, "partial": 199, "blocked": 162})
+                         {"full": 73, "partial": 228, "blocked": 133})
         self.assertEqual(sum(m["family"] == "resonance" and
-                             m["status"] != "blocked" for m in self.manifest), 63)
+                             m["status"] != "blocked" for m in self.manifest), 92)
 
     def test_targeted_damage_is_hostile_only(self):
         item = self.powers["tarot:tower/3_shockwave"]
