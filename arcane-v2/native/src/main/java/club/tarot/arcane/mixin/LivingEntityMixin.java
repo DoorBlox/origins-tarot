@@ -13,6 +13,7 @@ import club.tarot.arcane.HermitChariotAbilities;
 import club.tarot.arcane.BurningArchive;
 import club.tarot.arcane.DeathTowerAbilities;
 import club.tarot.arcane.CrumblingReaper;
+import club.tarot.arcane.MagicianStrengthAbilities;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -40,6 +41,10 @@ public abstract class LivingEntityMixin {
             amount=DeathTowerAbilities.incoming(target,source,amount);
         if(source.getAttacker() instanceof ServerPlayerEntity owner)
             amount=DeathTowerAbilities.outgoing(owner,victim,source,amount);
+        if(victim instanceof ServerPlayerEntity target)
+            amount=MagicianStrengthAbilities.incoming(target,source,amount);
+        if(source.getAttacker() instanceof ServerPlayerEntity owner)
+            amount=MagicianStrengthAbilities.outgoing(owner,victim,source,amount);
         return amount;
     }
 
@@ -51,6 +56,11 @@ public abstract class LivingEntityMixin {
 
     @Inject(method="damage",at=@At("HEAD"),cancellable=true)
     private void tarot$rescue(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
+        if((Object)this instanceof ServerPlayerEntity p &&
+            MagicianStrengthAbilities.fallSave(p,source)) {
+            cir.setReturnValue(false);
+            return;
+        }
         if((Object)this instanceof ServerPlayerEntity p &&
             (HermitChariotAbilities.fireImmune(p,source) || BurningArchive.immortalDash(p))) {
             cir.setReturnValue(false);
@@ -113,6 +123,18 @@ public abstract class LivingEntityMixin {
             HermitChariotAbilities.onTakenDamage(p,source,taken);
             DeathTowerAbilities.onDamage(p,source,taken);
             FoolAbilities.afterDamage(p,source);
+        }
+    }
+
+    @Inject(method="jump",at=@At("TAIL"))
+    private void tarot$travelerJump(CallbackInfo ci) {
+        if((Object)this instanceof ServerPlayerEntity player) {
+            float multiplier=MagicianStrengthAbilities.jumpMultiplier(player);
+            if(multiplier!=1f){
+                net.minecraft.util.math.Vec3d velocity=player.getVelocity();
+                player.setVelocity(velocity.x,velocity.y*multiplier,velocity.z);
+                player.velocityModified=true;
+            }
         }
     }
 

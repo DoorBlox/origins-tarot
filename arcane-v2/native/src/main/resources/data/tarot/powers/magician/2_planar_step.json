@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Planar Step",
+  "description": "Secondary key. Teleport through up to 4 solid blocks. Cooldown 3600t."
+}

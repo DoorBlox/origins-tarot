@@ -8,6 +8,8 @@
     "tarot:hermit",
     "tarot:chariot",
     "tarot:death",
-    "tarot:tower"
+    "tarot:tower",
+    "tarot:magician",
+    "tarot:strength"
   ]
 }

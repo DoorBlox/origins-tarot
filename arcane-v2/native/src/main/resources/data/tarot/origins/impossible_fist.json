@@ -1,0 +1,13 @@
+{
+  "name": "The Impossible Fist",
+  "description": "Magician + Strength at Sequence 1 with both permanent drawbacks.",
+  "icon": "minecraft:nether_star",
+  "impact": 3,
+  "order": 26,
+  "powers": [
+    "tarot:impossible_fist/marker",
+    "tarot:magician/identity_full_moon_ravings",
+    "tarot:strength/identity_the_giant_sinks",
+    "tarot:impossible_fist/identity_wings"
+  ]
+}

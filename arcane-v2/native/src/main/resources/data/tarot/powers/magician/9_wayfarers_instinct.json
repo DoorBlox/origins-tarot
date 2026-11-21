@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Wayfarer’s Instinct",
+  "description": "`modify_jump` +20% when not submerged."
+}

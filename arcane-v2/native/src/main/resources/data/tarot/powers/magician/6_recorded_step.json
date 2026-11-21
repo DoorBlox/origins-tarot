@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Recorded Step",
+  "description": "Crouch + right-click block stores coordinate; second right-click within 1200t teleports back (max 30 blocks). Cooldown 1200t."
+}

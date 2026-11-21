@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Giant’s Shortcut",
+  "description": "Phase exit → enemies within 2 blocks take +20% current HP."
+}

@@ -31,8 +31,8 @@ not need a second Arcane datapack ZIP.
 5. Join with a test character. Initially the supported selectable Origin
    IDs are `tarot:fool`, `tarot:hanged_man`, `tarot:world`,
    `tarot:justice`, `tarot:hermit`, `tarot:chariot`, `tarot:death`,
-   and `tarot:tower`. The Paper Martyr, Marked Verdict, Burning Archive,
-   and Crumbling Reaper Resonances activate at Sequence 1; their Origin JSONs are not
+   `tarot:tower`, `tarot:magician`, and `tarot:strength`. The Paper Martyr, Marked Verdict, Burning Archive,
+   Crumbling Reaper, and Impossible Fist Resonances activate at Sequence 1; their Origin JSONs are not
    added as independent character-creation choices.
 6. Check `/tarot slots` and `/tarot status`. Players can alternate
    **Acting A** (acquire/handle the card's designated item) and **Acting B**
@@ -54,6 +54,8 @@ Current supported Acting A / Acting B tracks:
 - **Chariot:** acquire or handle flint and steel; then kill a blaze
 - **Death:** acquire or handle a bone; then kill a skeleton
 - **Tower:** acquire or handle TNT; then kill a creeper
+- **Magician:** acquire or handle an ender pearl; then kill an Enderman
+- **Strength:** acquire or handle an iron ingot; then kill a zombie
 
 Alternate A/B. Each accepted action grants one mark, to a maximum of 20.
 Use `/tarot status` to see mark count, next required action and the
@@ -111,7 +113,7 @@ from a meaningful save without a backup and migration.
 
 ## 6. Acceptance and rollback
 
-Follow `BATCH_1_TEST.md`, `BATCH_2_TEST.md`, `BATCH_3_TEST.md`, `BATCH_4_TEST.md`, `BATCH_5_TEST.md`
+Follow `BATCH_1_TEST.md`, `BATCH_2_TEST.md`, `BATCH_3_TEST.md`, `BATCH_4_TEST.md`, `BATCH_5_TEST.md`, `BATCH_6_TEST.md`
 and the associated gaps documents. Do not confuse successful CI with
 real in-game gameplay acceptance.
 
@@ -119,7 +121,9 @@ To roll back, stop the server, remove the Arcane V2 JAR, restore the
 old V3 datapack and matching world backup. Do **not** mix Arcane V2
 persistent save data with V3 progression data without a migration.
 
-**Status:** Eight individual pathways and four Resonances have named powers
-in source (157/434); 277 entries remain. Actual gameplay verification remains
-incomplete. Death+Tower's Falling Ground can injure **all entities including
-you and your allies** by specification, so test that ability away from bases.
+**Status:** Ten individual pathways and five Resonances have named power
+resources in development source (196/434), with 238 remaining. Some of
+these entries have incomplete or approximate mechanics; no live SMP acceptance
+is recorded. The Fall can injure **self and allies** by Rev2 design.
+**Do not enable experimental phasing in a protected or public world** until
+its noClip safety, cleanup and client prediction are verified.

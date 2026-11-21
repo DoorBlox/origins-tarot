@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "render_elytra": true,
+  "name": "Impossible Fist Wings",
+  "description": "Innate Elytra glide."
+}

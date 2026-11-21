@@ -71,6 +71,15 @@ public final class ArcaneSave extends PersistentState {
                 record.reaperFallUntil=n.getLong("reaperFallUntil");
                 record.arcaneAbsorption=n.getFloat("arcaneAbsorption");
                 record.arcaneAbsorptionUntil=n.getLong("arcaneAbsorptionUntil");
+                record.slamUntil=n.getLong("slamUntil");
+                record.divineHitUntil=n.getLong("divineHitUntil");
+                record.bulwarkUntil=n.getLong("bulwarkUntil");
+                record.dawnCrouchTicks=n.getInt("dawnCrouchTicks");
+                record.recordedStepUntil=n.getLong("recordedStepUntil");
+                record.recordedStepDimension=n.getString("recordedStepDimension");
+                if(n.contains("recordedStepX") && n.contains("recordedStepY") && n.contains("recordedStepZ"))
+                    record.recordedStep=new net.minecraft.util.math.BlockPos(
+                        n.getInt("recordedStepX"),n.getInt("recordedStepY"),n.getInt("recordedStepZ"));
                 record.restoreFlightPending = n.getBoolean("restoreFlightPending");
                 record.legendPriorMayFly = n.getBoolean("legendPriorMayFly");
                 record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
@@ -132,6 +141,17 @@ public final class ArcaneSave extends PersistentState {
             n.putLong("reaperFallUntil",record.reaperFallUntil);
             n.putFloat("arcaneAbsorption",record.arcaneAbsorption);
             n.putLong("arcaneAbsorptionUntil",record.arcaneAbsorptionUntil);
+            n.putLong("slamUntil",record.slamUntil);
+            n.putLong("divineHitUntil",record.divineHitUntil);
+            n.putLong("bulwarkUntil",record.bulwarkUntil);
+            n.putInt("dawnCrouchTicks",record.dawnCrouchTicks);
+            n.putLong("recordedStepUntil",record.recordedStepUntil);
+            n.putString("recordedStepDimension",record.recordedStepDimension);
+            if(record.recordedStep!=null){
+                n.putInt("recordedStepX",record.recordedStep.getX());
+                n.putInt("recordedStepY",record.recordedStep.getY());
+                n.putInt("recordedStepZ",record.recordedStep.getZ());
+            }
             n.putBoolean("restoreFlightPending",record.restoreFlightPending);
             n.putBoolean("legendPriorMayFly",record.legendPriorMayFly);
             n.putString("bindPrimary",record.primaryBinding);
@@ -191,6 +211,13 @@ public final class ArcaneSave extends PersistentState {
         public long chargeUntil;
         public float lastAirFall;
         public boolean wasAirborne;
+        public long slamUntil;
+        public long divineHitUntil;
+        public long bulwarkUntil;
+        public int dawnCrouchTicks;
+        public net.minecraft.util.math.BlockPos recordedStep;
+        public String recordedStepDimension="";
+        public long recordedStepUntil;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

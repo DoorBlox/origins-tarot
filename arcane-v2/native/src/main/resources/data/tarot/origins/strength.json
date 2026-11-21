@@ -1,0 +1,11 @@
+{
+  "name": "Strength",
+  "description": "Arcane V2 Strength. Sequence powers are dynamically slotted.",
+  "icon": "minecraft:iron_chestplate",
+  "impact": 3,
+  "order": 8,
+  "powers": [
+    "tarot:strength/marker",
+    "tarot:strength/identity_the_giant_sinks"
+  ]
+}

@@ -59,3 +59,14 @@ activate at Sequence 4 when the second pathway is unlocked, even if none of its
 kits are slotted. **The Fall intentionally damages self and allies** per Rev2.
 See `docs/BATCH_5_TEST.md` and `docs/BATCH_5_GAPS.md` for exact acceptance
 criteria and incomplete mechanics. No changes were released to the SMP.
+
+## Magician / Strength / Impossible Fist (development Batch 6)
+
+The native module now represents 196 named power entries across ten individual
+pathways and five Resonances. Rev2's fall-saving, movement, stone mining,
+Strength's bow restriction, and some teleport mechanics have native handlers.
+Waypoints, Astral Lock, precise armor bypass and native dynamic light still
+need implementation. Magician/Impossible Fist phasing is **experimental** and
+must not be used on a shared/world-protected SMP without careful acceptance.
+See `docs/BATCH_6_TEST.md`, `docs/BATCH_6_GAPS.md`, and
+`docs/IMPLEMENTATION_COVERAGE.md` for evidence and remaining work.

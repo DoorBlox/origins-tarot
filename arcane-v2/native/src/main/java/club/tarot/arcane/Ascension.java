@@ -31,7 +31,9 @@ public final class Ascension {
         "hermit",new Objective(Items.LAPIS_LAZULI,null,true),
         "chariot",new Objective(Items.FLINT_AND_STEEL,EntityType.BLAZE,false),
         "death",new Objective(Items.BONE,EntityType.SKELETON,false),
-        "tower",new Objective(Items.TNT,EntityType.CREEPER,false)
+        "tower",new Objective(Items.TNT,EntityType.CREEPER,false),
+        "magician",new Objective(Items.ENDER_PEARL,EntityType.ENDERMAN,false),
+        "strength",new Objective(Items.IRON_INGOT,EntityType.ZOMBIE,false)
     );
     private static final Map<Integer,List<Offering>> OFFERINGS=new HashMap<>();
     static {

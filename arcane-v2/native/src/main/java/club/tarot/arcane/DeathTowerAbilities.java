@@ -155,6 +155,15 @@ public final class DeathTowerAbilities {
                     pos.getX()+.5,pos.getY()+.5,pos.getZ()+.5,4,.3,.3,.3,.01);
         });
     }
+    public static void onLand(ServerPlayerEntity p,float distance) {
+        ArcaneSave state=ArcaneSave.get(p.getServer());
+        ArcaneSave.Record r=ArcaneMod.profile(p);
+        if(r==null)return;
+        if(distance>=4f && (tower(r,3)||reaper(r,7)))
+            HangedAbilities.nova(p,p.getPos(),3,2f);
+        if(distance>=3f && reaper(r,4))r.reaperFallUntil=time(p)+200;
+        state.markDirty();
+    }
     public static boolean rescue(ServerPlayerEntity p,float amount) {
         ArcaneSave state=ArcaneSave.get(p.getServer());
         ArcaneSave.Record r=ArcaneMod.profile(p);
@@ -244,15 +253,8 @@ public final class DeathTowerAbilities {
                 p.interactionManager.tryBreakBlock(pos);
             state.markDirty();
         }
-        if(!p.isOnGround()) {
-            r.wasAirborne=true;r.lastAirFall=Math.max(r.lastAirFall,p.fallDistance);
-        } else if(r.wasAirborne) {
-            float distance=r.lastAirFall;
-            r.wasAirborne=false;r.lastAirFall=0f;
-            if(distance>=4f && (tower(r,3)||reaper(r,7)))
-                HangedAbilities.nova(p,p.getPos(),3,2f);
-            if(distance>=3f && reaper(r,4))r.reaperFallUntil=t+200;
-        }
+        // Landing bonuses now use the per-fall PlayerEntity.handleFallDamage
+        // callback; 20-tick polling misses short 3-4 block falls.
         if(tower(r,2)) {
             List<LivingEntity> enemies=HangedAbilities.enemies(p,p.getPos(),5);
             if(!enemies.isEmpty() && r.ready("cataclysm",t,3600))

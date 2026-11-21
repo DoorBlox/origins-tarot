@@ -136,6 +136,36 @@ public final class AbilityRegistry {
         path("crumbling_reaper", 2, "unstable_souls");
         path("crumbling_reaper", 1, "falling_towers_reap");
         path("crumbling_reaper", 0, "the_crumbling_reaper");
+        path("magician", 9, "travelers_body", "wayfarers_instinct", "threshold_step", "full_moon_ravings");
+        path("magician", 8, "sleight_of_hand");
+        path("magician", 7, "star_chart");
+        path("magician", 6, "recorded_step");
+        path("magician", 5, "doorstep");
+        path("magician", 4, "sealed_room");
+        path("magician", 3, "shortcut");
+        path("magician", 2, "planar_step");
+        path("magician", 1, "waypoint", "astral_lock");
+        path("magician", 0, "all_paths_converge");
+        path("strength", 9, "giants_grip", "quarry_hands", "steel_frame", "grounded_slam", "the_giant_sinks");
+        path("strength", 8, "iron_fist");
+        path("strength", 7, "masters_grip");
+        path("strength", 6, "dawnlight");
+        path("strength", 5, "bulwark");
+        path("strength", 4, "hunters_bane");
+        path("strength", 3, "silver_blade");
+        path("strength", 2, "twilight_blade");
+        path("strength", 1, "divine_hand", "unyielding");
+        path("strength", 0, "the_giants_decay");
+        path("impossible_fist", 9, "travelers_might");
+        path("impossible_fist", 8, "sleight_of_fist");
+        path("impossible_fist", 7, "star_chart_grip");
+        path("impossible_fist", 6, "recorded_dawnlight");
+        path("impossible_fist", 5, "doorstep_slam");
+        path("impossible_fist", 4, "doorstep_punch");
+        path("impossible_fist", 3, "sealed_slam");
+        path("impossible_fist", 2, "giants_shortcut");
+        path("impossible_fist", 1, "divine_door");
+        path("impossible_fist", 0, "the_impossible_fist");
     }
 
     private static void path(String name, int sequence, String... ids) {

@@ -1,0 +1,12 @@
+{
+  "name": "The Magician",
+  "description": "Arcane V2 The Magician. Sequence powers are dynamically slotted.",
+  "icon": "minecraft:ender_pearl",
+  "impact": 3,
+  "order": 1,
+  "powers": [
+    "tarot:magician/marker",
+    "tarot:magician/identity_full_moon_ravings",
+    "tarot:magician/identity_wings"
+  ]
+}

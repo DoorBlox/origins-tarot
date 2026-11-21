@@ -4,6 +4,8 @@ import club.tarot.arcane.ArcaneSave;
 import club.tarot.arcane.WorldJusticeAbilities;
 import club.tarot.arcane.HermitChariotAbilities;
 import club.tarot.arcane.DeathTowerAbilities;
+import club.tarot.arcane.MagicianStrengthAbilities;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,9 +34,18 @@ public abstract class PlayerEntityMixin {
         if((Object)this instanceof ServerPlayerEntity player)
             cir.setReturnValue(cir.getReturnValue()
                 *HermitChariotAbilities.breakMultiplier(player)
-                * DeathTowerAbilities.breakMultiplier(player,state));
+                * DeathTowerAbilities.breakMultiplier(player,state)
+                * MagicianStrengthAbilities.breakSpeed(player,state));
     }
 
+    @Inject(method="handleFallDamage",at=@At("RETURN"))
+    private void tarot$onLanding(float distance,float multiplier,DamageSource source,
+                                  CallbackInfoReturnable<Boolean> ci) {
+        if((Object)this instanceof ServerPlayerEntity player) {
+            DeathTowerAbilities.onLand(player,distance);
+            MagicianStrengthAbilities.onLand(player,distance);
+        }
+    }
     @Inject(method="tick",at=@At("HEAD"))
     private void tarot$movementRestriction(CallbackInfo ci) {
         if((Object)this instanceof ServerPlayerEntity player &&

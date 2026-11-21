@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Sealed Slam",
+  "description": "Teleport into **hostile mob OR enemy player** → 4 damage + 3 block KB."
+}

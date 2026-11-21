@@ -104,6 +104,7 @@ public final class ArcaneMod implements ModInitializer {
                 HermitChariotAbilities.tick(player,state,record);
                 DeathTowerAbilities.tick(player,state,record);
                 CrumblingReaper.maintenance(player,state,record);
+                MagicianStrengthAbilities.tick(player,state,record);
             }
         });
         FoolAbilities.register();
@@ -111,6 +112,8 @@ public final class ArcaneMod implements ModInitializer {
         WorldJusticeAbilities.register();
         HermitChariotAbilities.register();
         DeathTowerAbilities.register();
+        MagicianStrengthAbilities.register();
+        ImpossibleFist.register();
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server) ->
             server.execute(() -> {
                 FoolLegend.stopOnDisconnect(handler.getPlayer());
@@ -119,6 +122,7 @@ public final class ArcaneMod implements ModInitializer {
                 WorldJusticeAbilities.stopOnDisconnect(handler.getPlayer());
                 BurningArchive.stopOnDisconnect(handler.getPlayer());
                 CrumblingReaper.stopOnDisconnect(handler.getPlayer());
+                ImpossibleFist.stopOnDisconnect(handler.getPlayer());
             }));
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
@@ -197,6 +201,10 @@ public final class ArcaneMod implements ModInitializer {
                 || "the_final_harvest".equals(ability) || "the_fall".equals(ability)
                 || "the_crumbling_reaper".equals(ability) || "falling_tower".equals(ability)
                 || "falling_towers_reap".equals(ability)
+                || "divine_hand".equals(ability) || "divine_door".equals(ability)
+                || "the_giants_decay".equals(ability)
+                || "the_impossible_fist".equals(ability)
+                || "all_paths_converge".equals(ability)
                 || "reap".equals(ability);
         return "secondary".equals(binding) && (
             "paper_dagger".equals(ability) || "paper_sentence".equals(ability)
@@ -207,12 +215,18 @@ public final class ArcaneMod implements ModInitializer {
             || "star_read".equals(ability) || "sages_counsel".equals(ability)
             || "storm_call".equals(ability) || "gate".equals(ability)
             || "gate_collapse".equals(ability) || "collapse".equals(ability)
+            || "bulwark".equals(ability) || "doorstep".equals(ability)
+            || "doorstep_slam".equals(ability) || "star_chart".equals(ability)
+            || "star_chart_grip".equals(ability) || "planar_step".equals(ability)
             || "consul".equals(ability)
             || "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
             || "borrowed_sacrifice".equals(ability) || "gathering_of_martyrs".equals(ability));
     }
     private static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String ability) {
         if(AbilityRegistry.isActive(r.profile,ability)) {
+            if(MagicianStrengthAbilities.cast(p,state,r,ability)) {
+                info(p,"Cast "+ability);return 1;
+            }
             if(DeathTowerAbilities.cast(p,state,r,ability)) {
                 info(p,"Cast "+ability);return 1;
             }
@@ -309,6 +323,9 @@ public final class ArcaneMod implements ModInitializer {
         if(before.stream().anyMatch(id->id.contains("death/")
             || id.contains("tower/") || id.contains("crumbling_reaper/")))
             CrumblingReaper.stopOnDisconnect(player);
+        if(before.stream().anyMatch(id->id.contains("magician/")
+            || id.contains("strength/") || id.contains("impossible_fist/")))
+            ImpossibleFist.stopOnDisconnect(player);
     }
     static void run(ServerPlayerEntity player, String command) {
         MinecraftServer server=player.getServer();
@@ -332,6 +349,8 @@ public final class ArcaneMod implements ModInitializer {
                 case "chariot" -> "tarot:hermit/identity_forbidden_knowledge";
                 case "death" -> "tarot:tower/identity_falling_tower";
                 case "tower" -> "tarot:death/identity_severed_vitality";
+                case "magician" -> "tarot:strength/identity_the_giant_sinks";
+                case "strength" -> "tarot:magician/identity_full_moon_ravings";
                 default -> null;
             };
             if(secondaryIdentity!=null)
@@ -349,7 +368,9 @@ public final class ArcaneMod implements ModInitializer {
         }
         // Clear stale input bindings when a Sequence has been removed.
         if(!AbilityRegistry.isActive(profile,r.primaryBinding)) {
-            String[] priorities={"the_crumbling_reaper","the_final_harvest","the_fall",
+            String[] priorities={"the_impossible_fist","the_giants_decay","all_paths_converge",
+                "divine_door","divine_hand",
+                "the_crumbling_reaper","the_final_harvest","the_fall",
                 "reap","falling_tower","the_burning_archive","the_battlefield","the_unseen",
                 "meteor","emperors_library","burning_lecture",
                 "the_marked_verdict","the_mindscape","the_perfect_prey",
@@ -362,7 +383,9 @@ public final class ArcaneMod implements ModInitializer {
                 }
         }
         if(!AbilityRegistry.isActive(profile,r.secondaryBinding)) {
-            String[] priorities={"gate_collapse","gate","collapse","consul",
+            String[] priorities={"doorstep_slam","doorstep","planar_step",
+                "star_chart_grip","star_chart","bulwark",
+                "gate_collapse","gate","collapse","consul",
                 "star_read_reaper","star_read","reap","storm_call",
                 "sages_counsel","puppets_sentence","paper_sentence","suffering_sight",
                 "suggestion","paper_dagger","spirit_vision","borrowed_face","discern"};
@@ -416,6 +439,7 @@ public final class ArcaneMod implements ModInitializer {
         WorldJusticeAbilities.stopOnDisconnect(p);
         BurningArchive.stopOnDisconnect(p);
         CrumblingReaper.stopOnDisconnect(p);
+        ImpossibleFist.stopOnDisconnect(p);
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_secondary_identity");
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
         run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);

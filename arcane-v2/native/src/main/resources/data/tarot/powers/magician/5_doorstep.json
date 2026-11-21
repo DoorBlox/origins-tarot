@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Doorstep",
+  "description": "Secondary key. Teleport 8 blocks forward. Cooldown 300t. KubeJS raycast for air preferred."
+}
