@@ -77,13 +77,15 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8",
         "a_view_slot","a_view_code","a_view_path","a_view_seq",
-        "a_alone_time","a_iron_count","a_pick_slot","a_pick_path")
+        "a_alone_time","a_iron_count","a_pick_slot","a_pick_path",
+        "a_hud_on","a_hud_timer")
 RESCUE_COOLDOWNS = ("a_cd_martyr", "a_cd_swift", "a_cd_history", "a_cd_hunter", "a_cd_undying")
 SCORES += RESCUE_COOLDOWNS + ("a_rtest", "a_focus") + SIN_SCORES
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick",
           "a_focus_menu","a_choose","a_guide","a_abilities","a_roadmap",
-          "a_kit","a_detail","a_stages","a_book","a_tome","a_partner_tome")
+          "a_kit","a_detail","a_stages","a_book","a_tome","a_partner_tome",
+          "a_hud")
 
 
 def J(obj):
@@ -253,6 +255,8 @@ def emit_player(w,kits,root=ROOT):
         "execute if score @s a_book matches 1.. run "+F("ui/book/give"),
         "execute if score @s a_tome matches 1.. run "+F("ui/book/tome"),
         "execute if score @s a_partner_tome matches 1.. run "+F("ui/book/partner"),
+        "execute if score @s a_hud matches 1.. run "+F("ui/hud/toggle"),
+        "execute if score @s a_init matches 1 run "+F("ui/hud/tick"),
         "execute if score @s a_kit matches 1.. run "+F("ui/codex/open"),
         "execute if score @s a_detail matches 1.. run "+F("ui/codex/detail_open"),
         # Focus selection is player-triggered and processed only when
@@ -561,6 +565,8 @@ def emit_ui(w):
         click("[Get Arcane Handbook BOOK]","a_book","gold"),
         click("[Get my Pathway Tome BOOK]","a_tome","aqua"),
         click("[Get linked Partner Tome at Seq4]","a_partner_tome","light_purple"),
+        click("[Toggle personal progress HUD]","a_hud set 1","green"),
+        msg("HUD: /trigger a_hud set 2 to show, set 3 to hide. No Command Aliases required.","gray"),
         click("[My abilities (book)]","a_abilities"),
         click("[My live marks and next task]","a_roadmap","yellow"),
         click("[All Sequence milestones]","a_stages","light_purple"),
@@ -801,6 +807,10 @@ def alias():
                 lit("book",actions=[a("a_book")]),
                 lit("tome",actions=[a("a_tome")]),
                 lit("partner-tome",actions=[a("a_partner_tome")]),
+                lit("hud",[
+                    lit("on",actions=[a("a_hud set 2")]),
+                    lit("off",actions=[a("a_hud set 3")])
+                ],actions=[a("a_hud set 1")]),
                 lit("abilities",actions=[a("a_abilities")]),
                 lit("roadmap",actions=[a("a_roadmap")]),
                 lit("stages",actions=[a("a_stages")]),
@@ -893,6 +903,8 @@ def build(root=ROOT,output=None):
         emit_roadmap(w)
         from .guide_books import emit_books
         emit_books(w,compiled,manifest,kits)
+        from .progress_hud import emit_progress_hud
+        emit_progress_hud(w)
         from .active_focus import emit_focus
         emit_focus(w,focus_entries)
         emit_progression(w)
