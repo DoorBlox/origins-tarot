@@ -63,7 +63,7 @@ public final class MarkedVerdict {
     private static boolean isMovementForbidden(ServerPlayerEntity player) {
         for(Active a:ACTIVE.values())if(live(a)&&a.world==player.getWorld()) {
             if(a.mode.equals("mindscape") && a.world.getServer().getPlayerManager().getPlayer(a.owner)!=null) {
-                ServerPlayerEntity p=a.world.getPlayerByUuid(a.owner);
+                ServerPlayerEntity p=a.world.getServer().getPlayerManager().getPlayer(a.owner);
                 if(p.squaredDistanceTo(player)<=400)return true;
             }
             if(a.mode.equals("marked_verdict") && player.getUuid().equals(a.target))return true;
@@ -73,8 +73,8 @@ public final class MarkedVerdict {
     public static void enforceMovement(ServerPlayerEntity player) {
         if(!canSprint(player))player.setSprinting(false);
         for(Active a:ACTIVE.values())if(live(a)&&a.world==player.getWorld()
-            && a.mode.equals("mindscape")&&a.world.getPlayerByUuid(a.owner)!=null) {
-            ServerPlayerEntity holder=a.world.getPlayerByUuid(a.owner);
+            && a.mode.equals("mindscape")&&a.world.getServer().getPlayerManager().getPlayer(a.owner)!=null) {
+            ServerPlayerEntity holder=a.world.getServer().getPlayerManager().getPlayer(a.owner);
             if(holder!=null && holder!=player && holder.squaredDistanceTo(player)<=400 &&
                 FoolAbilities.enemy(holder,player)) {
                 WorldJusticeAbilities.effect(player,StatusEffects.SLOWNESS,25,255);
@@ -85,7 +85,7 @@ public final class MarkedVerdict {
     public static boolean cancelDamage(LivingEntity victim,DamageSource source) {
         for(Active a:ACTIVE.values()) {
             if(!live(a) || !a.mode.equals("mindscape") || a.world!=victim.getWorld())continue;
-            ServerPlayerEntity owner=a.world.getPlayerByUuid(a.owner);
+            ServerPlayerEntity owner=a.world.getServer().getPlayerManager().getPlayer(a.owner);
             if(owner==null)continue;
             Entity attacker=source.getAttacker();
             boolean victimFrozen=FoolAbilities.enemy(owner,victim)

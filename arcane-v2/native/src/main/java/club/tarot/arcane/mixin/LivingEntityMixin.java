@@ -26,7 +26,7 @@ public abstract class LivingEntityMixin {
     private float tarot$scaleDamage(float damage, DamageSource source) {
         LivingEntity victim=(LivingEntity)(Object)this;
         float amount=HangedAbilities.scaleIncoming(victim,HangedAbilities.scaleOutgoing(victim,source,damage));
-        return WorldJusticeAbilities.scaleIncoming(victim,
+        return WorldJusticeAbilities.scaleIncoming(victim,source,
             WorldJusticeAbilities.scaleOutgoing(victim,source,amount));
     }
 
