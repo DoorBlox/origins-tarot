@@ -9,7 +9,7 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 - 22 pathway Origins and 18 inherited Elytra gliders; 11 paired Resonance IDs are reserved, not activated.
 - Pure datapack/scoreboard runtime: Sequence 9 through 2, 22 distinct acting quest tracks, altar requirements, combat lock, fixed second pathway at Sequence 4, 6/7/8 editable slots, grant/revoke and re-login reconciliation. No KubeJS or custom Fabric mod.
 - Non-OP `/tarot`, `/tarot status`, `/tarot slots`, `/tarot ascend`, `/tarot slot N tarot:card S`, `/tarot slot N clear`, `/tarot slot auto`, `/tarot slot swap N M`, and `/tarot reset` via player-scoped CLIENT `/trigger` operations. Command Aliases schema uses permission 0. Both `/tarot status` and `/tarot slots` display actual Arcana titles and Sequence numbers rather than internal numeric kit codes; the partner is revealed at Sequence 4.
-- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **181 powers compiled (69 source-complete, 112 partial), 253 still blocked.** No fake `origins:simple` abilities are emitted.
+- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **204 powers compiled (73 source-complete, 131 partial), 230 still blocked.** No fake `origins:simple` abilities are emitted.
 - Permanent primary-pathway drawbacks are innate Origin powers, **not removable Sequence-9 slot abilities**: Fool's +25% exhaustion plus 20 more compiled pathway drawbacks are attached directly to their Origins, outside the source-grant/revoke cycle.
 
 ## Rev3 identity-drawback integrity
@@ -39,6 +39,14 @@ The 1.18.2-safe targeting helper emits **fixed server-side commands** with `@e[t
 Lovers' Separation Anxiety has a real per-player `a_alone_time` tick counter, capped at 601 and reset when any player enters eight blocks. After more than 600 ticks alone, the native scoreboard condition applies +35% exhaustion and −15% break speed. Its same-team qualifier is not yet implemented and is recorded as partial.
 
 All compiled abilities remain test-world-only until actual 1.18.2 Origins 1.4.1 testing.
+
+## Resonance progression: 23 genuine pair powers, still fail-closed
+
+The next module, `arcane_rev3/batches/resonance.py`, compiles **23 source-mapped Resonance powers across all 11 pair identities**. All 11 Sequence-9 forms are represented with a genuine subset of their prescribed combined passives; eight Sequence-8 combinations and four Sequence-7 combinations are also implemented. The compiler now accepts both `individual` and `resonance` catalog families.
+
+**This is not a Resonance unlock.** The generated 11 Resonance Origins remain unchoosable with empty intrinsic power lists, no Resonance power is granted by a slot function, and the Seq2→Seq1 ritual remains fail-closed without consuming ingredients. The source manifest counts the compiled Resonance JSON as implemented/partial translations, **not usable kits**. The remaining scripted minion AI, Sin storage, creative flight windows, damage-source tracking, team-safe targeting and fully precise 10-kit states are still unavailable.
+
+The 23 compilation records include **four source-complete and 19 explicitly partial** power translations; all still require actual Minecraft runtime acceptance.
 
 ## Second batch: native interactions and exact inventory trade
 
