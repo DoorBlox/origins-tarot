@@ -76,3 +76,27 @@ def enemy_effect(effect, duration, radius, amplifier=0, *, root=ROOT):
 
 def ally_effect(effect, duration, radius, amplifier=0, *, root=ROOT):
     return player_effect(effect, duration, radius, amplifier, allies=True, root=root)
+
+def nearby_ally_condition(radius, *, root=ROOT):
+    """Require another player on the caster's explicitly allowlisted team.
+
+    Teamless casters, unlisted teams and enemy-only proximity cannot activate
+    an allied benefit. Never creates or changes scoreboard teams.
+    """
+    if type(radius) is not int or not 1 <= radius <= 64:
+        raise ValueError("Nearby teammate distance must be 1..64 blocks")
+    return {
+        "type": "origins:or",
+        "conditions": [
+            {
+                "type": "origins:command",
+                "command": (
+                    f"execute if entity @s[team={team}] at @s "
+                    f"if entity @a[team={team},distance=0.01..{radius}]"
+                ),
+                "comparison": ">=",
+                "compare_to": 1,
+            }
+            for team in team_names(root)
+        ],
+    }
