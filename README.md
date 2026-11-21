@@ -2,6 +2,12 @@
 
 > **Arcane V2 Rev3 is a separate DEVELOPMENT datapack.** Source-complete does not mean gameplay-complete: 434/434 source definitions, 73 full and 361 PARTIAL; 110/110 Resonance entries source-defined, normal Sequence 1 locked. Do not install it alongside legacy Tarot V2/V3 or assume old player scores migrate. Check [the handoff](CHATGPT_HANDOFF.md), [AGENTS.md](AGENTS.md) and [issue #20](https://github.com/DoorBlox/origins-tarot/issues/20) for the live source checkpoint.
 
+## Play Arcane Rev3: in-game abilities and ascension
+
+**[Read the Arcane Rev3 Player Guide](docs/ARCANE_REV3_PLAYER_GUIDE.md)** for an exact Sequence 9→2 ascension roadmap, all 22 acting methods, ritual ingredients, editable slots, active keys, and the non-OP in-game commands.
+
+In an updated Arcane Rev3 datapack, open **/trigger a_guide** (or **/tarot guide** with Command Aliases), **/trigger a_abilities** (inspect equipped kits and click DETAILS), **/trigger a_roadmap** (next proof and offerings), and **/trigger a_stages** (all milestones). A full source-backed **434-ability reference** is included in the Arcane GitHub Actions artifact as **Arcane_Rev3_Player_Ability_Reference.md**. **PARTIAL** abilities explicitly disclose what's unfinished; normal Sequence 1 Resonance is locked.
+
 ## IMPORTANT — choose the correct Actions build
 
 **Arcane Rev3 testers** must use [Build Arcane V2 Rev3 22-Origin Dev Pack](https://github.com/DoorBlox/origins-tarot/actions/workflows/arcane-full.yml). Its artifact is named `tarot-arcane-rev3-22-origin-dev-not-production` and contains the inner `Arcane_Rev3_22_Origins_ONLY_DEV_1.18.2.zip` and `Arcane_Rev3_22_Origins_ADDON_DEV_1.18.2.zip`; use exactly one. Check `ARCANE_REV3_BUILD_SHA.txt` to identify its source. **Do not download `tarot-club-datapacks`** from the generic "Build and validate Tarot Club origins" workflow for Arcane: that is the **legacy V2** build.
