@@ -71,7 +71,7 @@ def emit_sin(w, prefix, root):
         "execute if score @s a_sin_delta matches ..0 if score @s a_sin matches 1.. run scoreboard players add @s a_sin_idle 1",
         "execute if score @s a_sin matches 1.. if score @s a_sin_idle matches 200.. run " + F("dissipate"),
         "execute if score @s a_sin matches 1.. store result score @s a_sin_hp run data get entity @s Health 1",
-        "execute if score @s a_sin matches 1.. if score @s a_sin_hp matches ..7 run " + F("burst"))
+        "execute if score @s a_sin matches 1.. unless score @s a_sin_form matches 1.. if score @s a_sin_hp matches ..7 run " + F("burst"))
 
     w.f("sin/on_hit",
         "scoreboard players set @s a_sin_idle 0",
@@ -137,11 +137,11 @@ def emit_sin(w, prefix, root):
         "execute store success score @s a_sin_capown run power has @s tarot:hanged_man/0_weight_of_sin_made_manifest",
         "execute unless score @s a_sin_capown matches 1 run scoreboard players set @s a_sin_form 0",
         "execute if score @s a_sin_capown matches 1 run scoreboard players remove @s a_sin_form 1",
+        "scoreboard players operation @s a_sin_mod = @s a_sin_form",
+        "scoreboard players operation @s a_sin_mod %= #80 a_const",
         "execute if score @s a_sin_capown matches 1 if score @s a_sin_form matches 1.. run " + F("nova_check"),
         "execute if score @s a_sin_capown matches 1 if score @s a_sin_form matches 0 run " + F("form_expire"))
     w.f("sin/nova_check",
-        "scoreboard players operation @s a_sin_mod = @s a_sin_form",
-        "scoreboard players operation @s a_sin_mod %= #80 a_const",
         "execute if score @s a_sin matches 1.. if score @s a_sin_mod matches 0 run " + F("nova"))
     w.f("sin/nova",
         _mobs("weakness", 4, 0, 8),
