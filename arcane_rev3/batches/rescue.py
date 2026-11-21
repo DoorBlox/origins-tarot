@@ -25,12 +25,15 @@ def save(name, score, cooldown, heal, radius, *, speed=0, invisible=False,
             raise ValueError("Invalid chance")
         gate = {"type": "origins:and", "conditions": [
             gate, {"type": "origins:chance", "chance": chance}]}
-    actions = [
-        cmd(f"scoreboard players set @s {score} {cooldown}"),
-        {"type": "origins:random_teleport", "area_width": radius,
-         "area_height": 3, "attempts": 20, "loaded_chunks_only": True},
-        {"type": "origins:heal", "amount": heal},
-    ]
+    if type(radius) is not int or not 0 <= radius <= 16:
+        raise ValueError("Rescue random teleport distance must be 0..16")
+    actions = [cmd(f"scoreboard players set @s {score} {cooldown}")]
+    if radius:
+        actions.append({
+            "type": "origins:random_teleport", "area_width": radius,
+            "area_height": 3, "attempts": 20, "loaded_chunks_only": True
+        })
+    actions.append({"type": "origins:heal", "amount": heal})
     if invisible:
         actions.append(apply("invisibility", 60))
     if speed:
