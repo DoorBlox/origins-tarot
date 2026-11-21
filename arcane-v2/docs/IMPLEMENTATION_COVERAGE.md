@@ -1,33 +1,25 @@
-# Arcane V2 native capability coverage
+# Arcane V2 capability coverage (native KubeJS-free build)
 
-All mechanics use a Fabric companion mod, Apoli/Origins data powers, and
-Mixins. **No KubeJS dependency** is necessary or allowed in this target.
+Rev2 contains 324 individual ability entries and 110 Resonance ability
+entries = 434 total; Rev3 governs all Sequence transitions and slot grants.
 
-| Category | Resources | Native behavior |
-|---|---:|---|
-| Fool | 14 | Early handlers and approximations; see Batch 1 gaps |
-| Hanged Man | 14 | Sin/regen/death handlers; see Batch 2 |
-| Paper Martyr resonance | 10 | Native 10-kit fusion at Sequence 1 |
-| World | 15 | Projectile, targeting, trade, Mark and Perfect Prey effects |
-| Justice | 15 | Healing, damage restraint, sleep, interactions and Mindscape |
-| Marked Verdict resonance | 10 | Native 10-kit fusion at Sequence 1 |
-| **Total represented** | **78 / 434** | **Not all exact; not playtested** |
+| Group | Individual powers | Resonance powers | Status |
+|---|---:|---:|---|
+| Fool / Hanged Man / Paper Martyr | 28 | 10 | Native compiled, runtime approximations |
+| World / Justice / Marked Verdict | 30 | 10 | Native compiled, runtime approximations |
+| Hermit / Chariot / Burning Archive | 29 | 10 | In current source candidate; CI pending |
+| **Total authored** | **87** | **30** | **117/434** |
+| **Remaining** | **237** | **80** | **317/434** |
 
-Remaining 356 abilities across 18 individual Arcana and 9 Resonances.
-These are **not** placeholders generated to pretend full coverage. They
-have not been authored in this build.
+An authored power is not equivalent to verified behavior: client disguises,
+custom local weather, enchantment copying, true armor-ignoring arrows and
+some AI/control edge cases remain approximated.
 
-CI gates: Gradle Java compilation + JUnit; V2/V3 regressions; headless
-Fabric 1.18.2 + Origins 1.4.1 server startup. Passing does not replace
-live multiplayer/ability acceptance.
+Native progression: /tarot status and /tarot ascend are available without
+OP for the implemented origins. Their Acting and ritual offerings are
+adapted from the repo's previous V3 progression model, whereas Rev3 controls
+the shared Sequence, slot and Resonance transitions.
 
-Sources: `spec/REV2.txt` and `spec/REV3.txt`. Rev 3 controls the sequence
-and slot transitions; Rev2 controls ability mechanics and cooldowns.
-
-## Optional survival ascension bridge
-
-The native mod also includes /tarot status and /tarot ascend for the
-four implemented origins, using the previous V3 alternating Acting
-A/B and ritual costs. Sequence-up calls the same transition logic as
-the administrator's debug command. It is NOT included in the 78
-ability count, and does not claim to be a Rev3-specified Acting economy.
+CI: Gradle and JUnit + headless Fabric 1.18.2 / Origins 1.4.1 server startup,
+plus unchanged legacy V2/V3 workflows. Live-world acceptance remains
+unverified until run by the SMP owner.

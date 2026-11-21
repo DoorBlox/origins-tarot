@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Meteor",
+  "description": "Primary key: dash 15 blocks as blazing meteor; **ignite `#tarot:hostile` AND enemy players in 3-block path for 100t**; immune during dash. Cooldown 2400t."
+}

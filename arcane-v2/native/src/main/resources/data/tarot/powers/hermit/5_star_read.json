@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Star Read",
+  "description": "Secondary key at night: reveal `#tarot:hostile` **AND enemy players** health/name within 15 blocks for 100t. Cooldown 1200t."
+}

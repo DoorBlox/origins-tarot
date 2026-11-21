@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Forbidden Knowledge",
+  "description": "Permanent The Hermit drawback, implemented in native Fabric."
+}

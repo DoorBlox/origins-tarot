@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Reap",
+  "description": "Secondary key: next melee +30% within 100t. Cooldown 600t."
+}

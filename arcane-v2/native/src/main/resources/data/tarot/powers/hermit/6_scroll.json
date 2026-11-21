@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Scroll",
+  "description": "Crouch-right-click paper → coordinate in NBT."
+}

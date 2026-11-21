@@ -26,7 +26,7 @@ and live Minecraft acceptance gates pass. Never treat static tests as in-game pr
 
 ## Arcane V2 native development slice — Fool + Hanged Man / Paper Martyr
 
-The compiled mod bundles 14 Fool, 14 Hanged Man, and 10 Paper Martyr
+The compiled mod bundles 14 Fool, 14 Hanged Man, 15 World, 15 Justice, 14 Hermit, 15 Chariot, and 30 Resonance
 Sequence power IDs, their origin resources, and shared entity/blocks/item tags.
 The 10 Paper Martyr abilities activate together at Sequence 1. The rest of the
 handbook is **not implemented**. Never install the old V3 datapack alongside
@@ -42,3 +42,10 @@ alternating Acting marks, 120-second online cooldown, and ritual offerings.
 All upgrades advance the Rev3 **single shared Sequence**. This is a port of
 the earlier V3 economy, not a claim that Rev2/Rev3 explicitly specify an
 Acting economy. Manual in-game confirmation remains necessary.
+
+The Hermit / Chariot / Burning Archive native handlers and 39 Sequence kit
+definitions are in the current source candidate. Their effects, XP calculations,
+temporary fire powers, Book/Scroll interactions and capstone require the
+specific Batch 4 test checklist and in-game verification.
+See [current ability coverage](docs/IMPLEMENTATION_COVERAGE.md) for the
+latest counts rather than relying on historical Batch 1/2 snapshots.

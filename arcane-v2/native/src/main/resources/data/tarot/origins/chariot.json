@@ -1,0 +1,12 @@
+{
+  "name": "The Chariot",
+  "description": "The Chariot — Arcane V2. Abilities dynamically granted by Sequence slots.",
+  "icon": "minecraft:blaze_rod",
+  "impact": 3,
+  "order": 7,
+  "powers": [
+    "tarot:chariot/marker",
+    "tarot:chariot/identity_extinguished_fury",
+    "tarot:chariot/identity_wings"
+  ]
+}

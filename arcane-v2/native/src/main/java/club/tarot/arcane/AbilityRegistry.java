@@ -76,6 +76,36 @@ public final class AbilityRegistry {
         path("marked_verdict", 2, "the_verdict");
         path("marked_verdict", 1, "swift_judgment");
         path("marked_verdict", 0, "the_marked_verdict");
+        path("hermit", 9, "mystery_prying", "astral_calculation", "prepared_investigator", "forbidden_knowledge");
+        path("hermit", 8, "combat_insight");
+        path("hermit", 7, "hex");
+        path("hermit", 6, "scroll");
+        path("hermit", 5, "star_read");
+        path("hermit", 4, "forbidden_insight");
+        path("hermit", 3, "omen");
+        path("hermit", 2, "sages_counsel");
+        path("hermit", 1, "emperors_library", "prying_eyes");
+        path("hermit", 0, "the_unseen");
+        path("chariot", 9, "hunters_momentum", "war_rush", "pyromaniac", "trail_of_embers", "extinguished_fury");
+        path("chariot", 8, "taunt");
+        path("chariot", 7, "flame_burst");
+        path("chariot", 6, "plot");
+        path("chariot", 5, "reap");
+        path("chariot", 4, "iron_skin");
+        path("chariot", 3, "rally");
+        path("chariot", 2, "storm_call");
+        path("chariot", 1, "meteor", "burning_wrath");
+        path("chariot", 0, "the_battlefield");
+        path("burning_archive", 9, "scholars_fire");
+        path("burning_archive", 8, "combat_insight");
+        path("burning_archive", 7, "astrologers_trail");
+        path("burning_archive", 6, "recorded_plot");
+        path("burning_archive", 5, "star_read_reaper");
+        path("burning_archive", 4, "scholars_momentum");
+        path("burning_archive", 3, "insightful_flame");
+        path("burning_archive", 2, "reapers_library");
+        path("burning_archive", 1, "burning_lecture");
+        path("burning_archive", 0, "the_burning_archive");
     }
 
     private static void path(String name, int sequence, String... ids) {

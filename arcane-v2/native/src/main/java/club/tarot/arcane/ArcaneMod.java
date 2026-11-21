@@ -99,17 +99,20 @@ public final class ArcaneMod implements ModInitializer {
                 HangedAbilities.tick(player,state,record);
                 WorldJusticeAbilities.tick(player,state,record);
                 Ascension.tick(player,state,record);
+                HermitChariotAbilities.tick(player,state,record);
             }
         });
         FoolAbilities.register();
         FoolLegend.register();
         WorldJusticeAbilities.register();
+        HermitChariotAbilities.register();
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server) ->
             server.execute(() -> {
                 FoolLegend.stopOnDisconnect(handler.getPlayer());
                 HangedAbilities.stopOnDisconnect(handler.getPlayer());
                 PaperMartyr.stopOnDisconnect(handler.getPlayer());
                 WorldJusticeAbilities.stopOnDisconnect(handler.getPlayer());
+                BurningArchive.stopOnDisconnect(handler.getPlayer());
             }));
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
@@ -181,17 +184,26 @@ public final class ArcaneMod implements ModInitializer {
             return "the_paper_martyr".equals(ability) || "weight_of_sin_made_manifest".equals(ability)
                 || "air_cannon".equals(ability) || "the_perfect_prey".equals(ability)
                 || "authors_edit".equals(ability) || "the_mindscape".equals(ability)
-                || "the_marked_verdict".equals(ability);
+                || "the_marked_verdict".equals(ability)
+                || "the_unseen".equals(ability) || "the_battlefield".equals(ability)
+                || "the_burning_archive".equals(ability) || "meteor".equals(ability)
+                || "emperors_library".equals(ability) || "burning_lecture".equals(ability);
         return "secondary".equals(binding) && (
             "paper_dagger".equals(ability) || "paper_sentence".equals(ability)
             || "small_miracle".equals(ability) || "mystery_step".equals(ability)
             || "suggestion".equals(ability) || "discern".equals(ability)
             || "puppets_sentence".equals(ability) || "silent_witness".equals(ability)
+            || "reap".equals(ability) || "star_read_reaper".equals(ability)
+            || "star_read".equals(ability) || "sages_counsel".equals(ability)
+            || "storm_call".equals(ability)
             || "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
             || "borrowed_sacrifice".equals(ability) || "gathering_of_martyrs".equals(ability));
     }
     private static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String ability) {
         if(AbilityRegistry.isActive(r.profile,ability)) {
+            if(HermitChariotAbilities.cast(p,state,r,ability)) {
+                info(p,"Cast "+ability);return 1;
+            }
             if(WorldJusticeAbilities.cast(p,state,r,ability)) {
                 info(p,"Cast "+ability);return 1;
             }
@@ -255,6 +267,8 @@ public final class ArcaneMod implements ModInitializer {
                 case "hanged_man" -> "tarot:fool/identity_spiritual_expenditure";
                 case "world" -> "tarot:justice/identity_compassionate_restraint";
                 case "justice" -> "tarot:world/identity_terrifying_reputation";
+                case "hermit" -> "tarot:chariot/identity_extinguished_fury";
+                case "chariot" -> "tarot:hermit/identity_forbidden_knowledge";
                 default -> null;
             };
             if(secondaryIdentity!=null)
@@ -270,7 +284,9 @@ public final class ArcaneMod implements ModInitializer {
         }
         // Clear stale input bindings when a Sequence has been removed.
         if(!AbilityRegistry.isActive(profile,r.primaryBinding)) {
-            String[] priorities={"the_marked_verdict","the_mindscape","the_perfect_prey",
+            String[] priorities={"the_burning_archive","the_battlefield","the_unseen",
+                "meteor","emperors_library","burning_lecture",
+                "the_marked_verdict","the_mindscape","the_perfect_prey",
                 "the_paper_martyr","air_cannon","authors_edit",
                 "weight_of_sin_made_manifest","full_faceless_disguise"};
             r.primaryBinding="";
@@ -280,7 +296,8 @@ public final class ArcaneMod implements ModInitializer {
                 }
         }
         if(!AbilityRegistry.isActive(profile,r.secondaryBinding)) {
-            String[] priorities={"puppets_sentence","paper_sentence","suffering_sight",
+            String[] priorities={"star_read_reaper","star_read","reap","storm_call",
+                "sages_counsel","puppets_sentence","paper_sentence","suffering_sight",
                 "suggestion","paper_dagger","spirit_vision","borrowed_face","discern"};
             r.secondaryBinding="";
             for(String candidate:priorities)
@@ -330,6 +347,7 @@ public final class ArcaneMod implements ModInitializer {
         HangedAbilities.stopOnDisconnect(p);
         PaperMartyr.stopOnDisconnect(p);
         WorldJusticeAbilities.stopOnDisconnect(p);
+        BurningArchive.stopOnDisconnect(p);
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_secondary_identity");
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
         run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);

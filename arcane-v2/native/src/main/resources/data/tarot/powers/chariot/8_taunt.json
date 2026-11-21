@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Taunt",
+  "description": "Crouch-right-click **hostile mob OR enemy player** → force target 60t. Cooldown 400t."
+}

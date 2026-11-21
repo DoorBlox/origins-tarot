@@ -1,0 +1,13 @@
+{
+  "name": "The Burning Archive",
+  "description": "Hermit + Chariot Resonance at Sequence 1; both drawbacks persist.",
+  "icon": "minecraft:blaze_powder",
+  "impact": 3,
+  "order": 24,
+  "powers": [
+    "tarot:burning_archive/marker",
+    "tarot:hermit/identity_forbidden_knowledge",
+    "tarot:chariot/identity_extinguished_fury",
+    "tarot:burning_archive/identity_wings"
+  ]
+}

@@ -60,6 +60,13 @@ public final class ArcaneSave extends PersistentState {
                     ?n.getLong("lastActingTick"):-2400;
                 record.hadActingItem=n.getBoolean("hadActingItem");
                 record.lastTradeCount=n.getInt("lastTradeCount");
+                record.xpRemainder=n.getFloat("xpRemainder");
+                record.reapUntil=n.getLong("reapUntil");
+                record.libraryUntil=n.getLong("libraryUntil");
+                record.stormUntil=n.getLong("stormUntil");
+                record.meteorImmuneUntil=n.getLong("meteorImmuneUntil");
+                record.lastBookStudy=n.getLong("lastBookStudy");
+                record.burnStacks=n.getInt("burnStacks");
                 record.restoreFlightPending = n.getBoolean("restoreFlightPending");
                 record.legendPriorMayFly = n.getBoolean("legendPriorMayFly");
                 record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
@@ -110,6 +117,13 @@ public final class ArcaneSave extends PersistentState {
             n.putLong("lastActingTick",record.lastActingTick);
             n.putBoolean("hadActingItem",record.hadActingItem);
             n.putInt("lastTradeCount",record.lastTradeCount);
+            n.putFloat("xpRemainder",record.xpRemainder);
+            n.putLong("reapUntil",record.reapUntil);
+            n.putLong("libraryUntil",record.libraryUntil);
+            n.putLong("stormUntil",record.stormUntil);
+            n.putLong("meteorImmuneUntil",record.meteorImmuneUntil);
+            n.putLong("lastBookStudy",record.lastBookStudy);
+            n.putInt("burnStacks",record.burnStacks);
             n.putBoolean("restoreFlightPending",record.restoreFlightPending);
             n.putBoolean("legendPriorMayFly",record.legendPriorMayFly);
             n.putString("bindPrimary",record.primaryBinding);
@@ -154,6 +168,13 @@ public final class ArcaneSave extends PersistentState {
         public long lastActingTick=-2400;
         public boolean hadActingItem;
         public int lastTradeCount;
+        public float xpRemainder;
+        public long reapUntil;
+        public long libraryUntil;
+        public long stormUntil;
+        public long meteorImmuneUntil;
+        public long lastBookStudy;
+        public int burnStacks;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

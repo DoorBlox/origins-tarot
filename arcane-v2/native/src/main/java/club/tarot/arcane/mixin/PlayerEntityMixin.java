@@ -2,6 +2,8 @@ package club.tarot.arcane.mixin;
 
 import club.tarot.arcane.ArcaneSave;
 import club.tarot.arcane.WorldJusticeAbilities;
+import club.tarot.arcane.HermitChariotAbilities;
+import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
@@ -17,6 +19,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /** Rev 2 spiritual expenditure and Fools' Bounty, no KubeJS. */
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
+    @ModifyVariable(method="addExperience",at=@At("HEAD"),argsOnly=true,index=1)
+    private int tarot$xpBonus(int experience) {
+        if((Object)this instanceof ServerPlayerEntity player)
+            return HermitChariotAbilities.modifyXp(player,experience);
+        return experience;
+    }
+
+    @Inject(method="getBlockBreakingSpeed",at=@At("RETURN"),cancellable=true)
+    private void tarot$investigationSpeed(BlockState state,CallbackInfoReturnable<Float> cir) {
+        if((Object)this instanceof ServerPlayerEntity player)
+            cir.setReturnValue(cir.getReturnValue()*HermitChariotAbilities.breakMultiplier(player));
+    }
+
     @Inject(method="tick",at=@At("HEAD"))
     private void tarot$movementRestriction(CallbackInfo ci) {
         if((Object)this instanceof ServerPlayerEntity player &&

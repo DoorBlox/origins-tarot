@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "name": "The Hermit Wings",
+  "render_elytra": true,
+  "description": "Innate Elytra-style glide."
+}

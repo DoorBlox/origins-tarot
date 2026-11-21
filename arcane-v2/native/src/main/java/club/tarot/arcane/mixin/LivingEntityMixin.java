@@ -9,6 +9,8 @@ import club.tarot.arcane.MarkedVerdict;
 import club.tarot.arcane.Ascension;
 import club.tarot.arcane.ArcaneMod;
 import club.tarot.arcane.ArcaneSave;
+import club.tarot.arcane.HermitChariotAbilities;
+import club.tarot.arcane.BurningArchive;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,8 +31,9 @@ public abstract class LivingEntityMixin {
     private float tarot$scaleDamage(float damage, DamageSource source) {
         LivingEntity victim=(LivingEntity)(Object)this;
         float amount=HangedAbilities.scaleIncoming(victim,HangedAbilities.scaleOutgoing(victim,source,damage));
-        return WorldJusticeAbilities.scaleIncoming(victim,source,
+        amount=WorldJusticeAbilities.scaleIncoming(victim,source,
             WorldJusticeAbilities.scaleOutgoing(victim,source,amount));
+        return HermitChariotAbilities.outgoing(victim,source,amount);
     }
 
     @Inject(method="damage",at=@At("HEAD"))
@@ -41,6 +44,11 @@ public abstract class LivingEntityMixin {
 
     @Inject(method="damage",at=@At("HEAD"),cancellable=true)
     private void tarot$rescue(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
+        if((Object)this instanceof ServerPlayerEntity p &&
+            (HermitChariotAbilities.fireImmune(p,source) || BurningArchive.immortalDash(p))) {
+            cir.setReturnValue(false);
+            return;
+        }
         if(WorldJusticeAbilities.cancelDamage((LivingEntity)(Object)this,source)) {
             cir.setReturnValue(false);
             return;
@@ -72,6 +80,8 @@ public abstract class LivingEntityMixin {
         if (Boolean.TRUE.equals(cir.getReturnValue())) {
             FoolLegend.afterSuccessfulHit((LivingEntity)(Object)this,source);
             WorldJusticeAbilities.onSuccessfulHit((LivingEntity)(Object)this,source);
+            if(source.getAttacker() instanceof ServerPlayerEntity attacker)
+                HermitChariotAbilities.onSuccessfulHit(attacker,(LivingEntity)(Object)this,source);
             if(source.getAttacker() instanceof ServerPlayerEntity attacker) {
                 ArcaneSave.Record r=ArcaneSave.get(attacker.getServer()).getPlayer(attacker.getUuid());
                 if(r!=null&&r.originValid) {
@@ -86,6 +96,7 @@ public abstract class LivingEntityMixin {
             float taken=Math.max(0f,tarot$effectiveHealthBefore-p.getHealth()-p.getAbsorptionAmount());
             HangedAbilities.onDamage(p,source,taken);
             WorldJusticeAbilities.onTakenDamage(p,source,taken);
+            HermitChariotAbilities.onTakenDamage(p,source,taken);
             FoolAbilities.afterDamage(p,source);
         }
     }
@@ -104,6 +115,7 @@ public abstract class LivingEntityMixin {
         if(source.getAttacker() instanceof ServerPlayerEntity attacker) {
             HangedAbilities.onKill(attacker,victim);
             WorldJusticeAbilities.onKill(attacker,victim);
+            HermitChariotAbilities.onKill(attacker,victim);
             Ascension.onKill(attacker,victim);
         }
     }
