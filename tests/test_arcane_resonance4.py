@@ -99,7 +99,12 @@ class ResonanceWaveFourTests(unittest.TestCase):
                     if obj.get("type") == "origins:execute_command":
                         command = obj["command"]
                         self.assertEqual(obj["permission_level"], 2)
-                        self.assertNotIn("@a", command)
+                        if "@a" in command:
+                            # Generated cross-team effect is allowed only with
+                            # an explicit caster team AND a known target team.
+                            self.assertIn("execute if entity @s[team=", command)
+                            self.assertIn("@a[team=", command)
+                            self.assertNotIn("@a[distance=", command)
                         self.assertNotIn("op ", command)
                         self.assertNotIn("deop ", command)
                         self.assertNotIn(";", command)
