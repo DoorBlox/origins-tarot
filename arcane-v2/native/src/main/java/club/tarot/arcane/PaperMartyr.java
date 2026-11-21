@@ -152,7 +152,7 @@ public final class PaperMartyr {
         }
     }
     /** One rescue, on confirmed lethal damage. Does not heal if no Sequence 1 kit. */
-    static boolean rescue(ServerPlayerEntity p,float damage) {
+    public static boolean rescue(ServerPlayerEntity p,float damage) {
         ArcaneSave state=ArcaneSave.get(p.getServer());
         ArcaneSave.Record r=state.getPlayer(p.getUuid());
         if(r==null || !has(r,1) || damage<p.getHealth()+p.getAbsorptionAmount())return false;

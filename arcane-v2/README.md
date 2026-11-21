@@ -23,3 +23,19 @@ The native mod now includes the Fool's initial event handlers, bounded Vex-like 
 
 This branch is **not production-ready** until the full 434-ability coverage
 and live Minecraft acceptance gates pass. Never treat static tests as in-game proof.
+
+## Arcane V2 native development slice — Fool + Hanged Man / Paper Martyr
+
+The compiled mod bundles 14 Fool, 14 Hanged Man, and 10 Paper Martyr
+Sequence power IDs, their origin resources, and shared entity/blocks/item tags.
+The 10 Paper Martyr abilities activate together at Sequence 1. The rest of the
+handbook is **not implemented**. Never install the old V3 datapack alongside
+this mod: it also owns `tarot:*` origin identifiers and implements a conflicting
+progression model.
+
+The branch is a **development test build**, not a completed 434-power release.
+See `docs/BATCH_2_TEST.md` and `docs/BATCH_2_GAPS.md`. You may test on a
+private SMP before inviting friends, but back up the world and player files first.
+Only `/tarot debug sequence <level>` advances the Arcane V2 Sequence currently;
+that command requires OP. The prior V3 acting/ritual pipeline has not been
+rewired into the Rev3 shared-Sequence architecture.

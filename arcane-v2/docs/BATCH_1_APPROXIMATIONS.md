@@ -12,7 +12,7 @@ must be provided by native Java handlers.
 | Puppet String | Slowness II applies to hostile mobs and enemy players; coordinates are shown immediately, but 100-tick coordinate visibility, exact player sprint denial and mob next-hit half-damage are not yet exact. |
 | Trickster's Favor | Native polling of mob target acquisition every 20 ticks, 10% retarget chance and 200-tick cooldown. There is no equivalent target acquisition for PvP players. |
 | Fools' Gathering | Two native Vex minions spawn with four health, one attack damage and 200-tick life. Targets are recalculated every 20 ticks; vanilla Vex behavior between scans is an approximation. Friendly-fire against owner/teammates is blocked by a mixin. |
-| Legend of the Fool | Native 700-tick transformation, flight, fire/fall immunity, decoys every 100 ticks, rewind and regeneration on expiry. Uses Resistance IV (80%, not exact 75%) and Strength I (not exact +50%). Double mob loot, player/mob kill handling and persistence through restart are incomplete. |
+| Legend of the Fool | Native 700-tick transformation, flight, fire/fall immunity, decoys every 100 ticks, rewind and regeneration. The incoming −75% and outgoing +50% now use a damage mixin (compiled but not live-tested). Double mob loot and restart-safe flight persistence remain incomplete. |
 | Stage Magician | Backward teleport and decoy are implemented in native damage callback; safe-location checks and decoy expiry are not yet verified. |
 | Trickster's Escape | Low-health Speed II and decoy implemented; decoy expiry and anti-loop controls require game acceptance. |
 | Spiritual Overload | Uses the actual `#tarot:hostile` entity type tag and enemy players, but count scanning occurs at 40-tick intervals. |
