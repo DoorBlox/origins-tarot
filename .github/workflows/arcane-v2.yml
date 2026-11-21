@@ -35,7 +35,7 @@ jobs:
           path: arcane-v2/native/build/libs/*-0.1.0.jar
           if-no-files-found: error
       - name: Download pinned Origins 1.4.1 for a disposable server
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.smoke_server }}
+        if: ${{ github.event_name == 'pull_request' || inputs.smoke_server }}
         working-directory: arcane-v2/native
         run: |
           python3 - <<'PY'
@@ -54,7 +54,7 @@ jobs:
           print(f"Installed pinned Origins jar: {target.stat().st_size} bytes")
           PY
       - name: Headless 1.18.2 + Origins 1.4.1 startup smoke
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.smoke_server }}
+        if: ${{ github.event_name == 'pull_request' || inputs.smoke_server }}
         working-directory: arcane-v2/native
         run: |
           printf 'eula=true\n' > run/eula.txt
@@ -73,7 +73,7 @@ jobs:
           echo "Server did not reach Ready (runner exit $code)"
           exit 1
       - name: Upload startup diagnostics
-        if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.smoke_server }}
+        if: ${{ always() && (github.event_name == 'pull_request' || inputs.smoke_server) }}
         uses: actions/upload-artifact@v4
         with:
           name: tarot-arcane-v2-server-smoke-logs
