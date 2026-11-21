@@ -80,7 +80,11 @@ class WaveFiveTests(unittest.TestCase):
                     record = self.lookup[(family, slug, seq, norm(name))]
                     self.assertEqual(record["status"], "partial")
                     self.assertEqual(accuracy, "partial")
-                    self.assertEqual(record["missing"], missing)
+                    # The compiler appends an explicit enemy-player safety
+                    # disclosure to retaliatory powers; preserve that warning.
+                    self.assertTrue(record["missing"].startswith(missing))
+                    if definition["type"] == "origins:attacker_action_when_hit":
+                        self.assertIn("different-team target filter", record["missing"])
                     self.assertIn(record["power_id"], self.powers)
                     self.assertIn(record["power_id"], self.kits[(slug, seq)])
                     self.assertNotEqual(definition["type"], "origins:simple")
