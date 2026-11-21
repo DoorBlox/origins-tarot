@@ -318,7 +318,7 @@ def emit_roadmap(w):
 def generate_player_manual(manifest, compiled, kits, innate):
     """Readable abilities and controls, with development diagnostics excluded."""
     lines = [
-        "# Arcane Rev3 — Abilities & Pathways",
+        "# Arcane Rev3 Player Ability Reference",
         "",
         "Explore 434 Arcana and Resonance ability entries, organized by pathway and Sequence.",
         "",
