@@ -1,14 +1,5 @@
 {
-  "type": "origins:active_self",
+  "type": "origins:simple",
   "name": "The Legend of The Fool",
-  "description": "35-second capstone with 15-minute cooldown and end-of-duration rewind.",
-  "entity_action": {
-    "type": "origins:execute_command",
-    "command": "tarot cast legend_of_the_fool",
-    "permission_level": 0
-  },
-  "key": {
-    "key": "key.origins.primary_active",
-    "continuous": false
-  }
+  "description": "35-second capstone with 15-minute cooldown and end-of-duration rewind."
 }

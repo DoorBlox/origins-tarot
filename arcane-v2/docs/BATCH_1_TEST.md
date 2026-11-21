@@ -8,12 +8,15 @@ and the native mod. Never use the existing V3 Path of Ascension datapack simulta
 - [ ] Choose Fool in Origins; get `[Tarot] Enrolled as fool at Sequence 9`.
 - [ ] Run `/tarot slots`: SINGLE, Sequence 9, one filled Fool 9 slot.
 - [ ] Sprint / Elytra glide and compare exhaustion with an ordinary player; Fool multiplier should be 1.25 when the relevant action produces exhaustion.
-- [ ] Sneak and press the secondary key or `/tarot cast spirit_vision`: all nearby living entities within ten blocks glow for 40 ticks; 100-tick cooldown.
+- [ ] With secondary bound to spirit_vision, sneak and press V (or as OP `/tarot cast spirit_vision`): all nearby living entities within ten blocks glow for 40 ticks; 100-tick cooldown.
 - [ ] Get hit repeatedly and confirm Clown's Mischief occasionally blinds the attacker (20% chance, 100-tick cooldown).
 - [ ] Stand within eight blocks of three hostile mobs or one enemy player; Spiritual Overload Nausea triggers at 40-tick intervals.
 - [ ] Try enemy teammate and unteamed players. Teammates must never be affected by Puppet String; unteamed players may be enemies.
 - [ ] Verify `/tarot slot 1 tarot:fool 8` fails in single mode.
 - [ ] As OP run `/tarot debug sequence 8`; check automatic Seq 9 and Seq 8 activation and the increased slot count.
+- [ ] Check G activates the default primary skill Full Faceless Disguise (server-side invisibility approximation).
+- [ ] As OP run `/tarot debug sequence 6`, then `/tarot bind secondary borrowed_face`; press V and confirm ONLY Borrowed Face activates.
+- [ ] Use `/tarot bind secondary spirit_vision` to restore the default; confirm no two skills fire from the same key.
 - [ ] As OP run `/tarot debug sequence 5`; check five auto-filled slots.
 - [ ] As OP run `/tarot debug sequence 4`; check six slots, Fool 9–5 retained and slot 6 empty.
 - [ ] Assign `/tarot slot 6 tarot:hanged_man 9`; check assignment persists in `/tarot slots`. Hanged Man mechanics are not yet available in Batch 1.

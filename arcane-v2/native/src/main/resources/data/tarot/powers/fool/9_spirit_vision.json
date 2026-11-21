@@ -1,17 +1,5 @@
 {
-  "type": "origins:active_self",
+  "type": "origins:simple",
   "name": "Spirit Vision",
-  "description": "Sneak + secondary: Glowing 40 ticks within 10 blocks. 100-tick cooldown.",
-  "entity_action": {
-    "type": "origins:execute_command",
-    "command": "tarot cast spirit_vision",
-    "permission_level": 0
-  },
-  "key": {
-    "key": "key.origins.secondary_active",
-    "continuous": false
-  },
-  "condition": {
-    "type": "origins:sneaking"
-  }
+  "description": "Sneak + secondary: Glowing 40 ticks within 10 blocks. 100-tick cooldown."
 }

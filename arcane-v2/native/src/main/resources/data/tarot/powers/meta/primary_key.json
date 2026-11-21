@@ -1,0 +1,18 @@
+{
+  "type": "origins:active_self",
+  "name": "Arcane primary binding",
+  "description": "Press the primary Origins key to activate your bound Tarot ability. Select it with /tarot bind primary <ability>.",
+  "cooldown": 1,
+  "hud_render": {
+    "should_render": false
+  },
+  "entity_action": {
+    "type": "origins:execute_command",
+    "command": "tarot key primary",
+    "permission_level": 0
+  },
+  "key": {
+    "key": "key.origins.primary_active",
+    "continuous": false
+  }
+}

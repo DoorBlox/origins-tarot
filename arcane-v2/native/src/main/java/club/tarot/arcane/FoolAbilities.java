@@ -37,6 +37,14 @@ public final class FoolAbilities {
     private static boolean enabled(ArcaneSave.Record r,int seq) {
         return r.profile.active("fool",seq);
     }
+    public static boolean supportsBinding(String key,String ability) {
+        if("primary".equals(key)) return "full_faceless_disguise".equals(ability)
+            || "legend_of_the_fool".equals(ability);
+        if("secondary".equals(key)) return "spirit_vision".equals(ability)
+            || "borrowed_face".equals(ability) || "puppet_string".equals(ability)
+            || "fools_gathering".equals(ability);
+        return false;
+    }
     public static boolean enemy(ServerPlayerEntity holder,Entity target) {
         if(target==holder) return false;
         if(target instanceof PlayerEntity) {

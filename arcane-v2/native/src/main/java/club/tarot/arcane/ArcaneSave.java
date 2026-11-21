@@ -43,6 +43,8 @@ public final class ArcaneSave extends PersistentState {
                 for (String key : cooldowns.getKeys()) record.cooldowns.put(key, cooldowns.getLong(key));
                 record.combatUntil = n.getLong("combatUntil");
                 record.foodRemainder = n.getFloat("foodRemainder");
+                record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
+                record.secondaryBinding = n.contains("bindSecondary") ? n.getString("bindSecondary") : "spirit_vision";
                 state.players.put(n.getUuid("uuid"), record);
             } catch (RuntimeException ignored) {
                 // Reject only malformed per-player records, never wipe other players.
@@ -74,6 +76,8 @@ public final class ArcaneSave extends PersistentState {
             n.put("cooldowns", cds);
             n.putLong("combatUntil", record.combatUntil);
             n.putFloat("foodRemainder", record.foodRemainder);
+            n.putString("bindPrimary",record.primaryBinding);
+            n.putString("bindSecondary",record.secondaryBinding);
             records.add(n);
         }
         root.put("players", records);
@@ -92,6 +96,8 @@ public final class ArcaneSave extends PersistentState {
         public final Map<String, Long> cooldowns = new HashMap<>();
         public long combatUntil;
         public float foodRemainder;
+        public String primaryBinding="full_faceless_disguise";
+        public String secondaryBinding="spirit_vision";
         private Record(SlotModel.Profile profile) { this.profile = profile; }
 
         public boolean ready(String key, long now, int ticks) {

@@ -45,12 +45,32 @@ public final class ArcaneMod implements ModInitializer {
                                     normalize(StringArgumentType.getString(c,"pathway")),
                                     IntegerArgumentType.getInteger(c,"sequence"))))))))
                 .then(literal("reset").executes(c -> alter(c,r -> r.profile.reset())))
-                .then(literal("cast").then(argument("ability",StringArgumentType.word())
+                .then(literal("cast").requires(src -> src.hasPermissionLevel(2)).then(argument("ability",StringArgumentType.word())
                     .executes(c -> withPlayer(c,(p,s,r) -> FoolAbilities.cast(p,s,r,StringArgumentType.getString(c,"ability"))))))
                 .then(literal("debug").requires(src -> src.hasPermissionLevel(2))
                     .then(literal("sequence").then(argument("level",IntegerArgumentType.integer(0,9))
                         .executes(c -> withPlayer(c,(p,s,r) -> onSequenceChange(p,s,r,IntegerArgumentType.getInteger(c,"level"))))))
         )));
+        // Separate command registration merges additional children into /tarot.
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+            dispatcher.register(literal("tarot")
+                .then(literal("bind")
+                    .then(argument("binding",StringArgumentType.word())
+                        .then(argument("ability",StringArgumentType.word())
+                            .executes(c -> withPlayer(c,(p,s,r) -> bind(p,s,r,
+                                StringArgumentType.getString(c,"binding"),
+                                StringArgumentType.getString(c,"ability")))))))
+                .then(literal("key")
+                    .then(argument("binding",StringArgumentType.word())
+                        .executes(c -> withPlayer(c,(p,s,r) -> activateKey(p,s,r,
+                            StringArgumentType.getString(c,"binding")))))));
+            // Origins marker callback can signal selection immediately, even before JOIN.
+            dispatcher.register(literal("tarot")
+                .then(literal("origin_ready").executes(c -> {
+                    try { enrollAndRefresh(c.getSource().getPlayer()); return 1; }
+                    catch(com.mojang.brigadier.exceptions.CommandSyntaxException ignored) { return 0; }
+                })));
+        });
         ServerPlayConnectionEvents.JOIN.register((handler,sender,server) ->
             server.execute(() -> enrollAndRefresh(handler.getPlayer())));
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer,newPlayer,alive) ->
@@ -96,8 +116,41 @@ public final class ArcaneMod implements ModInitializer {
             ArcaneSave state=ArcaneSave.get(p.getServer());
             ArcaneSave.Record r=state.getPlayer(p.getUuid());
             if(r == null) { error(p,"Choose a Tarot Arcana first."); return 0; }
+            if(originHas(p,r.profile.primary())<=0) {
+                error(p,"Registered Arcana mismatch; Tarot slot powers disabled.");
+                return 0;
+            }
             return work.run(p,state,r);
         } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) { return 0; }
+    }
+    private static int bind(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,
+                            String binding,String ability) {
+        binding=binding.toLowerCase(java.util.Locale.ROOT);
+        ability=ability.toLowerCase(java.util.Locale.ROOT);
+        if(!FoolAbilities.supportsBinding(binding,ability)
+            || !AbilityRegistry.isActive(r.profile,ability)) {
+            error(p,"Ability not unlocked, unsupported, or wrong key. Use /tarot slots.");
+            return 0;
+        }
+        if("primary".equals(binding)) r.primaryBinding=ability;
+        else if("secondary".equals(binding)) r.secondaryBinding=ability;
+        else { error(p,"Select primary or secondary."); return 0; }
+        state.markDirty();
+        info(p,"Bound "+binding+" to "+ability+".");
+        return 1;
+    }
+    private static int activateKey(ServerPlayerEntity p,ArcaneSave state,
+                                   ArcaneSave.Record r,String binding) {
+        String ability;
+        if("primary".equals(binding)) ability=r.primaryBinding;
+        else if("secondary".equals(binding)) ability=r.secondaryBinding;
+        else { error(p,"Unknown Tarot key."); return 0; }
+        if(!FoolAbilities.supportsBinding(binding,ability)
+            || !AbilityRegistry.isActive(r.profile,ability)) {
+            error(p,"No active "+binding+" skill. Use /tarot bind "+binding+" <ability>.");
+            return 0;
+        }
+        return FoolAbilities.cast(p,state,r,ability);
     }
     @FunctionalInterface private interface Mutation { void apply(ArcaneSave.Record record); }
     private static int alter(CommandContext<ServerCommandSource> c, Mutation action) {
@@ -153,6 +206,19 @@ public final class ArcaneMod implements ModInitializer {
             for (String id:AbilityRegistry.forSequence(choice.pathway,choice.sequence))
                 run(p,"power grant "+selector+" "+id+" "+SOURCE);
         }
+        // Clear stale input bindings when a Sequence has been removed.
+        if(!AbilityRegistry.isActive(profile,r.primaryBinding))
+            r.primaryBinding=AbilityRegistry.isActive(profile,"full_faceless_disguise")
+                ?"full_faceless_disguise":"";
+        if(!AbilityRegistry.isActive(profile,r.secondaryBinding))
+            r.secondaryBinding=AbilityRegistry.isActive(profile,"spirit_vision")
+                ?"spirit_vision":"";
+        ArcaneSave.get(p.getServer()).markDirty();
+    }
+    private static void grantInputKeys(ServerPlayerEntity p) {
+        String uuid=p.getUuidAsString();
+        run(p,"power grant "+uuid+" tarot:meta/primary_key tarot_input");
+        run(p,"power grant "+uuid+" tarot:meta/secondary_key tarot_input");
     }
     static void enrollAndRefresh(ServerPlayerEntity p) {
         ArcaneSave state=ArcaneSave.get(p.getServer());
@@ -160,12 +226,17 @@ public final class ArcaneMod implements ModInitializer {
         if(existing!=null) {
             // Do not grant powers if player no longer holds the registered origin.
             int holds=originHas(p,existing.profile.primary());
-            if (holds > 0) refreshSlots(p,existing);
-            else error(p,"Registered Arcana mismatch; slot powers suspended until origin restored.");
+            if (holds > 0) { grantInputKeys(p); refreshSlots(p,existing); }
+            else {
+                run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
+                run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);
+                error(p,"Registered Arcana mismatch; slot powers suspended until origin restored.");
+            }
             return;
         }
         for(String card:SlotModel.PAIRS.keySet()) if(originHas(p,card)>0) {
             ArcaneSave.Record r=state.enroll(p.getUuid(),card);
+            grantInputKeys(p);
             refreshSlots(p,r); info(p,"Enrolled as "+card+" at Sequence 9.");
             return;
         }
@@ -183,5 +254,7 @@ public final class ArcaneMod implements ModInitializer {
         if(model.mode().equals("resonance")) { info(p,"Resonance: "+model.resonance()+" (Sequences 9-0)"); return; }
         int i=1;
         for(SlotModel.Choice slot:model.slots()) info(p,"["+i+++"] "+(slot==null?"(empty)":slot.toString()));
+        info(p,"Keys: primary="+r.primaryBinding+" | secondary="+r.secondaryBinding);
+        info(p,"Use /tarot bind <primary|secondary> <ability> to change key bindings.");
     }
 }

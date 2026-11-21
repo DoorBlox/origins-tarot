@@ -39,6 +39,21 @@ public final class AbilityRegistry {
     public static boolean implemented(String pathway, int sequence) {
         return POWERS.containsKey(pathway) && POWERS.get(pathway).containsKey(sequence);
     }
+    /** Check native event permission against the actual equipped Sequence kit. */
+    public static boolean isActive(SlotModel.Profile profile,String ability) {
+        if("resonance".equals(profile.mode())) {
+            for(int seq=0;seq<=9;seq++)
+                for(String power:forSequence(profile.resonance(),seq))
+                    if(power.endsWith("_"+ability)) return true;
+            return false;
+        }
+        for(SlotModel.Choice slot:profile.slots()) {
+            if(slot==null) continue;
+            for(String power:forSequence(slot.pathway,slot.sequence))
+                if(power.endsWith("_"+ability)) return true;
+        }
+        return false;
+    }
     public static boolean has(String fullId) {
         return POWERS.values().stream().flatMap(map -> map.values().stream())
             .flatMap(List::stream).anyMatch(fullId::equals);
