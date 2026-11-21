@@ -73,8 +73,11 @@ def emit_content(w,root,compiled,variant):
     for slug in PATHWAYS:
         c=info[slug]
         wings=["tarot:"+slug+"/wings"] if c["glider"] else []
+        # Rev2's Fool weakness is an identity drawback, not one of its four
+        # named Seq9 abilities. It survives slot reconfiguration.
+        identity=["tarot:fool/identity_spiritual_expenditure"] if slug=="fool" else []
         w.j("data/tarot/origins/"+slug+".json",{
-             "powers":wings, "icon":"minecraft:paper", "name":c["name"],
+             "powers":wings+identity, "icon":"minecraft:paper", "name":c["name"],
              "description":"Rev3 player-owned slot kits; "+c["lore"],
              "impact":3,"order":c["id"]-1})
         if wings:
@@ -82,6 +85,15 @@ def emit_content(w,root,compiled,variant):
                 "type":"origins:elytra_flight","render_elytra":True,
                 "name":c["name"]+" Wings",
                 "description":"Innate Elytra-style gliding, separate from the removable sequence kit."})
+    w.j("data/tarot/powers/fool/identity_spiritual_expenditure.json",{
+        "type":"origins:modify_exhaustion",
+        "name":"Spiritual Expenditure",
+        "description":"The Fool consumes 25% more exhaustion while sprinting or gliding.",
+        "modifier":{"name":"Fool Spiritual Expenditure","operation":"multiply_total","value":0.25},
+        "condition":{"type":"origins:or","conditions":[
+            {"type":"origins:sprinting"},
+            {"type":"origins:fall_flying"}]}
+    })
     for a,b,res in PAIRS:
         w.j("data/tarot/origins/"+res+".json",{
             "powers":[],"icon":"minecraft:nether_star",
@@ -157,7 +169,7 @@ def emit_player(w,kits):
             f"advancement revoke @s only {PREFIX}events/combat_{kind}")
 
 
-def emit_slots(w):
+def emit_slots(w,kits):
     w.f("slot/assign",
         "scoreboard players operation @s a_rslot = @s a_assign",
         "scoreboard players operation @s a_rslot /= #10000 a_const",
@@ -168,9 +180,15 @@ def emit_slots(w):
         "scoreboard players operation @s a_rseq = @s a_rcode",
         "scoreboard players operation @s a_rseq %= #100 a_const",
         "scoreboard players set @s a_ok 0",
+        "scoreboard players set @s a_probe 0",
         "execute if score @s a_mode matches 1 if score @s a_rslot matches 1..8 if score @s a_rslot <= @s a_max if score @s a_rseq matches 2..9 if score @s a_rseq >= @s a_seq if score @s a_rpath = @s a_path run scoreboard players set @s a_ok 1",
         "execute if score @s a_mode matches 1 if score @s a_rslot matches 1..8 if score @s a_rslot <= @s a_max if score @s a_rseq matches 2..9 if score @s a_rseq >= @s a_seq if score @s a_rpath = @s a_partner run scoreboard players set @s a_ok 1",
         [f"execute unless score @s a_rslot matches {i} if score @s a_rcode = @s a_s{i} run scoreboard players set @s a_ok 0" for i in range(1,9)],
+        # Nonexistent/entirely blocked kits cannot be equipped: no silent
+        # zero-effect upgrades. One generated guard per real sequence kit.
+        [f"execute if score @s a_rpath matches {NUM[slug]} if score @s a_rseq matches {seq} run scoreboard players set @s a_probe 1"
+          for slug,seq in sorted(kits) if kits[(slug,seq)] and slug in NUM],
+        "execute if score @s a_probe matches 0 run scoreboard players set @s a_ok 0",
         "execute if score @s a_ok matches 1 run "+F("slot/assign_ok"),
         "execute if score @s a_ok matches 0 run "+msg("Locked, duplicate, or invalid slot assignment.","red"))
     w.f("slot/assign_ok",
@@ -365,7 +383,7 @@ def build(root=ROOT,output=None):
         w=Pack()
         emit_content(w,root,compiled,variant)
         emit_player(w,kits)
-        emit_slots(w)
+        emit_slots(w,kits)
         emit_grants(w,kits)
         emit_ui(w)
         emit_progression(w)
