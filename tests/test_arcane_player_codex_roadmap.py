@@ -100,8 +100,11 @@ class PlayerGuidePackContracts(unittest.TestCase):
             merged_text = "\n".join(read(z, name[
                 len("data/tarot_arcane/functions/"):-len(".mcfunction")])
                 for name in details)
-            for fragment in ("Currently in game", "How to use", "Limitations", "PARTIAL"):
+            for fragment in ("What it does", "How to use"):
                 self.assertIn(fragment, merged_text)
+            for forbidden in ("Currently in game (compiled source)", "Limitations:",
+                              "[PARTIAL]", "[FULL]", "Source-full"):
+                self.assertNotIn(forbidden, merged_text)
 
     def test_roadmap_uses_actual_quest_ritual_and_blocks_seq1(self):
         with ZipFile(self.artifacts["addon"]) as z:
@@ -167,13 +170,15 @@ class PlayerGuidePackContracts(unittest.TestCase):
         content = path.read_text(encoding="utf8")
         self.assertIn("Arcane Rev3 Player Ability Reference", content)
         self.assertIn("434", content)
-        self.assertIn("361", content)
         self.assertIn("Sequence 1", content)
         self.assertIn("Resonance", content)
-        self.assertIn("Actual in-game", content)
-        self.assertIn("Still missing", content)
+        self.assertIn("What it does", content)
+        self.assertIn("How to use", content)
+        self.assertNotIn("Still missing", content)
+        self.assertNotIn("PARTIAL", content)
+        self.assertNotIn("source-full", content)
         for entry in self.manifest:
-            self.assertIn(entry["power_id"], content)
+            self.assertIn(entry["name"], content)
 
     def test_alias_keeps_existing_commands_and_adds_guide(self):
         alias = json.loads(self.artifacts["alias"].read_text())
