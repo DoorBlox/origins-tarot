@@ -1,48 +1,73 @@
-# Arcane V2 Rev3 — outstanding gameplay fidelity, mod dependencies and owner decisions
+# Arcane V2 Rev3 — current source blockers, fidelity gaps and owner decisions
 
-**Checkpoint:** after source PRs #32, #33 and manual preview #35 on 2026-11-22. This is a priority/action register, not an assertion that unsupported content is impossible to implement. The 434-entry source catalog is authoritative, and the generated manifest is the source of exact statuses.
+**Current source checkpoint, 2026-11-22:** main implementation commit afba754b5ccd7996d64029e7e455d048df1aaddb (merged PR #40). The 434-entry authoritative Rev2 catalog and Rev3 progression handbook govern scope. This file replaces the obsolete list of twelve uncompiled Resonance abilities: all twelve now have explicit, sometimes limited, non-placeholder source effects.
 
-## Required end state (not negotiable without asking owner)
+**Exact source status:** 434 specified; **402 compiled (73 source-full, 329 source-PARTIAL); 32 blocked (all individual)**. All **110/110 Resonance** entries are compiled; many are PARTIAL. Player Seq1 is a protected test-only operator-enabled transition, not approved live SMP progression. No live Minecraft gameplay acceptance performed.
 
-- Rev3 **Sequence 1** must activate the corresponding fixed paired Resonance's **all ten kits, Seq9 through Seq0** together, in place of individual slot abilities, while keeping both relevant permanent identity drawbacks. The current Sequence1 lock is a **temporary incomplete-development safety gate**, not the final design.
-- Offensive effects affect tagged hostiles **and enemy players**, excluding teammates. Positive ally effects must not heal enemies. No blanket OP rights for players. No destruction of player world or inventories to fake an ability.
-- Minecraft Java 1.18.2 / Fabric / Origins 1.4.1; owner-installed Pehkui, Extra Keybinds, Command Aliases, ReMorphed, Woodwalkers, CraftedCore, SkinShifter, LambDynamicLights and LuckPerms. No Immersive Portals, no KubeJS and no custom Java/Fabric companion mod unless the owner explicitly changes their mind.
-- Source CI passing is not equivalent to testing interaction, targeting, performance, persistence or permissions on the **real Minecraft server**.
+## Every currently blocked individual catalog entry
 
-## Twelve uncompiled Resonance entries (remaining after #33)
+| Pathway | Sequence | Ability | Source flag | Original requirement (abridged) |
+| --- | --- | --- | --- | --- |
+| magician | 3 | Shortcut | D/S | KubeJS `BlockBreakEvent`, 10% chance break opposite block if same type. |
+| magician | 1 | Astral Lock | D/S | KubeJS `PlayerTeleportEvent` cancels other players' teleport effects. |
+| high_priestess | 7 | Index | S | Store 1 book in lectern; retrieve from any lectern within 50 blocks. |
+| high_priestess | 6 | Cross-Reference | S | KubeJS `EnchantmentScreenHandler`, lapis −1 per level (min 1) with offhand book. |
+| emperor | 9 | Decree of the Sovereign | S | Villager discount 10% within 8 blocks while holding shield. |
+| hierophant | 7 | Consecrate | S | Right-click block with torch → bless 1200t, light 10 in 3 blocks. |
+| hierophant | 6 | Contract | S | Right-click player → health in tab list 12000t. |
+| hierophant | 1 | Dietary Expansion | D | Fish allowed. |
+| hermit | 2 | Sage’s Counsel | S | Once per 6000t, yes/no structure question. |
+| justice | 9 | Calming Presence | D/S | Passive mobs never flee. |
+| justice | 2 | Discern | S | Once per 3600t, reveal player inventory within 6 blocks. |
+| justice | 1 | Author’s Edit | S | Primary key: 300t chat-word edit + mind read. Cooldown 2400t. |
+| hanged_man | 9 | Sin-Bearing | S | 25% damage taken → Sin (cap 16 HP). Decay: 200t without damage → dissipates. Below 8 HP with Sin active → burst: `area_of_eff |
+| hanged_man | 5 | Burden Bearer | D/S | 10% damage reduction while Sin active. On Sin dissipate → Regeneration I 60t. |
+| hanged_man | 3 | Trinity | D/S | 3 damage sources in 100t → Resistance II 60t + heal 2 hearts. |
+| hanged_man | 1 | Sin Overflow | D/S | Burst radius 10, Weakness II + Slowness II 60t, heal 75% of Sin. |
+| hanged_man | 1 | Depraved Dependent | S | 20% chance on kill → minion for 300t. Cooldown 2400t. Max 2. |
+| hanged_man | 0 | Weight of Sin Made Manifest | S | Primary key. **Duration 1200t (60s). Cooldown 14400t (12 min).** |
+| death | 2 | Consul | S | Once per 6000t, one `#tarot:undead` within 8 blocks fights for Death 200t. |
+| death | 1 | Reap | D/S | Primary key: **kill hostile mob OR enemy player below 30% HP within 8 blocks**. Kills apply Weakness I 60t to nearby. Cooldow |
+| temperance | 4 | Puppet | D/S | Right-click **hostile mob OR enemy player** → forced to attack nearest other hostile/player for 100t. Cooldown 900t. |
+| devil | 5 | Desire | D/S | Crouch-right-click player → held item chat. Cooldown 200t. |
+| devil | 3 | Blather | D/S | 10% chance nearby hostile mobs **AND enemy players** target another mob/player instead. |
+| tower | 7 | Fault Line | D/S | 5% chance on stone break → break block above. |
+| moon | 8 | Tame | D/S | Right-click passive with bone → no flee 1200t. |
+| moon | 6 | Brew | D/S | Instant brew. Cooldown 6000t. |
+| moon | 3 | Summon | D/S | Right-click passive → copy fights for Moon 200t. Cooldown 1200t. |
+| moon | 2 | Life | S | Once per 3600t, revive dead passive as ally 400t. |
+| moon | 1 | Pharmacist II | D | +35% potion. |
+| judgement | 8 | Posse | D/S | Right-click player → direction tracking 1200t. |
+| judgement | 3 | Chaos Hunter | D | +10% vs mobs/players targeting another player. |
+| judgement | 2 | Balance | S | Once per 3600t, equalize health between Judgement and **hostile mob OR enemy player** within 6 blocks. |
 
-| Pair | Seq / ability | Main missing technical contract |
-| --- | --- | --- |
-| Paper Martyr | 5 / Gathering of Martyrs | Two 200t ally figurines, actual Sin ownership, hostile-and-enemy-player AI, scoped detonation |
-| Paper Martyr | 4 / Burdened Trickster | Genuine Sin cap increase and real decoy Sin storage/detonation |
-| Paper Martyr | 2 / Sacrificial Gathering | Upgraded minion/detonation chain and synced Sin budget |
-| Paper Martyr | 1 / Martyr's Substitute | Once-per-7200t lethal cancel, bounded safe relocation and persisted Sin shadow |
-| Marked Verdict | 1 / Swift Judgment | Once-per-9600t lethal save with attacker-targeted frozen effect, no collateral |
-| Crumbling Reaper | 5 / Gate Collapse | Safe, permission-aware temporary Nether portal with bounded 3x3 terrain edits |
-| Crumbling Reaper | 4 / Falling Harvest | Fall-height and 200t kill-window resource, healing and guarded enemy-only explosion |
-| Impossible Fist | 4 / Doorstep Punch | Timed post-teleport +15% melee event association |
-| Impossible Fist | 2 / Giant's Shortcut | Exact post-phase-exit enemy health-scaled AoE, PvP team safety |
-| Benevolent Crown | 3 / Shared Domain | Genuine Emperor's Corrupt Ground region state plus team-specific regeneration |
-| Binding Contract | 2 / Contract Enforcement | Explicit player accept/refuse contract state, permission-safe inventory effects |
-| Loaded Dice | 1 / Loaded Answer | Typed yes/no fate event predicates, cooldown, deterministic consequence tracking |
+These are **not implemented** simply because their names exist in the catalog. The list is generated by comparing the names/sequences against registered individual source batches and existing templates. Verify against the generated manifest after new merges. A minimal potion/stealth substitute is not equivalent to a full scripted ability; any such implementation must document the original missing hooks in the manifest.
 
-These entries are **not automatically solved by installing LuckPerms, Pehkui or a morphing mod**. Many are possible only with more extensive vanilla scoreboard/advancement logic plus in-game verification, explicit acceptance of weaker approximations, or a scripting/event-hook capability that the current architecture forbids. Do **not** register empty dummy powers to make the metric 110/110.
+## What still requires engineering, not just more source registrations
 
-## Other must-fix areas before release
+- **The Hanged Man Sin subsystem:** exact per-hit damage-fraction accounting, persistent capped shared Sin, 200t decay, low-health burst, linked Figurine payload and clean relog/revive behavior remain blocked. Adding a static Absorption buff alone is not a complete Sin-Bearing substitute.
+- **Data-carrying and world-state hooks:** cross-lectern book storage, protected block-break doubles, fixed-zone light/sanctuaries, true local rain, persistent waypoints and 3x3 mining must respect land protection, consent, expiration and rollback. Avoid unconditional area setblock/fill, shared world destruction or world-wide weather.
+- **Combat AI and PVP event context:** forced aggro, peaceful mob targeting, exact victim health, teleported hit cancellation, player-restricted live attributes and arbitrary team comparisons are not exposed by every Origins 1.4.1 power type. Use the explicit vanilla team allowlist from docs/ARCANE_TEAM_POLICY.md; unassigned players remain neutral.
+- **Enchanting/economy/item-event operations:** lapis refunds, villager trade discounts, potion output scalars and enchant copying need exact 1.18.2 event APIs or transparent, tested data-pack mechanics. Do not counterfeit actual enchantment effects.
+- **Client-visible skins and disguises:** 1.18.2 SkinShifter 1.0 and ReMorphed 4.0 are installed, but old-version command syntax, arbitrary online player skin lookup and safe cleanup are unverified. Wave7 includes actual Invisibility substitutes marked PARTIAL; do not claim a skin/name swap.
+- **329 compiled partial mechanics:** many have approximate cooldown/event semantics, long-lived potion effects after source revoke, incomplete targets, or weak capstone transformations. Fix major gameplay discrepancies rather than counting another placeholder as done.
 
-- **85 individual catalog entries still blocked** after #33, including Full Faceless Disguise, Borrowed Face, Recorded Step, Waypoint, Sin-Bearing, Debt of Fate, and various world, AI and client-rendering mechanics.
-- **264 explicitly partial** definitions have real JSON but omitted details; their damage, cooldown, ally/enemy targeting, trigger specificity and resource dependencies must be tested and refined. A count of compiled entries is not a count of handbook-complete abilities.
-- **Fair PvP:** no general arbitrary-team comparison available in plain current power JSON; fixed team selectors or a verified team-source contract may work, but need to know whether the SMP uses vanilla `/team` names or another team system. Until then, hostile-mob-only offensive fallback must not hit allies.
-- **Mod integration:** documented SkinShifter `/skinshifter set @s <username-or-uuid>` does not accept a datapack runtime expression for random online username. Pehkui scale setters need expiry/relog/death/pause reset. Exact installed ReMorphed 4.0 permission semantics with LuckPerms must be checked. Current ReMorphed permission docs mention a separate Fabric Permissions API and `usePermissions=true`; **not yet verified for 4.0**.
-- **Version discipline:** some modern Origins power types listed in latest docs (e.g. modify_insomnia_ticks, modify_healing) are not listed for Origins 1.4.1. Do not silently use them as if supported. See https://origins.readthedocs.io/en/1.4.1/types/power_types/.
-- **Preview**: The separate operator-only `Arcane_Rev3_Resonance_Manual_Preview_TEST_ONLY_1.18.2.zip` is for isolated testing. It overlays current slots and is not the Seq1 transition. Always manually revoke preview source before uninstalling; see `docs/ARCANE_RESONANCE_MANUAL_PREVIEW.md`.
+## What the owner has already decided
 
-## Owner involvement: only when materially necessary
+- Use **vanilla scoreboard teams** (tarot_red / tarot_blue / tarot_green / tarot_gold) as the sole explicit combat-faction source of truth. Enemy players are players on different **allowlisted** teams; same-team players are allies; teamless/unlisted players are neutral for custom effects. No user-facing team-management command.
+- **Fabric Permissions API is already installed**, along with LuckPerms. This does not prove that ReMorphed 4.0 exposes modern permission nodes; verify exact current jar/config before enabling them. Do NOT ask the owner to install Fabric Permissions API again.
+- Owner **authorizes meaningful, bounded gameplay substitutions** for source mechanics impossible under the current datapack-plus-installed-mod setup, so long as behavior changes are visible and marked partial, not silent or disguised full completions.
+- No KubeJS, custom Java/Fabric extension or Immersive Portals; no live SMP install/deployment from source CI.
+- Owner authorizes ordinary GitHub source edits and merges after all four exact-head checks and requests proactive, brief notice if a real mod API, dependency, changed game behavior or testing decision needs involvement. Do not repeatedly request generic permission.
 
-The engineer can keep implementing source batches **without asking again for general authorization**. Before implementing exact PvP filtering or certain advanced mods, the owner can help by supplying:
+## Seq1 progression and testing truth
 
-1. The actual **mod jar list and Fabric startup log**, especially ReMorphed 4.0, SkinShifter, LuckPerms and whether Fabric Permissions API is present. This can wait until command integration or runtime acceptance.
-2. **How players are assigned allies/enemies**: vanilla Minecraft scoreboard team names/configuration versus another plugin/mod concept. Do not invent or silently change teams.
-3. If a required mechanic cannot be reproduced under the current installed mods, choose explicitly between **a documented weaker datapack workaround** or **authorizing an additional existing 1.18.2 event-capable mod**. No scripting dependency or custom Java may be added without this decision.
+- PR #39 implemented default-fail-closed **OP opt-in test-only Sequence2->1** after real 5 acting marks, altar and 1 Nether Star + 8 Ender Pearls. The transition clears slots, grants ten Resonance powers and preserves both parent identities in scoped sources, with admin pause/resume and repair. See docs/ARCANE_SEQ1_OPERATOR_TEST.md.
+- The separate optional OP manual power preview from PR #35 remains useful for individual source effect tests. Both previews are **not** a production release. Neither proves gameplay even if GitHub Actions pass.
+- Test real 1.18.2 startup, pack load/reload, actual cooldowns, PvP friend/enemy/neutral, OP vs nonOP permissions, packet/keybind collisions, respawn/relog/restart, performance and rollback with PASS / FAIL / NOT RUN and logs before releasing normal Seq1.
 
-**Immediate source tasks:** tackle Sin-Bearing/Death-save resource state and bounded timers, implement real slot-to-Resonance transition with rollback tests in an isolated feature flag, close individual register gaps with concrete mechanics, verify team-scope operations against vanilla commands, and get in-game acceptance logs from the owner before calling any build ready.
+## Only if owner input becomes necessary
+
+Ask once for the **actual server mods directory filenames and Fabric startup log**, plus ReMorphed 4.0 and SkinShifter 1.0 configs, when verifying exact old-version permission/skin/morph commands. Ask for the current scoreboard team membership only if custom team names are wanted. User has supplied adequate authorization to continue other source work without waiting. Clearly propose a bounded substitute versus a new dependency if the verified mod API lacks a needed hook.
+
+**Next focused source tasks:** Hanged Man Sin scoreboard lifecycle and no-friendly-fire burst; audit optional mod integration command names, implement direct-effect gaps with tests, reduce major partial fidelity debt, and run genuine test-world acceptance. Do not call compiled 402/434 equivalent to 402 verified behaviors.
