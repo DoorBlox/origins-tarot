@@ -37,15 +37,6 @@ def fate_roll(positive_only=False):
 
 
 def register(add):
-    add("death", 9, "Reaper's Touch",
-        power("Reaper's Touch", "Undead melee hits receive Weakness I 60t.",
-              "origins:target_action_on_hit", cooldown=200,
-              target_condition=UNDEAD, entity_action=apply("weakness", 60)))
-    add("strength", 4, "Hunter's Bane",
-        power("Hunter's Bane", "Deal 15% more melee damage to tagged undead.",
-              "origins:modify_damage_dealt",
-              target_condition=UNDEAD, modifier=mod(0.15)),
-        "partial", "Rev2 also covers demons; no safe authoritative demon tag is defined")
     add("strength", 7, "Master's Grip",
         power("Master's Grip", "Projectile damage is reduced 25%.",
               "origins:modify_projectile_damage", modifier=mod(-0.25)),
