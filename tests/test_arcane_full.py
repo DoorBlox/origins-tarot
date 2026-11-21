@@ -25,6 +25,59 @@ class CompleteCatalogTests(unittest.TestCase):
         self.assertIn("tarot:fool/9_spirit_vision", powers)
         self.assertIn("tarot:fool/9_clown_s_mischief", powers)
 
+    def test_batch_two_native_effects_are_source_traced(self):
+        from arcane_rev3.powers import norm
+        root=Path(__file__).resolve().parents[1]
+        powers,manifest,kits=compile_powers(root)
+        expected={
+            ("empress",9,"Mirror Veil"),
+            ("emperor",4,"Fallen Aura"),
+            ("wheel_of_fortune",9,"Fate's Current"),
+            ("justice",4,"Emotional Push"),
+            ("justice",9,"Patient Observation"),
+            ("hanged_man",7,"Shadow Cloak"),
+            ("sun",7,"Solar Flare"),
+            ("sun",5,"Purify"),
+            ("world",4,"Historical Recall"),
+            ("tower",4,"Impact"),
+            ("star",2,"Conceal"),
+            ("hermit",1,"Prying Eyes"),
+            ("sun",1,"Beacon of Faith II"),
+        }
+        for slug,seq,name in expected:
+            key=next((m for m in manifest if m["family"]=="individual"
+                      and m["pathway"]==slug and m["sequence"]==seq
+                      and norm(m["name"])==norm(name)),None)
+            self.assertIsNotNone(key,(slug,seq,name))
+            self.assertEqual(key["status"],"partial" if name!="Solar Flare" else "full")
+            self.assertIn(key["power_id"],powers)
+            self.assertTrue(key["missing"] if key["status"]=="partial" else True)
+
+    def test_fates_current_exact_six_equal_1_of_6_outcomes(self):
+        root=Path(__file__).resolve().parents[1]
+        powers,_,_=compile_powers(root)
+        current=powers["tarot:wheel_of_fortune/9_fate_s_current"]
+        self.assertEqual(current["type"],"origins:action_over_time")
+        self.assertEqual(current["interval"],1800)
+        choices=current["entity_action"]
+        self.assertEqual(choices["type"],"origins:choice")
+        self.assertEqual(len(choices["actions"]),6)
+        self.assertEqual([a["weight"] for a in choices["actions"]],[1]*6)
+        self.assertEqual({a["element"]["effect"]["effect"].split(":")[1]
+                          for a in choices["actions"]},
+                         {"speed","haste","absorption","hunger","slowness","mining_fatigue"})
+
+    def test_undead_only_solar_flare_never_targets_regular_players(self):
+        root=Path(__file__).resolve().parents[1]
+        powers,_,_=compile_powers(root)
+        flare=powers["tarot:sun/7_solar_flare"]
+        self.assertEqual(flare["type"],"origins:attacker_action_when_hit")
+        conditional=flare["entity_action"]
+        self.assertEqual(conditional["type"],"origins:if_else")
+        self.assertEqual(conditional["condition"]["tag"],"tarot:undead")
+        self.assertEqual(conditional["if_action"]["chance"],0.2)
+        self.assertEqual(conditional["if_action"]["action"]["effect"]["duration"],40)
+
     def test_alias_is_nonop_and_player_scoped(self):
         doc=alias()
         self.assertEqual((doc["schemaVersion"],doc["commandMode"],doc["command"],doc["permission"]),
