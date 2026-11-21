@@ -94,8 +94,8 @@ def compile_powers(root):
         if accuracy not in ("full", "partial") or (accuracy == "partial" and not missing):
             raise ValueError("partial implementation requires disclosed missing details")
         card, entry, family = entries[key]
-        if family != "individual":
-            raise ValueError("wrong family")
+        if family not in ("individual","resonance"):
+            raise ValueError("unknown catalog family")
         if not value.get("type", "").startswith("origins:") or value["type"] == "origins:simple":
             raise ValueError("invalid or fake power")
         ident = "tarot:" + slug + "/" + str(seq) + "_" + entry["slug"]
@@ -666,6 +666,10 @@ def compile_powers(root):
     from .batches import native2
     for workstream in (support, control, mobility, native2):
         workstream.register(add)
+    # Resonance powers now compile into real JSON and manifest records.
+    # Full-build intentionally never grants them until all 10 per pair exist.
+    from .batches import resonance
+    resonance.register(add)
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}
