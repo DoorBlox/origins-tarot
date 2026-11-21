@@ -99,7 +99,16 @@
     "chiseled_quartz_block",
     "deepslate_tiles",
     "deepslate_bricks",
-    "polished_deepslate"
+    "polished_deepslate",
+    "stone_bricks",
+    "mossy_stone_bricks",
+    "cracked_stone_bricks",
+    "stone_brick_stairs",
+    "stone_brick_slab",
+    "stone_brick_wall",
+    "mossy_stone_brick_stairs",
+    "mossy_stone_brick_slab",
+    "mossy_stone_brick_wall"
   ],
   "blocks/unphasable": [
     "bedrock",
