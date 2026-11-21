@@ -173,8 +173,14 @@ class BulkGeneratorContractTests(unittest.TestCase):
         self.assertIn("function tarot_arcane:player/alone",tick)
         self.assertIn("scoreboard players add @s a_alone_time 0",tick)
         alone=self.read("player/alone")
-        self.assertIn("execute at @s if entity @a[distance=0.01..8]",alone)
-        self.assertIn("execute at @s unless entity @a[distance=0.01..8]",alone)
+        from arcane_rev3.team_policy import team_names
+        for name in team_names():
+            self.assertIn(
+                f"execute if entity @s[team={name}] at @s "
+                f"if entity @a[team={name},distance=0.01..8]", alone)
+        # Enemies or neutral players must NEVER reset Lovers' identity
+        # isolation: the old anywhere-player counter was too permissive.
+        self.assertNotIn("@a[distance=0.01..8]", alone)
         self.assertIn("scoreboard players set @s a_alone_time 601",alone)
         self.assertIn("scoreboard players add @s a_alone_time 1",alone)
         for slug in ("fool","lovers"):
