@@ -2,6 +2,18 @@
 
 > **Arcane V2 Rev3 is a separate DEVELOPMENT datapack.** Source-complete does not mean gameplay-complete: 434/434 source definitions, 73 full and 361 PARTIAL; 110/110 Resonance entries source-defined, normal Sequence 1 locked. Do not install it alongside legacy Tarot V2/V3 or assume old player scores migrate. Check [the handoff](CHATGPT_HANDOFF.md), [AGENTS.md](AGENTS.md) and [issue #20](https://github.com/DoorBlox/origins-tarot/issues/20) for the live source checkpoint.
 
+## Arcane Rev3 — written books (no Command Aliases needed)
+
+**Vanilla Minecraft 1.18.2 can display interactive written books**, so the latest Arcane development build uses them by default instead of long chat explanations.
+
+- **`/trigger a_book`** or **`/trigger a_guide`**: receive the Arcane Handbook, including setup, controls, quests and every normal ritual milestone. **Right-click it in your inventory to open the book screen.**
+- **`/trigger a_tome`** or **`/trigger a_abilities`**: receive your own pathway's source-grounded ability Tome, with Sequence-index page links, actual effects, activation and incomplete mechanics.
+- **`/trigger a_partner_tome`**: receive the linked second-path Tome after unlocking Sequence 4.
+- **`/trigger a_hud set 2`**: show a private Sequence/acting-mark/next-phase progress actionbar; **`/trigger a_hud set 3`** turns it off. This is player-scoped and optional; a shared vanilla bossbar could show the wrong player's progress.
+- **`/trigger a_roadmap`** and **`/trigger a_slots`**: retain the short live status and slot controls in chat; a written book's pages cannot display live, changing scoreboard values.
+
+**No Command Aliases mod configuration is required for any `/trigger` command.** The optional `tarot.json` adds shortcuts like `/tarot book`, but you can ignore it. The datapack cannot automatically open the book screen; hold the given book and right-click. Existing SMP installs do not receive this functionality until they are upgraded with the new Rev3 ZIP after a full world backup.
+
 ## Play Arcane Rev3: in-game abilities and ascension
 
 **[Read the Arcane Rev3 Player Guide](docs/ARCANE_REV3_PLAYER_GUIDE.md)** for an exact Sequence 9→2 ascension roadmap, all 22 acting methods, ritual ingredients, editable slots, active keys, and the non-OP in-game commands.

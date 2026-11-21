@@ -4,11 +4,25 @@
 
 This guide is about **Arcane Rev3**, not the legacy Tarot V2 pack or the separate older V3. There are **434 source-defined abilities: 73 source-full and 361 PARTIAL**. The 110 paired Resonance entries exist in source, but **Sequence 1 is LOCKED for normal SMP play**. Source compilation is not proof of every Minecraft mechanic working.
 
+## New default: the in-game written books (no Command Aliases)
+
+The preferred way to read explanations in Minecraft 1.18.2 is the vanilla **written-book GUI**:
+
+1. Use **`/trigger a_book`** to receive the **Arcane Handbook**. New Tarot players are also given this book when they awaken. Hold it and **right-click**; use the clickable page index to jump to controls, quests and Sequence 9→2 materials.
+2. Use **`/trigger a_tome`** or **`/trigger a_abilities`** to receive your **Pathway Tome**, covering Sequence kit pages, every ability's real implementation, controls, and missing mechanics. Open the book in hand and select a Sequence using the index.
+3. At **Sequence 4**, use **`/trigger a_partner_tome`** to receive the linked second-path Tome. This is a read-only reference: it doesn't equip locked abilities.
+4. To see your own **live progress**, type **`/trigger a_hud set 2`** (opt-in actionbar) or use **`/trigger a_roadmap`** for live acting marks, cooldown, next task and ritual status. Turn the HUD off using **`/trigger a_hud set 3`**, or toggle with **`/trigger a_hud set 1`**.
+5. **`/trigger a_slots`** and **`/trigger a_focus_menu`** remain chat interactions for modifying slots and focus. Written books are static and cannot display realtime scores or instantly open themselves by a datapack command.
+
+**You have not configured Command Aliases? That's fine.** All commands above are vanilla player `/trigger` commands, usable without OP privileges. The optional `tarot.json` shortcut file is not necessary. For any book, keep it in your inventory and right-click to open: datapacks cannot directly force the book GUI to open.
+
+The HUD is **private and opt-in**, because a single server-wide bossbar cannot reliably render each player's separate Sequence/mark values. It updates about every two seconds and displays your Sequence, current marks/threshold, whether the next acting proof is ITEM or EVENT, and remaining proof-cooldown ticks. It does not change your XP, stats or progression.
+
 ## Quick start — find and understand your abilities
 
 1. Select a Tarot Origin. You start at **Sequence 9** with **one automatically equipped Sequence kit**.
-2. Type **/tarot guide**, or without Command Aliases **/trigger a_guide**. The help menu is also **/trigger a_help**.
-3. Type **/tarot abilities**, or **/trigger a_abilities**. Click a numbered slot, then click **[DETAILS]** on a listed ability. The inspector explains the current implementation, how it activates, and what is still missing.
+2. Use **/trigger a_book** (or **/trigger a_guide**) to receive the written Handbook. Open it in your hand; **/trigger a_help** gives brief chat shortcuts.
+3. Use **/trigger a_tome** (or **/trigger a_abilities**) for a written Pathway Tome. Click a Sequence in the book to read each ability and its limitations.
 4. Type **/tarot roadmap**, or **/trigger a_roadmap**, to see your next acting proof, required marks, offerings, altar conditions and next Sequence unlock.
 5. Use the clickable buttons in chat; non-OP players can navigate with vanilla triggers. To inspect directly, use **/trigger a_kit set 1** then **/trigger a_detail set 1**. With Command Aliases, **/tarot kit 1** and **/tarot detail 1** also work.
 
