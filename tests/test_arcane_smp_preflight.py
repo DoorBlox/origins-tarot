@@ -6,6 +6,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 from scripts.arcane_smp_preflight import audit_world, compare_upgrade, inspect_pack
+from arcane_rev3.full_build import build
 
 
 def pack(path, *, kind="arcane", extra_powers=()):
@@ -91,6 +92,27 @@ class SMPPreflightTests(unittest.TestCase):
         self.assertEqual(before, path.read_bytes())
         self.assertEqual(state_before, sorted(p.relative_to(self.world) for p in self.world.rglob("*")))
 
+
+    def test_actual_emitted_arcane_zips_recognized_not_legacy(self):
+        with tempfile.TemporaryDirectory() as output:
+            variants = build(output=Path(output))
+            for variant in ("only", "addon"):
+                with self.subTest(variant=variant):
+                    result = inspect_pack(variants[variant])
+                    self.assertEqual(result["family"], "arcane_rev3")
+                    self.assertEqual(result["pack_format"], 9)
+                    self.assertTrue(result["is_arcane_rev3"])
+                    self.assertGreaterEqual(len(result["origin_ids"]), 22)
+                    self.assertGreaterEqual(len(result["power_ids"]), 434)
+                    self.assertEqual(result["issues"], [])
+
+    def test_outer_actions_zip_is_not_a_datapack(self):
+        with ZipFile(self.dp / "outer.zip", "w") as archive:
+            archive.writestr("Arcane_Rev3_22_Origins_ONLY_DEV_1.18.2.zip", "fake inner")
+        result = inspect_pack(self.dp / "outer.zip")
+        self.assertEqual(result["family"], "outer_artifact")
+        self.assertIn("extract_outer_actions_artifact_first", result["issues"])
+        self.assertIn("outer_artifact_uploaded", audit_world(self.world)["blockers"])
 
 if __name__ == "__main__":
     unittest.main()
