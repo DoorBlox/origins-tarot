@@ -16,5 +16,8 @@
     "java": ">=17",
     "fabric-api": "*",
     "origins": ">=1.4.1"
-  }
+  },
+  "mixins": [
+    "tarot.arcane.mixins.json"
+  ]
 }

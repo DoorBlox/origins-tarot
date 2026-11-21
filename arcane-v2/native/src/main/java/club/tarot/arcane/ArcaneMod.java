@@ -22,7 +22,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 /** Native no-KubeJS command, persistence, and Apoli power-source bridge. */
 public final class ArcaneMod implements ModInitializer {
     public static final Logger LOG = LoggerFactory.getLogger("tarot-arcane-v2");
-    private static final String SOURCE = "tarot:slot";
+    private static final String SOURCE = "tarot_slot";
 
     @Override public void onInitialize() {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(
@@ -48,7 +48,7 @@ public final class ArcaneMod implements ModInitializer {
                 .then(literal("debug").requires(src -> src.hasPermissionLevel(2))
                     .then(literal("sequence").then(argument("level",IntegerArgumentType.integer(0,9))
                         .executes(c -> withPlayer(c,(p,s,r) -> onSequenceChange(p,s,r,IntegerArgumentType.getInteger(c,"level"))))))
-        ));
+        )));
         ServerPlayConnectionEvents.JOIN.register((handler,sender,server) ->
             server.execute(() -> enrollAndRefresh(handler.getPlayer())));
         ServerTickEvents.END_SERVER_TICK.register(server -> {
