@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:chiseled_stone_bricks",
+    "minecraft:quartz_block",
+    "minecraft:quartz_bricks",
+    "minecraft:chiseled_quartz_block",
+    "minecraft:deepslate_tiles",
+    "minecraft:deepslate_bricks",
+    "minecraft:polished_deepslate"
+  ]
+}

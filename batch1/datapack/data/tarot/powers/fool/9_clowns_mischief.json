@@ -1,0 +1,17 @@
+{
+  "type": "origins:action_on_callback",
+  "name": "Clown's Mischief",
+  "description": "On hostile hit, 20% chance to blind attacker for 20 ticks; cooldown 100 ticks. Team-safe scripted hit filter.",
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_9_clowns_mischief"
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_9_clowns_mischief"
+  },
+  "entity_action_lost": {
+    "type": "origins:execute_command",
+    "command": "tag @s remove tc_fool_9_clowns_mischief"
+  }
+}

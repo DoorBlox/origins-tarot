@@ -1,0 +1,17 @@
+{
+  "type": "origins:action_on_callback",
+  "name": "Trickster's Favor",
+  "description": "10% chance on hostile target acquisition to misdirect aggro within 6 blocks; cooldown 200 ticks. Proximity approximation.",
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_8_tricksters_favor"
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "tag @s add tc_fool_8_tricksters_favor"
+  },
+  "entity_action_lost": {
+    "type": "origins:execute_command",
+    "command": "tag @s remove tc_fool_8_tricksters_favor"
+  }
+}

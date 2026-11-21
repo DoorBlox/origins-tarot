@@ -1,0 +1,13 @@
+{
+  "type": "origins:modify_exhaustion",
+  "name": "Spiritual Expenditure",
+  "description": "Sprinting costs 25% more exhaustion. Gliding surcharge is applied separately by KubeJS.",
+  "modifier": {
+    "name": "Spiritual expenditure +25%",
+    "operation": "multiply_total",
+    "value": 0.25
+  },
+  "condition": {
+    "type": "origins:sprinting"
+  }
+}

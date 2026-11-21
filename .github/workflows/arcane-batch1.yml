@@ -1,0 +1,33 @@
+name: Arcane Batch 1 Fool and Slot Engine
+on:
+  push:
+    branches: ['feat/arcane-batch1-fool-slot-engine-20261121']
+  pull_request:
+  workflow_dispatch:
+jobs:
+  structural-and-slot-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check every KubeJS handler syntax
+        run: |
+          find batch1/kubejs -type f -name '*.js' -print0 | xargs -0 -n 1 node --check
+      - name: Run Python datapack contracts
+        run: python3 -m unittest discover -s batch1/tests -v
+      - name: Run simulated slot-engine behavior
+        run: node batch1/tests/test_slot_model.js
+      - name: Build isolated test world artifacts
+        run: python3 batch1/tools/package_batch1.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tarot-arcane-batch1-fool-test-world
+          path: batch1/output/*.zip
+          if-no-files-found: error

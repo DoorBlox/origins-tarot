@@ -1,0 +1,16 @@
+{
+  "type": "origins:active_self",
+  "name": "Full Faceless Disguise",
+  "description": "G: disguised presence for 2400-2880 ticks, 6000 tick cooldown. Server approximation uses invisibility; exact skin/name/model needs a client mod.",
+  "cooldown": 1,
+  "hud_render": {
+    "should_render": false
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:execute_command",
+    "command": "function tarot_batch1:request/g"
+  }
+}
