@@ -63,15 +63,15 @@ class ArcaneUpgradeSafetyTests(unittest.TestCase):
         self.assertTrue(r["static_compatibility"], r["blockers"])
 
     def test_cannot_remove_previously_saved_origin_power_id(self):
-        write_pack(self.candidate)
+        write_pack(self.candidate, power="8_new")
+        # Preserve an otherwise valid archive; remove ONLY one persisted
+        # power ID. Missing mandatory metadata must not mask this regression.
         with ZipFile(self.candidate) as z:
-            pass
-        # A new ZIP containing a different definition but omitting the old ID.
+            members = {name: z.read(name) for name in z.namelist()
+                       if name != "data/tarot/powers/moon/9_identity.json"}
         with ZipFile(self.candidate, "w") as z:
-            z.writestr("pack.mcmeta", '{"pack":{"pack_format":9}}')
-            z.writestr("data/tarot/origins/moon.json", '{"powers":[]}')
-            z.writestr("data/tarot/powers/moon/8_new.json", '{"type":"origins:simple"}')
-            z.writestr("data/tarot_arcane/functions/load.mcfunction", "")
+            for name, payload in members.items():
+                z.writestr(name, payload)
         r = compare_arcane_zips(self.previous, self.candidate)
         self.assertIn("removed_power_ids", r["blockers"])
         self.assertFalse(r["static_compatibility"])
