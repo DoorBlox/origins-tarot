@@ -16,7 +16,7 @@ ROOT=Path(__file__).resolve().parent.parent
 SOURCE="tarot_arcane:slot_grants"
 PREFIX="tarot_arcane:"
 NUM={slug:i+1 for i,slug in enumerate(PATHWAYS)}
-SCORES=("a_init","a_path","a_partner","a_seq","a_mode","a_max","a_marks","a_phase",
+SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_marks","a_phase",
         "a_actcd","a_combat","a_clock","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8")
@@ -115,16 +115,16 @@ def emit_player(w,kits):
     w.f("tick","execute as @a at @s run "+F("player/tick"))
     w.f("player/tick",
         [f"scoreboard players enable @s {x}" for x in TRIGGERS],
-        "execute unless score @s a_init matches 1 run "+F("player/detect"),
+        "execute unless score @s a_init matches 1 unless score @s a_paused matches 1 run "+F("player/detect"),
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
-        "execute if score @s a_assign matches 1.. run "+F("slot/assign"),
-        "execute if score @s a_clear matches 1.. run "+F("slot/clear"),
-        "execute if score @s a_swap matches 1.. run "+F("slot/swap"),
-        "execute if score @s a_auto matches 1.. run "+F("slot/auto"),
-        "execute if score @s a_reset matches 1.. run "+F("slot/auto"),
-        "execute if score @s a_ascend matches 1.. run "+F("ascend/dispatch"),
+        "execute unless score @s a_paused matches 1 if score @s a_assign matches 1.. run "+F("slot/assign"),
+        "execute unless score @s a_paused matches 1 if score @s a_clear matches 1.. run "+F("slot/clear"),
+        "execute unless score @s a_paused matches 1 if score @s a_swap matches 1.. run "+F("slot/swap"),
+        "execute unless score @s a_paused matches 1 if score @s a_auto matches 1.. run "+F("slot/auto"),
+        "execute unless score @s a_paused matches 1 if score @s a_reset matches 1.. run "+F("slot/auto"),
+        "execute unless score @s a_paused matches 1 if score @s a_ascend matches 1.. run "+F("ascend/dispatch"),
         [f"scoreboard players set @s {x} 0" for x in TRIGGERS],
         "execute if score @s a_init matches 1 run scoreboard players add @s a_clock 1",
         "execute if score @s a_actcd matches 1.. run scoreboard players remove @s a_actcd 1",
@@ -137,6 +137,7 @@ def emit_player(w,kits):
             "execute unless score @s a_init matches 1 if score @s a_probe matches 1 run "+F("player/init/"+slug)])
         w.f("player/init/"+slug,
             "scoreboard players set @s a_init 1",
+            "scoreboard players set @s a_paused 0",
             f"scoreboard players set @s a_path {idnum}",
             f"scoreboard players set @s a_partner {NUM[PARTNER[slug]]}",
             "scoreboard players set @s a_seq 9",
@@ -159,7 +160,8 @@ def emit_player(w,kits):
             f"execute if score @s a_path matches {i} if score @s a_probe matches 0 run origin set @s origins:origin tarot:{slug}"])
     w.f("player/verify",verify)
     w.f("player/periodic","scoreboard players set @s a_clock 0",
-        F("player/verify"),F("powers/reconcile"))
+        "execute unless score @s a_paused matches 1 run "+F("player/verify"),
+        "execute unless score @s a_paused matches 1 run "+F("powers/reconcile"))
     for kind,trigger in (("taken","minecraft:entity_hurt_player"),("dealt","minecraft:player_hurt_entity")):
         w.j("data/tarot_arcane/advancements/events/combat_"+kind+".json",{
             "criteria":{"hit":{"trigger":trigger}},
@@ -249,12 +251,21 @@ def emit_grants(w,kits):
                 f"execute if score @s a_has matches 0 run power grant @s {ident} {SOURCE}"]
         w.f(f"kits/{slug}/repair_s{seq}",checks)
         for i in range(1,9):
-            refresh.append(f"execute if score @s a_s{i} matches {code} run "+F(f"kits/{slug}/s{seq}"))
-            repair.append(f"execute if score @s a_s{i} matches {code} run "+F(f"kits/{slug}/repair_s{seq}"))
+            refresh.append(f"execute unless score @s a_paused matches 1 if score @s a_s{i} matches {code} run "+F(f"kits/{slug}/s{seq}"))
+            repair.append(f"execute unless score @s a_paused matches 1 if score @s a_s{i} matches {code} run "+F(f"kits/{slug}/repair_s{seq}"))
     w.f("powers/refresh",refresh)
     w.f("powers/reconcile",repair)
-    w.f("admin/rollback_player","power revokeall @s "+SOURCE,msg("Arcane slot powers revoked; progression preserved.","yellow"))
+    w.f("admin/rollback_player",
+        "scoreboard players set @s a_paused 1",
+        "power revokeall @s "+SOURCE,
+        msg("Arcane runtime PAUSED by administrator; slot powers revoked until explicit resume.","yellow"))
     w.f("admin/rollback_all","execute as @a run "+F("admin/rollback_player"))
+    w.f("admin/resume_player",
+        "scoreboard players set @s a_paused 0",
+        "execute if score @s a_init matches 1 run "+F("player/verify"),
+        "execute if score @s a_init matches 1 run "+F("powers/refresh"),
+        msg("Arcane runtime RESUMED by administrator; owned kit restored.","green"))
+    w.f("admin/resume_all","execute as @a run "+F("admin/resume_player"))
 
 
 def emit_ui(w):
@@ -265,6 +276,7 @@ def emit_ui(w):
         msg("Seq1 Resonance temporarily gated until all 10 pair powers exist.","red"))
     w.f("ui/status",
         "execute unless score @s a_init matches 1 run "+msg("Choose a Tarot origin.","red"),
+        "execute if score @s a_paused matches 1 run "+msg("Arcane runtime paused by administrator; ask an admin to resume.","red"),
         "execute if score @s a_init matches 1 run tellraw @s "+J([
             {"text":"[Tarot] Path: ","color":"gold"},score("a_path"),
             {"text":" | Paired: "},score("a_partner"),
