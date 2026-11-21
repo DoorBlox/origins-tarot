@@ -209,20 +209,23 @@ def register(add):
     add("walking_sanctuary", 2, "Mobile Sanctum",
         active("Mobile Sanctum", "Secondary key regenerates self and withers nearby undead.",
                combined(apply("regeneration", 200),
+                        ally_effect("regeneration", 200, 3),
                         effect(mobs(3, "undead"), "wither", 200)),
                1200),
-        "partial", "No Incorporeal activation coupling, spawn suppression, exact 2 damage/sec or same-team-only player healing")
+        "partial", "No Incorporeal activation coupling, spawn suppression or exact 2 undead damage/sec; team-only player Regeneration is a one-shot radius-three pulse")
     add("walking_sanctuary", 1, "Spectral White Angel",
         active("Spectral White Angel", "Primary key regenerates self and weakens undead.",
                combined(apply("regeneration", 300, 1),
+                        ally_effect("regeneration", 300, 15, 1),
                         effect(mobs(15, "undead"), "wither", 300, 1)),
                3600, primary=True),
-        "partial", "No 15-block light field, phasing requirement, exact undead 3 damage/sec or ally Regeneration II")
+        "partial", "No 15-block light field, phasing requirement or exact undead 3 damage/sec; ally Regeneration II is a one-shot allowed-team pulse")
     add("walking_sanctuary", 0, "The Walking Sanctuary",
         cap("The Walking Sanctuary", 24000, 1200,
             apply("regeneration", 1200, 1),
+            ally_effect("regeneration", 1200, 15, 1),
             effect(mobs(15, "undead"), "wither", 300, 1)),
-        "partial", "No mobile anti-spawn domain, persistent phasing, ally-only heal, hunger recovery, reaction damage/Blindness when allies attacked or final 3-second enlarged pulse")
+        "partial", "No mobile anti-spawn domain, persistent phasing, hunger recovery, reaction damage/Blindness or final enlarged pulse; allies only gain one-shot regeneration on listed teams")
 
     # High Priestess + Wheel: no fabricated questions/inventory disclosures.
     add("loaded_dice", 3, "Prophetic Vision",
