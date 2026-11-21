@@ -622,29 +622,6 @@ def compile_powers(root):
         modifier={**mod(0.60,"addition"),
                   "attribute":"minecraft:generic.knockback_resistance"}),
         "partial", "Rev2 upgrades +45% to +60%, not additive; this standalone bonus stacks if both slots equipped")
-    add("moon", 4, "Shaman", power("Shaman",
-        "Heal 1.5 hearts (3 HP) every 600 ticks at night.",
-        "origins:action_over_time",interval=600,
-        condition={"type":"origins:daytime","inverted":True},
-        entity_action={"type":"origins:heal","amount":3}),
-        "partial", "Rev2 upgrades Blood's Renewal; both effects can independently heal if both selected")
-    add("world", 1, "Cold Precision II", power("Cold Precision II",
-        "Projectiles deal 30% more damage.",
-        "origins:modify_projectile_damage",modifier=mod(0.30)),
-        "partial", "Rev2 upgrades Cold Precision from 25% to 30%, rather than stacking them")
-    add("sun", 4, "Unshadowed II", power("Unshadowed II",
-        "Deal 50% more damage to undead targets.",
-        "origins:modify_damage_dealt",
-        target_condition={"type":"origins:in_tag","tag":"tarot:undead"},
-        modifier=mod(0.50)),
-        "partial", "Rev2 replaces 40% Unshadowed bonus; both sequence kits may stack")
-    add("hanged_man", 4, "Dark Blade", compound("Dark Blade",
-        attack={"type":"origins:conditioned_attribute","tick_rate":20,
-                "modifier":{**mod(0.15),"attribute":"minecraft:generic.attack_damage"},
-                "condition":{"type":"origins:health","comparison":"<","compare_to":12}},
-        speed={"type":"origins:conditioned_attribute","tick_rate":20,
-               "modifier":{**mod(0.10),"attribute":"minecraft:generic.movement_speed"},
-               "condition":{"type":"origins:health","comparison":"<","compare_to":12}}))
     add("star", 4, "Nightwatch II", compound("Nightwatch II",
         speed={"type":"origins:conditioned_attribute","tick_rate":20,
                "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.467},
