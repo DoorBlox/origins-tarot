@@ -1,37 +1,28 @@
-# Arcane V2 Rev3 — current source blockers and fidelity debt
+# Arcane V2 Rev3 — complete source coverage; remaining gameplay fidelity and release gates
 
-**2026-11-22 source checkpoint for [PR #48](https://github.com/DoorBlox/origins-tarot/pull/48)** (do not call merged until four exact-head CI checks pass). The authoritative Rev2 catalog remains **434 abilities** (324 individual and 110 Resonance). Expected manifest after PR48: **433 source-compiled = 73 source-full + 360 source-PARTIAL, one blocked**, all **110/110 Resonance** source-defined. These are generated source definitions, **NOT gameplay-verified abilities**.
+**PR #49 source-only checkpoint (2026-11-22; pending final merge).** All **434/434** authoritative Rev2 abilities have concrete source definitions: **73 source-full, 361 explicitly partial, 0 source-blocked**; all **110/110** fixed-pair Resonance definitions are present. These are authoring statistics, **NOT 434 verified gameplay mechanics**.
 
-## One still-uncompiled individual requirement
+## Last source blocker: Hierophant Dietary Expansion
 
-| Pathway | Seq | Ability | What must be engineered |
-| --- | ---: | --- | --- |
-| Hierophant | 1 | **Dietary Expansion** | Exact **fish-only** exception to the Hierophant’s permanently pinned Seq9 **Sacred Dietary Vow**. The original ban uses item tag `tarot:meat` (including fish), and this needs a reversible, source-owned exception only while the Seq1 improvement is active, still banning nonfish meat without creating a removable identity loophole |
+- **Pinned permanent Seq9 identity remains.** The Sacred Dietary Vow native Origin power is not a removable slot. Existing tarot:meat tag is split into exactly six fish items and eleven nonfish meat items via new tarot:fish and tarot:nonfish_meat tags.
+- **Nonfish meat stays prohibited unconditionally.** The original immutable vow is now a native multiple power with one unconditional nonfish prevent_item_use subpower and one independent fish prevent_item_use subpower.
+- **Fish is allowed only when the trusted Arcane slot source grants Seq1 Dietary Expansion.** The fish restriction has an inverted origins:power condition tied to tarot:hierophant/1_dietary_expansion from tarot_arcane:slot_grants. Revoking that source power restores the fish restriction. The upgrade itself still bans nonfish meat, so no disappearance of permanent nonfish identity is possible.
+- **PARTIAL by design:** normal Rev3 Sequence1 is the fixed paired Resonance rather than an equipable individual Seq1 kit. This source-defined exception is useful for an opt-in developer grant and future unlock policy, but normal players do not automatically acquire it. Real 1.18.2 runtime acceptance is pending. See https://github.com/DoorBlox/origins-tarot/pull/49 and tests/test_arcane_dietary_expansion.py.
+- No dummy origins:simple, OP access, vanilla inventory mutation or client mod added; four exact-head CI workflows required before merge.
 
-Do not add a dummy `origins:simple` merely to force 434. If the exact source-owned carveout cannot be achieved, implement only a genuine meaningful subset with explicit PARTIAL disclosure or keep this entry blocked.
+## Remaining 361 partial fidelity gaps
 
-## Hanged Man Sin — implemented as a partial source-backed subsystem
+- **Sin resource:** six Hanged Man powers use capped damage-taken scoreboard storage, 200-tick idle dissipation, team-safe low-health weakening, Trinity 100t window, and bounded 1200t capstone with 14400t cooldown. Still unable to identify exact *distinct* damage sources, dynamically inflict stored HP as direct AoE, heal exact percent of Sin, or summon source-faithful attacking minions. PARTIAL labels are permanent until those semantics exist and are tested.
+- **Resonance:** all 11 paired suites have ten source powers each, but many are partial native substitutes; normal Sequence1 remains fail-closed, OP-gated real Seq2-to-1 ritual is test-world only.
+- **World/API:** source cannot truly implement protected adjacent blockbreak, cross-lectern storage, enchanting lapis discounts, arbitrary mob AI aggro, real revival of historical mobs, other-player chat editing, precise potion resource events, client model/skin manipulation, world-state light/weather zones and exact score-driven damage under current datapack-only 1.18.2 runtime. Do not overclaim.
+- **Team safety:** only explicit allowlisted vanilla teams tarot_red, tarot_blue, tarot_green, tarot_gold; same team allies, different known teams enemies, unlisted and teamless players neutral. LuckPerms group membership is not combat allegiance.
+- **Mods:** real server has ReMorphed 4.2, SkinShifter 1.3, Pehkui 3.8.3, Extra Keybinds 0.5.0, Fabric Permissions API 0.3.1 and LuckPerms 5.3.86. The older ReMorphed and SkinShifter do not inherit later permission APIs; do not invent mod command or automatic reset behavior.
+- **Runtime evidence:** after PR44 owner verified Moon Seq9 awakening and successful help/status/slots, with two residual chest.ingredient decoder errors. PR46 corrected these in source. The owner explicitly deferred that minor Minecraft server retest while source work continued. PR47, PR48 and PR49 are source-checked, not real in-game accepted. Offline mode intentional, initial Terralith worldgen heap OOM accepted caveat.
+- **No hosted SMP deployment** authorized by source CI. User authorizes source edits and merges after all four exact-head green workflows; not world/player data mutation.
 
-[PR #48](https://github.com/DoorBlox/origins-tarot/pull/48) adds six catalog-matched Hanged Man powers and `arcane_rev3/sin_engine.py`, all marked **PARTIAL**:
-- Seq9 **Sin-Bearing:** persistent scoreboard samples changes in the actual 1.18.2 damage-taken statistic, stores a rounded quarter into a **16HP-equivalent** capped resource, dissipates after **200 online ticks** without damage, triggers low-health bounded hostile/elected-opponent status pulse when below **8HP**, and has an owner-specific HUD. No fabricated exact damage-source callback or arbitrary dynamic damage.
-- Seq5 **Burden Bearer:** native **−10% incoming damage** while Sin resource positive, and **60-tick Regeneration** when it dissipates.
-- Seq3 **Trinity:** three received hit events within **100 ticks** give Resistance II for **60 ticks** and Instant Health I (2 hearts); cannot guarantee three *distinct sources*.
-- Seq1 **Sin Overflow:** 10-block hostile and explicit enemy-team debuffs, stronger Weakness/Slowness than base; can't inflict exact stored-Sin dynamic HP damage or heal precisely 75%.
-- Seq1 **Depraved Dependent:** 20% on kill (2400t cooldown) harmless smoke cloud lasting **300 ticks**, not fake attacking AI, max one concurrent rather than two; no persistent ownership.
-- Seq0 **Weight of Sin Made Manifest:** primary-key **1200t** active form, **14400t** cooldown, native −75% incoming damage and −15% movement, 80t bounded weakening nova and safe expiry; **not** exact 40-heart dynamic explosion, 100% conversion, kill minions or 50% stored-Sin proportional healing.
+## Next development priorities
 
-The engine resets on source revocation, pause, death, native Origin reselection, and tracks only online ticks. All negative player effects use explicit vanilla scoreboard teams, never unassigned/unlisted or friendly targets; world terrain is not edited. Some scoreboard sampling and player health readout mechanics still need **real in-game acceptance** and should not be called exact until tested. Regression tests enforce both generated ZIP variants, attack/decay thresholds, team-safe selectors, cleanup and exact source manifests.
-
-## 360 partial mechanics still need fidelity improvements
-
-- **Missing event APIs:** block-break adjacent blocks respecting protections, actual enchanting lapis discounts, cross-lectern storage, temporary light zones, exact AI aggro, genuine controlled minions and resurrection, potion consumption/healing scalars, exact chat editing, true invulnerability/teleport-cancellation, and event-perfect damage-source signatures cannot be promised under the 1.18.2 datapack-only constraint.
-- **UI and mods:** SkinShifter **1.3**, ReMorphed **4.2**, Pehkui **3.8.3**, Origins Extra Keybinds **0.5.0**, LuckPerms **5.3.86** and Fabric Permissions API **0.3.1** are installed. Old ReMorphed 4.2 does **not** have modern v7.1 granular permission nodes; SkinShifter 1.3 predates modern v3.0 LuckPerms support. Exact command activation + inverse/reset remains unverified. Do not grant wildcard admin permissions.
-- **Multiplayer:** fixed vanilla `tarot_red`, `tarot_blue`, `tarot_green`, `tarot_gold` combat teams; opposing teams only if both allowlisted; same-team allies; neutral/no-team players must not be hit by a custom negative player command. Never infer enemies from LuckPerms groups.
-- **Resonance:** 110/110 source definitions represented, many partial. Default Seq1 progression remains fail-closed; OP-enabled genuine Seq2→1 ritual remains **test-world only** pending actual game and PvP acceptance. All normal slot/progression rules through Seq2 preserved.
-- **Environment:** Moon Seq9 help/status/slots worked in actual server test after PR44, though two armor JSON decoder problems were observed; PR46 corrected those in source but user expressly **defers that minor Minecraft retest** while source development continues. No direct hosted player/world modifications. Existing intentional offline mode and early one-time Terralith worldgen OOM are accepted for development, not risk-free.
-
-## Standing owner decisions and next engineering work
-
-Owner authorizes safe GitHub changes and merges **only with four green exact-head CI workflows** and focused diff review. They want **substantial source development first** before consolidated game tests, and documented bounded substitutions without introducing KubeJS/new Java mods. Update `CHATGPT_HANDOFF.md`, this register and GitHub issue #20 at every major merge.
-
-**Next:** complete Hierophant’s safe reversible Dietary Expansion, then prioritize source-faithful upgrades of high-value PARTIAL powers, refine and test Sin/Resonance interactions and reserved team PvP safeguards, and finally run ONE consolidated backed-up 1.18.2 server DEV pack acceptance. **No production release or unvalidated gameplay-complete claim.**
+1. Raise *actual fidelity* of the highest-impact partial definitions, starting Sin, gameplay cooldowns, source identity, temporary-effect cleanup, AI/skin/mechanic fallback and full team/neutral safety.
+2. Audit all 11 Resonance suites against the Rev2/Rev3 handbooks, source grants and target rules before declaring them playable.
+3. At owner's preferred consolidated acceptance point, install one latest ONLY_DEV ZIP in a backed-up test world and check full data reload, no missing powers, 22 paths, 11 pairs, Moon Seq9 status, team safety, Sin state, death/relog/pause, mod commands and opt-in Seq1. Record PASS/FAIL/NOT RUN. No production promotion until verified.
+4. Avoid asking for already-supplied mod lists/logs, changing intentional offline mode, or demanding a restart after each small source change.

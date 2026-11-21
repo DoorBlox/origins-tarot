@@ -41,9 +41,9 @@ NEW = (
     ("judgement", 3, "Chaos Hunter"),
     ("judgement", 2, "Balance"),
 )
-KNOWN_BLOCKED = (
-    # The six Hanged Man Sin entries have moved to source-mapped PARTIAL
-    # status in wave9, but the Rev2 dietary-fish carveout is still blocked.
+FINAL_FORMERLY_BLOCKED = (
+    # Wave10 now supplies a real fish-only native carveout. Do not let
+    # any later refactor pretend it is fully source-complete without proof.
     ("hierophant", 1, "Dietary Expansion"),
 )
 
@@ -72,12 +72,14 @@ class Wave8CatalogTests(unittest.TestCase):
                                     "origins:simple")
                 self.assertIn(item["power_id"], self.kits[(slug, seq)])
 
-    def test_remaining_unimplemented_entries_are_not_falsely_completed(self):
-        for slug, seq, name in KNOWN_BLOCKED:
+    def test_final_formerly_blocked_entry_is_real_but_not_falsely_full(self):
+        for slug, seq, name in FINAL_FORMERLY_BLOCKED:
             with self.subTest(name=name):
                 item = self.index[(slug, seq, norm(name))]
-                self.assertEqual(item["status"], "blocked")
-                self.assertIsNone(item["power_id"])
+                self.assertEqual(item["status"], "partial")
+                self.assertIsNotNone(item["power_id"])
+                self.assertIn(item["power_id"], self.powers)
+                self.assertTrue(item["missing"])
 
     def test_exact_source_total_after_wave8(self):
         self.assertEqual(len(self.manifest), 434)
