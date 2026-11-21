@@ -20,7 +20,8 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_actcd","a_combat","a_clock","a_seen_dealt","a_seen_taken",
         "a_seen_bow","a_seen_crossbow","a_seen_trident","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
-        "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8")
+        "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8",
+        "a_view_slot","a_view_code","a_view_path","a_view_seq")
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend")
 
@@ -301,6 +302,12 @@ def emit_grants(w,kits):
 
 
 def emit_ui(w):
+    """Player-facing status/slots use real Arcana names, not encoded scores.
+
+    a_sN remains a compact, deterministic integer internally (card ID *100
+    + sequence). Render temporaries are per-player scoreboards, so requests
+    from different players cannot overwrite each other's slot display.
+    """
     w.f("ui/help",
         msg("Rev3 | /tarot status | /tarot slots | /tarot ascend","aqua"),
         msg("Seq4-2: /tarot slot N tarot:pathway S; /tarot slot N clear","yellow"),
@@ -309,18 +316,47 @@ def emit_ui(w):
     w.f("ui/status",
         "execute unless score @s a_init matches 1 run "+msg("Choose a Tarot origin.","red"),
         "execute if score @s a_paused matches 1 run "+msg("Arcane runtime paused by administrator; ask an admin to resume.","red"),
+        "execute if score @s a_init matches 1 run "+F("ui/status_primary"),
+        "execute if score @s a_init matches 1 if score @s a_seq matches ..4 run "+F("ui/status_partner"),
+        "execute if score @s a_init matches 1 if score @s a_seq matches 5.. run "+msg("Partner unlocks at Sequence 4.","yellow"),
         "execute if score @s a_init matches 1 run tellraw @s "+J([
-            {"text":"[Tarot] Path: ","color":"gold"},score("a_path"),
-            {"text":" | Paired: "},score("a_partner"),
-            {"text":" | Seq: "},score("a_seq"),
+            {"text":"[Tarot] Sequence: ","color":"gold"},score("a_seq"),
             {"text":" | Slots: "},score("a_max"),
-            {"text":" | Acting: "},score("a_marks")]))
+            {"text":" | Acting marks: "},score("a_marks")]))
+    w.f("ui/status_primary",[
+        f"execute if score @s a_path matches {c['id']} run "+msg("Primary: "+c["name"],"aqua")
+        for c in CARDS])
+    w.f("ui/status_partner",[
+        f"execute if score @s a_partner matches {c['id']} run "+msg("Unlocked partner: "+c["name"],"light_purple")
+        for c in CARDS])
+
     w.f("ui/slots",
         "execute unless score @s a_init matches 1 run "+msg("Choose a Tarot origin.","red"),
-        [f"execute if score @s a_init matches 1 if score @s a_max matches {i}.. run tellraw @s "+J([
-            {"text":f"[{i}] Kit code: ","color":"aqua"},score(f"a_s{i}")]) for i in range(1,9)],
-        "execute if score @s a_mode matches 0 run "+msg("SINGLE mode: automatic kits.","gold"),
-        "execute if score @s a_mode matches 1 run "+msg("SLOT mode: 0=empty; kit code=pathID*100+Seq.","yellow"))
+        [f"execute if score @s a_init matches 1 if score @s a_max matches {i}.. run "+F(f"ui/slot_{i}")
+         for i in range(1,9)],
+        "execute if score @s a_mode matches 0 run "+msg("SINGLE: sequence kits auto-fill as you advance.","gold"),
+        "execute if score @s a_mode matches 1 run "+msg("SLOT: /tarot slot N tarot:card S | clear | auto | swap.","yellow"))
+    for i in range(1,9):
+        w.f(f"ui/slot_{i}",
+            f"scoreboard players set @s a_view_slot {i}",
+            f"scoreboard players operation @s a_view_code = @s a_s{i}",
+            F("ui/slot_render"))
+
+    render=[
+        "scoreboard players operation @s a_view_path = @s a_view_code",
+        "scoreboard players operation @s a_view_path /= #100 a_const",
+        "scoreboard players operation @s a_view_seq = @s a_view_code",
+        "scoreboard players operation @s a_view_seq %= #100 a_const",
+        "execute if score @s a_view_code matches 0 run tellraw @s "+J([
+            {"text":"[Tarot] Slot ","color":"gray"},score("a_view_slot"),
+            {"text":": Empty","color":"dark_gray"}]),
+    ]
+    for c in CARDS:
+        render.append(
+            f"execute if score @s a_view_path matches {c['id']} run tellraw @s "+J([
+                {"text":"[Tarot] Slot ","color":"aqua"},score("a_view_slot"),
+                {"text":": "+c["name"]+" — Sequence ","color":"aqua"},score("a_view_seq")]))
+    w.f("ui/slot_render",render)
 
 
 def emit_progression(w):
