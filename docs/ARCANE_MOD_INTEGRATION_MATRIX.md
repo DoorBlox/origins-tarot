@@ -43,8 +43,8 @@ These interfaces are from public project documentation; the **owner's exact inst
 ## Runtime baseline and release gates (2026-11-22)
 
 - Fresh-world **no-datapack startup reached Done (68.464s)**, with 76 Origins powers and 11 default origins; this does not prove Tarot load or abilities.
-- **BLOCKER: java.lang.OutOfMemoryError during terralith:spire world generation**. Diagnose actual Java heap and hosting RAM before Arcane load testing. Experimental C2ME v0.2.0+alpha.7.40 may complicate memory triage; no causal claim yet.
-- **BLOCKER for directly accessible public server: OFFLINE/INSECURE MODE**. Require online-mode authentication or a correctly isolated authenticated proxy backend before production multiplayer.
+- **OWNER-ACCEPTED DEV RISK: Java heap OOM during the first terralith:spire world generation**. Owner confirms this was a fresh-world generation event and does not want it to block the next isolated Arcane test. Memory exhaustion can recur during generation of new chunks; observe and reassess if it does. Experimental C2ME alpha is present, but causality is unproven.
+- **OWNER-INTENTIONAL: OFFLINE/INSECURE MODE**. Do not ask the owner to change this mode as a development prerequisite. This does not provide authenticated usernames; avoid untrusted direct access/identity impersonation risks. Public deployment security remains separate from Arcane functional acceptance.
 - Version-specific ReMorphed 4.2 / SkinShifter 1.3 integration rules above take precedence over modern docs. See [real startup evidence](ARCANE_VERIFIED_SERVER_BASELINE_2026-11-22.md) and run the read-only [audit utility](../scripts/arcane_server_evidence_audit.py) against private future logs.
 - Do not confuse command parser ambiguity warnings with fatal errors, mod API proof, or successful gameplay tests. No damage/friendly/skin/cooldown/relog acceptance performed.
 
@@ -57,4 +57,4 @@ These interfaces are from public project documentation; the **owner's exact inst
 - **434 specified; 402 compiled = 73 full + 329 partial; 32 blocked, ALL individual.** Resonance **110/110** compiled but many partial. The 22 pathways, 11 pairs and three dev-only ZIPs do not constitute a production-ready pack.
 - **No Minecraft startup/reload acceptance** and **no live SMP deployment**. Do not represent installed dependencies as proof that mod APIs, skins, size reset, command permission nodes or keybind IDs work under the exact old versions.
 
-Next: fix/diagnose **server heap OOM and offline authentication**, then load one dev-only Arcane ZIP on a separate backed-up test world and capture new game logs. Continue the 32 remaining individual source blocks and 329 partial fidelity gaps while the server issues are addressed. Do NOT ask for previously supplied mod list or both configs again.
+Next: **proceed with one DEV-only Arcane ZIP on a backed-up copy of the already-generated world**; capture the first Arcane-enabled startup and runtime logs. The owner's accepted first-worldgen OOM and intentional offline mode are documented cautions, not blockers to development smoke testing. Keep 32 remaining individual source blocks/329 partial fidelity gaps in scope. Do NOT request previously supplied mod list, both configs, or a change to the intentional offline mode.
