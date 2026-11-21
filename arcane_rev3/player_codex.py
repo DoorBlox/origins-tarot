@@ -124,11 +124,11 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
     w.f("ui/codex/home",
         _msg("ABILITY CODEX | Choose an equipped Sequence kit.", "gold"),
         _msg("Seq9-5 kits auto-equip. Seq4-2 slots are editable. Every selected kit has its own abilities.", "yellow"),
-        _msg("Partial means an actual fallback exists, but some handbook mechanics do not.", "gray"),
+        _msg("Open a kit to learn its abilities and activation controls.", "gray"),
         "execute unless score @s a_init matches 1 run " + _msg(
             "Choose a Tarot Origin to see your own kits.", "red"),
         "execute if score @s a_mode matches 2 run " + _msg(
-            "Sequence 1 is an OP-only Resonance test. Normal unlock is locked.", "red"),
+            "Your current form cannot be changed from this menu.", "red"),
         [f"execute if score @s a_init matches 1 if score @s a_mode matches 0..1 "
          f"if score @s a_max matches {slot}.. run " +
          _click("[View slot " + str(slot) + " abilities]", "a_kit set " + str(slot), "green")
@@ -184,7 +184,7 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
                 raise ValueError(f"Empty playable kit {slug} Seq {seq}")
             shown = [_msg(f"{slug.replace('_', ' ').title()} | Sequence {seq} | "
                           f"{len(kit_ids)} ability entries", "gold"),
-                     _msg("Click DETAILS for actual implementation, activation, and missing mechanics.", "gray")]
+                     _msg("Click DETAILS to learn what each ability does and how to use it.", "gray")]
             if seq == 9 and slug == "fool":
                 shown.append(_msg(
                     "Permanent identity drawback: Spiritual Expenditure (+25% sprint/glide exhaustion).",
@@ -192,23 +192,15 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
             for index, ident in enumerate(kit_ids, 1):
                 row = by_id[ident]
                 implemented = compiled[ident]
-                label = f"{index}. {row['name']} [{row['status'].upper()}] [DETAILS]"
-                shown.append(_click(label, "a_detail set " + str(index),
-                                    "yellow" if row["status"] == "partial" else "green"))
+                label = f"{index}. {row['name']} [DETAILS]"
+                shown.append(_click(label, "a_detail set " + str(index), "aqua"))
                 detail_fn = f"ui/codex/detail/{slug}_{seq}_{index}"
                 shown_detail = [
-                    _msg(row["name"] + " | " + row["status"].upper(),
-                         "yellow" if row["status"] == "partial" else "green"),
-                    _text("Currently in game (compiled source): " +
-                          str(implemented.get("description", "No short gameplay description supplied.")), "aqua"),
+                    _msg(row["name"], "gold"),
+                    _text("What it does: " +
+                          str(implemented.get("description", "See the effects of your equipped ability.")), "aqua"),
                     _text("How to use: " + how_to_use(implemented), "green"),
                 ]
-                if row["status"] == "partial":
-                    shown_detail.append(_text("Limitations: " + row["missing"], "yellow"))
-                if row["status"] == "full":
-                    shown_detail.append(_msg(
-                        "Source-full means compiled functionality, not an in-game acceptance certificate.",
-                        "gray"))
                 shown_detail.extend([
                     _msg("Use /trigger a_kit set <your slot number> to reopen this kit.", "gray"),
                     _click("[Open Ability Codex]", "a_abilities"),
@@ -266,7 +258,7 @@ def emit_roadmap(w):
     for seq in range(9, 1, -1):
         line = f"Sequence {seq} to {seq-1}: {ACT_MARKS[seq]} marks"
         if seq == 2:
-            line += " | LOCKED: Sequence 1 is an OP-only Resonance development test"
+            line += " | LOCKED: Sequence 1 is not available yet"
         else:
             line += " | " + ", ".join(
                 f"{count} {item.replace('_', ' ')}"
