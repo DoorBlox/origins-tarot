@@ -594,6 +594,74 @@ def compile_powers(root):
         condition={"type":"origins:health","comparison":">","compare_to":16}),
         "partial", "Rev2 temporary regen-cap unlocks by kills, Healing potions or remaining motionless in darkness are not implemented")
 
+
+    # Rev2 sequence upgrade batch: faithfully model independent bonuses where
+    # possible. Upgrades which should replace an earlier slotted kit are
+    # PARTIAL until a nonstacking, upgrade-aware slot policy exists.
+    add("devil", 4, "Demon Form", power("Demon Form",
+        "When below half health, gain 18% attack damage.",
+        "origins:conditioned_attribute",tick_rate=20,
+        modifier={**mod(0.18),"attribute":"minecraft:generic.attack_damage"},
+        condition={"type":"origins:relative_health","comparison":"<","compare_to":0.5}),
+        "partial", "Can stack with Seq9 Desperate Malice, which the upgrade should replace")
+    add("tower", 1, "Ruin-Proof II", power("Ruin-Proof II",
+        "Reduce explosion damage by 80%.",
+        "origins:modify_damage_taken",
+        damage_condition={"type":"origins:name","name":"explosion"},
+        modifier=mod(-0.8)),
+        "partial", "May stack with Ruin-Proof and not cover every explosion damage source variant")
+    add("wheel_of_fortune", 4, "Misfortune", power("Misfortune",
+        "15% chance to reduce incoming damage by 60%.",
+        "origins:modify_damage_taken",
+        condition={"type":"origins:chance","chance":0.15},
+        modifier=mod(-0.6)),
+        "partial", "Rev2 upgrade replaces Fate Intervenes; if both are slotted the chance may stack")
+    add("judgement", 1, "Law's Weight II", power("Law's Weight II",
+        "Increase knockback resistance by 0.60.",
+        "origins:attribute",
+        modifier={**mod(0.60,"addition"),
+                  "attribute":"minecraft:generic.knockback_resistance"}),
+        "partial", "Rev2 upgrades +45% to +60%, not additive; this standalone bonus stacks if both slots equipped")
+    add("moon", 4, "Shaman", power("Shaman",
+        "Heal 1.5 hearts (3 HP) every 600 ticks at night.",
+        "origins:action_over_time",interval=600,
+        condition={"type":"origins:daytime","inverted":True},
+        entity_action={"type":"origins:heal","amount":3}),
+        "partial", "Rev2 upgrades Blood's Renewal; both effects can independently heal if both selected")
+    add("world", 1, "Cold Precision II", power("Cold Precision II",
+        "Projectiles deal 30% more damage.",
+        "origins:modify_projectile_damage",modifier=mod(0.30)),
+        "partial", "Rev2 upgrades Cold Precision from 25% to 30%, rather than stacking them")
+    add("sun", 4, "Unshadowed II", power("Unshadowed II",
+        "Deal 50% more damage to undead targets.",
+        "origins:modify_damage_dealt",
+        target_condition={"type":"origins:in_tag","tag":"tarot:undead"},
+        modifier=mod(0.50)),
+        "partial", "Rev2 replaces 40% Unshadowed bonus; both sequence kits may stack")
+    add("hanged_man", 4, "Dark Blade", compound("Dark Blade",
+        attack={"type":"origins:conditioned_attribute","tick_rate":20,
+                "modifier":{**mod(0.15),"attribute":"minecraft:generic.attack_damage"},
+                "condition":{"type":"origins:health","comparison":"<","compare_to":12}},
+        speed={"type":"origins:conditioned_attribute","tick_rate":20,
+               "modifier":{**mod(0.10),"attribute":"minecraft:generic.movement_speed"},
+               "condition":{"type":"origins:health","comparison":"<","compare_to":12}}))
+    add("star", 4, "Nightwatch II", compound("Nightwatch II",
+        speed={"type":"origins:conditioned_attribute","tick_rate":20,
+               "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.467},
+               "modifier":{**mod(0.15),"attribute":"minecraft:generic.movement_speed"}},
+        combat={"type":"origins:modify_damage_dealt",
+                "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.467},
+                "target_condition":{"type":"origins:in_tag","tag":"tarot:undead"},
+                "modifier":mod(0.15)}),
+        "partial", "Overlaps Nightwatch night buffs when both slots equipped; brightness threshold approximates light<=7")
+    add("empress", 5, "Plague Touch", power("Plague Touch",
+        "Hostile hit applies Poison I 80 ticks and Hunger I 40 ticks; 240t cooldown.",
+        "origins:target_action_on_hit", cooldown=240,
+        target_condition={"type":"origins:in_tag","tag":"tarot:hostile"},
+        entity_action={"type":"origins:and","actions":[
+            apply("poison",80),apply("hunger",40)]}),
+        "partial", "Enemy players excluded pending team checks; overlaps Seq9 Witch's Venom rather than replacing it")
+
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}
