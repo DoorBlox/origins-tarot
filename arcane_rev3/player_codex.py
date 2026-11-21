@@ -159,6 +159,7 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
     dispatch = [
         "scoreboard players set @s a_ok 0",
         "execute if score @s a_init matches 1 if score @s a_mode matches 0..1 "
+        "if score @s a_view_slot <= @s a_max "
         "if score @s a_view_code matches 1.. if score @s a_detail matches 1.. "
         "run scoreboard players set @s a_ok 1",
         [f"execute if score @s a_view_slot matches {i} "
@@ -209,8 +210,7 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
                         "Source-full means compiled functionality, not an in-game acceptance certificate.",
                         "gray"))
                 shown_detail.extend([
-                    _click("[Back to this Sequence kit]", "a_kit set " + str(1), "gray")
-                    if False else _msg("Use /trigger a_kit set <your slot number> to reopen this kit.", "gray"),
+                    _msg("Use /trigger a_kit set <your slot number> to reopen this kit.", "gray"),
                     _click("[Open Ability Codex]", "a_abilities"),
                     _click("[Ascension roadmap]", "a_roadmap", "yellow"),
                 ])
@@ -225,7 +225,7 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
             w.f(fn, shown)
     w.f("ui/codex/show", entries)
     w.f("ui/codex/detail_dispatch", details_dispatch)
-    w.f("ui/codex/detail_open", dispatch)
+    w.f("ui/codex/detail_open", *dispatch)
 
 
 def emit_roadmap(w):
