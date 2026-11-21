@@ -1,5 +1,6 @@
 """Rev2 wave 2: 28 pair and nine individual effects, with release-lock assertions."""
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -7,6 +8,7 @@ from zipfile import ZipFile
 from arcane_rev3.batches import resonance2, individual3
 from arcane_rev3.powers import compile_powers, norm
 from arcane_rev3.full_build import build
+from arcane_rev3.team_policy import team_names
 
 ROOT=Path(__file__).resolve().parents[1]
 RES={
@@ -84,11 +86,25 @@ class SecondWaveSourceTests(unittest.TestCase):
                         is_hostile_effect=any("minecraft:"+effect in command for effect in
                               ("slowness","weakness","wither","poison","blindness","mining_fatigue"))
                         if is_hostile_effect:
-                            self.assertTrue("@e[type=#tarot:hostile" in command or
-                                            "@e[type=#tarot:undead" in command,command)
-                            self.assertNotIn(" @a[distance=",command)
-                        # Positive effects such as Regeneration are allowed
-                        # on nearby players, albeit not yet team-filtered.
+                            is_mob = ("@e[type=#tarot:hostile" in command or
+                                      "@e[type=#tarot:undead" in command)
+                            # Player harm requires an explicitly configured
+                            # DIFFERENT team: no teammate, neutral or
+                            # teamless collateral, and bounded range.
+                            match = re.fullmatch(
+                                r"execute if entity @s\[team=([^\]]+)\] at @s "
+                                r"run effect give @a\[team=([^,]+),distance=\.\.(\d+)\] "
+                                r"minecraft:[a-z_]+ \d+ \d+ true", command)
+                            safe_enemy = bool(
+                                match and match.group(1) in team_names() and
+                                match.group(2) in team_names() and
+                                match.group(1) != match.group(2) and
+                                1 <= int(match.group(3)) <= 64
+                            )
+                            self.assertTrue(is_mob or safe_enemy, command)
+                            self.assertNotIn(" @a[distance=", command)
+                        # Unlike unrestricted @a, explicitly scoped ally
+                        # effects are allowed for a confirmed source rule.
                         self.assertNotIn(" op ",command)
 
     def test_cooldowns_and_safety_fail_closed_examples(self):
