@@ -54,7 +54,7 @@ public final class FoolAbilities {
         ArmorStandEntity stand=new ArmorStandEntity(p.world,p.getX(),p.getY(),p.getZ());
         stand.setInvisible(true);
         stand.setNoGravity(true);
-        stand.addCommandTag("tarot_decoy");
+        stand.addScoreboardTag("tarot_decoy");
         stand.setCustomName(new LiteralText("Paper Decoy"));
         stand.setCustomNameVisible(true);
         p.world.spawnEntity(stand);
@@ -73,7 +73,7 @@ public final class FoolAbilities {
     public static boolean rescueIfLethal(ServerPlayerEntity p, DamageSource source, float damage) {
         ArcaneSave.Record r=ArcaneMod.profile(p);
         if(r==null || !enabled(r,1) || damage < p.getHealth()+p.getAbsorptionAmount()) return false;
-        long now=p.getServerWorld().getTime();
+        long now=p.getWorld().getTime();
         if(!r.ready("history_substitution",now,7200)) return false;
         p.setHealth(20);
         p.requestTeleport(p.getX()+12,p.getY(),p.getZ());
@@ -86,7 +86,7 @@ public final class FoolAbilities {
     public static void afterDamage(ServerPlayerEntity p, DamageSource source) {
         ArcaneSave.Record r=ArcaneMod.profile(p);
         if(r==null) return;
-        long now=p.getServerWorld().getTime();
+        long now=p.getWorld().getTime();
         r.combat(now);
         Entity attacker=source.getAttacker();
         if(enabled(r,9) && attacker instanceof LivingEntity && enemy(p,attacker)
@@ -105,7 +105,7 @@ public final class FoolAbilities {
         ArcaneSave.get(p.getServer()).markDirty();
     }
     public static void tick(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r) {
-        long now=p.getServerWorld().getTime();
+        long now=p.getWorld().getTime();
         if(enabled(r,9) && now%40==0) {
             int mobs=0; boolean playerEnemy=false;
             for(LivingEntity e:enemies(p,8)) {
@@ -122,7 +122,7 @@ public final class FoolAbilities {
     }
     public static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String requested) {
         String id=requested.toLowerCase(java.util.Locale.ROOT);
-        long now=p.getServerWorld().getTime();
+        long now=p.getWorld().getTime();
         switch(id) {
             case "spirit_vision":
                 if(!enabled(r,9) || !p.isSneaking()) return failure(p);
