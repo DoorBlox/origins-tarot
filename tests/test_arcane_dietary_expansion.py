@@ -61,8 +61,8 @@ class HierophantDietaryExpansionTests(unittest.TestCase):
                           "ingredient": {"tag": "tarot:nonfish_meat"}})
         self.assertNotIn("condition", original["nonfish"],
                          "Nonfish identity cannot be disabled by a source upgrade")
-        self.assertNotIn(VOW, self.kits[("hierophant", 9)],
-                         "The builder extracts the pinned identity later")
+        self.assertIn(VOW, self.kits[("hierophant", 9)],
+                      "The compiler must retain the identity before the full builder pins it")
 
     def test_fish_ban_is_active_without_upgrade_and_inverse_when_granted(self):
         vow = self.powers[VOW]
