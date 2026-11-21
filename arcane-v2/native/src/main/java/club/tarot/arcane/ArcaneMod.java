@@ -87,6 +87,12 @@ public final class ArcaneMod implements ModInitializer {
                     if (server.getTicks() % 100 == 0) enrollAndRefresh(player);
                     continue;
                 }
+                if(originHas(player,record.profile.primary())<=0) {
+                    revokeIfMismatched(player,record);
+                    continue;
+                }
+                record.originValid=true;
+                record.originChecked=true;
                 FoolAbilities.tick(player,state,record);
                 HangedAbilities.tick(player,state,record);
             }
@@ -106,7 +112,8 @@ public final class ArcaneMod implements ModInitializer {
         return name.startsWith("tarot:") ? name.substring(6) : name;
     }
     static ArcaneSave.Record profile(ServerPlayerEntity player) {
-        return ArcaneSave.get(player.getServer()).getPlayer(player.getUuid());
+        ArcaneSave.Record r=ArcaneSave.get(player.getServer()).getPlayer(player.getUuid());
+        return r!=null && r.originValid?r:null;
     }
     static void info(ServerPlayerEntity player, String msg) {
         player.sendMessage(new LiteralText("[Tarot] " + msg).formatted(Formatting.AQUA), false);
@@ -124,9 +131,12 @@ public final class ArcaneMod implements ModInitializer {
             ArcaneSave.Record r=state.getPlayer(p.getUuid());
             if(r == null) { error(p,"Choose a Tarot Arcana first."); return 0; }
             if(originHas(p,r.profile.primary())<=0) {
+                revokeIfMismatched(p,r);
                 error(p,"Registered Arcana mismatch; Tarot slot powers disabled.");
                 return 0;
             }
+            r.originValid=true;
+            r.originChecked=true;
             return work.run(p,state,r);
         } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) { return 0; }
     }
@@ -249,25 +259,41 @@ public final class ArcaneMod implements ModInitializer {
         run(p,"power grant "+uuid+" tarot:meta/secondary_key tarot_input");
     }
     static void enrollAndRefresh(ServerPlayerEntity p) {
+        FoolLegend.recoverStaleFlight(p);
         ArcaneSave state=ArcaneSave.get(p.getServer());
         ArcaneSave.Record existing=state.getPlayer(p.getUuid());
         if(existing!=null) {
             // Do not grant powers if player no longer holds the registered origin.
             int holds=originHas(p,existing.profile.primary());
-            if (holds > 0) { grantInputKeys(p); refreshSlots(p,existing); }
-            else {
-                run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
-                run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);
+            if (holds > 0) {
+                existing.originValid=true;
+                existing.originChecked=true;
+                grantInputKeys(p); refreshSlots(p,existing);
+            } else {
+                revokeIfMismatched(p,existing);
                 error(p,"Registered Arcana mismatch; slot powers suspended until origin restored.");
             }
             return;
         }
         for(String card:SlotModel.PAIRS.keySet()) if(originHas(p,card)>0) {
             ArcaneSave.Record r=state.enroll(p.getUuid(),card);
+            r.originValid=true;
+            r.originChecked=true;
             grantInputKeys(p);
             refreshSlots(p,r); info(p,"Enrolled as "+card+" at Sequence 9.");
             return;
         }
+    }
+    private static void revokeIfMismatched(ServerPlayerEntity p,ArcaneSave.Record r) {
+        if(!r.originValid && r.originChecked)return; // avoid spamming after first revocation
+        r.originValid=false;
+        r.originChecked=true;
+        FoolLegend.stopOnDisconnect(p);
+        HangedAbilities.stopOnDisconnect(p);
+        PaperMartyr.stopOnDisconnect(p);
+        run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
+        run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);
+        info(p,"Current Origins selection does not match registered Arcana; powers suspended.");
     }
     private static int originHas(ServerPlayerEntity p,String card) {
         String selector=p.getUuidAsString();

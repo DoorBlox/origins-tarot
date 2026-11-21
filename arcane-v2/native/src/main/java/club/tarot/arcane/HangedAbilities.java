@@ -55,7 +55,7 @@ public final class HangedAbilities {
     static long now(ServerPlayerEntity p) { return p.getServer().getOverworld().getTime(); }
     public static float naturalRegenLimit(ServerPlayerEntity p) {
         ArcaneSave.Record r=ArcaneMod.profile(p);
-        if(r==null || !identity(r)) return Float.POSITIVE_INFINITY;
+        if(r==null || !r.originValid || !identity(r)) return Float.POSITIVE_INFINITY;
         long t=now(p);
         return SinRules.regenLimit(r.killedForRegen,t<r.healingPotionUntil || t<r.darkStillUntil);
     }
@@ -164,7 +164,7 @@ public final class HangedAbilities {
         if(taken<=0)return;
         ArcaneSave state=ArcaneSave.get(p.getServer());
         ArcaneSave.Record r=state.getPlayer(p.getUuid());
-        if(r==null)return;
+        if(r==null || !r.originValid)return;
         long t=now(p);
         if(sinEnabled(r)) {
             r.sin=SinRules.absorb(r.sin,taken,capacity(p,r),
@@ -209,7 +209,7 @@ public final class HangedAbilities {
     public static void onKill(ServerPlayerEntity p,LivingEntity victim) {
         ArcaneSave state=ArcaneSave.get(p.getServer());
         ArcaneSave.Record r=state.getPlayer(p.getUuid());
-        if(r==null || !FoolAbilities.enemy(p,victim))return;
+        if(r==null || !r.originValid || !FoolAbilities.enemy(p,victim))return;
         long t=now(p);
         if(identity(r))r.killedForRegen=true;
         if(has(r,9) && r.ready("graze_the_soul",t,120)) {

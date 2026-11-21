@@ -49,6 +49,8 @@ public final class ArcaneSave extends PersistentState {
                 record.healingPotionUntil = n.getLong("healingPotionUntil");
                 record.darkStillUntil = n.getLong("darkStillUntil");
                 record.darkStillTicks = n.getInt("darkStillTicks");
+                record.restoreFlightPending = n.getBoolean("restoreFlightPending");
+                record.legendPriorMayFly = n.getBoolean("legendPriorMayFly");
                 record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
                 record.secondaryBinding = n.contains("bindSecondary") ? n.getString("bindSecondary") : "spirit_vision";
                 state.players.put(n.getUuid("uuid"), record);
@@ -88,6 +90,8 @@ public final class ArcaneSave extends PersistentState {
             n.putLong("healingPotionUntil",record.healingPotionUntil);
             n.putLong("darkStillUntil",record.darkStillUntil);
             n.putInt("darkStillTicks",record.darkStillTicks);
+            n.putBoolean("restoreFlightPending",record.restoreFlightPending);
+            n.putBoolean("legendPriorMayFly",record.legendPriorMayFly);
             n.putString("bindPrimary",record.primaryBinding);
             n.putString("bindSecondary",record.secondaryBinding);
             records.add(n);
@@ -108,12 +112,18 @@ public final class ArcaneSave extends PersistentState {
         public final Map<String, Long> cooldowns = new HashMap<>();
         public long combatUntil;
         public float foodRemainder;
+        /** Transient security gate, recalculated using the current Origins selection. */
+        public boolean originValid;
+        public boolean originChecked;
         public float sin;
         public long lastSinDamage;
         public boolean killedForRegen;
         public long healingPotionUntil;
         public long darkStillUntil;
         public int darkStillTicks;
+        /** Crash recovery for temporary capstone flight; only ours is restored. */
+        public boolean restoreFlightPending;
+        public boolean legendPriorMayFly;
         public String primaryBinding="full_faceless_disguise";
         public String secondaryBinding="spirit_vision";
         private Record(SlotModel.Profile profile) { this.profile = profile; }

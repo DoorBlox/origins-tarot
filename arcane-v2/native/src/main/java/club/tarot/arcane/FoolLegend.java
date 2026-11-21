@@ -60,6 +60,8 @@ public final class FoolLegend {
         int cooldown=player.getHealth()<6f?12000:18000;
         if(!record.ready(isPaper?"the_paper_martyr":"legend_of_the_fool",now,cooldown)) return false;
         Active a=new Active(player,now,isPaper);
+        record.restoreFlightPending=true;
+        record.legendPriorMayFly=a.priorMayFly;
         ACTIVE.put(player.getUuid(),a);
         player.getAbilities().allowFlying=true;
         player.sendAbilitiesUpdate();
@@ -124,7 +126,24 @@ public final class FoolLegend {
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,200,1));
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,200,1));
     }
+    public static void recoverStaleFlight(ServerPlayerEntity player) {
+        ArcaneSave state=ArcaneSave.get(player.getServer());
+        ArcaneSave.Record r=state.getPlayer(player.getUuid());
+        if(r==null || !r.restoreFlightPending || ACTIVE.containsKey(player.getUuid()))return;
+        player.getAbilities().allowFlying=r.legendPriorMayFly;
+        if(!r.legendPriorMayFly)player.getAbilities().flying=false;
+        player.sendAbilitiesUpdate();
+        r.restoreFlightPending=false;
+        state.markDirty();
+        LOG_RECOVERY(player);
+    }
+    private static void LOG_RECOVERY(ServerPlayerEntity player) {
+        ArcaneMod.LOG.warn("Recovered stale Tarot capstone flight for {}",player.getUuidAsString());
+    }
     private static void restoreFlight(ServerPlayerEntity player,Active a) {
+        ArcaneSave state=ArcaneSave.get(player.getServer());
+        ArcaneSave.Record r=state.getPlayer(player.getUuid());
+        if(r!=null){r.restoreFlightPending=false;state.markDirty();}
         player.getAbilities().allowFlying=a.priorMayFly;
         if(!a.priorMayFly) player.getAbilities().flying=false;
         player.sendAbilitiesUpdate();

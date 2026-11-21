@@ -155,7 +155,7 @@ public final class PaperMartyr {
     public static boolean rescue(ServerPlayerEntity p,float damage) {
         ArcaneSave state=ArcaneSave.get(p.getServer());
         ArcaneSave.Record r=state.getPlayer(p.getUuid());
-        if(r==null || !has(r,1) || damage<p.getHealth()+p.getAbsorptionAmount())return false;
+        if(r==null || !r.originValid || !has(r,1) || damage<p.getHealth()+p.getAbsorptionAmount())return false;
         long t=HangedAbilities.now(p);
         if(!r.ready("martyrs_substitute",t,7200))return false;
         Vec3d before=p.getPos();
