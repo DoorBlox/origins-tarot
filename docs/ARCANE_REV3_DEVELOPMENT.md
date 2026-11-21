@@ -9,7 +9,7 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 - 22 pathway Origins and 18 inherited Elytra gliders; 11 paired Resonance IDs are reserved, not activated.
 - Pure datapack/scoreboard runtime: Sequence 9 through 2, 22 distinct acting quest tracks, altar requirements, combat lock, fixed second pathway at Sequence 4, 6/7/8 editable slots, grant/revoke and re-login reconciliation. No KubeJS or custom Fabric mod.
 - Non-OP `/tarot`, `/tarot status`, `/tarot slots`, `/tarot ascend`, `/tarot slot N tarot:card S`, `/tarot slot N clear`, `/tarot slot auto`, `/tarot slot swap N M`, and `/tarot reset` via player-scoped CLIENT `/trigger` operations. Command Aliases schema uses permission 0. Both `/tarot status` and `/tarot slots` display actual Arcana titles and Sequence numbers rather than internal numeric kit codes; the partner is revealed at Sequence 4.
-- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **166 powers compiled (69 source-complete, 97 partial), 268 still blocked.** No fake `origins:simple` abilities are emitted.
+- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **181 powers compiled (69 source-complete, 112 partial), 253 still blocked.** No fake `origins:simple` abilities are emitted.
 - Permanent primary-pathway drawbacks are innate Origin powers, **not removable Sequence-9 slot abilities**: Fool's +25% exhaustion plus 20 more compiled pathway drawbacks are attached directly to their Origins, outside the source-grant/revoke cycle.
 
 ## Rev3 identity-drawback integrity
@@ -39,6 +39,14 @@ The 1.18.2-safe targeting helper emits **fixed server-side commands** with `@e[t
 Lovers' Separation Anxiety has a real per-player `a_alone_time` tick counter, capped at 601 and reset when any player enters eight blocks. After more than 600 ticks alone, the native scoreboard condition applies +35% exhaustion and −15% break speed. Its same-team qualifier is not yet implemented and is recorded as partial.
 
 All compiled abilities remain test-world-only until actual 1.18.2 Origins 1.4.1 testing.
+
+## Second batch: native interactions and exact inventory trade
+
+Another **15 non-placeholder abilities** are generated from `arcane_rev3/batches/native2.py`: Lovers Triage and Blessing, Hierophant Purify, Consecrated Workspace and Sanctified Ground II, Justice Calm and Compassionate Restraint II, Lovers Symbiosis and Transmute, Tower Unstable Ground, Emperor Coin, Fool Stage Magician and Spiritual Overload, Death Grave Dirt, Chariot Flame Burst.
+
+These are intentionally labeled partial because Minecraft 1.18.2/Origins 1.4.1 cannot enforce the listed skill cooldowns in some native right-click hooks, and some require AI targeting, client cosmetics, exact team comparison or safer raycast hooks. The **Lovers Transmute** transaction is built as a server-owned function: count iron ingots non-destructively, require two, remove two, then grant one gold ingot; insufficient iron consumes nothing. The underlying `/tarot` alias still has no operator access. A 12000-tick activation cooldown is set, though it also starts on an insufficient-inventory attempt.
+
+The supported vanilla sanctified-ground tag now includes all Minecraft 1.18.2 stone-brick base and stair/slab/wall variants. These effects scan their radius and need real performance acceptance before server deployment.
 
 ## Retaliation team-safety gate
 

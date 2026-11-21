@@ -663,7 +663,8 @@ def compile_powers(root):
     # Parallel handbook-backed workstreams: 14 support/identity, 17 control,
     # and 7 mobility/stealth powers. Each retains its own source audit label.
     from .batches import support, control, mobility
-    for workstream in (support, control, mobility):
+    from .batches import native2
+    for workstream in (support, control, mobility, native2):
         workstream.register(add)
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]

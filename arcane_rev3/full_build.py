@@ -72,7 +72,7 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8",
         "a_view_slot","a_view_code","a_view_path","a_view_seq",
-        "a_alone_time")
+        "a_alone_time","a_iron_count")
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend")
 
@@ -235,6 +235,15 @@ def emit_player(w,kits):
     # Fixed per-player 600-tick proximity counter for Lovers' drawback.
     # This intentionally counts *any* nearby player; the true same-team-only
     # semantics remain explicitly partial until verified in 1.18.2.
+    # Transaction is player scoped: test inventory without removing items,
+    # then remove exactly two iron ingots and give precisely one gold ingot.
+    # No client alias can choose other items or invoke this function directly.
+    w.f("abilities/lovers_transmute",
+        "scoreboard players set @s a_iron_count 0",
+        "execute store result score @s a_iron_count run clear @s minecraft:iron_ingot 0",
+        "execute if score @s a_iron_count matches 2.. run clear @s minecraft:iron_ingot 2",
+        "execute if score @s a_iron_count matches 2.. run give @s minecraft:gold_ingot 1",
+        "execute unless score @s a_iron_count matches 2.. run "+msg("Transmute needs two iron ingots; no items taken.","yellow"))
     w.f("player/alone",
         "execute at @s if entity @a[distance=0.01..8] run scoreboard players set @s a_alone_time 0",
         "execute at @s unless entity @a[distance=0.01..8] run scoreboard players add @s a_alone_time 1",
