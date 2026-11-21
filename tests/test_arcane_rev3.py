@@ -112,6 +112,9 @@ class Rev3BuildTests(unittest.TestCase):
         self.assertEqual(power["entity_action"]["type"], "origins:chance")
         self.assertEqual(power["entity_action"]["action"]["effect"]["effect"], "minecraft:blindness")
         self.assertEqual(power["entity_action"]["action"]["effect"]["duration"], 20)
+        self.assertEqual(power["damage_condition"]["type"], "origins:attacker")
+        self.assertEqual(power["damage_condition"]["entity_condition"],
+                         {"type": "origins:in_tag", "tag": "tarot:hostile"})
         init = self.zip.read("data/tarot_arcane/functions/player/init_fool.mcfunction").decode()
         repair = self.zip.read("data/tarot_arcane/functions/player/reconcile.mcfunction").decode()
         self.assertIn("power grant @s tarot:fool/9_clowns_mischief tarot_slot", init)

@@ -102,6 +102,25 @@ def compile_powers(root):
         if ident in compiled:
             raise ValueError("duplicate compiled power")
         value = dict(value)
+        # Rev3 targeting: negative retaliation may only hit hostile mobs or
+        # enemy players. Origins 1.4.1 cannot compare arbitrary scoreboard
+        # teams inside attacker_action_when_hit; apply a fail-closed hostile
+        # mob filter instead of accidentally debuffing friendly players.
+        # Sun's Solar Flare has its own stricter undead-only condition.
+        if value["type"] == "origins:attacker_action_when_hit" and not (
+            slug == "sun" and seq == 7 and norm(name) == norm("Solar Flare")
+        ):
+            if "damage_condition" in value:
+                raise ValueError("retaliation already has damage filter: " + ident)
+            value["damage_condition"] = {
+                "type": "origins:attacker",
+                "entity_condition": {"type": "origins:in_tag", "tag": "tarot:hostile"},
+            }
+            accuracy = "partial"
+            missing = (missing + "; " if missing else "") + (
+                "enemy players are not debuffed until a reliable different-team "
+                "target filter is implemented in the permitted datapack runtime"
+            )
         value["name"] = name
         value["description"] = value.get("description", "") or entry["description"][:180]
         compiled[ident] = value

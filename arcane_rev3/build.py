@@ -74,6 +74,12 @@ def _files():
         'type': 'origins:attacker_action_when_hit', 'name': "Clown's Mischief",
         'description': '20% chance to blind the attacker for 1s, with a 5s cooldown.',
         'cooldown': 100, 'hud_render': {'should_render': False},
+        # Retaliation against mobs only until a non-OP safe team check can
+        # distinguish enemy players from teammates.
+        'damage_condition': {
+            'type': 'origins:attacker',
+            'entity_condition': {'type': 'origins:in_tag', 'tag': 'tarot:hostile'},
+        },
         'entity_action': {'type': 'origins:chance', 'chance': 0.20,
                           'action': _effect('blindness', 20)},
     })

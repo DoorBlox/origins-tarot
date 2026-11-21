@@ -2,6 +2,10 @@
 
 **DO NOT install this pack in the live SMP.** This is a deliberately restricted **Fool Sequence 9 proof of concept** based on the supplied handbooks, not a release of all 434 abilities. Work is isolated from main V3 and does not replace its sequence/quest system.
 
+## Safety: Clown's Mischief cannot target allied players
+
+The sandbox's Clown's Mischief now applies Blindness only when an attacker belongs to `#tarot:hostile`. It deliberately excludes enemy players until there is a verified way to distinguish them from teammates in Origins 1.4.1. This is a **partial** implementation of the Rev3 offensive-targeting rule, not a complete hostile-player PvP effect.
+
 ## Fool Spirit Vision sphere compatibility
 
 Origins/Apoli 1.4.1's `origins:area_of_effect` entity action has a radius but no `shape` field; it cannot natively guarantee Rev2's spherical 10-block reveal. Both the full developer pack and earlier Fool-only sandbox pack therefore use one **fixed, server-side** `origins:execute_command` action with permission level 2 and the vanilla target selector `@e[distance=..10]`. The ability still requires sneak + secondary key, applies Glowing for 2 seconds, includes the caster, and keeps the 100-tick cooldown. The static power action is **not exposed as an arbitrary operator command through /tarot**, which remains a non-OP /trigger bridge.
