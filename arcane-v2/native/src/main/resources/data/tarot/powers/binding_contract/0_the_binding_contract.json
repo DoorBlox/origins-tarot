@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Binding Contract",
+  "description": "Primary key. **Duration 800t (40s). Cooldown 18000t.** - Strength II, Fire Resistance, +20% speed, Wither I on melee, 0.5 heart lifesteal - 75% chance on kill → minion 600t (max 4) - All `#tarot:hostile` **AND enemy players** within 15 blocks frozen + Wither II - Any player within 15 blocks offered contract - Melee Wither II + Slowness I - Wither kills → Absorption II 600t - +15% damage taken; on end: Hunger II 200t"
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Descent",
+  "description": "Primary key. **Duration 800t (40s). Cooldown 18000t.**"
+}

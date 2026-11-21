@@ -196,6 +196,36 @@ public final class AbilityRegistry {
         path("benevolent_crown", 2, "emperors_hymn");
         path("benevolent_crown", 1, "triage_decree");
         path("benevolent_crown", 0, "the_benevolent_crown");
+        path("devil", 9, "hellborn", "corrupting_claws", "desperate_malice", "infernal_vitality", "sacred_rejection");
+        path("devil", 8, "fallen_grace");
+        path("devil", 7, "predator");
+        path("devil", 6, "devils_mark");
+        path("devil", 5, "desire");
+        path("devil", 4, "demon_form");
+        path("devil", 3, "blather");
+        path("devil", 2, "blood_price");
+        path("devil", 1, "chaos_unleashed", "infernal_vitality_ii");
+        path("devil", 0, "descent");
+        path("judgement", 9, "laws_weight", "retaliatory_sentence", "hold_the_line", "verdicts_weight", "no_unlawful_escape");
+        path("judgement", 8, "posse");
+        path("judgement", 7, "question");
+        path("judgement", 6, "verdict");
+        path("judgement", 5, "discipline");
+        path("judgement", 4, "imperative");
+        path("judgement", 3, "chaos_hunter");
+        path("judgement", 2, "balance");
+        path("judgement", 1, "order", "laws_weight_ii");
+        path("judgement", 0, "the_absolute_law");
+        path("binding_contract", 9, "hellborn_verdict");
+        path("binding_contract", 8, "fallen_question");
+        path("binding_contract", 7, "predators_calm");
+        path("binding_contract", 6, "devils_verdict");
+        path("binding_contract", 5, "desires_discipline");
+        path("binding_contract", 4, "infernal_verdict");
+        path("binding_contract", 3, "law_of_hell");
+        path("binding_contract", 2, "contract_enforcement");
+        path("binding_contract", 1, "chaos_law");
+        path("binding_contract", 0, "the_binding_contract");
     }
 
     private static void path(String name, int sequence, String... ids) {

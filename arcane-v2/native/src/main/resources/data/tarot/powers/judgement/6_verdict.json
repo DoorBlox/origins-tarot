@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Verdict",
+  "description": "Kill → Slowness I 40t to `#tarot:hostile` **AND enemy players** within 4 blocks. Cooldown 400t."
+}

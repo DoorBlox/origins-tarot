@@ -96,6 +96,21 @@ public final class ArcaneMod implements ModInitializer {
                     catch(com.mojang.brigadier.exceptions.CommandSyntaxException ignored) { return 0; }
                 })));
         });
+        CommandRegistrationCallback.EVENT.register((dispatcher,dedicated) -> {
+            dispatcher.register(literal("tarot").then(literal("decree")
+                .then(argument("type",StringArgumentType.word())
+                    .executes(c -> withPlayer(c,(p,s,r) ->
+                        BindingContract.selectDecree(p,StringArgumentType.getString(c,"type"))?1:0)))));
+            dispatcher.register(literal("tarot").then(literal("contract")
+                .then(literal("accept").executes(c -> {
+                    try{return BindingContract.answer(c.getSource().getPlayer(),"accept")?1:0;}
+                    catch(com.mojang.brigadier.exceptions.CommandSyntaxException e){return 0;}
+                }))
+                .then(literal("refuse").executes(c -> {
+                    try{return BindingContract.answer(c.getSource().getPlayer(),"refuse")?1:0;}
+                    catch(com.mojang.brigadier.exceptions.CommandSyntaxException e){return 0;}
+                }))));
+        });
         ServerPlayConnectionEvents.JOIN.register((handler,sender,server) ->
             server.execute(() -> enrollAndRefresh(handler.getPlayer())));
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer,newPlayer,alive) ->
@@ -127,6 +142,7 @@ public final class ArcaneMod implements ModInitializer {
                 CrumblingReaper.maintenance(player,state,record);
                 MagicianStrengthAbilities.tick(player,state,record);
                 EmperorLoversAbilities.tick(player,state,record);
+                DevilJudgementAbilities.tick(player,state,record);
             }
             EmperorLoversAbilities.updateAllies(server);
         });
@@ -138,6 +154,7 @@ public final class ArcaneMod implements ModInitializer {
         MagicianStrengthAbilities.register();
         ImpossibleFist.register();
         EmperorLoversAbilities.register();
+        DevilJudgementAbilities.register();
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server) ->
             server.execute(() -> {
                 FoolLegend.stopOnDisconnect(handler.getPlayer());
@@ -148,6 +165,7 @@ public final class ArcaneMod implements ModInitializer {
                 CrumblingReaper.stopOnDisconnect(handler.getPlayer());
                 ImpossibleFist.stopOnDisconnect(handler.getPlayer());
                 EmperorLoversAbilities.stopOnDisconnect(handler.getPlayer());
+                DevilJudgementAbilities.stopOnDisconnect(handler.getPlayer());
             }));
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
@@ -235,6 +253,10 @@ public final class ArcaneMod implements ModInitializer {
                 || "the_emperors_domain".equals(ability)
                 || "the_garden".equals(ability)
                 || "the_benevolent_crown".equals(ability)
+                || "chaos_unleashed".equals(ability) || "chaos_law".equals(ability)
+                || "order".equals(ability) || "descent".equals(ability)
+                || "the_absolute_law".equals(ability)
+                || "the_binding_contract".equals(ability)
                 || "reap".equals(ability);
         return "secondary".equals(binding) && (
             "paper_dagger".equals(ability) || "paper_sentence".equals(ability)
@@ -252,12 +274,17 @@ public final class ArcaneMod implements ModInitializer {
             || "decree".equals(ability) || "decree_of_nature".equals(ability)
             || "emperors_hymn".equals(ability) || "natures_grasp".equals(ability)
             || "transmute".equals(ability)
+            || "blood_price".equals(ability) || "discipline".equals(ability)
+            || "desires_discipline".equals(ability) || "balance".equals(ability)
             || "consul".equals(ability)
             || "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
             || "borrowed_sacrifice".equals(ability) || "gathering_of_martyrs".equals(ability));
     }
     private static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String ability) {
         if(AbilityRegistry.isActive(r.profile,ability)) {
+            if(DevilJudgementAbilities.cast(p,state,r,ability)) {
+                info(p,"Cast "+ability);return 1;
+            }
             if(EmperorLoversAbilities.cast(p,state,r,ability)) {
                 info(p,"Cast "+ability);return 1;
             }
@@ -366,6 +393,9 @@ public final class ArcaneMod implements ModInitializer {
         if(before.stream().anyMatch(id->id.contains("emperor/")
             || id.contains("lovers/") || id.contains("benevolent_crown/")))
             EmperorLoversAbilities.stopOnDisconnect(player);
+        if(before.stream().anyMatch(id->id.contains("devil/")
+            || id.contains("judgement/") || id.contains("binding_contract/")))
+            DevilJudgementAbilities.stopOnDisconnect(player);
     }
     static void run(ServerPlayerEntity player, String command) {
         MinecraftServer server=player.getServer();
@@ -393,6 +423,8 @@ public final class ArcaneMod implements ModInitializer {
                 case "strength" -> "tarot:magician/identity_full_moon_ravings";
                 case "emperor" -> "tarot:lovers/identity_separation_anxiety";
                 case "lovers" -> "tarot:emperor/identity_weight_of_the_crown";
+                case "devil" -> "tarot:judgement/identity_no_unlawful_escape";
+                case "judgement" -> "tarot:devil/identity_sacred_rejection";
                 default -> null;
             };
             if(secondaryIdentity!=null)
@@ -410,7 +442,9 @@ public final class ArcaneMod implements ModInitializer {
         }
         // Clear stale input bindings when a Sequence has been removed.
         if(!AbilityRegistry.isActive(profile,r.primaryBinding)) {
-            String[] priorities={"the_benevolent_crown","the_emperors_domain","the_garden",
+            String[] priorities={"the_binding_contract","the_absolute_law","descent",
+                "chaos_law","chaos_unleashed","order",
+                "the_benevolent_crown","the_emperors_domain","the_garden",
                 "triage_decree","abolish","natures_step",
                 "the_impossible_fist","the_giants_decay","all_paths_converge",
                 "divine_door","divine_hand",
@@ -427,7 +461,8 @@ public final class ArcaneMod implements ModInitializer {
                 }
         }
         if(!AbilityRegistry.isActive(profile,r.secondaryBinding)) {
-            String[] priorities={"emperors_hymn","decree_of_nature",
+            String[] priorities={"desires_discipline","discipline","blood_price","balance",
+                "emperors_hymn","decree_of_nature",
                 "decree","coins_blessing","coin","natures_grasp","transmute",
                 "doorstep_slam","doorstep","planar_step",
                 "star_chart_grip","star_chart","bulwark",
@@ -487,6 +522,7 @@ public final class ArcaneMod implements ModInitializer {
         CrumblingReaper.stopOnDisconnect(p);
         ImpossibleFist.stopOnDisconnect(p);
         EmperorLoversAbilities.stopOnDisconnect(p);
+        DevilJudgementAbilities.stopOnDisconnect(p);
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_secondary_identity");
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
         run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Question",
+  "description": "Crouch-right-click **hostile mob OR enemy player** → Weakness I 60t. Cooldown 400t."
+}

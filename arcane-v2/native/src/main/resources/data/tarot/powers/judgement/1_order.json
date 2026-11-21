@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Order",
+  "description": "Primary key: Slowness II + Weakness II to `#tarot:hostile` **AND enemy players** within 8 blocks for 160t; next melee stuns 40t. Cooldown 1800t."
+}

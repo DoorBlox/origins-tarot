@@ -86,6 +86,13 @@ public final class ArcaneSave extends PersistentState {
                 record.entropyUntil=n.getLong("entropyUntil");
                 record.decreeUntil=n.getLong("decreeUntil");
                 record.natureStepUntil=n.getLong("natureStepUntil");
+                record.sacredPotionUntil=n.getLong("sacredPotionUntil");
+                record.posseUntil=n.getLong("posseUntil");
+                if(n.contains("posseTarget",NbtElement.INT_ARRAY_TYPE))
+                    record.posseTarget=n.getUuid("posseTarget");
+                record.disciplineUntil=n.getLong("disciplineUntil");
+                record.chaosStrikeUntil=n.getLong("chaosStrikeUntil");
+                record.orderStrikeUntil=n.getLong("orderStrikeUntil");
                 if(n.contains("recordedStepX") && n.contains("recordedStepY") && n.contains("recordedStepZ"))
                     record.recordedStep=new net.minecraft.util.math.BlockPos(
                         n.getInt("recordedStepX"),n.getInt("recordedStepY"),n.getInt("recordedStepZ"));
@@ -167,6 +174,12 @@ public final class ArcaneSave extends PersistentState {
             n.putLong("entropyUntil",record.entropyUntil);
             n.putLong("decreeUntil",record.decreeUntil);
             n.putLong("natureStepUntil",record.natureStepUntil);
+            n.putLong("sacredPotionUntil",record.sacredPotionUntil);
+            n.putLong("posseUntil",record.posseUntil);
+            if(record.posseTarget!=null)n.putUuid("posseTarget",record.posseTarget);
+            n.putLong("disciplineUntil",record.disciplineUntil);
+            n.putLong("chaosStrikeUntil",record.chaosStrikeUntil);
+            n.putLong("orderStrikeUntil",record.orderStrikeUntil);
             if(record.recordedStep!=null){
                 n.putInt("recordedStepX",record.recordedStep.getX());
                 n.putInt("recordedStepY",record.recordedStep.getY());
@@ -245,6 +258,12 @@ public final class ArcaneSave extends PersistentState {
         public long entropyUntil;
         public long decreeUntil;
         public long natureStepUntil;
+        public long sacredPotionUntil;
+        public UUID posseTarget;
+        public long posseUntil;
+        public long disciplineUntil;
+        public long chaosStrikeUntil;
+        public long orderStrikeUntil;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

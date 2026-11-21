@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Verdict’s Weight",
+  "description": "Kill → hostiles within 4 blocks 10% chance flee 40t."
+}

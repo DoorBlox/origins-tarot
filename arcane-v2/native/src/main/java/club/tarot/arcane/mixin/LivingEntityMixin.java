@@ -16,6 +16,9 @@ import club.tarot.arcane.CrumblingReaper;
 import club.tarot.arcane.MagicianStrengthAbilities;
 import club.tarot.arcane.EmperorLoversAbilities;
 import club.tarot.arcane.BenevolentCrown;
+import club.tarot.arcane.DevilJudgementAbilities;
+import club.tarot.arcane.BindingContract;
+import club.tarot.arcane.ImpossibleFist;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -50,12 +53,17 @@ public abstract class LivingEntityMixin {
         amount=EmperorLoversAbilities.incoming(victim,source,amount);
         if(source.getAttacker() instanceof ServerPlayerEntity owner)
             amount=EmperorLoversAbilities.outgoing(owner,victim,source,amount);
+        if(victim instanceof ServerPlayerEntity target)
+            amount=DevilJudgementAbilities.incoming(target,source,amount);
+        if(source.getAttacker() instanceof ServerPlayerEntity owner)
+            amount=DevilJudgementAbilities.outgoing(owner,victim,source,amount);
         return amount;
     }
     @ModifyVariable(method="heal",at=@At("HEAD"),argsOnly=true,index=1)
     private float tarot$loversHealing(float healing) {
         if((Object)this instanceof ServerPlayerEntity player)
-            return EmperorLoversAbilities.healMultiplier(player,healing);
+            return DevilJudgementAbilities.healingMultiplier(player,
+                EmperorLoversAbilities.healMultiplier(player,healing));
         return healing;
     }
 
@@ -69,7 +77,13 @@ public abstract class LivingEntityMixin {
     private void tarot$rescue(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
         LivingEntity victim=(LivingEntity)(Object)this;
         if(BenevolentCrown.protectsPassive(victim) ||
-            BenevolentCrown.preventAttack(victim,source)) {
+            BenevolentCrown.preventAttack(victim,source) ||
+            BindingContract.preventAttack(victim,source)) {
+            cir.setReturnValue(false);
+            return;
+        }
+        if((Object)this instanceof ServerPlayerEntity p &&
+            DevilJudgementAbilities.fireImmune(p,source)) {
             cir.setReturnValue(false);
             return;
         }
@@ -120,6 +134,8 @@ public abstract class LivingEntityMixin {
             FoolLegend.afterSuccessfulHit((LivingEntity)(Object)this,source);
             WorldJusticeAbilities.onSuccessfulHit((LivingEntity)(Object)this,source);
             BenevolentCrown.onSuccessfulHit((LivingEntity)(Object)this,source);
+            if(source.getAttacker() instanceof ServerPlayerEntity caster)
+                DevilJudgementAbilities.onSuccessfulHit(caster,(LivingEntity)(Object)this,source);
             if(source.getAttacker() instanceof ServerPlayerEntity owner)
                 DeathTowerAbilities.onHit(owner,(LivingEntity)(Object)this,source);
             if(source.getAttacker() instanceof ServerPlayerEntity attacker)
@@ -141,6 +157,7 @@ public abstract class LivingEntityMixin {
             HermitChariotAbilities.onTakenDamage(p,source,taken);
             DeathTowerAbilities.onDamage(p,source,taken);
             EmperorLoversAbilities.onTakenDamage(p,source,taken);
+            DevilJudgementAbilities.onTakenDamage(p,source,taken);
             FoolAbilities.afterDamage(p,source);
         }
     }
@@ -161,7 +178,8 @@ public abstract class LivingEntityMixin {
     private void tarot$blockJump(CallbackInfo ci) {
         if((Object)this instanceof ServerPlayerEntity player &&
             (!WorldJusticeAbilities.canJump(player) ||
-                !BenevolentCrown.maySprintOrJump(player)))ci.cancel();
+                !BenevolentCrown.maySprintOrJump(player) ||
+                !BindingContract.mayJump(player)))ci.cancel();
     }
 
     @Inject(method="onDeath",at=@At("HEAD"))
@@ -171,12 +189,27 @@ public abstract class LivingEntityMixin {
         DeathTowerAbilities.onAnyDeath(victim);
         EmperorLoversAbilities.onAnyDeath(victim);
         BenevolentCrown.onAnyDeath(victim);
-        if(victim instanceof ServerPlayerEntity p)HangedAbilities.onPlayerDeath(p);
+        BindingContract.onAnyDeath(victim,source);
+        if(victim instanceof ServerPlayerEntity p) {
+            HangedAbilities.onPlayerDeath(p);
+            // Stop all timed powers immediately on death, before any fresh
+            // Origin grants/respawn; never leave flight/noClip or living minions.
+            FoolLegend.stopOnDisconnect(p);
+            HangedAbilities.stopOnDisconnect(p);
+            PaperMartyr.stopOnDisconnect(p);
+            WorldJusticeAbilities.stopOnDisconnect(p);
+            BurningArchive.stopOnDisconnect(p);
+            CrumblingReaper.stopOnDisconnect(p);
+            ImpossibleFist.stopOnDisconnect(p);
+            EmperorLoversAbilities.stopOnDisconnect(p);
+            DevilJudgementAbilities.stopOnDisconnect(p);
+        }
         if(source.getAttacker() instanceof ServerPlayerEntity attacker) {
             HangedAbilities.onKill(attacker,victim);
             WorldJusticeAbilities.onKill(attacker,victim);
             HermitChariotAbilities.onKill(attacker,victim);
             DeathTowerAbilities.onKill(attacker,victim);
+            DevilJudgementAbilities.onKill(attacker,victim);
             Ascension.onKill(attacker,victim);
         }
     }

@@ -8,11 +8,12 @@ Rev3 governs shared Sequence, slots, and Sequence1 fusion.
 | Fool + Hanged Man / Paper Martyr | 28 | 10 | Java/boot tested, gameplay acceptance pending |
 | World + Justice / Marked Verdict | 30 | 10 | Java/boot tested, gameplay acceptance pending |
 | Hermit + Chariot / Burning Archive | 29 | 10 | Java/boot tested, gameplay acceptance pending |
-| Death + Tower / Crumbling Reaper | 30 | 10 | Latest CI pending; gameplay acceptance pending |
+| Death + Tower / Crumbling Reaper | 30 | 10 | Java/boot CI passed; gameplay acceptance pending |
 | Magician + Strength / Impossible Fist | 29 | 10 | Java and startup CI passed; experimental phasing |
-| Emperor + Lovers / Benevolent Crown | 29 | 10 | New candidate; exact-head CI pending |
-| **Authored** | **175** | **60** | **235 / 434** |
-| **Remaining** | **149** | **50** | **199 / 434** |
+| Emperor + Lovers / Benevolent Crown | 29 | 10 | Java/boot CI passed; gameplay acceptance pending |
+| Devil + Judgement / Binding Contract | 30 | 10 | New candidate; exact-head CI pending |
+| **Authored** | **205** | **70** | **275 / 434** |
+| **Remaining** | **119** | **40** | **159 / 434** |
 
 **Read "authored" as packaged named power IDs with native handlers or
 documented approximations, never as in-game verified complete behavior.**
@@ -29,3 +30,8 @@ Batch 7 adds native domain authorization and movement policy, permanent
 shield and solitude drawbacks, allied healing and server-driven attribute
 modifiers. See the Batch 7 gaps list for approximate villager discounts,
 land-claim interactions, leaf phasing and player-target control.
+
+Batch 8 adds explicit consent-based contracts, timed law domains, Devil
+combat buffs, Judgement PvP debuffs and native summons. It retains known
+gaps in no_spawn, precise potion-healing attribution, human stun/aggro and
+client rendering. Tests and owner gameplay acceptance are separate gates.

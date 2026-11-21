@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Law of Hell",
+  "description": "Attacker takes 2 damage + Slowness II 40t; if <50% HP: Wither I 60t."
+}

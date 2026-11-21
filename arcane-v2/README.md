@@ -80,5 +80,18 @@ The **second pathway's identity drawback is permanent from Seq4**, while
 its sequence kits remain slot-gated until resonance activates at Seq1.
 `docs/BATCH_7_TEST.md` has uncompleted in-game checks; the documented
 approximations in `docs/BATCH_7_GAPS.md` are not claims of source fidelity.
-The draft PR now represents **235/434** named ability entries. The remaining
-199 entries and gaps in already-authored abilities still need development.
+At the end of Batch 7 the draft PR represented **235/434** named ability entries;
+in-game mechanics and older approximations still required testing.
+
+## Devil / Judgement / Binding Contract — native Batch 8
+
+40 additional power entries (15 Devil, 15 Judgement, 10 Binding Contract)
+plus native event handlers for fire/retaliation/teleport restrictions,
+survival skills, temporary law domains and a player-driven contract
+acceptance flow. A contract has **no refusal penalty when ignored**; only
+an explicit `/tarot contract refuse` applies the described effects.
+The Absolute Law `no_spawn` selection currently pacifies hostile mobs but
+**does not truly block spawn registration**. Potion source attribution,
+player-directed aggro, and custom AI/stun behavior are approximate.
+See `docs/BATCH_8_TEST.md` and `docs/BATCH_8_GAPS.md`.
+This source candidate represents **275/434** named entries, 159 remaining.

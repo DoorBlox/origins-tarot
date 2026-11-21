@@ -7,6 +7,7 @@ import club.tarot.arcane.DeathTowerAbilities;
 import club.tarot.arcane.MagicianStrengthAbilities;
 import club.tarot.arcane.EmperorLoversAbilities;
 import club.tarot.arcane.BenevolentCrown;
+import club.tarot.arcane.BindingContract;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -53,7 +54,8 @@ public abstract class PlayerEntityMixin {
     private void tarot$movementRestriction(CallbackInfo ci) {
         if((Object)this instanceof ServerPlayerEntity player &&
             (!WorldJusticeAbilities.canSprint(player) ||
-                !BenevolentCrown.maySprintOrJump(player)))player.setSprinting(false);
+                !BenevolentCrown.maySprintOrJump(player) ||
+                !BindingContract.maySprint(player)))player.setSprinting(false);
     }
     @ModifyVariable(method = "addExhaustion", at = @At("HEAD"), argsOnly = true)
     private float tarot$spiritualExpenditure(float amount) {

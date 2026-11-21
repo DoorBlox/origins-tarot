@@ -32,8 +32,9 @@ not need a second Arcane datapack ZIP.
    IDs are `tarot:fool`, `tarot:hanged_man`, `tarot:world`,
    `tarot:justice`, `tarot:hermit`, `tarot:chariot`, `tarot:death`,
    `tarot:tower`, `tarot:magician`, `tarot:strength`,
-   `tarot:emperor`, and `tarot:lovers`. The Paper Martyr, Marked Verdict, Burning Archive,
-   Crumbling Reaper, Impossible Fist and Benevolent Crown Resonances activate at Sequence 1; their Origin JSONs are not
+   `tarot:emperor`, `tarot:lovers`, `tarot:devil` and `tarot:judgement`. The Paper Martyr, Marked Verdict, Burning Archive,
+   Crumbling Reaper, Impossible Fist, Benevolent Crown and Binding Contract
+   Resonances activate at Sequence 1; their Origin JSONs are not
    added as independent character-creation choices.
 6. Check `/tarot slots` and `/tarot status`. Players can alternate
    **Acting A** (acquire/handle the card's designated item) and **Acting B**
@@ -59,6 +60,8 @@ Current supported Acting A / Acting B tracks:
 - **Strength:** acquire or handle an iron ingot; then kill a zombie
 - **Emperor:** acquire or handle a shield; then kill a pillager
 - **Lovers:** acquire or handle a poppy; then trade with a villager
+- **Devil:** acquire or handle a blaze rod; then kill a blaze
+- **Judgement:** acquire or handle iron bars; then trade with a villager
 
 Alternate A/B. Each accepted action grants one mark, to a maximum of 20.
 Use `/tarot status` to see mark count, next required action and the
@@ -116,7 +119,7 @@ from a meaningful save without a backup and migration.
 
 ## 6. Acceptance and rollback
 
-Follow `BATCH_1_TEST.md`, `BATCH_2_TEST.md`, `BATCH_3_TEST.md`, `BATCH_4_TEST.md`, `BATCH_5_TEST.md`, `BATCH_6_TEST.md`, `BATCH_7_TEST.md`
+Follow `BATCH_1_TEST.md`, `BATCH_2_TEST.md`, `BATCH_3_TEST.md`, `BATCH_4_TEST.md`, `BATCH_5_TEST.md`, `BATCH_6_TEST.md`, `BATCH_7_TEST.md`, `BATCH_8_TEST.md`
 and the associated gaps documents. Do not confuse successful CI with
 real in-game gameplay acceptance.
 
@@ -124,8 +127,8 @@ To roll back, stop the server, remove the Arcane V2 JAR, restore the
 old V3 datapack and matching world backup. Do **not** mix Arcane V2
 persistent save data with V3 progression data without a migration.
 
-**Status:** Twelve individual pathways and six Resonances have named power
-resources in development source (235/434), with 199 remaining. Some of
+**Status:** Fourteen individual pathways and seven Resonances have named power
+resources in development source (275/434), with 159 remaining. Some of
 these entries have incomplete or approximate mechanics; no live SMP acceptance
 is recorded. The Fall can injure **self and allies** by Rev2 design.
 **Do not enable experimental phasing in a protected or public world** until
@@ -135,3 +138,9 @@ Batch 7 adds `/tarot allow <player>` for active Emperor/Benevolent Crown
 domains and `/tarot consort <player>` for the fused capstone. These commands
 are scoped to the player's active domain and cannot assign an offline consort.
 Do not interpret startup CI as verified ally/PvP/land-claim behavior.
+
+Batch 8: use `/tarot decree <no_sprint|no_jump|no_attack|no_spawn>`
+inside an active Judgement Absolute Law, and `/tarot contract accept` or
+`/tarot contract refuse` if you receive a pending Binding Contract offer.
+Non-response causes **no penalty**. These commands require only a server
+player account, not OP. Never deploy before exact-head CI and safe PvP tests.

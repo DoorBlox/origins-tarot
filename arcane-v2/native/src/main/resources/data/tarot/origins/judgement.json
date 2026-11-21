@@ -1,0 +1,11 @@
+{
+  "name": "Judgement",
+  "description": "Arcane V2 Judgement; all sequence kits are managed dynamically.",
+  "icon": "minecraft:iron_bars",
+  "impact": 3,
+  "order": 20,
+  "powers": [
+    "tarot:judgement/marker",
+    "tarot:judgement/identity_no_unlawful_escape"
+  ]
+}
