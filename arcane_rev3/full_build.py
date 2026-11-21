@@ -83,7 +83,7 @@ SCORES += RESCUE_COOLDOWNS + ("a_rtest", "a_focus") + SIN_SCORES
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick",
           "a_focus_menu","a_choose","a_guide","a_abilities","a_roadmap",
-          "a_kit","a_detail")
+          "a_kit","a_detail","a_stages")
 
 
 def J(obj):
@@ -249,6 +249,7 @@ def emit_player(w,kits,root=ROOT):
         "execute if score @s a_guide matches 1.. run "+F("ui/help"),
         "execute if score @s a_abilities matches 1.. run "+F("ui/codex/home"),
         "execute if score @s a_roadmap matches 1.. run "+F("ui/roadmap"),
+        "execute if score @s a_stages matches 1.. run "+F("ui/stages"),
         "execute if score @s a_kit matches 1.. run "+F("ui/codex/open"),
         "execute if score @s a_detail matches 1.. run "+F("ui/codex/detail_open"),
         # Focus selection is player-triggered and processed only when
@@ -553,6 +554,7 @@ def emit_ui(w):
         msg("Vanilla commands: /trigger a_help, /trigger a_abilities, /trigger a_roadmap.","gray"),
         click("[My abilities]","a_abilities"),
         click("[My ascension roadmap]","a_roadmap","yellow"),
+        click("[All Sequence milestones]","a_stages","light_purple"),
         click("[My status]","a_status"),
         click("[Manage slots]","a_slots"),
         click("[Choose active key focus]","a_focus_menu"),
@@ -787,6 +789,7 @@ def alias():
                 lit("guide",actions=[a("a_guide")]),
                 lit("abilities",actions=[a("a_abilities")]),
                 lit("roadmap",actions=[a("a_roadmap")]),
+                lit("stages",actions=[a("a_stages")]),
                 lit("kit",[lit(i,actions=[a("a_kit set "+str(i))])
                            for i in range(1,9)]),
                 lit("detail",[lit(i,actions=[a("a_detail set "+str(i))])
