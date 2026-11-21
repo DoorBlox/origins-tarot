@@ -78,6 +78,26 @@ class CompleteCatalogTests(unittest.TestCase):
         self.assertEqual(conditional["if_action"]["chance"],0.2)
         self.assertEqual(conditional["if_action"]["action"]["effect"]["duration"],40)
 
+    def test_justice_compassion_and_hanged_regen_are_limited_safely(self):
+        root=Path(__file__).resolve().parents[1]
+        powers,manifest,_=compile_powers(root)
+        just=powers["tarot:justice/9_compassionate_restraint"]
+        self.assertEqual(just["type"],"origins:modify_damage_dealt")
+        self.assertEqual(just["target_condition"]["type"],"origins:in_tag")
+        self.assertEqual(just["target_condition"]["tag"],"tarot:passive")
+        self.assertEqual(just["modifier"]["value"],-0.70)
+        hanged=powers["tarot:hanged_man/9_weight_of_sin"]
+        self.assertEqual(hanged["type"],"origins:disable_regen")
+        self.assertEqual(hanged["condition"]["type"],"origins:health")
+        self.assertEqual(hanged["condition"]["comparison"],">")
+        self.assertEqual(hanged["condition"]["compare_to"],16)
+        for slug,name in (("justice","Compassionate Restraint"),("hanged_man","Weight of Sin")):
+            found=[x for x in manifest if x["pathway"]==slug and x["sequence"]==9 and x["name"]==name]
+            self.assertEqual(len(found),1)
+            self.assertEqual(found[0]["status"],"partial")
+            self.assertIn("missing",found[0])
+            self.assertTrue(found[0]["missing"])
+
     def test_alias_is_nonop_and_player_scoped(self):
         doc=alias()
         self.assertEqual((doc["schemaVersion"],doc["commandMode"],doc["command"],doc["permission"]),
@@ -133,10 +153,10 @@ class FullBuildTests(unittest.TestCase):
         from arcane_rev3.powers import compile_powers, norm
         root=Path(__file__).resolve().parents[1]
         compiled, manifest, original_kits=compile_powers(root)
-        self.assertEqual(len(IDENTITY_DRAWBACK_NAMES),17)
+        self.assertEqual(len(IDENTITY_DRAWBACK_NAMES),19)
         missing=set(PATHWAYS)-set(IDENTITY_DRAWBACK_NAMES)-{"fool"}
         self.assertEqual(missing,
-                         {"lovers","wheel_of_fortune","justice","hanged_man"})
+                         {"lovers","wheel_of_fortune"})
         for slug,ability in IDENTITY_DRAWBACK_NAMES.items():
             expected=[
                 item for item in manifest
