@@ -2,7 +2,7 @@
 
 > **READ THIS FIRST IN A NEW CHAT.** This file is a durable engineering checkpoint, **not** proof of current GitHub state. First query the live `main` branch, open PRs, CI, and issue [#20](https://github.com/DoorBlox/origins-tarot/issues/20), then read the authoritative handbooks. Do not ask the owner to re-explain the project.
 
-**Last verified snapshot:** 2026-11-22 (Indonesia time), `main` at `7f51a2683098572437bb4da9dbe71fea5201e81c` after merged PR [#28](https://github.com/DoorBlox/origins-tarot/pull/28). This hash is *historical*; never assume it stays current. Last observed open implementation PRs: **none after #28 merge** (re-query GitHub). The Arcane V2 Rev3 developer pack **has not been installed or tested on the live SMP**.
+**Last verified implementation snapshot:** 2026-11-22, main at `a45377cc2a1d33f2f514221c63db3624ef977317` after merged [PR #30](https://github.com/DoorBlox/origins-tarot/pull/30), four exact-head green workflows. This snapshot predates any handoff-only merge; re-query live main. No open implementation PR after #30. **272/434 abilities compiled (73 full, 199 partial, 162 blocked); 63/110 Resonance compiled, none granted. No live SMP acceptance or deployment.**
 
 ## 1. Mission and owner's standing instructions
 
@@ -28,7 +28,7 @@ Build **the entire Arcane V2 Rev3 Tarot Club experience** for Minecraft Java 1.1
 6. `docs/ARCANE_REV3_DEVELOPMENT.md` — detailed engineering history/limitations; [issue #20](https://github.com/DoorBlox/origins-tarot/issues/20) — current blocking backlog; this handoff — continuity/startup rules.
 7. `README.md` and `docs/ASCENSION.md` are mostly about existing V2 and the older **V3 Path of Ascension**, not this new production-ready Arcane Rev3 pack.
 
-**Version notes:** Minecraft Java **1.18.2**, Fabric, Origins **1.4.1**, pack format **9**. Owner has mentioned Fabric API, Pehkui, Extra Keybinds, Command Aliases **1.0.1**, ReMorphed, Woodwalkers, CraftedCore, SkinShifter and LambDynamicLights. **No Immersive Portals**. Verify exact mod jar/API versions in a disposable server; don't rely on newest Apoli examples. Official [Origins 1.4.1 power types](https://origins.readthedocs.io/en/1.4.1/types/power_types/) and [Command Aliases docs](https://wiki.commandaliases.flashyreese.me/command-modes/custom) are helpful but cannot substitute for the installed binary's behavior.
+**Version notes and owner modpack:** Minecraft Java **1.18.2**, Fabric, Origins **1.4.1**, pack format **9**. Owner-reported installed: **Fabric API 0.76.0+1.18.2, Pehkui 3.7.11, Origins Extra Keybinds 0.2.0, Command Aliases 1.0.1, ReMorphed 4.0, Woodwalkers 5.4, CraftedCore 5.1, SkinShifter 1.0, LambDynamicLights**, plus **LuckPerms** (exact version unprovided). **Immersive Portals intentionally not installed.** No KubeJS, custom Java/Fabric mod, or assumed Apugli. Read [docs/ARCANE_MOD_INTEGRATION_MATRIX.md](docs/ARCANE_MOD_INTEGRATION_MATRIX.md) before implementing mod-specific powers; validate exact APIs and permissions first.
 
 ## 3. Baseline snapshot (verified after #26)
 
@@ -58,6 +58,14 @@ Build **the entire Arcane V2 Rev3 Tarot Club experience** for Minecraft Java 1.1
 - **Intentionally not suppressed**: mandatory identity drawbacks, composite powers such as Judgement Law's Weight (+2 armor), and abilities with differing trigger scopes like Star Nightwatch. Additional upgrades must be audited for preserving unrelated effects.
 - Expected manifest remains **434 specified / 241 compiled / 73 full / 168 partial / 193 blocked** because this was a correctness fix, not new ability coverage. These source-completeness labels do not establish in-game compatibility.
 - Runtime check of Apoli 1.4.1 `origins:power` source filter, reload, and slot transitions **NOT RUN** on a Minecraft server. No release and no live SMP installation.
+
+## 3b. Milestone — new ability batch and confirmed installed mods (2026-11-22)
+
+- Merged [PR #30](https://github.com/DoorBlox/origins-tarot/pull/30) at `a45377cc2a1d33f2f514221c63db3624ef977317`, with all four PR workflows green at exact head `a41f1ac6301fe3876a21db12803a310d13377d80`.
+- 19 individually registered powers added in `individual4.py`, 12 new Resonance powers in `resonance3.py`. `tests/test_arcane_wave3.py` tests catalog IDs, statuses, ZIP contents, target safety and locked Sequence 1.
+- Current coverage **434 specified / 272 compiled / 73 full / 199 partial / 162 blocked**; **209/324 individual** and **63/110 Resonance** compiled. The 63 Resonance abilities are not selectable/granted, nor is Sequence1 unlocked.
+- The user's supplied **tarotmc(1).pdf** pages 22–25 confirms the selected installed modpack; they additionally confirm LuckPerms. The installed-mod matrix is now `docs/ARCANE_MOD_INTEGRATION_MATRIX.md`. Existing-mod commands/configs are permitted where confirmed, but avoid fabricated APIs, arbitrary OP permissions, KubeJS or a new Java mod.
+- Next: verify mod-specific commands and permission nodes; complete safe team comparison, Wheel Debt of Fate and Lovers Separation Anxiety; finish 47 remaining Resonance and 115 individual definitions plus 199 partial exactness gaps. Real Minecraft acceptance is still NOT RUN.
 
 ## 4. Exact gameplay contract — do not break
 
@@ -161,7 +169,7 @@ Choose **one inner ZIP only** in a new disposable world, never both or alongside
 
 **High-priority correctness:** Implement or prove limits of **same-team comparisons** (including ally-only healing and enemy-player PvP), permanent Wheel **Debt of Fate**, Lovers ally-only loneliness, upgrade replacement/nonstacking, true right-click cooldowns, and world/relog/respawn/pause integrity. Add tests tied to actual commands. Maintain 1.18.2 compatibility.
 
-**Bulk ability completion:** 193 entries are still blocked in the snapshot: **134 individual**, **59 Resonance**. Expand `arcane_rev3/batches` in parallel source-traced batches; identify what is truly impossible under no-KubeJS/no-custom-Java and avoid deceptive "done" counts. Upgrade 168 partial definitions toward source fidelity. **51/110 Resonance definitions are compiled but NONE are in playable kits**.
+**Bulk ability completion (after #30):** **162 still blocked** (115 individual, 47 Resonance). Expand meaningful source-backed implementations; improve **199 partial** definitions toward handbook fidelity. **63/110 Resonance compiled, none in playable kits.** Keep Sequence1 fail-closed. Prioritize verified integrations from the installed mod matrix when those add capabilities.
 
 **Resonance activation:** After all 110 are faithful, build validated 11 full 10-kit grants, one-way transition at Sequence1, permanent identity penalties and rollback/relog integration. Before that, keep all pair Origins unchoosable and the Sequence2→1 ritual blocked without spending resources.
 
