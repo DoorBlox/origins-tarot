@@ -124,11 +124,11 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
     w.f("ui/codex/home",
         _msg("ABILITY CODEX | Choose an equipped Sequence kit.", "gold"),
         _msg("Seq9-5 kits auto-equip. Seq4-2 slots are editable. Every selected kit has its own abilities.", "yellow"),
-        _msg("Partial means an actual fallback exists, but some handbook mechanics do not.", "gray"),
+        _msg("Open a kit to learn its abilities and activation controls.", "gray"),
         "execute unless score @s a_init matches 1 run " + _msg(
             "Choose a Tarot Origin to see your own kits.", "red"),
         "execute if score @s a_mode matches 2 run " + _msg(
-            "Sequence 1 is an OP-only Resonance test. Normal unlock is locked.", "red"),
+            "Your current form cannot be changed from this menu.", "red"),
         [f"execute if score @s a_init matches 1 if score @s a_mode matches 0..1 "
          f"if score @s a_max matches {slot}.. run " +
          _click("[View slot " + str(slot) + " abilities]", "a_kit set " + str(slot), "green")
@@ -184,7 +184,7 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
                 raise ValueError(f"Empty playable kit {slug} Seq {seq}")
             shown = [_msg(f"{slug.replace('_', ' ').title()} | Sequence {seq} | "
                           f"{len(kit_ids)} ability entries", "gold"),
-                     _msg("Click DETAILS for actual implementation, activation, and missing mechanics.", "gray")]
+                     _msg("Click DETAILS to learn what each ability does and how to use it.", "gray")]
             if seq == 9 and slug == "fool":
                 shown.append(_msg(
                     "Permanent identity drawback: Spiritual Expenditure (+25% sprint/glide exhaustion).",
@@ -192,23 +192,15 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
             for index, ident in enumerate(kit_ids, 1):
                 row = by_id[ident]
                 implemented = compiled[ident]
-                label = f"{index}. {row['name']} [{row['status'].upper()}] [DETAILS]"
-                shown.append(_click(label, "a_detail set " + str(index),
-                                    "yellow" if row["status"] == "partial" else "green"))
+                label = f"{index}. {row['name']} [DETAILS]"
+                shown.append(_click(label, "a_detail set " + str(index), "aqua"))
                 detail_fn = f"ui/codex/detail/{slug}_{seq}_{index}"
                 shown_detail = [
-                    _msg(row["name"] + " | " + row["status"].upper(),
-                         "yellow" if row["status"] == "partial" else "green"),
-                    _text("Currently in game (compiled source): " +
-                          str(implemented.get("description", "No short gameplay description supplied.")), "aqua"),
+                    _msg(row["name"], "gold"),
+                    _text("What it does: " +
+                          player_effect_text(implemented), "aqua"),
                     _text("How to use: " + how_to_use(implemented), "green"),
                 ]
-                if row["status"] == "partial":
-                    shown_detail.append(_text("Limitations: " + row["missing"], "yellow"))
-                if row["status"] == "full":
-                    shown_detail.append(_msg(
-                        "Source-full means compiled functionality, not an in-game acceptance certificate.",
-                        "gray"))
                 shown_detail.extend([
                     _msg("Use /trigger a_kit set <your slot number> to reopen this kit.", "gray"),
                     _click("[Open Ability Codex]", "a_abilities"),
@@ -266,7 +258,7 @@ def emit_roadmap(w):
     for seq in range(9, 1, -1):
         line = f"Sequence {seq} to {seq-1}: {ACT_MARKS[seq]} marks"
         if seq == 2:
-            line += " | LOCKED: Sequence 1 is an OP-only Resonance development test"
+            line += " | LOCKED: Sequence 1 is not available yet"
         else:
             line += " | " + ", ".join(
                 f"{count} {item.replace('_', ' ')}"
@@ -323,8 +315,87 @@ def emit_roadmap(w):
         w.f(f"ui/roadmap/seq_{seq}", lines)
 
 
+def player_effect_text(power):
+    """Keep actual gameplay effects, omit implementation-gap commentary.
+
+    Never substitute the original lore promise for what is compiled. If a
+    description contains a second clause about unfinished mechanics, only
+    show the implemented effect clause to players.
+    """
+    import re
+
+    description = str(power.get("description", "")).strip()
+    if not description:
+        return "Check your equipped power's effect in game."
+    clauses = re.split(r";\s*", description)
+    gameplay = [
+        clause for clause in clauses
+        if not re.search(
+            r"\b(?:not included|not implemented|pending|unsupported|"
+            r"unimplemented|placeholder|TODO|source-only)\b",
+            clause, flags=re.IGNORECASE,
+        )
+    ]
+    value = "; ".join(gameplay).strip() or description
+    value = re.sub(r"\bpartial manifestation\b", "manifestation",
+                   value, flags=re.IGNORECASE)
+    value = re.sub(r"\bfallback\b", "basic effect",
+                   value, flags=re.IGNORECASE)
+    return value
+
+
 def generate_player_manual(manifest, compiled, kits, innate):
-    """All 434 abilities, source-labelled and distinguishable from handbook intent."""
+    """Readable abilities and controls, with development diagnostics excluded."""
+    lines = [
+        "# Arcane Rev3 Player Ability Reference",
+        "",
+        "Explore your pathways and the abilities available through normal ascension.",
+        "",
+        "## How to play",
+        "",
+        "Choose an Arcana to begin at Sequence 9.",
+        "Use `/trigger a_book` for the Handbook or `/trigger a_tome` for your Pathway Tome.",
+        "Hold a written book and right-click to open it.",
+        "Check your active keys in Controls > Key Binds > Origins.",
+        "At Sequence 4, unlock your linked pathway and configure its kits with `/trigger a_slots`.",
+        "Use `/trigger a_roadmap` to see your next acting proof and ritual requirements.",
+        "Sequence 1 is not available through ordinary ascension.",
+        "",
+    ]
+    for family, title in (
+        ("individual", "22 Major Arcana pathways"),
+    ):
+        lines.extend(["## " + title, ""])
+        pathways = list(dict.fromkeys(
+            row["pathway"] for row in manifest if row["family"] == family
+        ))
+        for slug in pathways:
+            lines.extend(["### " + slug.replace("_", " ").title(), ""])
+            sequences = sorted(
+                {row["sequence"] for row in manifest
+                 if row["family"] == family and row["pathway"] == slug
+                 and 2 <= row["sequence"] <= 9},
+                reverse=True,
+            )
+            for seq in sequences:
+                lines.extend(["#### Sequence " + str(seq), ""])
+                for row in manifest:
+                    if (row["family"], row["pathway"], row["sequence"]) != (family, slug, seq):
+                        continue
+                    power = compiled.get(row["power_id"], {})
+                    identity = (family == "individual" and seq == 9
+                                and innate.get(slug) == row["power_id"])
+                    lines.append("- **" + row["name"] + "**" +
+                                 (" (permanent Origin trait)" if identity else ""))
+                    lines.append("  - What it does: " +
+                                 player_effect_text(power))
+                    lines.append("  - How to use: " + how_to_use(power))
+                lines.append("")
+    return "\n".join(lines)
+
+
+def generate_developer_ability_report(manifest, compiled, kits, innate):
+    """Source comparison and missing mechanics, distributed only for developers."""
     source_full = sum(row["status"] == "full" for row in manifest)
     source_partial = sum(row["status"] == "partial" for row in manifest)
     b = chr(96)

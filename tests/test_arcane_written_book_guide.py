@@ -77,9 +77,10 @@ class BookContracts(unittest.TestCase):
                 pages = pathway_pages(card["slug"], compiled, manifest, kits)
                 body = json.dumps(pages, ensure_ascii=False)
                 self.assertLessEqual(len(pages), 100)
-                self.assertIn("PARTIAL", body)
-                self.assertIn("Current", body)
-                self.assertIn("Missing", body)
+                self.assertIn("What it does", body)
+                self.assertIn("How to use", body)
+                self.assertNotIn("PARTIAL", body)
+                self.assertNotIn("Missing:", body)
                 self.assertIn("Sequence", body)
                 for row in manifest:
                     if (row["family"] == "individual" and
@@ -155,6 +156,47 @@ class BookContracts(unittest.TestCase):
             help_text = function(z, "ui/help")
             for trigger in ("a_book", "a_tome", "a_partner_tome", "a_hud"):
                 self.assertIn(trigger, help_text)
+
+    def test_player_books_hide_developer_status_without_misrepresenting_effects(self):
+        compiled, manifest, kits = compile_powers(Path(__file__).resolve().parents[1])
+        for card in CARDS:
+            pages = pathway_pages(card["slug"], compiled, manifest, kits)
+            rendered = json.dumps(pages, ensure_ascii=False)
+            for jargon in ("PARTIAL", "FULL SOURCE", "PARTIAL SOURCE",
+                           "Missing:", "Current source abilities:",
+                           "source-full", "Source-full", "compiled source"):
+                self.assertNotIn(jargon, rendered, (card["slug"], jargon))
+            self.assertIn("How to use", rendered)
+            self.assertIn("What it does", rendered)
+        general = json.dumps(general_pages(), ensure_ascii=False)
+        self.assertNotIn("Partial powers", general)
+        self.assertNotIn("developer", general.lower())
+
+    def test_player_chat_and_manual_hide_diagnostic_labels(self):
+        with ZipFile(self.data["only"]) as z:
+            for name in z.namelist():
+                if not name.startswith("data/tarot_arcane/functions/ui/"):
+                    continue
+                if not name.endswith(".mcfunction"):
+                    continue
+                content = z.read(name).decode()
+                for jargon in ("[FULL]", "[PARTIAL]", " | FULL",
+                               " | PARTIAL", "Currently in game (compiled source)",
+                               "Limitations:", "Source-full", "OP-only Resonance test",
+                               "incomplete powers remain PARTIAL"):
+                    self.assertNotIn(jargon, content, (name, jargon))
+        manual = self.data["player_manual"].read_text(encoding="utf8")
+        for jargon in ("source-full", "PARTIAL", "Still missing:",
+                       "Original intent", "compiled source", "power_id",
+                       "source implementations"):
+            self.assertNotIn(jargon, manual)
+        self.assertIn("How to use", manual)
+        self.assertIn("What it does", manual)
+        self.assertIn("Sequence 1", manual)
+        # Developer diagnostics are retained separately, not suppressed.
+        dev = self.data["developer_ability_report"].read_text(encoding="utf8")
+        self.assertIn("PARTIAL", dev)
+        self.assertIn("Still missing", dev)
 
     def test_alias_has_book_and_tome(self):
         alias = json.loads(self.data["alias"].read_text())
