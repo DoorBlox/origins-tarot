@@ -283,6 +283,12 @@ public final class HangedAbilities {
         if(r!=null) {r.sin=0f;state.markDirty();}
     }
     public static void stopOnDisconnect(ServerPlayerEntity p) {
+        // Remove short-lived owned minions before the controlling player leaves.
+        // A despawned owner must never leave unguarded hostile AI on the SMP.
+        String ownerTag="tarot_owner_"+p.getUuidAsString();
+        for(VexEntity vex:p.getWorld().getEntitiesByClass(VexEntity.class,
+            new Box(p.getBlockPos()).expand(256),
+            entity->entity.getScoreboardTags().contains(ownerTag))) vex.discard();
         MANIFESTS.remove(p.getUuid());
         HITS.remove(p.getUuid()); LAST_POS.remove(p.getUuid()); TRACKED_TARGETS.remove(p.getUuid());
     }

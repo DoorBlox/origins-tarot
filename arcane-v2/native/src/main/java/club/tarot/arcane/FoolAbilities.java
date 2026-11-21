@@ -47,6 +47,9 @@ public final class FoolAbilities {
     }
     public static boolean enemy(ServerPlayerEntity holder,Entity target) {
         if(target==holder) return false;
+        // Owned allied summons are never valid hostile targets, and never contribute
+        // to Spiritual Overload or other offensive targeting counts.
+        if(target.getScoreboardTags().contains("tarot_shadow_minion")) return false;
         if(target instanceof PlayerEntity) {
             if(holder.getScoreboardTeam()!=null && holder.isTeammate(target)) return false;
             // Unteamed players are enemies for Tarot combat targeting.

@@ -33,6 +33,7 @@ public class AbilityRegistryTest {
         }
         assertEquals(14,all.size());
         assertFalse(AbilityRegistry.has("tarot:fool/8_fabricated_power"));
-        assertFalse(AbilityRegistry.implemented("hanged_man",9));
+        assertTrue(AbilityRegistry.implemented("hanged_man",9));
+        assertTrue(AbilityRegistry.implemented("paper_martyr",9));
     }
 }
