@@ -320,6 +320,8 @@ def generate_player_manual(manifest, compiled, kits, innate):
     lines = [
         "# Arcane Rev3 — Abilities & Pathways",
         "",
+        "Explore 434 Arcana and Resonance ability entries, organized by pathway and Sequence.",
+        "",
         "## How to play",
         "",
         "Choose an Arcana to begin at Sequence 9.",
