@@ -9,7 +9,7 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 - 22 pathway Origins and 18 inherited Elytra gliders; 11 paired Resonance IDs are reserved, not activated.
 - Pure datapack/scoreboard runtime: Sequence 9 through 2, 22 distinct acting quest tracks, altar requirements, combat lock, fixed second pathway at Sequence 4, 6/7/8 editable slots, grant/revoke and re-login reconciliation. No KubeJS or custom Fabric mod.
 - Non-OP `/tarot`, `/tarot status`, `/tarot slots`, `/tarot ascend`, `/tarot slot N tarot:card S`, `/tarot slot N clear`, `/tarot slot auto`, `/tarot slot swap N M`, and `/tarot reset` via player-scoped CLIENT `/trigger` operations. Command Aliases schema uses permission 0. Both `/tarot status` and `/tarot slots` display actual Arcana titles and Sequence numbers rather than internal numeric kit codes; the partner is revealed at Sequence 4.
-- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **132 powers compiled (73 fully translated, 59 explicitly partial), 302 still blocked.** No fake `origins:simple` abilities are emitted.
+- The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **128 powers compiled (69 fully translated, 59 explicitly partial), 306 still blocked.** No fake `origins:simple` abilities are emitted.
 - Permanent primary-pathway drawbacks are innate Origin powers, **not removable Sequence-9 slot abilities**: Fool's +25% exhaustion plus 19 more compiled pathway drawbacks are attached directly to their Origins, outside the source-grant/revoke cycle.
 
 ## Rev3 identity-drawback integrity
@@ -28,9 +28,11 @@ Batch 2 implements 13 more native or partial abilities across Empress, Emperor, 
 
 ## Higher-sequence upgrades
 
-Ten further Rev2 abilities are compiled: Devil's Demon Form, Tower's Ruin-Proof II, Wheel of Fortune's Misfortune, Judgement's Law's Weight II, Moon's Shaman, World's Cold Precision II, Sun's Unshadowed II, Hanged Man's Dark Blade, Star's Nightwatch II, and Empress's Plague Touch.
+This batch adds **six new native powers** (Demon Form, Ruin-Proof II, Wheel's Misfortune, Law's Weight II, Nightwatch II and Plague Touch) and **repairs four existing legacy templates** that were incorrectly suited to the old cumulative progression: Moon's Shaman, World's Cold Precision II, Sun's Unshadowed II and Hanged Man's Dark Blade.
 
-**Dark Blade is a complete source translation in code.** The other nine are partial primarily because the source specifies a replacement or upgrade of an earlier kit, while selectable sequence slots can contain both and therefore stack the effects. Several still lack exact enemy-player targeting. Their machine-readable manifest entries state each limitation. These powers must not be described as having exact in-game fidelity without gameplay acceptance and a stacking policy.
+The handbook explicitly says Shaman heals 1.5 hearts = 3 HP every 600 ticks, not 2 HP. Cold Precision II now specifies a standalone +30% projectile modifier and Unshadowed II a standalone +50% undead modifier, rather than weak incremental deltas. Dark Blade uses two conditioned attributes below 12 HP, limiting its offensive effect to melee rather than every damage source.
+
+**Dark Blade remains a full source translation in code.** The nine other upgrades are labeled partial primarily because Rev2 specifies replacing an earlier kit, while Rev3 slots can hold both and stack the effects. Exact player-team targeting and source replacement behavior remain unverified. All corrections retain traceable source information in the machine-readable manifest.
 
 ## Not implemented / not verified
 
