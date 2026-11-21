@@ -97,11 +97,25 @@ class Rev3BuildTests(unittest.TestCase):
         self.assertEqual(power["key"]["key"], "key.origins.secondary_active")
         self.assertEqual(power["entity_action"]["radius"], 10)
         self.assertTrue(power["entity_action"]["include_target"])
+        self.assertEqual(power["entity_action"]["shape"], "sphere")
         self.assertEqual(power["entity_action"]["bientity_action"]["action"]["effect"]["duration"], 40)
         exhaustion = json.loads(self.zip.read("data/tarot/powers/fool/9_spiritual_expenditure.json"))
         self.assertEqual(exhaustion["modifier"]["value"], 0.25)
         self.assertEqual({part["type"] for part in exhaustion["condition"]["conditions"]},
                          {"origins:sprinting", "origins:fall_flying"})
+
+    def test_clowns_mischief_reactive_power(self):
+        power = json.loads(self.zip.read("data/tarot/powers/fool/9_clowns_mischief.json"))
+        self.assertEqual(power["type"], "origins:attacker_action_when_hit")
+        self.assertEqual(power["cooldown"], 100)
+        self.assertEqual(power["entity_action"]["chance"], 0.20)
+        self.assertEqual(power["entity_action"]["type"], "origins:chance")
+        self.assertEqual(power["entity_action"]["action"]["effect"]["effect"], "minecraft:blindness")
+        self.assertEqual(power["entity_action"]["action"]["effect"]["duration"], 20)
+        init = self.zip.read("data/tarot_arcane/functions/player/init_fool.mcfunction").decode()
+        repair = self.zip.read("data/tarot_arcane/functions/player/reconcile.mcfunction").decode()
+        self.assertIn("power grant @s tarot:fool/9_clowns_mischief tarot_slot", init)
+        self.assertIn("power grant @s tarot:fool/9_clowns_mischief tarot_slot", repair)
 
     def test_slot_grant_source_and_nonop_trigger(self):
         init = self.zip.read("data/tarot_arcane/functions/player/init_fool.mcfunction").decode()
@@ -111,7 +125,9 @@ class Rev3BuildTests(unittest.TestCase):
         self.assertIn("scoreboard players enable @s ta_slots", tick)
         self.assertIn("origin has origin @s origins:origin tarot:fool", tick)
         alias = json.loads(Path(self.paths["alias"]).read_text())
-        root = alias["customCommand"]
+        self.assertEqual(alias["schemaVersion"], 1)
+        self.assertNotIn("customCommand", alias)
+        root = alias
         self.assertEqual((root["parent"], root["permission"]), ("tarot", 0))
         self.assertTrue(all(action["commandType"] == "CLIENT"
                             and action["command"].startswith("trigger ta_")
