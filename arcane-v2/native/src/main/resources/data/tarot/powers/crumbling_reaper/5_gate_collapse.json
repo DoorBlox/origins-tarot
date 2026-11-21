@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Gate Collapse",
+  "description": "Secondary key: Nether portal + 3×3 break. Cooldown 12000t."
+}

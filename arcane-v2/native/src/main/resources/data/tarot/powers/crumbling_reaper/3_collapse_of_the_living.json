@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Collapse of the Living",
+  "description": "Enemy dies within 8 blocks → crack + 1 damage nearby enemies 3 blocks."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Consul",
+  "description": "Once per 6000t, one `#tarot:undead` within 8 blocks fights for Death 200t."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Spirit Sense",
+  "description": "Crouch 60t → `#tarot:undead` within 10 blocks glow 100t. Cooldown 600t."
+}

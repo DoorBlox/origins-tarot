@@ -102,12 +102,15 @@ public final class ArcaneMod implements ModInitializer {
                 WorldJusticeAbilities.tick(player,state,record);
                 Ascension.tick(player,state,record);
                 HermitChariotAbilities.tick(player,state,record);
+                DeathTowerAbilities.tick(player,state,record);
+                CrumblingReaper.maintenance(player,state,record);
             }
         });
         FoolAbilities.register();
         FoolLegend.register();
         WorldJusticeAbilities.register();
         HermitChariotAbilities.register();
+        DeathTowerAbilities.register();
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server) ->
             server.execute(() -> {
                 FoolLegend.stopOnDisconnect(handler.getPlayer());
@@ -115,6 +118,7 @@ public final class ArcaneMod implements ModInitializer {
                 PaperMartyr.stopOnDisconnect(handler.getPlayer());
                 WorldJusticeAbilities.stopOnDisconnect(handler.getPlayer());
                 BurningArchive.stopOnDisconnect(handler.getPlayer());
+                CrumblingReaper.stopOnDisconnect(handler.getPlayer());
             }));
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
@@ -189,7 +193,10 @@ public final class ArcaneMod implements ModInitializer {
                 || "the_marked_verdict".equals(ability)
                 || "the_unseen".equals(ability) || "the_battlefield".equals(ability)
                 || "the_burning_archive".equals(ability) || "meteor".equals(ability)
-                || "emperors_library".equals(ability) || "burning_lecture".equals(ability);
+                || "emperors_library".equals(ability) || "burning_lecture".equals(ability)
+                || "the_final_harvest".equals(ability) || "the_fall".equals(ability)
+                || "the_crumbling_reaper".equals(ability) || "falling_tower".equals(ability)
+                || "reap".equals(ability);
         return "secondary".equals(binding) && (
             "paper_dagger".equals(ability) || "paper_sentence".equals(ability)
             || "small_miracle".equals(ability) || "mystery_step".equals(ability)
@@ -197,12 +204,17 @@ public final class ArcaneMod implements ModInitializer {
             || "puppets_sentence".equals(ability) || "silent_witness".equals(ability)
             || "reap".equals(ability) || "star_read_reaper".equals(ability)
             || "star_read".equals(ability) || "sages_counsel".equals(ability)
-            || "storm_call".equals(ability)
+            || "storm_call".equals(ability) || "gate".equals(ability)
+            || "gate_collapse".equals(ability) || "collapse".equals(ability)
+            || "consul".equals(ability)
             || "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
             || "borrowed_sacrifice".equals(ability) || "gathering_of_martyrs".equals(ability));
     }
     private static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String ability) {
         if(AbilityRegistry.isActive(r.profile,ability)) {
+            if(DeathTowerAbilities.cast(p,state,r,ability)) {
+                info(p,"Cast "+ability);return 1;
+            }
             if(HermitChariotAbilities.cast(p,state,r,ability)) {
                 info(p,"Cast "+ability);return 1;
             }
@@ -293,6 +305,9 @@ public final class ArcaneMod implements ModInitializer {
         if(before.stream().anyMatch(id->id.contains("hermit/")
             || id.contains("chariot/") || id.contains("burning_archive/")))
             BurningArchive.stopOnDisconnect(player);
+        if(before.stream().anyMatch(id->id.contains("death/")
+            || id.contains("tower/") || id.contains("crumbling_reaper/")))
+            CrumblingReaper.stopOnDisconnect(player);
     }
     static void run(ServerPlayerEntity player, String command) {
         MinecraftServer server=player.getServer();
@@ -303,8 +318,10 @@ public final class ArcaneMod implements ModInitializer {
         String selector=p.getUuidAsString();
         run(p, "power revokeall "+selector+" "+SOURCE);
         SlotModel.Profile profile=r.profile;
-        if ("resonance".equals(profile.mode())) {
-            run(p,"power revokeall "+selector+" tarot_secondary_identity");
+        // Second-path drawbacks become permanent at Sequence 4, regardless
+        // of which kit occupies a slot. At Seq 1 both identities persist.
+        run(p,"power revokeall "+selector+" tarot_secondary_identity");
+        if (!"single".equals(profile.mode())) {
             String secondaryIdentity=switch(profile.primary()){
                 case "fool" -> "tarot:hanged_man/identity_weight_of_sin";
                 case "hanged_man" -> "tarot:fool/identity_spiritual_expenditure";
@@ -312,10 +329,14 @@ public final class ArcaneMod implements ModInitializer {
                 case "justice" -> "tarot:world/identity_terrifying_reputation";
                 case "hermit" -> "tarot:chariot/identity_extinguished_fury";
                 case "chariot" -> "tarot:hermit/identity_forbidden_knowledge";
+                case "death" -> "tarot:tower/identity_falling_tower";
+                case "tower" -> "tarot:death/identity_severed_vitality";
                 default -> null;
             };
             if(secondaryIdentity!=null)
                 run(p,"power grant "+selector+" "+secondaryIdentity+" tarot_secondary_identity");
+        }
+        if ("resonance".equals(profile.mode())) {
             // Resonance grant is guarded by implementation availability: no phantom powers.
             for (int seq=9;seq>=0;seq--)
                 for (String id : AbilityRegistry.forSequence(profile.resonance(),seq))
@@ -327,7 +348,8 @@ public final class ArcaneMod implements ModInitializer {
         }
         // Clear stale input bindings when a Sequence has been removed.
         if(!AbilityRegistry.isActive(profile,r.primaryBinding)) {
-            String[] priorities={"the_burning_archive","the_battlefield","the_unseen",
+            String[] priorities={"the_crumbling_reaper","the_final_harvest","the_fall",
+                "reap","falling_tower","the_burning_archive","the_battlefield","the_unseen",
                 "meteor","emperors_library","burning_lecture",
                 "the_marked_verdict","the_mindscape","the_perfect_prey",
                 "the_paper_martyr","air_cannon","authors_edit",
@@ -339,7 +361,8 @@ public final class ArcaneMod implements ModInitializer {
                 }
         }
         if(!AbilityRegistry.isActive(profile,r.secondaryBinding)) {
-            String[] priorities={"star_read_reaper","star_read","reap","storm_call",
+            String[] priorities={"gate_collapse","gate","collapse","consul",
+                "star_read_reaper","star_read","reap","storm_call",
                 "sages_counsel","puppets_sentence","paper_sentence","suffering_sight",
                 "suggestion","paper_dagger","spirit_vision","borrowed_face","discern"};
             r.secondaryBinding="";
@@ -391,6 +414,7 @@ public final class ArcaneMod implements ModInitializer {
         PaperMartyr.stopOnDisconnect(p);
         WorldJusticeAbilities.stopOnDisconnect(p);
         BurningArchive.stopOnDisconnect(p);
+        CrumblingReaper.stopOnDisconnect(p);
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_secondary_identity");
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
         run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);

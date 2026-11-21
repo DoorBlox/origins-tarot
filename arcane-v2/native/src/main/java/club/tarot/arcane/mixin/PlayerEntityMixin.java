@@ -3,6 +3,7 @@ package club.tarot.arcane.mixin;
 import club.tarot.arcane.ArcaneSave;
 import club.tarot.arcane.WorldJusticeAbilities;
 import club.tarot.arcane.HermitChariotAbilities;
+import club.tarot.arcane.DeathTowerAbilities;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +30,9 @@ public abstract class PlayerEntityMixin {
     @Inject(method="getBlockBreakingSpeed",at=@At("RETURN"),cancellable=true)
     private void tarot$investigationSpeed(BlockState state,CallbackInfoReturnable<Float> cir) {
         if((Object)this instanceof ServerPlayerEntity player)
-            cir.setReturnValue(cir.getReturnValue()*HermitChariotAbilities.breakMultiplier(player));
+            cir.setReturnValue(cir.getReturnValue()
+                *HermitChariotAbilities.breakMultiplier(player)
+                * DeathTowerAbilities.breakMultiplier(player,state));
     }
 
     @Inject(method="tick",at=@At("HEAD"))

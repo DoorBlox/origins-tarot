@@ -6,6 +6,8 @@
     "tarot:world",
     "tarot:justice",
     "tarot:hermit",
-    "tarot:chariot"
+    "tarot:chariot",
+    "tarot:death",
+    "tarot:tower"
   ]
 }

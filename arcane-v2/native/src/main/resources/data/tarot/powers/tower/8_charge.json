@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Charge",
+  "description": "Crouch-right-click stone → prime 60t → break harmlessly. Cooldown 600t."
+}

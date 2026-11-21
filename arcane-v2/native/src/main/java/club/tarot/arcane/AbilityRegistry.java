@@ -106,6 +106,36 @@ public final class AbilityRegistry {
         path("burning_archive", 2, "reapers_library");
         path("burning_archive", 1, "burning_lecture");
         path("burning_archive", 0, "the_burning_archive");
+        path("death", 9, "soul_harvest", "grave_affinity", "reapers_touch", "grave_whisper", "severed_vitality");
+        path("death", 8, "grave_dirt");
+        path("death", 7, "spirit_sense");
+        path("death", 6, "guide");
+        path("death", 5, "gate");
+        path("death", 4, "undying");
+        path("death", 3, "ferry");
+        path("death", 2, "consul");
+        path("death", 1, "reap", "grave_affinity_ii");
+        path("death", 0, "the_final_harvest");
+        path("tower", 9, "ruin_proof", "cracked_foundations", "unstable_strike", "unstable_ground", "falling_tower");
+        path("tower", 8, "charge");
+        path("tower", 7, "fault_line");
+        path("tower", 6, "foundation");
+        path("tower", 5, "collapse");
+        path("tower", 4, "impact");
+        path("tower", 3, "shockwave");
+        path("tower", 2, "cataclysm");
+        path("tower", 1, "falling_tower", "ruin_proof_ii");
+        path("tower", 0, "the_fall");
+        path("crumbling_reaper", 9, "grave_ruin");
+        path("crumbling_reaper", 8, "grave_dirt_fault_line");
+        path("crumbling_reaper", 7, "spirit_shockwave");
+        path("crumbling_reaper", 6, "guides_foundation");
+        path("crumbling_reaper", 5, "gate_collapse");
+        path("crumbling_reaper", 4, "falling_harvest");
+        path("crumbling_reaper", 3, "collapse_of_the_living");
+        path("crumbling_reaper", 2, "unstable_souls");
+        path("crumbling_reaper", 1, "falling_towers_reap");
+        path("crumbling_reaper", 0, "the_crumbling_reaper");
     }
 
     private static void path(String name, int sequence, String... ids) {

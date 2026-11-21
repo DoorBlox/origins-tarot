@@ -29,7 +29,9 @@ public final class Ascension {
         "world",new Objective(Items.CROSSBOW,EntityType.PILLAGER,false),
         "justice",new Objective(Items.HONEY_BOTTLE,null,true),
         "hermit",new Objective(Items.LAPIS_LAZULI,null,true),
-        "chariot",new Objective(Items.FLINT_AND_STEEL,EntityType.BLAZE,false)
+        "chariot",new Objective(Items.FLINT_AND_STEEL,EntityType.BLAZE,false),
+        "death",new Objective(Items.BONE,EntityType.SKELETON,false),
+        "tower",new Objective(Items.TNT,EntityType.CREEPER,false)
     );
     private static final Map<Integer,List<Offering>> OFFERINGS=new HashMap<>();
     static {

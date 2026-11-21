@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Unstable Strike",
+  "description": "Hits apply Slowness I 20t to **hostile mobs AND enemy players**. Cooldown 260t."
+}

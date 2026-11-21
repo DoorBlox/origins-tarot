@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Undying",
+  "description": "5% survive lethal at 1 heart. Cooldown 12000t."
+}

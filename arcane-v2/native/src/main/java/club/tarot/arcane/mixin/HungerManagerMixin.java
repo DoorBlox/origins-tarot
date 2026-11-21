@@ -1,6 +1,7 @@
 package club.tarot.arcane.mixin;
 
 import club.tarot.arcane.HangedAbilities;
+import club.tarot.arcane.DeathTowerAbilities;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,7 +15,9 @@ public abstract class HungerManagerMixin {
     @Redirect(method="update",at=@At(value="INVOKE",
         target="Lnet/minecraft/entity/player/PlayerEntity;heal(F)V"))
     private void tarot$naturalRegen(PlayerEntity player,float hp) {
-        if(player instanceof ServerPlayerEntity sp && HangedAbilities.blockNaturalHeal(sp,hp)) return;
+        if(player instanceof ServerPlayerEntity sp
+            && (HangedAbilities.blockNaturalHeal(sp,hp)
+                || DeathTowerAbilities.preventNaturalRegen(sp))) return;
         player.heal(hp);
     }
 }

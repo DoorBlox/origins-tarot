@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Guide",
+  "description": "`#tarot:undead` dies within 8 blocks → +1 HP. Cooldown 20t."
+}

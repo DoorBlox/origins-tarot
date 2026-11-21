@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Unstable Souls",
+  "description": "Fall damage → nearby enemies same damage. Kills → Soul Harvest heal."
+}

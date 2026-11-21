@@ -67,6 +67,10 @@ public final class ArcaneSave extends PersistentState {
                 record.meteorImmuneUntil=n.getLong("meteorImmuneUntil");
                 record.lastBookStudy=n.getLong("lastBookStudy");
                 record.burnStacks=n.getInt("burnStacks");
+                record.spiritSenseTicks=n.getInt("spiritSenseTicks");
+                record.reaperFallUntil=n.getLong("reaperFallUntil");
+                record.arcaneAbsorption=n.getFloat("arcaneAbsorption");
+                record.arcaneAbsorptionUntil=n.getLong("arcaneAbsorptionUntil");
                 record.restoreFlightPending = n.getBoolean("restoreFlightPending");
                 record.legendPriorMayFly = n.getBoolean("legendPriorMayFly");
                 record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
@@ -124,6 +128,10 @@ public final class ArcaneSave extends PersistentState {
             n.putLong("meteorImmuneUntil",record.meteorImmuneUntil);
             n.putLong("lastBookStudy",record.lastBookStudy);
             n.putInt("burnStacks",record.burnStacks);
+            n.putInt("spiritSenseTicks",record.spiritSenseTicks);
+            n.putLong("reaperFallUntil",record.reaperFallUntil);
+            n.putFloat("arcaneAbsorption",record.arcaneAbsorption);
+            n.putLong("arcaneAbsorptionUntil",record.arcaneAbsorptionUntil);
             n.putBoolean("restoreFlightPending",record.restoreFlightPending);
             n.putBoolean("legendPriorMayFly",record.legendPriorMayFly);
             n.putString("bindPrimary",record.primaryBinding);
@@ -175,6 +183,14 @@ public final class ArcaneSave extends PersistentState {
         public long meteorImmuneUntil;
         public long lastBookStudy;
         public int burnStacks;
+        public int spiritSenseTicks;
+        public long reaperFallUntil;
+        public float arcaneAbsorption;
+        public long arcaneAbsorptionUntil;
+        public net.minecraft.util.math.BlockPos chargePosition;
+        public long chargeUntil;
+        public float lastAirFall;
+        public boolean wasAirborne;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

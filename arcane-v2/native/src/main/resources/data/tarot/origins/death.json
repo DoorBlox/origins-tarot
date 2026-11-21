@@ -1,0 +1,12 @@
+{
+  "name": "Death",
+  "description": "Arcane V2 Death pathway; all sequence kits are slot managed.",
+  "icon": "minecraft:bone",
+  "impact": 3,
+  "order": 13,
+  "powers": [
+    "tarot:death/marker",
+    "tarot:death/identity_severed_vitality",
+    "tarot:death/identity_wings"
+  ]
+}
