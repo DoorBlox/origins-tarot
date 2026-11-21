@@ -162,6 +162,29 @@ class CompleteCatalogTests(unittest.TestCase):
         self.assertNotIn("@a",action["command"])
         self.assertNotIn("op ",action["command"])
 
+    def test_negative_retaliation_never_affects_same_team_players(self):
+        """Absent a team comparison, hostile-mob-only is safer than friendly fire."""
+        root=Path(__file__).resolve().parents[1]
+        powers,manifest,_=compile_powers(root)
+        byid={m["power_id"]:m for m in manifest if m["power_id"]}
+        found=[]
+        for ident,definition in powers.items():
+            if definition["type"]!="origins:attacker_action_when_hit":
+                continue
+            if ident=="tarot:sun/7_solar_flare":
+                self.assertEqual(definition["entity_action"]["condition"]["tag"],
+                                 "tarot:undead")
+                continue
+            found.append(ident)
+            guard=definition.get("damage_condition")
+            self.assertIsNotNone(guard,ident)
+            self.assertEqual(guard["type"],"origins:attacker",ident)
+            self.assertEqual(guard["entity_condition"],
+                             {"type":"origins:in_tag","tag":"tarot:hostile"},ident)
+            self.assertEqual(byid[ident]["status"],"partial",ident)
+            self.assertIn("enemy players",byid[ident]["missing"],ident)
+        self.assertGreaterEqual(len(found),8)
+
     def test_alias_is_nonop_and_player_scoped(self):
         doc=alias()
         self.assertEqual((doc["schemaVersion"],doc["commandMode"],doc["command"],doc["permission"]),
