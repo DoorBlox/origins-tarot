@@ -51,6 +51,7 @@ jobs:
             output/Arcane_Rev3_Resonance_Manual_Preview_TEST_ONLY_1.18.2.zip
             output/arcane_ability_manifest.json
             output/Arcane_Rev3_Player_Ability_Reference.md
+            output/Arcane_Rev3_Developer_Ability_Report.md
             output/tarot.json
             output/ARCANE_REV3_BUILD_SHA.txt
           if-no-files-found: error
