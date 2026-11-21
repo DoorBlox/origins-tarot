@@ -62,9 +62,17 @@ def _files():
         'key': {'key': 'key.origins.secondary_active'},
         'condition': {'type': 'origins:sneaking'},
         'entity_action': {'type': 'origins:area_of_effect', 'radius': 10,
-                          'include_target': True,
+                          'include_target': True, 'shape': 'sphere',
                           'bientity_action': {'type': 'origins:target_action',
                                               'action': _effect('glowing', 40)}},
+    })
+
+    j('data/tarot/powers/fool/9_clowns_mischief.json', {
+        'type': 'origins:attacker_action_when_hit', 'name': "Clown's Mischief",
+        'description': '20% chance to blind the attacker for 1s, with a 5s cooldown.',
+        'cooldown': 100, 'hud_render': {'should_render': False},
+        'entity_action': {'type': 'origins:chance', 'chance': 0.20,
+                          'action': _effect('blindness', 20)},
     })
 
     f('load', *[f'scoreboard objectives add {name} {kind}' for name, kind in [
@@ -97,6 +105,7 @@ def _files():
       'scoreboard players set @s ta_clock 0',
       'power revokeall @s tarot_slot',
       'power grant @s tarot:fool/9_spirit_vision tarot_slot',
+      'power grant @s tarot:fool/9_clowns_mischief tarot_slot',
       'tellraw @s '+json.dumps({'text':'[Tarot] Fool Sequence 9 activated. Sneak + V for Spirit Vision. /tarot slots', 'color':'aqua'}))
     f('player/cleanup',
       'power revokeall @s tarot_slot',
@@ -105,7 +114,11 @@ def _files():
     f('player/reconcile',
       'scoreboard players set @s ta_clock 0',
       'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 store success score @s ta_has run power has @s tarot:fool/9_spirit_vision',
-      'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 if score @s ta_has matches 0 run power grant @s tarot:fool/9_spirit_vision tarot_slot')
+      'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 if score @s ta_has matches 0 run power grant @s tarot:fool/9_spirit_vision tarot_slot',
+      'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 run function tarot_arcane:player/reconcile_clown')
+    f('player/reconcile_clown',
+      'execute store success score @s ta_has run power has @s tarot:fool/9_clowns_mischief',
+      'execute if score @s ta_has matches 0 run power grant @s tarot:fool/9_clowns_mischief tarot_slot')
     f('ui/help', 'tellraw @s '+json.dumps({'text':'[Tarot] Rev3 TEST: /tarot status, /tarot slots. Fool Seq9 only; no slot editing yet.', 'color':'gold'}))
     f('ui/status',
       'execute unless score @s ta_init matches 1 run tellraw @s '+json.dumps({'text':'[Tarot] Select Fool to begin this alpha.', 'color':'yellow'}),
@@ -123,16 +136,14 @@ def _alias():
     def action(objective):
         return {'command': 'trigger ' + objective, 'commandType': 'CLIENT'}
     return {
-        'commandMode': 'COMMAND_CUSTOM',
-        'customCommand': {
-            'parent': 'tarot', 'type': 'literal', 'permission': 0,
-            'actions': [action('ta_help')],
-            'children': [
-                {'child': name, 'type': 'literal', 'permission': 0,
-                 'actions': [action('ta_' + name)]}
-                for name in ('help', 'status', 'slots')
-            ],
-        },
+        'schemaVersion': 1, 'commandMode': 'COMMAND_CUSTOM',
+        'command': 'tarot', 'permission': 0,
+        'actions': [action('ta_help')],
+        'children': [
+            {'child': name, 'type': 'literal', 'permission': 0,
+             'actions': [action('ta_' + name)]}
+            for name in ('help', 'status', 'slots')
+        ],
     }
 
 
