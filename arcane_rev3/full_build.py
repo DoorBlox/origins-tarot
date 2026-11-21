@@ -14,6 +14,7 @@ from progression.build import quest
 
 ROOT=Path(__file__).resolve().parent.parent
 SOURCE="tarot_arcane:slot_grants"
+DEV_PREVIEW_SOURCE="tarot_arcane:resonance_manual_preview"
 PREFIX="tarot_arcane:"
 NUM={slug:i+1 for i,slug in enumerate(PATHWAYS)}
 # Every pathway has an identity drawback in Rev2. These 19 are now
@@ -597,6 +598,58 @@ def alias():
                 lit("slot",[lit("auto",actions=[a("a_auto")]),lit("swap",swaps)]+slots)]}
 
 
+def emit_resonance_manual_preview(output, kits):
+    """Separate OP-only test datapack; NEVER included in either live/main variant.
+
+    It has no load/tick entrypoint or player-facing alias. Its source-specific
+    revoke deliberately cannot erase identity drawbacks or normal slot grants.
+    Manual previews may stack with currently equipped kits; use ONLY in an
+    isolated development world and clear powers before removing the pack.
+    """
+    w = Pack()
+    w.j("pack.mcmeta", {"pack": {"pack_format": 9,
+        "description": "ARCANE RESONANCE MANUAL PREVIEW ONLY - incomplete / OP use"}})
+    w.f("dev/resonance/clear",
+        "power revokeall @s " + DEV_PREVIEW_SOURCE,
+        msg("Resonance MANUAL PREVIEW cleared; ordinary Arcane slot powers not changed.", "green"))
+    entries = []
+    for first, second, res in PAIRS:
+        powers = [ident for seq in range(9, -1, -1)
+                  for ident in kits.get((res, seq), [])]
+        if not powers:
+            raise ValueError("No concrete Resonance powers for " + res)
+        entries.append((res, len(powers)))
+        safe = [
+            "power revokeall @s " + DEV_PREVIEW_SOURCE,
+            *[f"power grant @s {ident} {DEV_PREVIEW_SOURCE}" for ident in powers],
+            msg(f"TEST-ONLY preview {res}: {len(powers)}/10 powers; NOT the full Rev3 kit. Use /function tarot_arcane:dev/resonance/clear before leaving.", "yellow"),
+        ]
+        w.f(f"dev/resonance/execute/{res}", safe)
+        w.f(f"dev/resonance/{res}",
+            "execute unless score @s a_init matches 1 run " +
+            msg("Pick a Tarot Origin before previewing.", "red"),
+            "execute if score @s a_paused matches 1 run " +
+            msg("Arcane runtime is administratively paused.", "red"),
+            f"execute if score @s a_init matches 1 unless score @s a_paused matches 1 run " +
+            F(f"dev/resonance/execute/{res}"))
+        for ident in powers:
+            ability = ident.split("/")[-1]
+            w.f(f"dev/resonance/one/{res}/{ability}",
+                "power revokeall @s " + DEV_PREVIEW_SOURCE,
+                f"power grant @s {ident} {DEV_PREVIEW_SOURCE}",
+                msg(f"TEST-ONLY one ability {ident}; clear manual preview before removing the datapack.", "yellow"))
+    w.f("dev/resonance/list",
+        msg("OP-only manual Resonance test; 11 pairs, incomplete. Not Seq1 progression!", "yellow"),
+        [msg(f"{res}: {count}/10 | /function tarot_arcane:dev/resonance/{res}", "aqua")
+         for res, count in entries],
+        msg("For isolated power tests use /function tarot_arcane:dev/resonance/one/PAIR/ABILITY_ID; /function tarot_arcane:dev/resonance/clear resets source.", "yellow"))
+    dest = output / "Arcane_Rev3_Resonance_Manual_Preview_TEST_ONLY_1.18.2.zip"
+    with ZipFile(dest, "w", ZIP_DEFLATED, compresslevel=9) as z:
+        for path, data in sorted(w.files.items()):
+            z.writestr(path, data)
+    return dest
+
+
 def build(root=ROOT,output=None):
     root=Path(root)
     output=Path(output) if output else root/"output"
@@ -616,6 +669,7 @@ def build(root=ROOT,output=None):
         with ZipFile(dest,"w",ZIP_DEFLATED,compresslevel=9) as z:
             for key,value in sorted(w.files.items()):z.writestr(key,value)
         artifacts[variant]=dest
+    artifacts["resonance_preview"] = emit_resonance_manual_preview(output, kits)
     status={"specified":len(manifest),"compiled":len(compiled),
             "full":sum(x["status"]=="full" for x in manifest),
             "partial":sum(x["status"]=="partial" for x in manifest),
