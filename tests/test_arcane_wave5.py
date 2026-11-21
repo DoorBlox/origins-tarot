@@ -104,14 +104,14 @@ class WaveFiveTests(unittest.TestCase):
 
     def test_counts_and_resonance_still_fail_closed(self):
         self.assertEqual(len(self.manifest), 434)
-        self.assertEqual(len(self.powers), 337)
+        self.assertEqual(len(self.powers), 370)
         self.assertEqual(
             {status: sum(m["status"] == status for m in self.manifest)
              for status in ("full", "partial", "blocked")},
-            {"full": 73, "partial": 264, "blocked": 97})
+            {"full": 73, "partial": 297, "blocked": 64})
         self.assertEqual(
             sum(m["family"] == "resonance" and m["status"] != "blocked"
-                for m in self.manifest), 98)
+                for m in self.manifest), 110)
 
     def test_area_effects_explicitly_exclude_player_targets(self):
         for module in (individual5, resonance5):

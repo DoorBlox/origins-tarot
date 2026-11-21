@@ -74,6 +74,8 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8",
         "a_view_slot","a_view_code","a_view_path","a_view_seq",
         "a_alone_time","a_iron_count","a_pick_slot","a_pick_path")
+RESCUE_COOLDOWNS = ("a_cd_martyr", "a_cd_swift", "a_cd_history", "a_cd_hunter", "a_cd_undying")
+SCORES += RESCUE_COOLDOWNS
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick")
 
@@ -169,7 +171,7 @@ def emit_content(w,root,compiled,variant,identity_powers):
         w.j("data/tarot/powers/"+ident.split(":")[1]+".json",power)
 
 
-def emit_player(w,kits):
+def emit_player(w,kits,root=ROOT):
     w.f("load",
         [f"scoreboard objectives add {x} dummy" for x in SCORES],
         [f"scoreboard objectives add {x} trigger" for x in TRIGGERS],
@@ -191,6 +193,8 @@ def emit_player(w,kits):
         "scoreboard players add @s a_crossbow 0",
         "scoreboard players add @s a_trident 0",
         "scoreboard players add @s a_alone_time 0",
+        [f"scoreboard players add @s {x} 0" for x in RESCUE_COOLDOWNS],
+        [f"execute if score @s {x} matches 1.. run scoreboard players remove @s {x} 1" for x in RESCUE_COOLDOWNS],
         "execute unless score @s a_init matches 1 unless score @s a_paused matches 1 run "+F("player/detect"),
         "execute if score @s a_init matches 1 run "+F("player/combat_stats"),
         "execute if score @s a_init matches 1 run "+F("player/alone"),
@@ -248,9 +252,9 @@ def emit_player(w,kits):
             f"execute if score @s a_path matches {i} store success score @s a_probe run origin has origin @s origins:origin tarot:{slug}",
             f"execute if score @s a_path matches {i} if score @s a_probe matches 0 run origin set @s origins:origin tarot:{slug}"])
     w.f("player/verify",verify)
-    # Fixed per-player 600-tick proximity counter for Lovers' drawback.
-    # This intentionally counts *any* nearby player; the true same-team-only
-    # semantics remain explicitly partial until verified in 1.18.2.
+    # Same-team-only Lovers isolation counter. Only configured vanilla team
+    # members count as allies; enemy and teamless players do not reset it.
+    # Team membership is admin-defined, never changed by Arcane runtime.
     # Transaction is player scoped: test inventory without removing items,
     # then remove exactly two iron ingots and give precisely one gold ingot.
     # No client alias can choose other items or invoke this function directly.
@@ -260,9 +264,10 @@ def emit_player(w,kits):
         "execute if score @s a_iron_count matches 2.. run clear @s minecraft:iron_ingot 2",
         "execute if score @s a_iron_count matches 2.. run give @s minecraft:gold_ingot 1",
         "execute unless score @s a_iron_count matches 2.. run "+msg("Transmute needs two iron ingots; no items taken.","yellow"))
+    from .team_policy import team_names
     w.f("player/alone",
-        "execute at @s if entity @a[distance=0.01..8] run scoreboard players set @s a_alone_time 0",
-        "execute at @s unless entity @a[distance=0.01..8] run scoreboard players add @s a_alone_time 1",
+        "scoreboard players add @s a_alone_time 1",
+        [f"execute if entity @s[team={team}] at @s if entity @a[team={team},distance=0.01..8] run scoreboard players set @s a_alone_time 0" for team in team_names(root)],
         "execute if score @s a_alone_time matches 601.. run scoreboard players set @s a_alone_time 601")
     w.f("player/periodic","scoreboard players set @s a_clock 0",
         "execute unless score @s a_paused matches 1 run "+F("player/verify"),
@@ -660,7 +665,7 @@ def build(root=ROOT,output=None):
     for variant in ("only","addon"):
         w=Pack()
         emit_content(w,root,compiled,variant,innate)
-        emit_player(w,kits)
+        emit_player(w,kits,root)
         emit_slots(w,kits)
         emit_grants(w,kits)
         emit_ui(w)

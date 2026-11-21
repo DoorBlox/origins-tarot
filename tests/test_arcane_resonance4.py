@@ -80,13 +80,13 @@ class ResonanceWaveFourTests(unittest.TestCase):
                 self.assertGreaterEqual(len(definition["entity_action"]["actions"]), 2)
 
     def test_counts_account_for_434_without_fake_full_status(self):
-        self.assertEqual(len(self.powers), 337)
+        self.assertEqual(len(self.powers), 370)
         self.assertEqual(len(self.manifest), 434)
         status = {kind: sum(m["status"] == kind for m in self.manifest)
                   for kind in ("full", "partial", "blocked")}
-        self.assertEqual(status, {"full": 73, "partial": 264, "blocked": 97})
+        self.assertEqual(status, {"full": 73, "partial": 297, "blocked": 64})
         self.assertEqual(sum(m["family"] == "resonance" and
-                             m["status"] != "blocked" for m in self.manifest), 98)
+                             m["status"] != "blocked" for m in self.manifest), 110)
 
     def test_no_unguarded_ally_effects_or_fake_op_commands(self):
         for slug, seq, name, definition, *_ in self.entries:

@@ -35,12 +35,12 @@ class ManualResonancePreviewTests(unittest.TestCase):
             self.assertNotIn("data/minecraft/tags/functions/load.json", names)
             self.assertNotIn("data/minecraft/tags/functions/tick.json", names)
             self.assertFalse(any("/powers/" in p or "/origins/" in p for p in names))
-            self.assertEqual(len(names), 1 + 1 + 1 + 11 + 11 + 98)
+            self.assertEqual(len(names), 1 + 1 + 1 + 11 + 11 + 110)
 
     def test_each_pair_grants_only_its_actual_compiled_powers(self):
         live = {m["power_id"] for m in self.manifest
                 if m["family"] == "resonance" and m["status"] != "blocked"}
-        self.assertEqual(len(live), 98)
+        self.assertEqual(len(live), 110)
         with ZipFile(self.artifacts["resonance_preview"]) as z:
             for _, _, slug in PAIRS:
                 with self.subTest(pair=slug):
