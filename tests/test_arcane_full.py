@@ -162,6 +162,32 @@ class FullBuildTests(unittest.TestCase):
         init=self.z.read("data/tarot_arcane/functions/player/init/fool.mcfunction").decode()
         self.assertIn("scoreboard players set @s a_paused 0",init)
 
+    def test_combat_lock_uses_1182_supported_statistics(self):
+        """The player_hurt_entity advancement trigger is only in newer MC versions."""
+        names=set(self.z.namelist())
+        self.assertNotIn("data/tarot_arcane/advancements/events/combat_dealt.json",names)
+        load=self.z.read("data/tarot_arcane/functions/load.mcfunction").decode()
+        self.assertIn("scoreboard objectives add a_dmg_dealt minecraft.custom:minecraft.damage_dealt",load)
+        self.assertIn("scoreboard objectives add a_dmg_taken minecraft.custom:minecraft.damage_taken",load)
+        for obj in ("a_seen_dealt", "a_seen_taken"):
+            self.assertIn(f"scoreboard objectives add {obj} dummy",load)
+        stat=self.z.read("data/tarot_arcane/functions/player/combat_stats.mcfunction").decode()
+        self.assertIn("if score @s a_dmg_dealt > @s a_seen_dealt",stat)
+        self.assertIn("if score @s a_dmg_taken > @s a_seen_taken",stat)
+        self.assertEqual(stat.count("run scoreboard players set @s a_combat 200"),2)
+        self.assertIn("scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",stat)
+        self.assertIn("scoreboard players operation @s a_seen_taken = @s a_dmg_taken",stat)
+        tick=self.z.read("data/tarot_arcane/functions/player/tick.mcfunction").decode()
+        self.assertIn("function tarot_arcane:player/combat_stats",tick)
+        init=self.z.read("data/tarot_arcane/functions/player/init/fool.mcfunction").decode()
+        self.assertIn("scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",init)
+        self.assertIn("scoreboard players operation @s a_seen_taken = @s a_dmg_taken",init)
+        for path in names:
+            if "/advancements/" in path and path.endswith(".json"):
+                advancement=json.loads(self.z.read(path))
+                triggers={criterion.get("trigger") for criterion in advancement.get("criteria",{}).values()}
+                self.assertNotIn("minecraft:player_hurt_entity",triggers,path)
+
     def test_no_java_kubejs_or_elevated_actions(self):
         self.assertTrue(all(not path.lower().endswith((".java",".js",".jar"))
                             for path in self.z.namelist()))
