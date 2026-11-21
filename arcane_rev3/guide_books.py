@@ -76,8 +76,8 @@ def general_pages():
         "22 Major Arcana",
         "Select a page using the arrows.",
         "This book is read-only.",
-        "Seq1 is LOCKED in normal SMP.",
-        "Partial powers are not complete."
+        "Sequence 1 is not yet",
+        "available for ascension."
     ], home=None, next_=2))
     pages.append(_page("START PLAYING", [
         "1. Select a Tarot Origin.",
@@ -243,30 +243,27 @@ def pathway_pages(slug, compiled, manifest, kits):
         card["acting_item"].replace("_", " "),
         "Event: " + _event(card["acting_event"]),
         "Each proof: +1 mark, 120s CD.",
-        "Seq1 remains LOCKED.",
-        "Powers can be PARTIAL.",
-        "Turn pages for ability notes."
+        "Sequence 1 is not unlocked.",
+        "Turn pages to learn your",
+        "abilities and how to use them."
     ], home=None, next_=2)]
     for seq in range(9, 1, -1):
         chunk = [r for r in rows if r["sequence"] == seq]
         pages.append(_page(f"SEQUENCE {seq}", [
-            "Current source abilities:",
-            *[r["name"] + " [" + r["status"].upper() + "]"
-              for r in chunk],
-            "Turn pages for each power.",
+            "Your pathway abilities:",
+            *[r["name"] for r in chunk],
+            "Turn pages to read what",
+            "each ability does."
         ], prev=len(pages), next_=len(pages)+2))
         for row in chunk:
             power = compiled.get(row["power_id"], {})
-            summary = _short(power.get("description", "No source description."), 115)
-            usage = _short(how_to_use(power), 90)
+            summary = _short(power.get("description", "See your equipped power effects."), 135)
+            usage = _short(how_to_use(power), 105)
             lines = [
                 row["name"],
-                row["status"].upper() + " SOURCE",
-                "Current: " + summary,
-                "Use: " + usage,
+                "What it does: " + summary,
+                "How to use: " + usage,
             ]
-            if row["status"] == "partial":
-                lines.append("Missing: " + _short(row["missing"], 110))
             pages.append(_page("ABILITY DETAILS", lines,
                                prev=len(pages), next_=len(pages)+2))
     # Contents page shortcuts to each source-kit Sequence section, even
