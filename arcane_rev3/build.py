@@ -61,10 +61,13 @@ def _files():
         'cooldown': 100, 'hud_render': {'should_render': True},
         'key': {'key': 'key.origins.secondary_active'},
         'condition': {'type': 'origins:sneaking'},
-        'entity_action': {'type': 'origins:area_of_effect', 'radius': 10,
-                          'include_target': True,
-                          'bientity_action': {'type': 'origins:target_action',
-                                              'action': _effect('glowing', 40)}},
+        # 1.18.2 area_of_effect has no sphere shape field. A vanilla
+        # distance selector is spherical and includes the caster at distance 0.
+        'entity_action': {
+            'type': 'origins:execute_command',
+            'command': 'execute at @s run effect give @e[distance=..10] minecraft:glowing 2 0 true',
+            'permission_level': 2,
+        },
     })
 
     j('data/tarot/powers/fool/9_clowns_mischief.json', {
