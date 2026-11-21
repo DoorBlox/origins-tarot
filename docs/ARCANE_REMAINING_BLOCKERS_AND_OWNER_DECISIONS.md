@@ -1,6 +1,6 @@
 # Arcane V2 Rev3 — complete source coverage; remaining gameplay fidelity and release gates
 
-**PR #49 source-only checkpoint (2026-11-22; pending final merge).** All **434/434** authoritative Rev2 abilities have concrete source definitions: **73 source-full, 361 explicitly partial, 0 source-blocked**; all **110/110** fixed-pair Resonance definitions are present. These are authoring statistics, **NOT 434 verified gameplay mechanics**.
+**Current source checkpoint (2026-11-22; PRs #54 and #55 merged).** All **434/434** Rev2 catalog abilities have concrete source definitions (**73 source-full, 361 explicitly PARTIAL, 0 blocked**), including all **110/110** fixed-pair Resonance entries. **23 partial abilities improved across two CI-verified source PRs, but zero promoted to source-full without evidence.** These are authoring statistics, NOT in-game acceptance. Normal Seq1 stays locked outside the OP-only disposable-world test.
 
 ## Last source blocker: Hierophant Dietary Expansion
 
@@ -32,3 +32,10 @@
 2. Audit all 11 Resonance suites against the Rev2/Rev3 handbooks, source grants and target rules before declaring them playable.
 3. At owner's preferred consolidated acceptance point, install one latest ONLY_DEV ZIP in a backed-up test world and check full data reload, no missing powers, 22 paths, 11 pairs, Moon Seq9 status, team safety, Sin state, death/relog/pause, mod commands and opt-in Seq1. Record PASS/FAIL/NOT RUN. No production promotion until verified.
 4. Avoid asking for already-supplied mod lists/logs, changing intentional offline mode, or demanding a restart after each small source change.
+
+## Latest verified source fidelity waves and next inventory
+
+- [PR #54](https://github.com/DoorBlox/origins-tarot/pull/54): 13 selected abilities receive strictly team-filtered ally regeneration/speed, enemy-player Slowness/Glowing, and nighttime Star Read. Merged `ebe1423b0bd994505c8c01bf64a9882601194122` after 4/4 exact-head green CI at `53c1cc752e1def5c69d1a77e7a7d27fc0b3f3ed2`.
+- [PR #55](https://github.com/DoorBlox/origins-tarot/pull/55): 10 further partial powers gain guarded enemy-player and ally components; Star Read Reaper correctly night-gated. Merged `3dd7f570896ef6309c03aed75b8009f608ed7c4e` after 4/4 exact-head CI at `3ac7c2ccd25427312881bbed74e6313e7c2eebf8`.
+- **Inventory generator:** run `python -m tools.arcane_fidelity_report --format markdown` or `--format json`; inventory covers all 361 PARTIAL records and their original `missing` claims. Keyword groups overlap and are for triage only. A global negative-player-selector regression gate covers all compiled power definitions, but actual Minecraft mechanics remain UNTESTED until the owner's consolidated world acceptance.
+- **Still missing:** unsupported scripting events, exact numerical effects/individual damage-source tracking, NPC/AI control, client skin/model hooks, permanent dynamic world regions, known-safe old mod API commands and inverse cleanup. Do not change architectures silently, remove the test-world Seq1 lock, or conflate a 434/434 source compile with ready-to-ship gameplay.
