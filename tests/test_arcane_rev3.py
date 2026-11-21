@@ -111,13 +111,14 @@ class Rev3BuildTests(unittest.TestCase):
         self.assertIn("scoreboard players enable @s ta_slots", tick)
         self.assertIn("origin has origin @s origins:origin tarot:fool", tick)
         alias = json.loads(Path(self.paths["alias"]).read_text())
-        self.assertEqual((alias["command"], alias["permission"]), ("tarot", 0))
+        root = alias["customCommand"]
+        self.assertEqual((root["parent"], root["permission"]), ("tarot", 0))
         self.assertTrue(all(action["commandType"] == "CLIENT"
                             and action["command"].startswith("trigger ta_")
-                            for action in alias["actions"] + [
-                                act for child in alias["children"] for act in child["actions"]
+                            for action in root["actions"] + [
+                                act for child in root["children"] for act in child["actions"]
                             ]))
-        self.assertEqual({child["child"] for child in alias["children"]},
+        self.assertEqual({child["child"] for child in root["children"]},
                          {"help", "status", "slots"})
 
     def test_no_fake_abilities_and_no_forbidden_commands(self):
