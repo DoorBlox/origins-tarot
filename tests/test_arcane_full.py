@@ -98,7 +98,7 @@ class CompleteCatalogTests(unittest.TestCase):
             self.assertIn("missing",found[0])
             self.assertTrue(found[0]["missing"])
 
-    def test_ten_new_source_traced_pathway_upgrades(self):
+    def test_six_new_upgrades_and_four_corrected_legacy_templates(self):
         """Upgrades must have real effects; overlapping originals are partial."""
         from arcane_rev3.powers import norm
         root=Path(__file__).resolve().parents[1]
@@ -140,6 +140,11 @@ class CompleteCatalogTests(unittest.TestCase):
             self.assertEqual(active["condition"]["compare_to"],12)
         self.assertEqual(blade["attack"]["modifier"]["value"],0.15)
         self.assertEqual(blade["speed"]["modifier"]["value"],0.10)
+        moon=powers["tarot:moon/4_shaman"]
+        self.assertEqual(moon["entity_action"]["amount"],3,
+                         "1.5 hearts must be 3 health points, not 2")
+        self.assertEqual(powers["tarot:world/1_cold_precision_ii"]["modifier"]["value"],0.30)
+        self.assertEqual(powers["tarot:sun/4_unshadowed_ii"]["modifier"]["value"],0.50)
 
     def test_alias_is_nonop_and_player_scoped(self):
         doc=alias()
