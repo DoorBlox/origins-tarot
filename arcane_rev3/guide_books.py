@@ -128,9 +128,9 @@ def general_pages():
     ], prev=7, next_=9))
     # Pages 9-16 are the eight non-Seq1 progression transitions.
     for seq in range(9, 1, -1):
-        offerings = RITUALS[seq]
-        items = [f"{n} x {item.replace('_', ' ')}" for item, n in offerings.items()]
         locked = seq == 2
+        offerings = {} if locked else RITUALS[seq]
+        items = [f"{n} x {item.replace('_', ' ')}" for item, n in offerings.items()]
         pages.append(_page(f"SEQUENCE {seq} > {seq-1}", [
             f"{ACT_MARKS[seq]} acting marks needed",
             *items[:2],
