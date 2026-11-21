@@ -2,7 +2,7 @@
 
 > **READ THIS FIRST IN A NEW CHAT.** This file is a durable engineering checkpoint, **not** proof of current GitHub state. First query the live `main` branch, open PRs, CI, and issue [#20](https://github.com/DoorBlox/origins-tarot/issues/20), then read the authoritative handbooks. Do not ask the owner to re-explain the project.
 
-**Last verified snapshot:** 2026-11-22 (Indonesia time), `main` at `326499b0f62105f5e0944d97e9f0f0ca2e4c00f4` after merged PR [#26](https://github.com/DoorBlox/origins-tarot/pull/26). This hash is *historical*; never assume it stays current. Last observed open PRs: **none**. The Arcane V2 Rev3 developer pack **has not been installed or tested on the live SMP**.
+**Last verified snapshot:** 2026-11-22 (Indonesia time), `main` at `7f51a2683098572437bb4da9dbe71fea5201e81c` after merged PR [#28](https://github.com/DoorBlox/origins-tarot/pull/28). This hash is *historical*; never assume it stays current. Last observed open implementation PRs: **none after #28 merge** (re-query GitHub). The Arcane V2 Rev3 developer pack **has not been installed or tested on the live SMP**.
 
 ## 1. Mission and owner's standing instructions
 
@@ -49,6 +49,15 @@ Build **the entire Arcane V2 Rev3 Tarot Club experience** for Minecraft Java 1.1
 **Exact CI evidence:** PR #26 commit `dbedcff595ef9c948c2625749aac8b397b8e53da`, four green workflows: [full Rev3 build](https://github.com/DoorBlox/origins-tarot/actions/runs/44933076045), [isolated Fool alpha](https://github.com/DoorBlox/origins-tarot/actions/runs/44933075894), [V3 Ascension](https://github.com/DoorBlox/origins-tarot/actions/runs/44933075930), [V2 origins](https://github.com/DoorBlox/origins-tarot/actions/runs/44933075910). The `main` push additionally passed the V3 and original-origins workflows; the two Arcane-specific workflows are configured on PR/feature branches, not normal `main` pushes. Do not state "four main checks" if only two run on `main`.
 
 **Never silently retain these counts after changing code.** Rebuild, inspect manifest, run all regressions and update this file and issue #20.
+
+## 3a. Milestone — PR #28 source-scoped upgrade replacement (2026-11-22)
+
+- **Merged** [PR #28](https://github.com/DoorBlox/origins-tarot/pull/28), squash SHA `7f51a2683098572437bb4da9dbe71fea5201e81c`, after four exact-head PR workflow successes at `b9941ddc453ca995f8fed8636af632f6ccd36fac`.
+- Added `arcane_rev3/upgrade_policy.py` and `tests/test_arcane_upgrade_replacement.py`; `compile_powers` now applies eight source-scoped non-stacking power conditions. The old bonus stays slotted but is inactive when its matching upgrade is granted by `tarot_arcane:slot_grants`. Lower-tier effects automatically resume on unslot/pause/recovery. Previous conditions are preserved.
+- Covered Moon Blood's Renewal → Shaman; Sun Unshadowed → Unshadowed II; World Cold Precision → Cold Precision II; Tower Ruin-Proof → Ruin-Proof II; Wheel Fate Intervenes → Misfortune; Devil Desperate Malice → Demon Form; Empress Witch's Venom → Plague Touch; Hierophant Sanctified Ground → Sanctified Ground II.
+- **Intentionally not suppressed**: mandatory identity drawbacks, composite powers such as Judgement Law's Weight (+2 armor), and abilities with differing trigger scopes like Star Nightwatch. Additional upgrades must be audited for preserving unrelated effects.
+- Expected manifest remains **434 specified / 241 compiled / 73 full / 168 partial / 193 blocked** because this was a correctness fix, not new ability coverage. These source-completeness labels do not establish in-game compatibility.
+- Runtime check of Apoli 1.4.1 `origins:power` source filter, reload, and slot transitions **NOT RUN** on a Minecraft server. No release and no live SMP installation.
 
 ## 4. Exact gameplay contract — do not break
 
