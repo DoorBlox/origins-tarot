@@ -17,7 +17,8 @@ SOURCE="tarot_arcane:slot_grants"
 PREFIX="tarot_arcane:"
 NUM={slug:i+1 for i,slug in enumerate(PATHWAYS)}
 SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_marks","a_phase",
-        "a_actcd","a_combat","a_clock","a_seen_dealt","a_seen_taken","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
+        "a_actcd","a_combat","a_clock","a_seen_dealt","a_seen_taken",
+        "a_seen_bow","a_seen_crossbow","a_seen_trident","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8")
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
@@ -110,6 +111,9 @@ def emit_player(w,kits):
         [f"scoreboard objectives add {x} trigger" for x in TRIGGERS],
         "scoreboard objectives add a_dmg_dealt minecraft.custom:minecraft.damage_dealt",
         "scoreboard objectives add a_dmg_taken minecraft.custom:minecraft.damage_taken",
+        "scoreboard objectives add a_bow minecraft.used:minecraft.bow",
+        "scoreboard objectives add a_crossbow minecraft.used:minecraft.crossbow",
+        "scoreboard objectives add a_trident minecraft.used:minecraft.trident",
         "scoreboard objectives add a_const dummy",
         "scoreboard players set #10 a_const 10",
         "scoreboard players set #100 a_const 100",
@@ -119,6 +123,9 @@ def emit_player(w,kits):
         [f"scoreboard players enable @s {x}" for x in TRIGGERS],
         "scoreboard players add @s a_dmg_dealt 0",
         "scoreboard players add @s a_dmg_taken 0",
+        "scoreboard players add @s a_bow 0",
+        "scoreboard players add @s a_crossbow 0",
+        "scoreboard players add @s a_trident 0",
         "execute unless score @s a_init matches 1 unless score @s a_paused matches 1 run "+F("player/detect"),
         "execute if score @s a_init matches 1 run "+F("player/combat_stats"),
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
@@ -154,6 +161,9 @@ def emit_player(w,kits):
             "scoreboard players set @s a_combat 0",
             "scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",
             "scoreboard players operation @s a_seen_taken = @s a_dmg_taken",
+            "scoreboard players operation @s a_seen_bow = @s a_bow",
+            "scoreboard players operation @s a_seen_crossbow = @s a_crossbow",
+            "scoreboard players operation @s a_seen_trident = @s a_trident",
             "scoreboard players set @s a_clock 0",
             f"scoreboard players set @s a_s1 {idnum*100+9}",
             [f"scoreboard players set @s a_s{i} 0" for i in range(2,9)],
@@ -177,8 +187,14 @@ def emit_player(w,kits):
     w.f("player/combat_stats",
         "execute if score @s a_dmg_dealt > @s a_seen_dealt run scoreboard players set @s a_combat 200",
         "execute if score @s a_dmg_taken > @s a_seen_taken run scoreboard players set @s a_combat 200",
+        "execute if score @s a_bow > @s a_seen_bow run scoreboard players set @s a_combat 200",
+        "execute if score @s a_crossbow > @s a_seen_crossbow run scoreboard players set @s a_combat 200",
+        "execute if score @s a_trident > @s a_seen_trident run scoreboard players set @s a_combat 200",
         "scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",
-        "scoreboard players operation @s a_seen_taken = @s a_dmg_taken")
+        "scoreboard players operation @s a_seen_taken = @s a_dmg_taken",
+        "scoreboard players operation @s a_seen_bow = @s a_bow",
+        "scoreboard players operation @s a_seen_crossbow = @s a_crossbow",
+        "scoreboard players operation @s a_seen_trident = @s a_trident")
     w.j("data/tarot_arcane/advancements/events/combat_taken.json",{
         "criteria":{"hit":{"trigger":"minecraft:entity_hurt_player"}},
         "rewards":{"function":PREFIX+"events/combat_taken"}})
