@@ -545,14 +545,18 @@ def emit_ui(w):
     from different players cannot overwrite each other's slot display.
     """
     w.f("ui/help",
-        msg("Rev3 | /tarot status | /tarot slots | /tarot ascend","aqua"),
-        msg("Seq4-2: /tarot slot N tarot:pathway S; /tarot slot N clear","yellow"),
-        msg("/tarot slot auto | /tarot slot swap N M | /tarot reset","yellow"),
-        msg("Seq1 requires OP-enabled development test until in-game acceptance. All ten source powers per pair exist; many are partial.","red"),
-        click("[View Status]","a_status"),
-        click("[View Slots]","a_slots"),
-        click("[Focus active ability]","a_focus_menu"),
-        click("[Auto slots on Seq4-2]","a_auto","yellow"))
+        msg("ARCANE REV3 PLAYER GUIDE | Choose a menu below.","gold"),
+        msg("ABILITIES: inspect equipped kits, current effects, activation, and limitations.","aqua"),
+        msg("ROADMAP: next acting task, marks, offerings, ritual, and unlocks.","aqua"),
+        msg("Seq9-5 auto equips; Seq4-2 unlocks a fixed partner and editable slots.","yellow"),
+        msg("Seq1 Resonance LOCKED for normal SMP players; incomplete powers remain PARTIAL.","red"),
+        msg("Vanilla commands: /trigger a_help, /trigger a_abilities, /trigger a_roadmap.","gray"),
+        click("[My abilities]","a_abilities"),
+        click("[My ascension roadmap]","a_roadmap","yellow"),
+        click("[My status]","a_status"),
+        click("[Manage slots]","a_slots"),
+        click("[Choose active key focus]","a_focus_menu"),
+        msg("Seq4-2: /tarot slot N tarot:pathway S | /tarot slot N clear | /tarot slot auto.","gray"))
     w.f("ui/status",
         "execute unless score @s a_init matches 1 run "+msg("Choose a Tarot origin.","red"),
         "execute if score @s a_paused matches 1 run "+msg("Arcane runtime paused by administrator; ask an admin to resume.","red"),
@@ -563,7 +567,9 @@ def emit_ui(w):
         "execute if score @s a_init matches 1 run tellraw @s "+J([
             {"text":"[Tarot] Sequence: ","color":"gold"},score("a_seq"),
             {"text":" | Slots: "},score("a_max"),
-            {"text":" | Acting marks: "},score("a_marks")]))
+            {"text":" | Acting marks: "},score("a_marks")]),
+        click("[How to ascend next]","a_roadmap","yellow"),
+        click("[View my active abilities]","a_abilities"))
     w.f("ui/status_primary",[
         f"execute if score @s a_path matches {c['id']} run "+msg("Primary: "+c["name"],"aqua")
         for c in CARDS])
@@ -578,12 +584,14 @@ def emit_ui(w):
         "execute if score @s a_mode matches 0 run "+msg("SINGLE: sequence kits auto-fill as you advance.","gold"),
         "execute if score @s a_mode matches 1 run "+msg("SLOT: click Edit by any slot, select pathway, then Sequence.","yellow"),
         "execute if score @s a_mode matches 2 run "+msg("RESONANCE TEST: all ten paired powers active. Slot UI disabled.","light_purple"),
-        "execute if score @s a_mode matches 1 run "+click("[Auto-fill all primary slots]","a_auto","yellow"))
+        "execute if score @s a_mode matches 1 run "+click("[Auto-fill all primary slots]","a_auto","yellow"),
+        click("[Inspect equipped abilities]","a_abilities","aqua"))
     for i in range(1,9):
         w.f(f"ui/slot_{i}",
             f"scoreboard players set @s a_view_slot {i}",
             f"scoreboard players operation @s a_view_code = @s a_s{i}",
             F("ui/slot_render"),
+            "execute if score @s a_view_code matches 1.. run "+click("  [View abilities in slot "+str(i)+"]","a_kit set "+str(i),"aqua"),
             "execute if score @s a_mode matches 1 run "+click("  [Edit slot "+str(i)+"]","a_menu set "+str(i),"green"),
             "execute if score @s a_mode matches 1 run "+click("  [Clear slot "+str(i)+"]","a_clear set "+str(i),"red"))
 
@@ -776,6 +784,13 @@ def alias():
     return {"schemaVersion":1,"commandMode":"COMMAND_CUSTOM","command":"tarot",
             "permission":0,"actions":[a("a_help")],"children":[
                 lit("help",actions=[a("a_help")]),
+                lit("guide",actions=[a("a_guide")]),
+                lit("abilities",actions=[a("a_abilities")]),
+                lit("roadmap",actions=[a("a_roadmap")]),
+                lit("kit",[lit(i,actions=[a("a_kit set "+str(i))])
+                           for i in range(1,9)]),
+                lit("detail",[lit(i,actions=[a("a_detail set "+str(i))])
+                              for i in range(1,17)]),
                 lit("status",actions=[a("a_status")]),
                 lit("slots",actions=[a("a_slots")]),
                 lit("focus",[lit("legacy",actions=[a("a_choose set 1")])],
