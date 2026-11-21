@@ -1,8 +1,8 @@
 """Rev3 datapack-only developer build: 22 origins and genuine scoreboard slots.
 
 No KubeJS or custom Java; all /tarot aliases execute as the player via /trigger.
-The full 10-skill Resonance stage deliberately fails closed while [S] skills
-remain unimplemented. Never install this alpha over a production world.
+Sequence 1 remains fail-closed UNLESS an OP explicitly enables the isolated
+Resonance development transition per player. Never install on a live SMP.
 """
 import json
 from pathlib import Path
@@ -14,13 +14,14 @@ from progression.build import quest
 
 ROOT=Path(__file__).resolve().parent.parent
 SOURCE="tarot_arcane:slot_grants"
+RESONANCE_SOURCE="tarot_arcane:resonance_seq1_test"
+PARTNER_IDENTITY_SOURCE="tarot_arcane:resonance_partner_identity_test"
 DEV_PREVIEW_SOURCE="tarot_arcane:resonance_manual_preview"
 PREFIX="tarot_arcane:"
 NUM={slug:i+1 for i,slug in enumerate(PATHWAYS)}
-# Every pathway has an identity drawback in Rev2. These 19 are now
-# implemented as native Origins powers. Keep them on the PRIMARY Origin
-# independently of Sequence slots: unslotting Seq9 must not remove penalties.
-# The two remaining pathway drawbacks are tracked as blocked, not faked.
+# Every pathway has an identity drawback. All 21 non-Fool drawbacks now
+# compile and live on the immutable primary Origin rather than slots.
+# The Fool uses a dedicated Spiritual Expenditure identity JSON.
 IDENTITY_DRAWBACK_NAMES = {
     "magician": "Full Moon Ravings",
     "high_priestess": "Dependent on Rituals",
@@ -33,6 +34,7 @@ IDENTITY_DRAWBACK_NAMES = {
     "chariot": "Extinguished Fury",
     "strength": "The Giant Sinks",
     "hermit": "Forbidden Knowledge",
+    "wheel_of_fortune": "Debt of Fate",
     "death": "Severed Vitality",
     "temperance": "Unstable Manifestation",
     "devil": "Sacred Rejection",
@@ -62,7 +64,7 @@ def pin_identity_drawbacks(compiled, kits):
             raise ValueError(f"Identity drawback absent from original kit: {ident}")
         kits[key] = [power for power in kits[key] if power != ident]
         result[slug] = ident
-    if len(result) != 20:
+    if len(result) != 21:
         raise ValueError("Native identity drawback extraction incomplete")
     return result
 
@@ -75,7 +77,7 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_view_slot","a_view_code","a_view_path","a_view_seq",
         "a_alone_time","a_iron_count","a_pick_slot","a_pick_path")
 RESCUE_COOLDOWNS = ("a_cd_martyr", "a_cd_swift", "a_cd_history", "a_cd_hunter", "a_cd_undying")
-SCORES += RESCUE_COOLDOWNS
+SCORES += RESCUE_COOLDOWNS + ("a_rtest",)
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick")
 
@@ -223,6 +225,7 @@ def emit_player(w,kits,root=ROOT):
         w.f("player/init/"+slug,
             "scoreboard players set @s a_init 1",
             "scoreboard players set @s a_paused 0",
+            "scoreboard players set @s a_rtest 0",
             "scoreboard players set @s a_pick_slot 0",
             "scoreboard players set @s a_pick_path 0",
             f"scoreboard players set @s a_path {idnum}",
