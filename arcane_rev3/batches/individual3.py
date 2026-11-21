@@ -1,6 +1,7 @@
 """Rev2 individual batch: nine additional source-traced combat/utility powers."""
 from ..powers import power, apply, mod
 from .shared import active, periodic, effect, mobs, combined, cmd
+from ..team_policy import ally_effect
 
 
 def register(add):
@@ -53,8 +54,9 @@ def register(add):
     add("lovers",1,"Nature's Step",
         active("Nature's Step","Primary heals self four HP and gives Regeneration I for 200t.",
                combined({"type":"origins:heal","amount":4},
-                        apply("regeneration",200)),2400,primary=True),
-        "partial","Walking through leaves for 300t and healing same-team allies within eight blocks are omitted")
+                        apply("regeneration",200),
+                        ally_effect("regeneration",200,8)),2400,primary=True),
+        "partial","No 300t leaf phasing; allies receive Regeneration I rather than exact instant 4HP and only from explicitly configured same-team players")
     add("sun",2,"Sanctify",
         active("Sanctify","Secondary applies Wither I to undead mobs within five blocks.",
                effect(mobs(5,"undead"),"wither",600),3600),
