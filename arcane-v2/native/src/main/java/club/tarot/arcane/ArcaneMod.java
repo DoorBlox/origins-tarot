@@ -89,7 +89,7 @@ public final class ArcaneMod implements ModInitializer {
                             return 0;
                         }
                         return 1;
-                    }))));
+                    })))));
             dispatcher.register(literal("tarot")
                 .then(literal("origin_ready").executes(c -> {
                     try { enrollAndRefresh(c.getSource().getPlayer()); return 1; }
