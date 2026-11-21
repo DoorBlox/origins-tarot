@@ -1,0 +1,32 @@
+name: Arcane Handbook Preview
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run base regression and Arcane preview tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Build V2 source trees
+        run: |
+          python3 generate.py
+          python3 tools/unpack_generated.py
+      - name: Package preview separately from production V3
+        run: python3 -m arcane.preview
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tarot-arcane-preview-alpha
+          path: |
+            output/The_Tarot_Club_Arcane_Preview_ONLY_1.18.2.zip
+            output/The_Tarot_Club_Arcane_Preview_ADDON_1.18.2.zip
+          if-no-files-found: error
