@@ -140,6 +140,28 @@ class FullBuildTests(unittest.TestCase):
         self.assertNotIn("clear @s",s)
         self.assertNotIn("scoreboard players remove @s a_marks",s)
 
+    def test_rollback_persists_until_explicit_admin_resume(self):
+        """Rollback must remain effective across ticks, relogs and manual refresh."""
+        names=set(self.z.namelist())
+        self.assertIn("data/tarot_arcane/functions/admin/resume_player.mcfunction", names)
+        rollback=self.z.read("data/tarot_arcane/functions/admin/rollback_player.mcfunction").decode()
+        self.assertIn("scoreboard players set @s a_paused 1",rollback)
+        self.assertIn("power revokeall @s tarot_arcane:slot_grants",rollback)
+        resume=self.z.read("data/tarot_arcane/functions/admin/resume_player.mcfunction").decode()
+        self.assertIn("scoreboard players set @s a_paused 0",resume)
+        self.assertIn("function tarot_arcane:powers/refresh",resume)
+        tick=self.z.read("data/tarot_arcane/functions/player/tick.mcfunction").decode()
+        self.assertIn("unless score @s a_paused matches 1",tick)
+        self.assertIn("execute unless score @s a_init matches 1 unless score @s a_paused matches 1",tick)
+        refresh=self.z.read("data/tarot_arcane/functions/powers/refresh.mcfunction").decode()
+        reconcile=self.z.read("data/tarot_arcane/functions/powers/reconcile.mcfunction").decode()
+        for code in (refresh,reconcile):
+            for line in code.splitlines():
+                if "power grant @s" in line or "function tarot_arcane:kits/" in line:
+                    self.assertIn("unless score @s a_paused matches 1",line)
+        init=self.z.read("data/tarot_arcane/functions/player/init/fool.mcfunction").decode()
+        self.assertIn("scoreboard players set @s a_paused 0",init)
+
     def test_no_java_kubejs_or_elevated_actions(self):
         self.assertTrue(all(not path.lower().endswith((".java",".js",".jar"))
                             for path in self.z.namelist()))
