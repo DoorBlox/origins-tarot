@@ -33,7 +33,9 @@ public final class Ascension {
         "death",new Objective(Items.BONE,EntityType.SKELETON,false),
         "tower",new Objective(Items.TNT,EntityType.CREEPER,false),
         "magician",new Objective(Items.ENDER_PEARL,EntityType.ENDERMAN,false),
-        "strength",new Objective(Items.IRON_INGOT,EntityType.ZOMBIE,false)
+        "strength",new Objective(Items.IRON_INGOT,EntityType.ZOMBIE,false),
+        "emperor",new Objective(Items.SHIELD,EntityType.PILLAGER,false),
+        "lovers",new Objective(Items.POPPY,null,true)
     );
     private static final Map<Integer,List<Offering>> OFFERINGS=new HashMap<>();
     static {

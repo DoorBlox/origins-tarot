@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Emperor’s Domain",
+  "description": "Primary key. **Duration 1200t (60s). Cooldown 18000t (15 min).**"
+}

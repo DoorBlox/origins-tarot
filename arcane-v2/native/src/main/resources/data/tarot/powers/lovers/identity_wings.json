@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "name": "The Lovers Wings",
+  "render_elytra": true,
+  "description": "Innate glide."
+}

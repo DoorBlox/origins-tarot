@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Blessing",
+  "description": "Crouch-right-click crop → full growth. Cooldown 1200t per crop."
+}

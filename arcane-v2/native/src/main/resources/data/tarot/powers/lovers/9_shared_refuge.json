@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Shared Refuge",
+  "description": "Near player → Resistance I pulse every 600t."
+}

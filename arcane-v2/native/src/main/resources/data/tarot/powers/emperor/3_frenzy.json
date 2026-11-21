@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Frenzy",
+  "description": "Health < 8 → Speed I + Haste I 100t. Cooldown 600t."
+}

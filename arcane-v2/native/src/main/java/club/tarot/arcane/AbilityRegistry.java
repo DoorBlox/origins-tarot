@@ -166,6 +166,36 @@ public final class AbilityRegistry {
         path("impossible_fist", 2, "giants_shortcut");
         path("impossible_fist", 1, "divine_door");
         path("impossible_fist", 0, "the_impossible_fist");
+        path("emperor", 9, "sovereigns_plate", "distorted_authority", "imperial_presence", "decree_of_the_sovereign", "weight_of_the_crown");
+        path("emperor", 8, "unbound");
+        path("emperor", 7, "coin");
+        path("emperor", 6, "corrupt_ground");
+        path("emperor", 5, "decree");
+        path("emperor", 4, "fallen_aura");
+        path("emperor", 3, "frenzy");
+        path("emperor", 2, "entropy_field");
+        path("emperor", 1, "abolish", "iron_decree");
+        path("emperor", 0, "the_emperors_domain");
+        path("lovers", 9, "linked_hearts", "fertile_hands", "shared_refuge", "separation_anxiety");
+        path("lovers", 8, "triage");
+        path("lovers", 7, "blessing");
+        path("lovers", 6, "symbiosis");
+        path("lovers", 5, "natures_grasp");
+        path("lovers", 4, "transmute");
+        path("lovers", 3, "requiem");
+        path("lovers", 2, "withering");
+        path("lovers", 1, "natures_step", "shared_refuge_ii");
+        path("lovers", 0, "the_garden");
+        path("benevolent_crown", 9, "sovereigns_care");
+        path("benevolent_crown", 8, "unbound_symbiosis");
+        path("benevolent_crown", 7, "coins_blessing");
+        path("benevolent_crown", 6, "corrupt_symbiosis");
+        path("benevolent_crown", 5, "decree_of_nature");
+        path("benevolent_crown", 4, "linked_crown");
+        path("benevolent_crown", 3, "shared_domain");
+        path("benevolent_crown", 2, "emperors_hymn");
+        path("benevolent_crown", 1, "triage_decree");
+        path("benevolent_crown", 0, "the_benevolent_crown");
     }
 
     private static void path(String name, int sequence, String... ids) {

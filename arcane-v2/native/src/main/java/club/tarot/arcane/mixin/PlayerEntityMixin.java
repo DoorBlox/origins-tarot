@@ -5,6 +5,8 @@ import club.tarot.arcane.WorldJusticeAbilities;
 import club.tarot.arcane.HermitChariotAbilities;
 import club.tarot.arcane.DeathTowerAbilities;
 import club.tarot.arcane.MagicianStrengthAbilities;
+import club.tarot.arcane.EmperorLoversAbilities;
+import club.tarot.arcane.BenevolentCrown;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,7 +37,8 @@ public abstract class PlayerEntityMixin {
             cir.setReturnValue(cir.getReturnValue()
                 *HermitChariotAbilities.breakMultiplier(player)
                 * DeathTowerAbilities.breakMultiplier(player,state)
-                * MagicianStrengthAbilities.breakSpeed(player,state));
+                * MagicianStrengthAbilities.breakSpeed(player,state)
+                * EmperorLoversAbilities.breakSpeed(player,state));
     }
 
     @Inject(method="handleFallDamage",at=@At("RETURN"))
@@ -49,16 +52,19 @@ public abstract class PlayerEntityMixin {
     @Inject(method="tick",at=@At("HEAD"))
     private void tarot$movementRestriction(CallbackInfo ci) {
         if((Object)this instanceof ServerPlayerEntity player &&
-            !WorldJusticeAbilities.canSprint(player))player.setSprinting(false);
+            (!WorldJusticeAbilities.canSprint(player) ||
+                !BenevolentCrown.maySprintOrJump(player)))player.setSprinting(false);
     }
     @ModifyVariable(method = "addExhaustion", at = @At("HEAD"), argsOnly = true)
     private float tarot$spiritualExpenditure(float amount) {
         if (!((Object)this instanceof ServerPlayerEntity)) return amount;
         ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
         ArcaneSave.Record record=ArcaneSave.get(player.getServer()).getPlayer(player.getUuid());
-        if(record==null || !record.originValid || !record.profile.identityActive("fool")) return amount;
-        // Approx: while sprinting, other exhaustion sources share this multiplier.
-        return player.isSprinting() || player.isFallFlying() ? amount * 1.25f : amount;
+        if(record==null || !record.originValid)return amount;
+        // The Fool's Spiritual Expenditure remains exactly +25%.
+        if(record.profile.identityActive("fool") &&
+            (player.isSprinting() || player.isFallFlying()))amount*=1.25f;
+        return EmperorLoversAbilities.exhaustion(player,amount);
     }
 
     @Inject(method = "eatFood", at = @At("TAIL"))

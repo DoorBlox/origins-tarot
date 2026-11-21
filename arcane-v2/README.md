@@ -70,3 +70,15 @@ need implementation. Magician/Impossible Fist phasing is **experimental** and
 must not be used on a shared/world-protected SMP without careful acceptance.
 See `docs/BATCH_6_TEST.md`, `docs/BATCH_6_GAPS.md`, and
 `docs/IMPLEMENTATION_COVERAGE.md` for evidence and remaining work.
+
+## Emperor / Lovers / Benevolent Crown — native Batch 7
+
+The candidate adds 15 Emperor, 14 Lovers and 10 Benevolent Crown Sequence
+power IDs (39) and native event handlers for shielding, ally healing, domains,
+teleport-independent movement restrictions, crop growth and consort bonuses.
+The **second pathway's identity drawback is permanent from Seq4**, while
+its sequence kits remain slot-gated until resonance activates at Seq1.
+`docs/BATCH_7_TEST.md` has uncompleted in-game checks; the documented
+approximations in `docs/BATCH_7_GAPS.md` are not claims of source fidelity.
+The draft PR now represents **235/434** named ability entries. The remaining
+199 entries and gaps in already-authored abilities still need development.

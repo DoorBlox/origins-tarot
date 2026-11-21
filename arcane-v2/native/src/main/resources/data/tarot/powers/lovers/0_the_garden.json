@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Garden",
+  "description": "Primary key. **Duration 1800t (90s). Cooldown 24000t.** 15-block: allies Regeneration II + 10% speed. **Hostile mobs AND enemy players pacified unless attacked** (KubeJS target clear + Slowness I on entry). Passive mobs inside cannot die."
+}

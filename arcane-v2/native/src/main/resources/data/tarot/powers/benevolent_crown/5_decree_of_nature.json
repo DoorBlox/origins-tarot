@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Decree of Nature",
+  "description": "Secondary key: Decree + Slowness II to `#tarot:hostile` **AND enemy players** within 6 blocks. Cooldown 900t."
+}

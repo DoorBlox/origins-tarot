@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Abolish",
+  "description": "Primary key. Strip all positive effects + Slowness II + Weakness I 100t to `#tarot:hostile` **AND enemy players** within 8 blocks. Cooldown 1800t."
+}

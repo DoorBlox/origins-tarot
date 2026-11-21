@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Decree",
+  "description": "Secondary key. `#tarot:hostile` **AND enemy players** within 6 blocks forced to target Emperor for 100t. Cooldown 900t."
+}

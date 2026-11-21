@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Withering",
+  "description": "Wither I to `#tarot:hostile` **AND enemy players** within 5 blocks for 60t. Cooldown 3600t."
+}

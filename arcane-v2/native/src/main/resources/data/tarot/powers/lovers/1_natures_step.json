@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Nature’s Step",
+  "description": "Primary key: 300t walk-through-leaves; allies within 8 blocks heal 2 hearts + Regeneration I 200t. Cooldown 2400t."
+}

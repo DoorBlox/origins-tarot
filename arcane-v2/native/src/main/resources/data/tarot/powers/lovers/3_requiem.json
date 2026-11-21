@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Requiem",
+  "description": "Passive mob dies within 8 blocks → Regeneration I 60t."
+}

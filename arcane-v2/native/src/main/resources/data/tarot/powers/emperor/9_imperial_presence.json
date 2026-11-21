@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Imperial Presence",
+  "description": "Shield: `modify_damage_taken` −0.1."
+}

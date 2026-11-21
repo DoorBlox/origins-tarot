@@ -14,6 +14,8 @@ import club.tarot.arcane.BurningArchive;
 import club.tarot.arcane.DeathTowerAbilities;
 import club.tarot.arcane.CrumblingReaper;
 import club.tarot.arcane.MagicianStrengthAbilities;
+import club.tarot.arcane.EmperorLoversAbilities;
+import club.tarot.arcane.BenevolentCrown;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -45,7 +47,16 @@ public abstract class LivingEntityMixin {
             amount=MagicianStrengthAbilities.incoming(target,source,amount);
         if(source.getAttacker() instanceof ServerPlayerEntity owner)
             amount=MagicianStrengthAbilities.outgoing(owner,victim,source,amount);
+        amount=EmperorLoversAbilities.incoming(victim,source,amount);
+        if(source.getAttacker() instanceof ServerPlayerEntity owner)
+            amount=EmperorLoversAbilities.outgoing(owner,victim,source,amount);
         return amount;
+    }
+    @ModifyVariable(method="heal",at=@At("HEAD"),argsOnly=true,index=1)
+    private float tarot$loversHealing(float healing) {
+        if((Object)this instanceof ServerPlayerEntity player)
+            return EmperorLoversAbilities.healMultiplier(player,healing);
+        return healing;
     }
 
     @Inject(method="damage",at=@At("HEAD"))
@@ -56,6 +67,12 @@ public abstract class LivingEntityMixin {
 
     @Inject(method="damage",at=@At("HEAD"),cancellable=true)
     private void tarot$rescue(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity victim=(LivingEntity)(Object)this;
+        if(BenevolentCrown.protectsPassive(victim) ||
+            BenevolentCrown.preventAttack(victim,source)) {
+            cir.setReturnValue(false);
+            return;
+        }
         if((Object)this instanceof ServerPlayerEntity p &&
             MagicianStrengthAbilities.fallSave(p,source)) {
             cir.setReturnValue(false);
@@ -102,6 +119,7 @@ public abstract class LivingEntityMixin {
         if (Boolean.TRUE.equals(cir.getReturnValue())) {
             FoolLegend.afterSuccessfulHit((LivingEntity)(Object)this,source);
             WorldJusticeAbilities.onSuccessfulHit((LivingEntity)(Object)this,source);
+            BenevolentCrown.onSuccessfulHit((LivingEntity)(Object)this,source);
             if(source.getAttacker() instanceof ServerPlayerEntity owner)
                 DeathTowerAbilities.onHit(owner,(LivingEntity)(Object)this,source);
             if(source.getAttacker() instanceof ServerPlayerEntity attacker)
@@ -122,6 +140,7 @@ public abstract class LivingEntityMixin {
             WorldJusticeAbilities.onTakenDamage(p,source,taken);
             HermitChariotAbilities.onTakenDamage(p,source,taken);
             DeathTowerAbilities.onDamage(p,source,taken);
+            EmperorLoversAbilities.onTakenDamage(p,source,taken);
             FoolAbilities.afterDamage(p,source);
         }
     }
@@ -141,7 +160,8 @@ public abstract class LivingEntityMixin {
     @Inject(method="jump",at=@At("HEAD"),cancellable=true)
     private void tarot$blockJump(CallbackInfo ci) {
         if((Object)this instanceof ServerPlayerEntity player &&
-            !WorldJusticeAbilities.canJump(player))ci.cancel();
+            (!WorldJusticeAbilities.canJump(player) ||
+                !BenevolentCrown.maySprintOrJump(player)))ci.cancel();
     }
 
     @Inject(method="onDeath",at=@At("HEAD"))
@@ -149,6 +169,8 @@ public abstract class LivingEntityMixin {
         LivingEntity victim=(LivingEntity)(Object)this;
         HangedAbilities.onMinionDeath(victim);
         DeathTowerAbilities.onAnyDeath(victim);
+        EmperorLoversAbilities.onAnyDeath(victim);
+        BenevolentCrown.onAnyDeath(victim);
         if(victim instanceof ServerPlayerEntity p)HangedAbilities.onPlayerDeath(p);
         if(source.getAttacker() instanceof ServerPlayerEntity attacker) {
             HangedAbilities.onKill(attacker,victim);

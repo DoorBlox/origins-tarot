@@ -77,6 +77,15 @@ public final class ArcaneSave extends PersistentState {
                 record.dawnCrouchTicks=n.getInt("dawnCrouchTicks");
                 record.recordedStepUntil=n.getLong("recordedStepUntil");
                 record.recordedStepDimension=n.getString("recordedStepDimension");
+                record.aloneTicks=n.getInt("aloneTicks");
+                record.corruptUntil=n.getLong("corruptUntil");
+                record.corruptDimension=n.getString("corruptDimension");
+                if(n.contains("corruptX") && n.contains("corruptY") && n.contains("corruptZ"))
+                    record.corruptCenter=new net.minecraft.util.math.BlockPos(
+                        n.getInt("corruptX"),n.getInt("corruptY"),n.getInt("corruptZ"));
+                record.entropyUntil=n.getLong("entropyUntil");
+                record.decreeUntil=n.getLong("decreeUntil");
+                record.natureStepUntil=n.getLong("natureStepUntil");
                 if(n.contains("recordedStepX") && n.contains("recordedStepY") && n.contains("recordedStepZ"))
                     record.recordedStep=new net.minecraft.util.math.BlockPos(
                         n.getInt("recordedStepX"),n.getInt("recordedStepY"),n.getInt("recordedStepZ"));
@@ -147,6 +156,17 @@ public final class ArcaneSave extends PersistentState {
             n.putInt("dawnCrouchTicks",record.dawnCrouchTicks);
             n.putLong("recordedStepUntil",record.recordedStepUntil);
             n.putString("recordedStepDimension",record.recordedStepDimension);
+            n.putInt("aloneTicks",record.aloneTicks);
+            n.putLong("corruptUntil",record.corruptUntil);
+            n.putString("corruptDimension",record.corruptDimension);
+            if(record.corruptCenter!=null){
+                n.putInt("corruptX",record.corruptCenter.getX());
+                n.putInt("corruptY",record.corruptCenter.getY());
+                n.putInt("corruptZ",record.corruptCenter.getZ());
+            }
+            n.putLong("entropyUntil",record.entropyUntil);
+            n.putLong("decreeUntil",record.decreeUntil);
+            n.putLong("natureStepUntil",record.natureStepUntil);
             if(record.recordedStep!=null){
                 n.putInt("recordedStepX",record.recordedStep.getX());
                 n.putInt("recordedStepY",record.recordedStep.getY());
@@ -218,6 +238,13 @@ public final class ArcaneSave extends PersistentState {
         public net.minecraft.util.math.BlockPos recordedStep;
         public String recordedStepDimension="";
         public long recordedStepUntil;
+        public int aloneTicks;
+        public long corruptUntil;
+        public String corruptDimension="";
+        public net.minecraft.util.math.BlockPos corruptCenter;
+        public long entropyUntil;
+        public long decreeUntil;
+        public long natureStepUntil;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

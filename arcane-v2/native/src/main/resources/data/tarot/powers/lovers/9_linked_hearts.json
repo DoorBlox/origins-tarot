@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Linked Hearts",
+  "description": "Same-team player within 8 blocks: both +10% speed + 1 HP heal every 500t."
+}

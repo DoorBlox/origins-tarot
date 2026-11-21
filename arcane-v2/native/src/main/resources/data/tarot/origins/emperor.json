@@ -1,0 +1,11 @@
+{
+  "name": "The Emperor",
+  "description": "Arcane V2 The Emperor; sequence kits dynamically equipped in slots.",
+  "icon": "minecraft:shield",
+  "impact": 3,
+  "order": 4,
+  "powers": [
+    "tarot:emperor/marker",
+    "tarot:emperor/identity_weight_of_the_crown"
+  ]
+}

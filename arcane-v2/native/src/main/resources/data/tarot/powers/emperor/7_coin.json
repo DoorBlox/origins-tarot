@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Coin",
+  "description": "Active key + gold ingot. Clear target on hostile mob **or pacify enemy player (they cannot attack Emperor for 100t)**. Cooldown 600t."
+}

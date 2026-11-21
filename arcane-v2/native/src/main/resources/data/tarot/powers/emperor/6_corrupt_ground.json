@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Corrupt Ground",
+  "description": "Crouch + right-click ground → 5×5 for 600t, Slowness I to `#tarot:hostile` **AND enemy players** inside. Cooldown 1200t."
+}
