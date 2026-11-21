@@ -69,6 +69,8 @@ def pin_identity_drawbacks(compiled, kits):
     return result
 
 
+from .sin_engine import SIN_SCORES
+
 SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_marks","a_phase",
         "a_actcd","a_combat","a_clock","a_seen_dealt","a_seen_taken",
         "a_seen_bow","a_seen_crossbow","a_seen_trident","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
@@ -77,7 +79,7 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_view_slot","a_view_code","a_view_path","a_view_seq",
         "a_alone_time","a_iron_count","a_pick_slot","a_pick_path")
 RESCUE_COOLDOWNS = ("a_cd_martyr", "a_cd_swift", "a_cd_history", "a_cd_hunter", "a_cd_undying")
-SCORES += RESCUE_COOLDOWNS + ("a_rtest",)
+SCORES += RESCUE_COOLDOWNS + ("a_rtest",) + SIN_SCORES
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick")
 
@@ -200,11 +202,14 @@ def emit_player(w,kits,root=ROOT):
         [f"scoreboard objectives add {x} trigger" for x in TRIGGERS],
         "scoreboard objectives add a_dmg_dealt minecraft.custom:minecraft.damage_dealt",
         "scoreboard objectives add a_dmg_taken minecraft.custom:minecraft.damage_taken",
+        "scoreboard objectives add a_deaths minecraft.custom:minecraft.deaths",
         "scoreboard objectives add a_bow minecraft.used:minecraft.bow",
         "scoreboard objectives add a_crossbow minecraft.used:minecraft.crossbow",
         "scoreboard objectives add a_trident minecraft.used:minecraft.trident",
         "scoreboard objectives add a_const dummy",
+        "scoreboard players set #4 a_const 4",
         "scoreboard players set #10 a_const 10",
+        "scoreboard players set #80 a_const 80",
         "scoreboard players set #100 a_const 100",
         "scoreboard players set #10000 a_const 10000")
     w.f("tick","execute as @a at @s run "+F("player/tick"))
@@ -212,6 +217,7 @@ def emit_player(w,kits,root=ROOT):
         [f"scoreboard players enable @s {x}" for x in TRIGGERS],
         "scoreboard players add @s a_dmg_dealt 0",
         "scoreboard players add @s a_dmg_taken 0",
+        "scoreboard players add @s a_deaths 0",
         "scoreboard players add @s a_bow 0",
         "scoreboard players add @s a_crossbow 0",
         "scoreboard players add @s a_trident 0",
@@ -221,6 +227,20 @@ def emit_player(w,kits,root=ROOT):
         "execute unless score @s a_init matches 1 unless score @s a_paused matches 1 run "+F("player/detect"),
         "execute if score @s a_init matches 1 run "+F("player/combat_stats"),
         "execute if score @s a_init matches 1 run "+F("player/alone"),
+        # Persistent Sin state belongs exclusively to the owner of an
+        # actual source-granted Hanged power. Never process a teamless
+        # opponent's scoreboard or retain Sin after loss/death/pause.
+        "execute if score @s a_deaths > @s a_seen_deaths run "+F("sin/clear"),
+        "scoreboard players operation @s a_seen_deaths = @s a_deaths",
+        "execute store success score @s a_sin_owned run power has @s tarot:hanged_man/9_sin_bearing",
+        "execute store success score @s a_sin_capown run power has @s tarot:hanged_man/0_weight_of_sin_made_manifest",
+        "execute if score @s a_sin_started matches 1 unless score @s a_sin_owned matches 1 unless score @s a_sin_capown matches 1 run "+F("sin/clear"),
+        "execute if score @s a_paused matches 1 if score @s a_sin_started matches 1 run "+F("sin/clear"),
+        "execute if score @s a_init matches 1 unless score @s a_paused matches 1 if score @s a_sin_owned matches 1 run "+F("sin/tick"),
+        "execute if score @s a_init matches 1 unless score @s a_paused matches 1 unless score @s a_sin_owned matches 1 if score @s a_sin_capown matches 1 run "+F("sin/tick"),
+        "execute if score @s a_sin_form matches 1.. run "+F("sin/form_tick"),
+        "execute if score @s a_trinity_win matches 1.. run scoreboard players remove @s a_trinity_win 1",
+        "execute if score @s a_trinity_win matches 0 run scoreboard players set @s a_trinity_hits 0",
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
@@ -256,6 +276,13 @@ def emit_player(w,kits,root=ROOT):
             "scoreboard players set @s a_actcd 0",
             "scoreboard players set @s a_combat 0",
             "scoreboard players set @s a_alone_time 0",
+            "scoreboard players set @s a_sin_started 0",
+            "scoreboard players set @s a_sin 0",
+            "scoreboard players set @s a_sin_form 0",
+            "scoreboard players set @s a_trinity_hits 0",
+            "scoreboard players set @s a_trinity_win 0",
+            "scoreboard players operation @s a_sin_seen = @s a_dmg_taken",
+            "scoreboard players operation @s a_seen_deaths = @s a_deaths",
             "scoreboard players operation @s a_seen_dealt = @s a_dmg_dealt",
             "scoreboard players operation @s a_seen_taken = @s a_dmg_taken",
             "scoreboard players operation @s a_seen_bow = @s a_bow",
@@ -317,6 +344,8 @@ def emit_player(w,kits,root=ROOT):
     w.f("events/combat_taken",
         "scoreboard players set @s a_combat 200",
         f"advancement revoke @s only {PREFIX}events/combat_taken")
+    from .sin_engine import emit_sin
+    emit_sin(w, PREFIX, root)
 
 
 def emit_slots(w,kits):
