@@ -1,6 +1,7 @@
 package club.tarot.arcane.mixin;
 
 import club.tarot.arcane.FoolAbilities;
+import club.tarot.arcane.FoolLegend;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -14,6 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
     @Inject(method="damage",at=@At("HEAD"),cancellable=true)
     private void tarot$rescue(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
+        if(FoolLegend.immuneToDamage((LivingEntity)(Object)this,source)) {
+            cir.setReturnValue(false);
+            return;
+        }
         if(FoolAbilities.cancelFriendlyMinionHit((LivingEntity)(Object)this,source)) {
             cir.setReturnValue(false);
             return;
@@ -25,6 +30,8 @@ public abstract class LivingEntityMixin {
 
     @Inject(method="damage",at=@At("RETURN"))
     private void tarot$afterDamage(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
+        if (Boolean.TRUE.equals(cir.getReturnValue()))
+            FoolLegend.afterSuccessfulHit((LivingEntity)(Object)this,source);
         if (Boolean.TRUE.equals(cir.getReturnValue())
             && (Object)this instanceof ServerPlayerEntity)
             FoolAbilities.afterDamage((ServerPlayerEntity)(Object)this,source);

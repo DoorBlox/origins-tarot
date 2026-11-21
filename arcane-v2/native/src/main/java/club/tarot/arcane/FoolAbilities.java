@@ -37,7 +37,7 @@ public final class FoolAbilities {
     private static boolean enabled(ArcaneSave.Record r,int seq) {
         return r.profile.active("fool",seq);
     }
-    private static boolean enemy(ServerPlayerEntity holder,Entity target) {
+    public static boolean enemy(ServerPlayerEntity holder,Entity target) {
         if(target==holder) return false;
         if(target instanceof PlayerEntity) {
             if(holder.getScoreboardTeam()!=null && holder.isTeammate(target)) return false;
@@ -57,7 +57,7 @@ public final class FoolAbilities {
     private static void effect(LivingEntity living,net.minecraft.entity.effect.StatusEffect e,int duration,int amplifier) {
         living.addStatusEffect(new StatusEffectInstance(e,duration,amplifier));
     }
-    private static void decoy(ServerPlayerEntity p) {
+    static void decoy(ServerPlayerEntity p) {
         ArmorStandEntity stand=new ArmorStandEntity(p.world,p.getX(),p.getY(),p.getZ());
         stand.setInvisible(true);
         stand.setNoGravity(true);
@@ -112,6 +112,7 @@ public final class FoolAbilities {
     }
     public static void tick(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r) {
         long now=p.getWorld().getTime();
+        FoolLegend.tick(p);
         for (ArmorStandEntity decoy : p.getWorld().getEntitiesByClass(ArmorStandEntity.class,
             new Box(p.getBlockPos()).expand(128), e -> e.age >= 100
                 && e.getScoreboardTags().contains("tarot_decoy"))) decoy.discard();
@@ -194,6 +195,9 @@ public final class FoolAbilities {
                     vex.addScoreboardTag("tarot_owner_"+p.getUuidAsString());
                     p.getWorld().spawnEntity(vex);
                 }
+                break;
+            case "legend_of_the_fool":
+                if(!FoolLegend.cast(p,state,r)) return failure(p);
                 break;
             case "full_faceless_disguise":
                 if(!enabled(r,9) || r.inCombat(now) || !r.ready(id,now,6000)) return failure(p);

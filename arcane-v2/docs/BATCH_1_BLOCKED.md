@@ -4,7 +4,7 @@ This draft branch **is not ready for release**. The native KubeJS replacement is
 
 ## Unimplemented / incomplete gameplay (engineering work, not platform blockers)
 
-- Fool Seq 0: Legend of the Fool needs real 35-second timed transformation, damage modification, flight, reset, and loot handling; no working handler.
+- Fool Seq 0: Legend of the Fool now has a native 700-tick activation, flight, decoys, rewind, fire/fall immunity, hit debuffs and end effects. The exact 75% DR, +50% final damage, double mob loot and restart-safe persistence remain unfinished.
 - All other 21 individual pathways and all 11 Resonance kits are not implemented or granted in the native registry.
 - A built-in native event listener for player Origin choice, death/respawn/dimension refresh and compatibility with externally managed sequence-up needs acceptance against actual runtime.
 - Original V3 ascension progression has **not** been migrated into the Rev3 paired-path synchronized Sequence model. Until then only an OP debug Sequence command changes levels.

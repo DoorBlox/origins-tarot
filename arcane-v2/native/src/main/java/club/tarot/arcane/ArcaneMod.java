@@ -71,6 +71,7 @@ public final class ArcaneMod implements ModInitializer {
             }
         });
         FoolAbilities.register();
+        FoolLegend.register();
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
 

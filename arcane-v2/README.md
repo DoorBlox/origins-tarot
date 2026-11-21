@@ -19,5 +19,7 @@ gradle build
 
 Server admin must replace the legacy Tarot datapack, back up the world,
 then load the new built JAR (including its bundled data resources).
+The native mod now includes the Fool's initial event handlers, bounded Vex-like minions, and a timed capstone approximation. **These abilities have not been accepted in a live world.**
+
 This branch is **not production-ready** until the full 434-ability coverage
 and live Minecraft acceptance gates pass. Never treat static tests as in-game proof.
