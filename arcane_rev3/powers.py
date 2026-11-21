@@ -674,6 +674,11 @@ def compile_powers(root):
     from .batches import resonance2, individual3
     resonance2.register(add)
     individual3.register(add)
+    # Wave 3's 21 individual and 12 Resonance definitions are source-backed
+    # partial or native full powers. None activates the blocked Seq1 ritual.
+    from .batches import individual4, resonance3
+    individual4.register(add)
+    resonance3.register(add)
     # The Rev3 slot system can equip both a source bonus and its explicit
     # replacement at once. Keep grant ownership unchanged, but condition the
     # superseded effect on absence of its source-scoped upgrade power.
