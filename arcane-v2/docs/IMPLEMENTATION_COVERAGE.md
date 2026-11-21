@@ -7,9 +7,10 @@ entries = 434 total; Rev3 governs all Sequence transitions and slot grants.
 |---|---:|---:|---|
 | Fool / Hanged Man / Paper Martyr | 28 | 10 | Native compiled, runtime approximations |
 | World / Justice / Marked Verdict | 30 | 10 | Native compiled, runtime approximations |
-| Hermit / Chariot / Burning Archive | 29 | 10 | In current source candidate; CI pending |
-| **Total authored** | **87** | **30** | **117/434** |
-| **Remaining** | **237** | **80** | **317/434** |
+| Hermit / Chariot / Burning Archive | 29 | 10 | Build/boot CI passed before next batch; live acceptance pending |
+| Death / Tower / Crumbling Reaper | 30 | 10 | New native handlers; run exact-head CI and manual gameplay tests |
+| **Total authored** | **117** | **40** | **157/434** |
+| **Remaining** | **207** | **70** | **277/434** |
 
 An authored power is not equivalent to verified behavior: client disguises,
 custom local weather, enchantment copying, true armor-ignoring arrows and
@@ -23,3 +24,11 @@ the shared Sequence, slot and Resonance transitions.
 CI: Gradle and JUnit + headless Fabric 1.18.2 / Origins 1.4.1 server startup,
 plus unchanged legacy V2/V3 workflows. Live-world acceptance remains
 unverified until run by the SMP owner.
+
+### Important qualification
+
+The 157 entries count packaged named ability definitions, not 157 independently
+verified gameplay effects. Some require client rendering, custom mob AI,
+combat edge-case testing, and server-world acceptance. The source handbooks
+remain authoritative, and unimplemented/approximate behavior is documented
+per batch rather than substituted silently.

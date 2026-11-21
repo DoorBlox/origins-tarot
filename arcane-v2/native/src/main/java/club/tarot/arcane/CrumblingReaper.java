@@ -68,8 +68,12 @@ public final class CrumblingReaper {
         if(!harvesting(owner))return;
         if(!FoolAbilities.enemy(owner,killed))return;
         float cap=DeathTowerAbilities.reaper(r,0)?30f:20f;
-        r.arcaneAbsorption=Math.min(cap,r.arcaneAbsorption+2);
-        r.arcaneAbsorptionUntil=time(owner)+1200;
+        grantAbsorption(owner,state,r,cap,1200);
+    }
+    static void grantAbsorption(ServerPlayerEntity owner,ArcaneSave state,
+                                ArcaneSave.Record r,float cap,int ticks) {
+        r.arcaneAbsorption=Math.min(cap,Math.max(0f,r.arcaneAbsorption)+2f);
+        r.arcaneAbsorptionUntil=time(owner)+ticks;
         owner.setAbsorptionAmount(Math.max(owner.getAbsorptionAmount(),r.arcaneAbsorption));
         state.markDirty();
     }

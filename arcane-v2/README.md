@@ -49,3 +49,13 @@ temporary fire powers, Book/Scroll interactions and capstone require the
 specific Batch 4 test checklist and in-game verification.
 See [current ability coverage](docs/IMPLEMENTATION_COVERAGE.md) for the
 latest counts rather than relying on historical Batch 1/2 snapshots.
+
+## Death / Tower / Crumbling Reaper (development Batch 5)
+
+An additional 40 named powers are now represented in the native Fabric module,
+with server-side event handlers for undead affinity, stone mining, ground shock,
+portal creation, execution rules, and timed capstones. The identities' drawbacks
+activate at Sequence 4 when the second pathway is unlocked, even if none of its
+kits are slotted. **The Fall intentionally damages self and allies** per Rev2.
+See `docs/BATCH_5_TEST.md` and `docs/BATCH_5_GAPS.md` for exact acceptance
+criteria and incomplete mechanics. No changes were released to the SMP.

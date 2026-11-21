@@ -294,12 +294,20 @@ public final class DeathTowerAbilities {
                     effect(e,StatusEffects.WEAKNESS,60,0);
                 break;
             }
-            case "falling_tower": {
-                if(!tower(r,1)||!r.ready(id,t,2400))return false;
+            case "falling_tower":
+            case "falling_towers_reap": {
+                boolean fused="falling_towers_reap".equals(id);
+                if(!(fused?reaper(r,1):tower(r,1)) || !r.ready(id,t,2400))return false;
                 p.addVelocity(0,1.2,0);
+                // A controlled 8-block leap approximation with a 6-block impact zone.
                 for(LivingEntity e:HangedAbilities.enemies(p,p.getPos(),6)) {
-                    e.damage(DamageSource.MAGIC,10f);
+                    boolean execute=fused && e.getMaxHealth()>0 &&
+                        e.getHealth()/e.getMaxHealth()<.20f;
+                    boolean damaged=e.damage(DamageSource.MAGIC,
+                        execute?e.getHealth()+2:10f);
                     effect(e,StatusEffects.SLOWNESS,100,1);
+                    if(fused && damaged && !e.isAlive())
+                        CrumblingReaper.grantAbsorption(p,state,r,20f,600);
                 }
                 break;
             }

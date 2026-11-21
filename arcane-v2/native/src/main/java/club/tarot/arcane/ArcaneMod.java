@@ -196,6 +196,7 @@ public final class ArcaneMod implements ModInitializer {
                 || "emperors_library".equals(ability) || "burning_lecture".equals(ability)
                 || "the_final_harvest".equals(ability) || "the_fall".equals(ability)
                 || "the_crumbling_reaper".equals(ability) || "falling_tower".equals(ability)
+                || "falling_towers_reap".equals(ability)
                 || "reap".equals(ability);
         return "secondary".equals(binding) && (
             "paper_dagger".equals(ability) || "paper_sentence".equals(ability)
