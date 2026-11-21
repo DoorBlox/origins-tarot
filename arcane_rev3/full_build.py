@@ -82,7 +82,8 @@ RESCUE_COOLDOWNS = ("a_cd_martyr", "a_cd_swift", "a_cd_history", "a_cd_hunter", 
 SCORES += RESCUE_COOLDOWNS + ("a_rtest", "a_focus") + SIN_SCORES
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick",
-          "a_focus_menu","a_choose")
+          "a_focus_menu","a_choose","a_guide","a_abilities","a_roadmap",
+          "a_kit","a_detail")
 
 
 def J(obj):
@@ -245,6 +246,11 @@ def emit_player(w,kits,root=ROOT):
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
+        "execute if score @s a_guide matches 1.. run "+F("ui/help"),
+        "execute if score @s a_abilities matches 1.. run "+F("ui/codex/home"),
+        "execute if score @s a_roadmap matches 1.. run "+F("ui/roadmap"),
+        "execute if score @s a_kit matches 1.. run "+F("ui/codex/open"),
+        "execute if score @s a_detail matches 1.. run "+F("ui/codex/detail_open"),
         # Focus selection is player-triggered and processed only when
         # unpaused. Nothing changes to original keys until opt-in.
         "execute unless score @s a_paused matches 1 if score @s a_focus_menu matches 1.. run "+F("ui/focus/menu"),
@@ -850,6 +856,9 @@ def build(root=ROOT,output=None):
         emit_slots(w,kits)
         emit_grants(w,kits,innate,focus_entries)
         emit_ui(w)
+        from .player_codex import emit_player_codex, emit_roadmap
+        emit_player_codex(w,compiled,manifest,kits,innate,NUM)
+        emit_roadmap(w)
         from .active_focus import emit_focus
         emit_focus(w,focus_entries)
         emit_progression(w)
@@ -868,7 +877,12 @@ def build(root=ROOT,output=None):
                              indent=2,ensure_ascii=False)+"\n",encoding="utf8")
     alias_path=output/"tarot.json"
     alias_path.write_text(json.dumps(alias(),indent=2)+"\n",encoding="utf8")
-    artifacts.update(manifest=manifest_path,alias=alias_path)
+    from .player_codex import generate_player_manual
+    manual_path = output/"Arcane_Rev3_Player_Ability_Reference.md"
+    manual_path.write_text(generate_player_manual(manifest,compiled,kits,innate),
+                           encoding="utf8")
+    artifacts.update(manifest=manifest_path,alias=alias_path,
+                     player_manual=manual_path)
     return artifacts
 
 
