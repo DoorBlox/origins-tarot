@@ -123,13 +123,16 @@ def _alias():
     def action(objective):
         return {'command': 'trigger ' + objective, 'commandType': 'CLIENT'}
     return {
-        'schemaVersion': 1, 'commandMode': 'COMMAND_CUSTOM', 'command': 'tarot',
-        'permission': 0, 'actions': [action('ta_help')],
-        'children': [
-            {'child': name, 'type': 'literal', 'permission': 0,
-             'actions': [action('ta_' + name)]}
-            for name in ('help', 'status', 'slots')
-        ],
+        'commandMode': 'COMMAND_CUSTOM',
+        'customCommand': {
+            'parent': 'tarot', 'type': 'literal', 'permission': 0,
+            'actions': [action('ta_help')],
+            'children': [
+                {'child': name, 'type': 'literal', 'permission': 0,
+                 'actions': [action('ta_' + name)]}
+                for name in ('help', 'status', 'slots')
+            ],
+        },
     }
 
 
