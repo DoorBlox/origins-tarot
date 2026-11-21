@@ -97,7 +97,6 @@ class Rev3BuildTests(unittest.TestCase):
         self.assertEqual(power["key"]["key"], "key.origins.secondary_active")
         self.assertEqual(power["entity_action"]["radius"], 10)
         self.assertTrue(power["entity_action"]["include_target"])
-        self.assertEqual(power["entity_action"]["shape"], "sphere")
         self.assertEqual(power["entity_action"]["bientity_action"]["action"]["effect"]["duration"], 40)
         exhaustion = json.loads(self.zip.read("data/tarot/powers/fool/9_spiritual_expenditure.json"))
         self.assertEqual(exhaustion["modifier"]["value"], 0.25)

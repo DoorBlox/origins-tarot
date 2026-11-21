@@ -62,7 +62,7 @@ def _files():
         'key': {'key': 'key.origins.secondary_active'},
         'condition': {'type': 'origins:sneaking'},
         'entity_action': {'type': 'origins:area_of_effect', 'radius': 10,
-                          'include_target': True, 'shape': 'sphere',
+                          'include_target': True,
                           'bientity_action': {'type': 'origins:target_action',
                                               'action': _effect('glowing', 40)}},
     })
