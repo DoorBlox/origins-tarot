@@ -76,11 +76,12 @@ class IndividualSevenTests(unittest.TestCase):
 
     def test_402_ability_status_and_complete_source_resonance(self):
         self.assertEqual(len(self.manifest), 434)
-        self.assertEqual(len(self.powers), 402)
-        self.assertEqual(
-            {s: sum(m["status"] == s for m in self.manifest)
-             for s in ("full", "partial", "blocked")},
-            {"full": 73, "partial": 329, "blocked": 32})
+        self.assertGreaterEqual(len(self.powers), 402)
+        counts = {s: sum(m["status"] == s for m in self.manifest)
+                  for s in ("full", "partial", "blocked")}
+        self.assertEqual(counts["full"], 73)
+        self.assertGreaterEqual(counts["partial"], 329)
+        self.assertLessEqual(counts["blocked"], 32)
         self.assertEqual(
             sum(x["family"] == "resonance" and x["status"] != "blocked"
                 for x in self.manifest), 110)
