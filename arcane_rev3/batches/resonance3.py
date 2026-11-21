@@ -5,7 +5,7 @@ transition or slot. The Seq2->Seq1 ritual must remain fail-closed until the
 whole 110-ability kit and world/runtime acceptance are complete.
 """
 from ..powers import power, apply, mod, compound
-from ..team_policy import ally_effect
+from ..team_policy import ally_effect, enemy_effect
 from .shared import active, periodic, effect, mobs, combined, cmd
 from .resonance import attacked_by, night
 
@@ -68,10 +68,11 @@ def register(add):
     lunar = active("Lunar Sanctuary",
         "Secondary key at night gives self a small heal and damages nearby undead over time.",
         combined({"type": "origins:heal", "amount": 2},
-                 effect(mobs(10, "undead"), "wither", 100)), 3600)
+                 effect(mobs(10, "undead"), "wither", 100),
+                 enemy_effect("wither", 100, 10)), 3600)
     lunar["condition"] = night()
     add("eclipse", 2, "Lunar Sanctuary", lunar, "partial",
-        "Persistent sanctified 15-block field, continuous 1 heart/40t drain, same-team healing and enemy-player targets absent")
+        "No persistent 15-block sanctified zone, exact 1-heart-per-40t drain or its proportional self-healing; nightly listed enemy-team Wither is only a timed fallback")
     add("eclipse", 1, "Solar Drain",
         active("Solar Drain", "Primary key self-regenerates and withers undead within 15 blocks.",
                combined(apply("regeneration", 300),
