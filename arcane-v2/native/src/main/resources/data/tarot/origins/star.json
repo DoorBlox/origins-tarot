@@ -1,0 +1,12 @@
+{
+  "name": "The Star",
+  "description": "Arcane V2 The Star. Sequence powers dynamically granted by slots.",
+  "icon": "minecraft:clock",
+  "impact": 3,
+  "order": 17,
+  "powers": [
+    "tarot:star/marker",
+    "tarot:star/identity_true_sleeplessness",
+    "tarot:star/identity_wings"
+  ]
+}

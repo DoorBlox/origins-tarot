@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Mirror Veil",
+  "description": "`invisibility` while sneaking, light ≤ 7, not exposed to sun. `render_armor: true`."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Aura of Despair",
+  "description": "`action_over_time` interval 40, 10% chance `#tarot:hostile` **AND enemy players** within 5 blocks flee 40t."
+}

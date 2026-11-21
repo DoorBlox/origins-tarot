@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Witch’s Venom",
+  "description": "`target_action_on_hit` Poison I 60t. Cooldown 240t. **Affects hostile mobs AND enemy players.**"
+}

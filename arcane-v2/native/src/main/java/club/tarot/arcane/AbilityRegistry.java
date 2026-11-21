@@ -226,6 +226,36 @@ public final class AbilityRegistry {
         path("binding_contract", 2, "contract_enforcement");
         path("binding_contract", 1, "chaos_law");
         path("binding_contract", 0, "the_binding_contract");
+        path("star", 9, "sleepless", "nightwatch", "evernights_patience", "sleepless_vigil", "true_sleeplessness");
+        path("star", 8, "lullaby");
+        path("star", 7, "nightmare");
+        path("star", 6, "soul_shield");
+        path("star", 5, "haunt");
+        path("star", 4, "nightwatch_ii");
+        path("star", 3, "terror");
+        path("star", 2, "conceal");
+        path("star", 1, "misfortune", "sleepless_vigil_ii");
+        path("star", 0, "the_starless_sky");
+        path("empress", 9, "witchs_venom", "mirror_veil", "witchs_grace", "reflected_beauty", "exposed_reflection");
+        path("empress", 8, "whisper");
+        path("empress", 7, "black_fire");
+        path("empress", 6, "thread");
+        path("empress", 5, "plague_touch");
+        path("empress", 4, "aura_of_despair");
+        path("empress", 3, "ageless");
+        path("empress", 2, "mirror_passage");
+        path("empress", 1, "apocalypses_herald", "petrifying_gaze");
+        path("empress", 0, "the_mirror_world");
+        path("starless_poison", 9, "sleepless_grace");
+        path("starless_poison", 8, "lullaby_whisper");
+        path("starless_poison", 7, "nightmare_fire");
+        path("starless_poison", 6, "soul_thread");
+        path("starless_poison", 5, "haunting_plague");
+        path("starless_poison", 4, "night_venom");
+        path("starless_poison", 3, "poison_conceal");
+        path("starless_poison", 2, "shadow_whisper");
+        path("starless_poison", 1, "midnight_apocalypse");
+        path("starless_poison", 0, "the_starless_poison");
     }
 
     private static void path(String name, int sequence, String... ids) {

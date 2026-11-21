@@ -8,6 +8,7 @@ import club.tarot.arcane.MagicianStrengthAbilities;
 import club.tarot.arcane.EmperorLoversAbilities;
 import club.tarot.arcane.BenevolentCrown;
 import club.tarot.arcane.BindingContract;
+import club.tarot.arcane.StarEmpressAbilities;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -66,7 +67,8 @@ public abstract class PlayerEntityMixin {
         // The Fool's Spiritual Expenditure remains exactly +25%.
         if(record.profile.identityActive("fool") &&
             (player.isSprinting() || player.isFallFlying()))amount*=1.25f;
-        return EmperorLoversAbilities.exhaustion(player,amount);
+        amount=EmperorLoversAbilities.exhaustion(player,amount);
+        return StarEmpressAbilities.exhaustion(player,amount);
     }
 
     @Inject(method = "eatFood", at = @At("TAIL"))

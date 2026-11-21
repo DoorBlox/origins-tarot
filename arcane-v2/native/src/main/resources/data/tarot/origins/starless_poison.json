@@ -1,0 +1,13 @@
+{
+  "name": "The Starless Poison",
+  "description": "Star + Empress Seq1 Resonance. Both drawbacks apply.",
+  "icon": "minecraft:fermented_spider_eye",
+  "impact": 3,
+  "order": 29,
+  "powers": [
+    "tarot:starless_poison/marker",
+    "tarot:star/identity_true_sleeplessness",
+    "tarot:empress/identity_exposed_reflection",
+    "tarot:starless_poison/identity_wings"
+  ]
+}

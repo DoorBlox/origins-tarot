@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Mirror World",
+  "description": "Primary key. **Duration 500t (25s). Cooldown 18000t (15 min).** Invisibility (no armor), invulnerability, free flight. Exit anywhere within 30 blocks of entry. On exit: Poison II + Wither II 100t to **#tarot:hostile AND enemy players** within 8 blocks."
+}

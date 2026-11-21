@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Petrifying Gaze",
+  "description": "Sneak 60t charge → Slowness II to `#tarot:hostile` **AND enemy players** within 6 blocks for 60t. Cooldown 1200t."
+}

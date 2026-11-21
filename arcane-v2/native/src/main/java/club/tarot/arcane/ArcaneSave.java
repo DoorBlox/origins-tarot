@@ -93,6 +93,11 @@ public final class ArcaneSave extends PersistentState {
                 record.disciplineUntil=n.getLong("disciplineUntil");
                 record.chaosStrikeUntil=n.getLong("chaosStrikeUntil");
                 record.orderStrikeUntil=n.getLong("orderStrikeUntil");
+                record.starSneakTicks=n.getInt("starSneakTicks");
+                record.empressSneakTicks=n.getInt("empressSneakTicks");
+                record.mirrorRestorePending=n.getBoolean("mirrorRestorePending");
+                record.mirrorOldMayFly=n.getBoolean("mirrorOldMayFly");
+                record.mirrorOldFlying=n.getBoolean("mirrorOldFlying");
                 if(n.contains("recordedStepX") && n.contains("recordedStepY") && n.contains("recordedStepZ"))
                     record.recordedStep=new net.minecraft.util.math.BlockPos(
                         n.getInt("recordedStepX"),n.getInt("recordedStepY"),n.getInt("recordedStepZ"));
@@ -180,6 +185,11 @@ public final class ArcaneSave extends PersistentState {
             n.putLong("disciplineUntil",record.disciplineUntil);
             n.putLong("chaosStrikeUntil",record.chaosStrikeUntil);
             n.putLong("orderStrikeUntil",record.orderStrikeUntil);
+            n.putInt("starSneakTicks",record.starSneakTicks);
+            n.putInt("empressSneakTicks",record.empressSneakTicks);
+            n.putBoolean("mirrorRestorePending",record.mirrorRestorePending);
+            n.putBoolean("mirrorOldMayFly",record.mirrorOldMayFly);
+            n.putBoolean("mirrorOldFlying",record.mirrorOldFlying);
             if(record.recordedStep!=null){
                 n.putInt("recordedStepX",record.recordedStep.getX());
                 n.putInt("recordedStepY",record.recordedStep.getY());
@@ -264,6 +274,12 @@ public final class ArcaneSave extends PersistentState {
         public long disciplineUntil;
         public long chaosStrikeUntil;
         public long orderStrikeUntil;
+        public int starSneakTicks;
+        public int empressSneakTicks;
+        /** Persistent crash recovery for the short-lived Mirror World flight. */
+        public boolean mirrorRestorePending;
+        public boolean mirrorOldMayFly;
+        public boolean mirrorOldFlying;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

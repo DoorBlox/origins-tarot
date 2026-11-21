@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Mirror Passage",
+  "description": "Once per 3600t, teleport through glass up to 10 blocks."
+}

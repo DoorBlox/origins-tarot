@@ -18,6 +18,8 @@ import club.tarot.arcane.EmperorLoversAbilities;
 import club.tarot.arcane.BenevolentCrown;
 import club.tarot.arcane.DevilJudgementAbilities;
 import club.tarot.arcane.BindingContract;
+import club.tarot.arcane.StarEmpressAbilities;
+import club.tarot.arcane.StarlessPoison;
 import club.tarot.arcane.ImpossibleFist;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -57,6 +59,10 @@ public abstract class LivingEntityMixin {
             amount=DevilJudgementAbilities.incoming(target,source,amount);
         if(source.getAttacker() instanceof ServerPlayerEntity owner)
             amount=DevilJudgementAbilities.outgoing(owner,victim,source,amount);
+        if(victim instanceof ServerPlayerEntity target)
+            amount=StarEmpressAbilities.incoming(target,source,amount);
+        if(source.getAttacker() instanceof ServerPlayerEntity owner)
+            amount=StarEmpressAbilities.outgoing(owner,victim,source,amount);
         return amount;
     }
     @ModifyVariable(method="heal",at=@At("HEAD"),argsOnly=true,index=1)
@@ -76,7 +82,8 @@ public abstract class LivingEntityMixin {
     @Inject(method="damage",at=@At("HEAD"),cancellable=true)
     private void tarot$rescue(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
         LivingEntity victim=(LivingEntity)(Object)this;
-        if(BenevolentCrown.protectsPassive(victim) ||
+        if((victim instanceof ServerPlayerEntity p && StarlessPoison.mirrorImmune(p)) ||
+            BenevolentCrown.protectsPassive(victim) ||
             BenevolentCrown.preventAttack(victim,source) ||
             BindingContract.preventAttack(victim,source)) {
             cir.setReturnValue(false);
@@ -134,8 +141,10 @@ public abstract class LivingEntityMixin {
             FoolLegend.afterSuccessfulHit((LivingEntity)(Object)this,source);
             WorldJusticeAbilities.onSuccessfulHit((LivingEntity)(Object)this,source);
             BenevolentCrown.onSuccessfulHit((LivingEntity)(Object)this,source);
-            if(source.getAttacker() instanceof ServerPlayerEntity caster)
+            if(source.getAttacker() instanceof ServerPlayerEntity caster) {
                 DevilJudgementAbilities.onSuccessfulHit(caster,(LivingEntity)(Object)this,source);
+                StarEmpressAbilities.onSuccessfulHit(caster,(LivingEntity)(Object)this,source);
+            }
             if(source.getAttacker() instanceof ServerPlayerEntity owner)
                 DeathTowerAbilities.onHit(owner,(LivingEntity)(Object)this,source);
             if(source.getAttacker() instanceof ServerPlayerEntity attacker)
@@ -158,6 +167,7 @@ public abstract class LivingEntityMixin {
             DeathTowerAbilities.onDamage(p,source,taken);
             EmperorLoversAbilities.onTakenDamage(p,source,taken);
             DevilJudgementAbilities.onTakenDamage(p,source,taken);
+            StarEmpressAbilities.onTakenDamage(p,source,taken);
             FoolAbilities.afterDamage(p,source);
         }
     }
@@ -203,6 +213,7 @@ public abstract class LivingEntityMixin {
             ImpossibleFist.stopOnDisconnect(p);
             EmperorLoversAbilities.stopOnDisconnect(p);
             DevilJudgementAbilities.stopOnDisconnect(p);
+            StarEmpressAbilities.stopOnDisconnect(p);
         }
         if(source.getAttacker() instanceof ServerPlayerEntity attacker) {
             HangedAbilities.onKill(attacker,victim);
@@ -210,6 +221,7 @@ public abstract class LivingEntityMixin {
             HermitChariotAbilities.onKill(attacker,victim);
             DeathTowerAbilities.onKill(attacker,victim);
             DevilJudgementAbilities.onKill(attacker,victim);
+            StarEmpressAbilities.onKill(attacker,victim);
             Ascension.onKill(attacker,victim);
         }
     }

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Thread",
+  "description": "Right-click player within 6 blocks → Slowness I 40t. Cooldown 400t."
+}

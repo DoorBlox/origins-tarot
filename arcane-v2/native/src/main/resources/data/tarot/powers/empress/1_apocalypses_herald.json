@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Apocalypse’s Herald",
+  "description": "Primary key. 5 meteors over 160t in 10-block radius: 6 damage + fire 60t to **#tarot:hostile AND enemy players**. Cooldown 3600t."
+}

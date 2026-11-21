@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "render_elytra": true,
+  "name": "The Empress Wings",
+  "description": "Permanent glide identity."
+}

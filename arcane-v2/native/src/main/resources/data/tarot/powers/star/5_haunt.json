@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Haunt",
+  "description": "Secondary key: Blindness I to **hostile mob OR enemy player** within 6 blocks for 60t. Cooldown 900t."
+}

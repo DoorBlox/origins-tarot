@@ -1,0 +1,12 @@
+{
+  "name": "The Empress",
+  "description": "Arcane V2 The Empress. Sequence powers dynamically granted by slots.",
+  "icon": "minecraft:amethyst_shard",
+  "impact": 3,
+  "order": 3,
+  "powers": [
+    "tarot:empress/marker",
+    "tarot:empress/identity_exposed_reflection",
+    "tarot:empress/identity_wings"
+  ]
+}

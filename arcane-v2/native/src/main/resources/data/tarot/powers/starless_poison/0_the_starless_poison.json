@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Starless Poison",
+  "description": "Primary key. **Duration 800t (40s). Cooldown 24000t.** - Extinguish light 30 blocks - Invisibility (Speed II, +20% damage) - `#tarot:hostile` **AND enemy players** within 30 blocks: Blind + Slowed I - Poison II every 60t to all enemies within 30 blocks (poisoned take +25%) - Attacks break invisibility only 40t - Poisoned deaths explode 3-block poison cloud - On end: all poisoned enemies take 6 damage + Wither I 100t; self Invisibility 100t"
+}

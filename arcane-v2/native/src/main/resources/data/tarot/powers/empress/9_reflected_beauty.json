@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Reflected Beauty",
+  "description": "`attacker_action_when_hit` Nausea I 40t if light ≥ 12. Cooldown 400t."
+}

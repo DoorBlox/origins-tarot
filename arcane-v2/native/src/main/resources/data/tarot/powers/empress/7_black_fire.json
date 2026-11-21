@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Black Fire",
+  "description": "10% chance melee ignite 20t. No block ignition. **Affects hostile mobs AND enemy players.**"
+}

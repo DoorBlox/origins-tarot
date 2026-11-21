@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Terror",
+  "description": "10% chance **hostile mobs AND enemy players** within 5 blocks flee 40t at night."
+}

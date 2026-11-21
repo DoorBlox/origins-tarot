@@ -95,3 +95,15 @@ The Absolute Law `no_spawn` selection currently pacifies hostile mobs but
 player-directed aggro, and custom AI/stun behavior are approximate.
 See `docs/BATCH_8_TEST.md` and `docs/BATCH_8_GAPS.md`.
 This source candidate represents **275/434** named entries, 159 remaining.
+
+## Star / Empress / Starless Poison — native Batch 9
+
+40 new named resources (15 Star, 15 Empress, 10 Starless Poison) and native
+handlers have been staged for bed/identity rules, night combat, poison,
+player debuffs, meteors and timed Mirror World flight. No KubeJS is required.
+Temporary Mirror World flight uses **saved recovery markers** to avoid leaving
+permanent flight permissions after a restart. Exits are bounded to30 blocks
+or safe return. Exact phantom spawn rules, decorative darkness, and passive
+hostile AI remain incomplete; see `docs/BATCH_9_GAPS.md` and the manual
+`docs/BATCH_9_TEST.md` list. Source coverage is **315/434** (119 remaining),
+not a claim that 315 effects have been proven in multiplayer.

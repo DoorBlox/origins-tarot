@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Nightwatch",
+  "description": "Night: +15% speed, +15% damage to `#tarot:undead`."
+}

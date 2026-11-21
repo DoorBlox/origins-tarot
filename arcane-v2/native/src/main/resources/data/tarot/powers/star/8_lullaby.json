@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Lullaby",
+  "description": "Crouch 60t → Slowness I to `#tarot:hostile` **AND enemy players** within 5 blocks for 60t. Cooldown 1200t."
+}

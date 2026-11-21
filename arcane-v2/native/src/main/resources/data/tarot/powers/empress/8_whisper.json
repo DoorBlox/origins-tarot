@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Whisper",
+  "description": "Crouch-right-click passive mob → hostile to nearest player (not Empress) for 200t. Cooldown 1200t."
+}

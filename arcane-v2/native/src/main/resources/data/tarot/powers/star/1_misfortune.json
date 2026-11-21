@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Misfortune",
+  "description": "Primary key: Weakness II + Slowness II + Blindness 60t to `#tarot:hostile` **AND enemy players** within 10 blocks for 160t. Cooldown 1800t."
+}

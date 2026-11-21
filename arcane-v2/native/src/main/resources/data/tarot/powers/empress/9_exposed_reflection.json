@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Exposed Reflection",
+  "description": "Projectile damage +25%, `exposed_to_sun`."
+}
