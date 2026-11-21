@@ -24,9 +24,10 @@ class ResonanceTargetFidelityTests(unittest.TestCase):
     def setUpClass(cls):
         cls.compiled, cls.manifest, cls.kits = compile_powers(ROOT)
 
-    def get(self, pathway, name):
+    def get(self, pathway, name, sequence=None):
         rows = [r for r in self.manifest
-                if r["pathway"] == pathway and norm(r["name"]) == norm(name)]
+                if r["pathway"] == pathway and norm(r["name"]) == norm(name)
+                and (sequence is None or r["sequence"] == sequence)]
         self.assertEqual(len(rows), 1, (pathway, name))
         self.assertEqual(rows[0]["status"], "partial")
         return self.compiled[rows[0]["power_id"]], rows[0]
@@ -64,7 +65,8 @@ class ResonanceTargetFidelityTests(unittest.TestCase):
         )
         for slug, name, effect, ticks, radius, amp in cases:
             with self.subTest(ability=name):
-                value, _ = self.get(slug, name)
+                value, _ = self.get(slug, name,
+                                    sequence=1 if slug == "tower" else None)
                 self.assert_effect(value, effect, ticks, radius, amp)
 
     def test_temporary_ally_support_is_team_only(self):
