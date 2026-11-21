@@ -551,7 +551,7 @@ def emit_ui(w):
         msg("ROADMAP: next acting task, marks, offerings, ritual, and unlocks.","aqua"),
         msg("Seq9-5 auto equips; Seq4-2 unlocks a fixed partner and editable slots.","yellow"),
         msg("Seq1 Resonance LOCKED for normal SMP players; incomplete powers remain PARTIAL.","red"),
-        msg("Vanilla commands: /trigger a_help, /trigger a_abilities, /trigger a_roadmap.","gray"),
+        msg("Vanilla commands: /trigger a_guide, /trigger a_help, /trigger a_abilities, /trigger a_roadmap.","gray"),
         click("[My abilities]","a_abilities"),
         click("[My ascension roadmap]","a_roadmap","yellow"),
         click("[All Sequence milestones]","a_stages","light_purple"),
