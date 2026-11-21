@@ -660,6 +660,11 @@ def compile_powers(root):
             apply("poison",80),apply("hunger",40)]}),
         "partial", "Enemy players excluded pending team checks; overlaps Seq9 Witch's Venom rather than replacing it")
 
+    # Parallel handbook-backed workstreams: 14 support/identity, 17 control,
+    # and 7 mobility/stealth powers. Each retains its own source audit label.
+    from .batches import support, control, mobility
+    for workstream in (support, control, mobility):
+        workstream.register(add)
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}

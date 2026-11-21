@@ -240,10 +240,10 @@ class FullBuildTests(unittest.TestCase):
         from arcane_rev3.powers import compile_powers, norm
         root=Path(__file__).resolve().parents[1]
         compiled, manifest, original_kits=compile_powers(root)
-        self.assertEqual(len(IDENTITY_DRAWBACK_NAMES),19)
+        self.assertEqual(len(IDENTITY_DRAWBACK_NAMES),20)
         missing=set(PATHWAYS)-set(IDENTITY_DRAWBACK_NAMES)-{"fool"}
         self.assertEqual(missing,
-                         {"lovers","wheel_of_fortune"})
+                         {"wheel_of_fortune"})
         for slug,ability in IDENTITY_DRAWBACK_NAMES.items():
             expected=[
                 item for item in manifest
