@@ -106,6 +106,39 @@ class BookContracts(unittest.TestCase):
                     self.assertTrue(cmd.startswith("/trigger a_"), (path, cmd))
                 self.assertNotIn("/function tarot_arcane:admin/", src)
 
+    def test_individual_opt_in_actionbar_hud_not_shared_bossbar(self):
+        for variant in ("only", "addon"):
+            with ZipFile(self.data[variant]) as z:
+                load = function(z, "load")
+                tick = function(z, "player/tick")
+                self.assertIn("scoreboard objectives add a_hud trigger", load)
+                self.assertIn("scoreboard objectives add a_hud_on dummy", load)
+                self.assertIn("scoreboard objectives add a_hud_timer dummy", load)
+                self.assertIn("scoreboard players enable @s a_hud", tick)
+                self.assertIn("if score @s a_hud matches 1..", tick)
+                self.assertIn("ui/hud/toggle", tick)
+                self.assertIn("ui/hud/tick", tick)
+                self.assertNotIn("bossbar add", tick)
+                toggle = function(z, "ui/hud/toggle")
+                self.assertIn("a_hud_on", toggle)
+                self.assertIn("a_hud matches 3", toggle)
+                display = function(z, "ui/hud/render")
+                self.assertIn("title @s actionbar", display)
+                self.assertIn("a_seq", display)
+                self.assertIn("a_marks", display)
+                self.assertIn("a_phase", display)
+                for seq in range(9, 1, -1):
+                    self.assertIn("a_seq matches " + str(seq), display)
+
+    def test_without_commandaliases_book_actions_work_with_vanilla_trigger(self):
+        with ZipFile(self.data["only"]) as z:
+            tick = function(z, "player/tick")
+            for trigger in ("a_book", "a_tome", "a_partner_tome", "a_hud"):
+                self.assertIn("scoreboard players enable @s " + trigger, tick)
+            help_text = function(z, "ui/help")
+            for trigger in ("a_book", "a_tome", "a_partner_tome", "a_hud"):
+                self.assertIn(trigger, help_text)
+
     def test_alias_has_book_and_tome(self):
         alias = json.loads(self.data["alias"].read_text())
         labels = {c["child"] for c in alias["children"]}
