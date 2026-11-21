@@ -69,9 +69,11 @@ class ClickableTarotMenuTests(unittest.TestCase):
         self.assertIn("a_pick_path = @s a_path",dispatch)
         self.assertIn("a_pick_path = @s a_partner",dispatch)
         self.assertIn("a_mode matches 1",dispatch)
-        self.assertIn("a_assign += @s a_rcode",dispatch)
-        self.assertIn("function tarot_arcane:slot/assign",dispatch)
-        self.assertIn("scoreboard players set @s a_assign 0",dispatch)
+        self.assertIn("function tarot_arcane:ui/menu_assign",dispatch)
+        assignment=self.fn("ui/menu_assign")
+        self.assertIn("a_assign += @s a_rcode",assignment)
+        self.assertIn("function tarot_arcane:slot/assign",assignment)
+        self.assertIn("scoreboard players set @s a_assign 0",assignment)
 
     def test_clickable_ui_never_sends_op_privileged_or_cross_player_command(self):
         from re import findall
