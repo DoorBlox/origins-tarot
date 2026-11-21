@@ -8,7 +8,8 @@
     "LivingEntityMixin",
     "HungerManagerMixin",
     "PotionItemMixin",
-    "ArmorStandEntityMixin"
+    "ArmorStandEntityMixin",
+    "ProjectileEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

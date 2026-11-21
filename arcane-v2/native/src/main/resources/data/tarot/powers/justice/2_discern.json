@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Discern",
+  "description": "Once per 3600t, reveal player inventory within 6 blocks."
+}

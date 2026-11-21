@@ -1,6 +1,8 @@
 package club.tarot.arcane.mixin;
 
 import club.tarot.arcane.ArcaneSave;
+import club.tarot.arcane.WorldJusticeAbilities;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /** Rev 2 spiritual expenditure and Fools' Bounty, no KubeJS. */
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
+    @Inject(method="tick",at=@At("HEAD"))
+    private void tarot$movementRestriction(CallbackInfo ci) {
+        if((Object)this instanceof ServerPlayerEntity player &&
+            !WorldJusticeAbilities.canSprint(player))player.setSprinting(false);
+    }
     @ModifyVariable(method = "addExhaustion", at = @At("HEAD"), argsOnly = true)
     private float tarot$spiritualExpenditure(float amount) {
         if (!((Object)this instanceof ServerPlayerEntity)) return amount;

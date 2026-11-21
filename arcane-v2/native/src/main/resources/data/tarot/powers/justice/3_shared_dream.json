@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Shared Dream",
+  "description": "Crouch 60t → Night Vision 200t to players within 8 blocks. Cooldown 1200t."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Therapist’s Presence",
+  "description": "Every 900t, Regeneration I 80t to players within 6 blocks."
+}

@@ -49,6 +49,10 @@ public final class ArcaneSave extends PersistentState {
                 record.healingPotionUntil = n.getLong("healingPotionUntil");
                 record.darkStillUntil = n.getLong("darkStillUntil");
                 record.darkStillTicks = n.getInt("darkStillTicks");
+                if(n.contains("markedEntity",NbtElement.INT_ARRAY_TYPE))
+                    record.markedEntity=n.getUuid("markedEntity");
+                record.markedUntil=n.getLong("markedUntil");
+                record.provokedUntil=n.getLong("provokedUntil");
                 record.restoreFlightPending = n.getBoolean("restoreFlightPending");
                 record.legendPriorMayFly = n.getBoolean("legendPriorMayFly");
                 record.primaryBinding = n.contains("bindPrimary") ? n.getString("bindPrimary") : "full_faceless_disguise";
@@ -90,6 +94,9 @@ public final class ArcaneSave extends PersistentState {
             n.putLong("healingPotionUntil",record.healingPotionUntil);
             n.putLong("darkStillUntil",record.darkStillUntil);
             n.putInt("darkStillTicks",record.darkStillTicks);
+            if(record.markedEntity!=null)n.putUuid("markedEntity",record.markedEntity);
+            n.putLong("markedUntil",record.markedUntil);
+            n.putLong("provokedUntil",record.provokedUntil);
             n.putBoolean("restoreFlightPending",record.restoreFlightPending);
             n.putBoolean("legendPriorMayFly",record.legendPriorMayFly);
             n.putString("bindPrimary",record.primaryBinding);
@@ -121,6 +128,13 @@ public final class ArcaneSave extends PersistentState {
         public long healingPotionUntil;
         public long darkStillUntil;
         public int darkStillTicks;
+        public UUID markedEntity;
+        public long markedUntil;
+        public long provokedUntil;
+        public int bowStillTicks;
+        public net.minecraft.util.math.BlockPos lastWorldPosition;
+        public boolean wasSleeping;
+        public int crouchTicks;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

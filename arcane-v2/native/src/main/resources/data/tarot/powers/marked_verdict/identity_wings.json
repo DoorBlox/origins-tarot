@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "render_elytra": true,
+  "name": "Marked Verdict Wings",
+  "description": "Innate Elytra-style gliding"
+}

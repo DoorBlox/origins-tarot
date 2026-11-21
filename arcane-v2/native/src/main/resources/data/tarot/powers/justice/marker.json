@@ -1,0 +1,16 @@
+{
+  "type": "origins:action_on_callback",
+  "name": "The Justice — Arcane Identity",
+  "description": "Registers Arcane V2 server-side progression",
+  "hidden": true,
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "tarot origin_ready",
+    "permission_level": 0
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "tarot origin_ready",
+    "permission_level": 0
+  }
+}

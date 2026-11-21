@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Paper Dagger",
+  "description": "3 damage + Slowness I 40t to **hostile mob OR enemy player**. Consumes paper. Cooldown 200t."
+}

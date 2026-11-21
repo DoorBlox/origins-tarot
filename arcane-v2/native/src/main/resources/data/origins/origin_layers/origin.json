@@ -2,6 +2,8 @@
   "replace": false,
   "origins": [
     "tarot:fool",
-    "tarot:hanged_man"
+    "tarot:hanged_man",
+    "tarot:world",
+    "tarot:justice"
   ]
 }

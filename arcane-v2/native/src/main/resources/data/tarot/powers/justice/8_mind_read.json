@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Mind Read",
+  "description": "Crouch-right-click player → health chat. Cooldown 200t."
+}

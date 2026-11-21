@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Air Cannon",
+  "description": "Primary key: 14-block projectile. **Hostile mob: 4 damage + strong KB. Enemy player: 3 damage + 50% KB.** No block damage, no piercing, no AoE, no fire. Does not benefit from Cold Precision or Predator’s Patience. Marked Prey may trigger. Cooldown 160t."
+}

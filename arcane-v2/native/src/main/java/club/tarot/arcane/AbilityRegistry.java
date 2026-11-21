@@ -46,6 +46,36 @@ public final class AbilityRegistry {
         path("paper_martyr", 2, "sacrificial_gathering");
         path("paper_martyr", 1, "martyrs_substitute");
         path("paper_martyr", 0, "the_paper_martyr");
+        path("world", 9, "cold_precision", "marked_prey", "hunters_tempo", "predators_patience", "terrifying_reputation");
+        path("world", 8, "paper_dagger");
+        path("world", 7, "air_cannon");
+        path("world", 6, "borrowed_face");
+        path("world", 5, "puppet_string");
+        path("world", 4, "historical_recall");
+        path("world", 3, "small_miracle");
+        path("world", 2, "mystery_step");
+        path("world", 1, "hunters_substitution", "cold_precision_ii");
+        path("world", 0, "the_perfect_prey");
+        path("justice", 9, "patient_observation", "emotional_recoil", "calming_presence", "therapists_presence", "compassionate_restraint");
+        path("justice", 8, "mind_read");
+        path("justice", 7, "calm");
+        path("justice", 6, "suggestion");
+        path("justice", 5, "dream_step");
+        path("justice", 4, "emotional_push");
+        path("justice", 3, "shared_dream");
+        path("justice", 2, "discern");
+        path("justice", 1, "authors_edit", "compassionate_restraint_ii");
+        path("justice", 0, "the_mindscape");
+        path("marked_verdict", 9, "cold_judgment");
+        path("marked_verdict", 8, "paper_sentence");
+        path("marked_verdict", 7, "hunters_calm");
+        path("marked_verdict", 6, "silent_witness");
+        path("marked_verdict", 5, "puppets_sentence");
+        path("marked_verdict", 4, "marked_judgment");
+        path("marked_verdict", 3, "hunters_stillness");
+        path("marked_verdict", 2, "the_verdict");
+        path("marked_verdict", 1, "swift_judgment");
+        path("marked_verdict", 0, "the_marked_verdict");
     }
 
     private static void path(String name, int sequence, String... ids) {

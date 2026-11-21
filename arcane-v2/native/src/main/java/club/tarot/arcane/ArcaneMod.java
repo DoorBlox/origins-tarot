@@ -95,15 +95,18 @@ public final class ArcaneMod implements ModInitializer {
                 record.originChecked=true;
                 FoolAbilities.tick(player,state,record);
                 HangedAbilities.tick(player,state,record);
+                WorldJusticeAbilities.tick(player,state,record);
             }
         });
         FoolAbilities.register();
         FoolLegend.register();
+        WorldJusticeAbilities.register();
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server) ->
             server.execute(() -> {
                 FoolLegend.stopOnDisconnect(handler.getPlayer());
                 HangedAbilities.stopOnDisconnect(handler.getPlayer());
                 PaperMartyr.stopOnDisconnect(handler.getPlayer());
+                WorldJusticeAbilities.stopOnDisconnect(handler.getPlayer());
             }));
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
@@ -172,13 +175,23 @@ public final class ArcaneMod implements ModInitializer {
     private static boolean supportsBinding(String binding,String ability) {
         if(FoolAbilities.supportsBinding(binding,ability))return true;
         if("primary".equals(binding))
-            return "the_paper_martyr".equals(ability) || "weight_of_sin_made_manifest".equals(ability);
+            return "the_paper_martyr".equals(ability) || "weight_of_sin_made_manifest".equals(ability)
+                || "air_cannon".equals(ability) || "the_perfect_prey".equals(ability)
+                || "authors_edit".equals(ability) || "the_mindscape".equals(ability)
+                || "the_marked_verdict".equals(ability);
         return "secondary".equals(binding) && (
-            "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
+            "paper_dagger".equals(ability) || "paper_sentence".equals(ability)
+            || "small_miracle".equals(ability) || "mystery_step".equals(ability)
+            || "suggestion".equals(ability) || "discern".equals(ability)
+            || "puppets_sentence".equals(ability) || "silent_witness".equals(ability)
+            || "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
             || "borrowed_sacrifice".equals(ability) || "gathering_of_martyrs".equals(ability));
     }
     private static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String ability) {
         if(AbilityRegistry.isActive(r.profile,ability)) {
+            if(WorldJusticeAbilities.cast(p,state,r,ability)) {
+                info(p,"Cast "+ability);return 1;
+            }
             if(PaperMartyr.cast(p,state,r,ability)>0) {
                 info(p,"Cast "+ability);return 1;
             }
@@ -233,6 +246,16 @@ public final class ArcaneMod implements ModInitializer {
         run(p, "power revokeall "+selector+" "+SOURCE);
         SlotModel.Profile profile=r.profile;
         if ("resonance".equals(profile.mode())) {
+            run(p,"power revokeall "+selector+" tarot_secondary_identity");
+            String secondaryIdentity=switch(profile.primary()){
+                case "fool" -> "tarot:hanged_man/identity_weight_of_sin";
+                case "hanged_man" -> "tarot:fool/identity_spiritual_expenditure";
+                case "world" -> "tarot:justice/identity_compassionate_restraint";
+                case "justice" -> "tarot:world/identity_terrifying_reputation";
+                default -> null;
+            };
+            if(secondaryIdentity!=null)
+                run(p,"power grant "+selector+" "+secondaryIdentity+" tarot_secondary_identity");
             // Resonance grant is guarded by implementation availability: no phantom powers.
             for (int seq=9;seq>=0;seq--)
                 for (String id : AbilityRegistry.forSequence(profile.resonance(),seq))
@@ -243,14 +266,25 @@ public final class ArcaneMod implements ModInitializer {
                 run(p,"power grant "+selector+" "+id+" "+SOURCE);
         }
         // Clear stale input bindings when a Sequence has been removed.
-        if(!AbilityRegistry.isActive(profile,r.primaryBinding))
-            r.primaryBinding=AbilityRegistry.isActive(profile,"the_paper_martyr")
-                ?"the_paper_martyr":(AbilityRegistry.isActive(profile,"full_faceless_disguise")
-                    ?"full_faceless_disguise":"");
-        if(!AbilityRegistry.isActive(profile,r.secondaryBinding))
-            r.secondaryBinding=AbilityRegistry.isActive(profile,"suffering_sight")
-                ?"suffering_sight":(AbilityRegistry.isActive(profile,"spirit_vision")
-                    ?"spirit_vision":"");
+        if(!AbilityRegistry.isActive(profile,r.primaryBinding)) {
+            String[] priorities={"the_marked_verdict","the_mindscape","the_perfect_prey",
+                "the_paper_martyr","air_cannon","authors_edit",
+                "weight_of_sin_made_manifest","full_faceless_disguise"};
+            r.primaryBinding="";
+            for(String candidate:priorities)
+                if(AbilityRegistry.isActive(profile,candidate) && supportsBinding("primary",candidate)) {
+                    r.primaryBinding=candidate;break;
+                }
+        }
+        if(!AbilityRegistry.isActive(profile,r.secondaryBinding)) {
+            String[] priorities={"puppets_sentence","paper_sentence","suffering_sight",
+                "suggestion","paper_dagger","spirit_vision","borrowed_face","discern"};
+            r.secondaryBinding="";
+            for(String candidate:priorities)
+                if(AbilityRegistry.isActive(profile,candidate) && supportsBinding("secondary",candidate)) {
+                    r.secondaryBinding=candidate;break;
+                }
+        }
         ArcaneSave.get(p.getServer()).markDirty();
     }
     private static void grantInputKeys(ServerPlayerEntity p) {
@@ -291,6 +325,8 @@ public final class ArcaneMod implements ModInitializer {
         FoolLegend.stopOnDisconnect(p);
         HangedAbilities.stopOnDisconnect(p);
         PaperMartyr.stopOnDisconnect(p);
+        WorldJusticeAbilities.stopOnDisconnect(p);
+        run(p,"power revokeall "+p.getUuidAsString()+" tarot_secondary_identity");
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
         run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);
         info(p,"Current Origins selection does not match registered Arcana; powers suspended.");

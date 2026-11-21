@@ -1,0 +1,6 @@
+{
+  "type": "origins:elytra_flight",
+  "render_elytra": true,
+  "name": "The World Wings",
+  "description": "Innate Elytra-style gliding"
+}

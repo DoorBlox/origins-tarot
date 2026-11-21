@@ -1,0 +1,13 @@
+{
+  "name": "The Marked Verdict",
+  "description": "Fusion of World and Justice at Sequence 1. Includes both permanent drawbacks.",
+  "icon": "minecraft:target",
+  "impact": 3,
+  "order": 23,
+  "powers": [
+    "tarot:marked_verdict/marker",
+    "tarot:world/identity_terrifying_reputation",
+    "tarot:justice/identity_compassionate_restraint",
+    "tarot:marked_verdict/identity_wings"
+  ]
+}
