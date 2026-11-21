@@ -8,7 +8,7 @@ KubeJS. No power is claimed to have passed real 1.18.2 runtime acceptance.
 from ..powers import power, apply, mod
 from .shared import active, periodic, effect, mobs, combined
 from .resonance import night
-from ..team_policy import enemy_effect
+from ..team_policy import enemy_effect, ally_effect
 
 
 HOSTILE = {"type": "origins:in_tag", "tag": "tarot:hostile"}
@@ -88,20 +88,23 @@ def register(add):
         "partial", "The random safe landing may change height up to 2 blocks and isn't a guaranteed horizontal 3-block dodge")
     add("emperor", 6, "Corrupt Ground",
         active("Corrupt Ground", "Sneak + secondary slows nearby hostile mobs.",
-               effect(mobs(4), "slowness", 100), 1200, crouch=True),
-        "partial", "Does not place a persistent 5x5 600t terrain zone; enemy-player targeting and right-click-on-ground trigger omitted")
+               combined(effect(mobs(4), "slowness", 100),
+                        enemy_effect("slowness", 100, 4)), 1200, crouch=True),
+        "partial", "No persistent 5x5 600t zone or crouch-right-click-on-ground; one-time 100t slow on hostiles and explicitly listed enemy teams")
     add("sun", 1, "White Angel",
         active("White Angel", "Primary key regenerates self and withers undead in 15 blocks.",
                combined(apply("regeneration", 300),
+                        ally_effect("regeneration", 300, 15),
                         effect(mobs(15, "undead"), "wither", 300, 1)),
                3600, primary=True),
-        "partial", "No 15-block light field or exact 4 damage/sec; other same-team allies are not healed")
+        "partial", "No 15-block light field, exact 4 undead damage/sec or persistent zone; teammate Regeneration I is one-shot and limited to listed combat teams")
     add("judgement", 9, "Verdict's Weight",
         power("Verdict's Weight", "10% chance on kill to slow nearby tagged hostiles.",
               "origins:self_action_on_kill", cooldown=1,
               entity_action={"type": "origins:chance", "chance": 0.10,
-                             "action": effect(mobs(4), "slowness", 40)}),
-        "partial", "Slowness I 40t does not force hostile mobs to flee; enemy players omitted")
+                             "action": combined(effect(mobs(4), "slowness", 40),
+                                                enemy_effect("slowness", 40, 4))}),
+        "partial", "Slowness I does not force mob AI to flee; enemy-player pulse applies only to configured opponent combat teams")
     add("judgement", 1, "Order",
         active("Order", "Primary key: Slowness II and Weakness II 160t to nearby hostile mobs.",
                combined(effect(mobs(8), "slowness", 160, 1),
@@ -134,19 +137,26 @@ def register(add):
         active("The Garden", "Primary key heals and speeds self while slowing nearby hostile mobs for 90s.",
                combined(apply("regeneration", 1800, 1),
                         apply("speed", 1800),
-                        effect(mobs(15), "slowness", 1800)),
+                        ally_effect("regeneration", 1800, 15, 1),
+                        ally_effect("speed", 1800, 15),
+                        effect(mobs(15), "slowness", 1800),
+                        enemy_effect("slowness", 1800, 15)),
                24000, primary=True),
-        "partial", "Ally-only 15-block Regeneration II and +10% speed, true mob pacification, passive immortality and enemy players are not implemented; individual Seq0 not player-granted in Rev3")
+        "partial", "Teammate Regeneration II and Speed I are one-shot rather than persistent +10% speed field; hostile/opponent Slowness is not actual AI pacification; no passive immortality; individual Seq0 not normally granted in Rev3")
+    star_read = active("Star Read", "Secondary reveals tagged hostiles and listed enemy teams at night.",
+                       combined(effect(mobs(15), "glowing", 100),
+                                enemy_effect("glowing", 100, 15)), 1200)
+    star_read["condition"] = night()
     add("hermit", 5, "Star Read",
-        active("Star Read", "Secondary key at night makes hostile mobs within 15 blocks glow.",
-               effect(mobs(15), "glowing", 100), 1200),
-        "partial", "The key is not night-locked, and health/name readout and safe enemy-player targeting are absent")
+        star_read,
+        "partial", "Night-only target Glowing replaces exact health/name readout; excludes teamless and unlisted players; 1.18.2 cannot provide the specified client overlay")
     add("star", 3, "Terror",
         periodic("Terror", "At night, occasionally slow hostile mobs within five blocks.",
                  {"type": "origins:chance", "chance": 0.10,
-                  "action": effect(mobs(5), "slowness", 40)}, 40,
+                  "action": combined(effect(mobs(5), "slowness", 40),
+                                     enemy_effect("slowness", 40, 5))}, 40,
                  condition=night()),
-        "partial", "Slowness does not force AI fleeing and enemy players are omitted; chance repeats every 40t rather than on entry")
+        "partial", "Slowness does not force AI fleeing; a 10% chance is sampled every 40t, not on entry; player effects restricted to listed opponents")
     add("high_priestess", 1, "All-Knowing Gaze",
         active("All-Knowing Gaze", "Primary key grants 300t Glowing to entities within 30 blocks.",
                effect("@e[distance=..30]", "glowing", 300), 1800,
