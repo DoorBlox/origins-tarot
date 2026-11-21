@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Suggestion",
+  "description": "Secondary key: **hostile mob OR enemy player** within 6 blocks stops targeting Justice for 100t. Cooldown 600t."
+}

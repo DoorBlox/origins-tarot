@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Burning Archive",
+  "description": "Primary key. **Duration 900t (45s). Cooldown 24000t.** - Players within 100 blocks outlined; structures within 200 blocks - One-shot armor-ignoring crit arrow - `#tarot:hostile` **AND enemy players** within 20 blocks forced to fight each other - +30% damage, +20% speed, melee ignite 100t - Kills grant Burn stacks (cap 5) - Crit arrow ignites all enemies within 10 blocks 100t - On end with 5 stacks: 6 fire damage + fire 100t to remaining enemies within 15 blocks"
+}

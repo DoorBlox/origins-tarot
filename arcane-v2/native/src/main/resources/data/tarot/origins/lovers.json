@@ -1,0 +1,12 @@
+{
+  "name": "The Lovers",
+  "description": "Arcane V2 The Lovers; sequence kits dynamically equipped in slots.",
+  "icon": "minecraft:rose_bush",
+  "impact": 3,
+  "order": 6,
+  "powers": [
+    "tarot:lovers/marker",
+    "tarot:lovers/identity_separation_anxiety",
+    "tarot:lovers/identity_wings"
+  ]
+}

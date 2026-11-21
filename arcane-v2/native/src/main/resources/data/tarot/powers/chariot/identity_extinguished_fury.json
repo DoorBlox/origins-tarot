@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Extinguished Fury",
+  "description": "Permanent The Chariot drawback, implemented in native Fabric."
+}

@@ -1,0 +1,18 @@
+{
+  "type": "origins:active_self",
+  "name": "Arcane secondary binding",
+  "description": "Press the secondary Origins key to activate your bound Tarot ability. Select it with /tarot bind secondary <ability>.",
+  "cooldown": 1,
+  "hud_render": {
+    "should_render": false
+  },
+  "entity_action": {
+    "type": "origins:execute_command",
+    "command": "tarot key secondary",
+    "permission_level": 0
+  },
+  "key": {
+    "key": "key.origins.secondary_active",
+    "continuous": false
+  }
+}

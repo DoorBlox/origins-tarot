@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Sin-Bearing",
+  "description": "25% damage taken → Sin (cap 16 HP). Decay: 200t without damage → dissipates. Below 8 HP with Sin active → burst: `area_of_effect` radius 8 = stored Sin to **#tarot:hostile AND enemy players**, Weakness I 80t, heal self 50% of Sin. Sin reset."
+}

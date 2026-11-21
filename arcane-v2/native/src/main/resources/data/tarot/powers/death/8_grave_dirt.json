@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Grave Dirt",
+  "description": "Right-click grave/skull → +1 XP. Cooldown 1200t."
+}

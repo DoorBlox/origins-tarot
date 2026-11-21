@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Fool's Bounty",
+  "description": "Food restoration increased by 20%; golden apple grants Speed I for 100 ticks.",
+  "hidden": false
+}

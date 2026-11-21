@@ -1,0 +1,12 @@
+{
+  "name": "The Benevolent Crown",
+  "description": "Emperor + Lovers Resonance at Sequence 1; both identity drawbacks persist.",
+  "icon": "minecraft:golden_helmet",
+  "impact": 3,
+  "order": 27,
+  "powers": [
+    "tarot:benevolent_crown/marker",
+    "tarot:emperor/identity_weight_of_the_crown",
+    "tarot:lovers/identity_separation_anxiety"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Falling Tower’s Reap",
+  "description": "Slam → +instakill enemies below 20%. Kills → +1 Absorption 600t. Cooldown 2400t."
+}

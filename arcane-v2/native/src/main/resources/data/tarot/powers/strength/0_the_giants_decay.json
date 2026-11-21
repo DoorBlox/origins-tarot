@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Giant’s Decay",
+  "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**"
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Triage",
+  "description": "Right-click player → heal 1 heart. Cooldown 400t."
+}

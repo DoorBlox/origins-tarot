@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Puppet String",
+  "description": "Sneak + secondary: nearest hostile mob or enemy player slowed within eight blocks."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Entropy Field",
+  "description": "5-block radius where projectiles halved 100t. Cooldown 3600t."
+}

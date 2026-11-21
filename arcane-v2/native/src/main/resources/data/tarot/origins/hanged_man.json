@@ -1,0 +1,12 @@
+{
+  "name": "The Hanged Man",
+  "description": "Sin-bearing shadow caster. Arcane V2 progression grants abilities by slot.",
+  "icon": "minecraft:crying_obsidian",
+  "impact": 3,
+  "order": 12,
+  "powers": [
+    "tarot:hanged_man/marker",
+    "tarot:hanged_man/identity_weight_of_sin",
+    "tarot:hanged_man/identity_wings"
+  ]
+}

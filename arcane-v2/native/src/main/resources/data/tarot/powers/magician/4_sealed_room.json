@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Sealed Room",
+  "description": "Threshold Step also applies **Blindness I 20t to `#tarot:hostile` AND enemy players** within 3 blocks of origin."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Martyr’s Substitute",
+  "description": "Lethal hit → cancel, teleport 12 blocks, heal 20, Invisibility 60t, Speed II 60t. Origin point leaves a Sin shadow for 100t; if attacked, detonates for all Sin (cap 16 HP) in 10 blocks. Player gains 3 Sin. Cooldown 7200t."
+}

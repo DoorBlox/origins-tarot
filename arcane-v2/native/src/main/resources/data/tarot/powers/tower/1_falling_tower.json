@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Falling Tower",
+  "description": "Primary key: leap 8 blocks + slam → 10 damage + Slowness II 100t to `#tarot:hostile` **AND enemy players** within 6 blocks. Cooldown 2400t."
+}

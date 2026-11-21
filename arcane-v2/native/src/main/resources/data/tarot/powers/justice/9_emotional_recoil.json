@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Emotional Recoil",
+  "description": "`attacker_action_when_hit` Weakness I 80t. Cooldown 360t."
+}

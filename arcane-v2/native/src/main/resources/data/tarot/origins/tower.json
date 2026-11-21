@@ -1,0 +1,12 @@
+{
+  "name": "The Tower",
+  "description": "Arcane V2 The Tower pathway; all sequence kits are slot managed.",
+  "icon": "minecraft:tnt",
+  "impact": 3,
+  "order": 16,
+  "powers": [
+    "tarot:tower/marker",
+    "tarot:tower/identity_falling_tower",
+    "tarot:tower/identity_wings"
+  ]
+}

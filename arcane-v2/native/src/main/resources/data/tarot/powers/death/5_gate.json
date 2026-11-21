@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Gate",
+  "description": "Secondary key: Nether portal. Cooldown 12000t."
+}

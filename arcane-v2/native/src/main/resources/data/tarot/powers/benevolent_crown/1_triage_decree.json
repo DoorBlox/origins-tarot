@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Triage Decree",
+  "description": "Triage 1 heart + Slows + 2 damage to nearest enemy. Cooldown 400t."
+}

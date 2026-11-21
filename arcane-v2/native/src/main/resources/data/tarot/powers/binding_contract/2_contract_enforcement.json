@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Contract Enforcement",
+  "description": "Right-click player. Accept: buffs. Refuse: Weakness II 600t + drop item. Cooldown 3600t."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "falling tower",
+  "description": "Permanent drawback enforced by native Fabric code."
+}

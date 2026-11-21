@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Depraved Dependent",
+  "description": "20% chance on kill → minion for 300t. Cooldown 2400t. Max 2."
+}

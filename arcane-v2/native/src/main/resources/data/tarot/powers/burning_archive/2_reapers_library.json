@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Reaper’s Library",
+  "description": "Kill → +1 XP + Burn stack (+5% melee, max 3, consumed on crit)."
+}

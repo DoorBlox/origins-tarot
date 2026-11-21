@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Blood Price",
+  "description": "Once per 3600t, −2 hearts → Strength II 200t."
+}

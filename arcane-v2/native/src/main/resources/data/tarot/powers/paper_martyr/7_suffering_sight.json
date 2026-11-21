@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Suffering Sight",
+  "description": "Spirit Vision reveals health + highest debuff. Sneak + secondary key → transfer 2 Sin to revealed **hostile mob OR enemy player** (2 damage, Sin −2). Cooldown 200t."
+}

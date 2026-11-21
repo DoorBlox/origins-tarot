@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Blather",
+  "description": "10% chance nearby hostile mobs **AND enemy players** target another mob/player instead."
+}

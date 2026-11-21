@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Ferry",
+  "description": "Right-click water → walk 100t. Cooldown 1200t."
+}

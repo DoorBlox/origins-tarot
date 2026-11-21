@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Spiritual Expenditure",
+  "description": "Sprinting and Elytra gliding cost 25% additional exhaustion.",
+  "hidden": false
+}

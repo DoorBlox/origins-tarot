@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Waypoint",
+  "description": "Secondary key. Mark up to 3 locations. Once per 180s open 200t passage to a mark, usable by all players. Cooldown 3600t."
+}

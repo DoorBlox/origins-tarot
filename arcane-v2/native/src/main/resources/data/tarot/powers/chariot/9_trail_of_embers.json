@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Trail of Embers",
+  "description": "Sprint particles; KubeJS ignition **to hostile mobs AND enemy players** in trail for 40t. Cooldown 300t."
+}

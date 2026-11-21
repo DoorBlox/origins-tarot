@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Full Moon Ravings",
+  "description": "`action_over_time` interval 1200, `exposed_to_sky` → Nausea I 100t."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Impossible Fist",
+  "description": "Primary key. **Duration 900t (45s). Cooldown 18000t.** - Unrestricted phasing - Wither II + Slowness II + armor halved to `#tarot:hostile` **AND enemy players** within 15 blocks - +30% damage - Every phased block: +5% melee (max +50%) - Melee reaches through 3-block walls - On end: shockwave 2 dmg/Momentum in 5 blocks"
+}

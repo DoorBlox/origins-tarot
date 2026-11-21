@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Doorstep Slam",
+  "description": "Doorstep 8 blocks → next melee +10% + Slowness I 20t within 60t. Cooldown 300t."
+}

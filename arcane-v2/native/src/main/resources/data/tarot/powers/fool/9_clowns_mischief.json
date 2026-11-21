@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Clown's Mischief",
+  "description": "20% chance to blind attacker for 20 ticks. 100-tick cooldown.",
+  "hidden": false
+}

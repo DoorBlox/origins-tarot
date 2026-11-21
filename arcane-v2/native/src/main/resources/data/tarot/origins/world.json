@@ -1,0 +1,12 @@
+{
+  "name": "The World",
+  "description": "The World — Arcane V2; native Java grants only slotted sequence powers",
+  "icon": "minecraft:crossbow",
+  "impact": 3,
+  "order": 21,
+  "powers": [
+    "tarot:world/marker",
+    "tarot:world/identity_terrifying_reputation",
+    "tarot:world/identity_wings"
+  ]
+}

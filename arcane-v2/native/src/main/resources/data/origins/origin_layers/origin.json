@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "origins": [
+    "tarot:fool",
+    "tarot:hanged_man",
+    "tarot:world",
+    "tarot:justice",
+    "tarot:hermit",
+    "tarot:chariot",
+    "tarot:death",
+    "tarot:tower",
+    "tarot:magician",
+    "tarot:strength",
+    "tarot:emperor",
+    "tarot:lovers",
+    "tarot:devil",
+    "tarot:judgement"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Trickster's Favor",
+  "description": "10% chance to redirect nearby hostile target acquisition. 200-tick cooldown.",
+  "hidden": false
+}

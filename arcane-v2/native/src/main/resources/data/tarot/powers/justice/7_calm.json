@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Calm",
+  "description": "Right-click **hostile mob OR enemy player** → Slowness I 60t. Cooldown 400t."
+}

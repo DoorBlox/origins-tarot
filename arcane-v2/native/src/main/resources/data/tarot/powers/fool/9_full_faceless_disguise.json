@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Full Faceless Disguise",
+  "description": "Out-of-combat disguise for 120-144 seconds; server-side approximation uses invisibility."
+}

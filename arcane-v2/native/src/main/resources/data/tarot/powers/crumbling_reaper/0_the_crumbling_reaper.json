@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Crumbling Reaper",
+  "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.** - Every 60t: lowest-health `#tarot:hostile` **AND enemy player** within 10 blocks dies (bosses 50%/tick cap; enemy players capped 50% HP removed per tick) - +1 Absorption per kill (cap 10) - 15-block unstable ground: any entity standing takes 4 damage/sec - Unstable-kill Absorption applies - Absorption cap 15 hearts, persists 1200t"
+}

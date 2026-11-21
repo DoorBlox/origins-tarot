@@ -1,0 +1,12 @@
+{
+  "name": "The Devil",
+  "description": "Arcane V2 The Devil; all sequence kits are managed dynamically.",
+  "icon": "minecraft:blaze_powder",
+  "impact": 3,
+  "order": 15,
+  "powers": [
+    "tarot:devil/marker",
+    "tarot:devil/identity_sacred_rejection",
+    "tarot:devil/identity_wings"
+  ]
+}

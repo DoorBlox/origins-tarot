@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Marked Verdict",
+  "description": "Primary key. **Duration 900t (45s). Cooldown 24000t.** - Mark player within 50 blocks - Target cannot sprint/jump - +100% damage + Slowness II to target - Next projectile auto-hits, freezes 60t, pacifies all enemies within 15 blocks 100t - On kill: Speed II + Regeneration I 600t; allies Absorption II 200t"
+}

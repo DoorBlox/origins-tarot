@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Sleight of Hand",
+  "description": "Same structure, `chance: 0.3`. Shared cooldown."
+}

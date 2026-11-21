@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Nature’s Grasp",
+  "description": "Secondary key: Slowness II to `#tarot:hostile` **AND enemy players** within 4 blocks for 60t. Cooldown 900t."
+}

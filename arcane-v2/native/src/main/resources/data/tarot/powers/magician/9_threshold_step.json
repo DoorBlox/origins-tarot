@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Threshold Step",
+  "description": "`self_action_when_hit` fall damage. 20% chance zero damage + horizontal 2-block teleport. Cooldown 100t. Shares `tarot:fall_save_used` flag with Sleight of Hand."
+}

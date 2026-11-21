@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Rally",
+  "description": "Kill → players within 8 blocks Speed I 100t. Cooldown 600t."
+}

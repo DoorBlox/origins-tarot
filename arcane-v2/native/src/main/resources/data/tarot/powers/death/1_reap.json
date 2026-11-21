@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Reap",
+  "description": "Primary key: **kill hostile mob OR enemy player below 30% HP within 8 blocks**. Kills apply Weakness I 60t to nearby. Cooldown 2400t."
+}

@@ -1,0 +1,16 @@
+{
+  "type": "origins:action_on_callback",
+  "name": "The Hermit",
+  "description": "Identity registration for native Arcane V2",
+  "hidden": true,
+  "entity_action_gained": {
+    "type": "origins:execute_command",
+    "command": "tarot origin_ready",
+    "permission_level": 0
+  },
+  "entity_action_added": {
+    "type": "origins:execute_command",
+    "command": "tarot origin_ready",
+    "permission_level": 0
+  }
+}

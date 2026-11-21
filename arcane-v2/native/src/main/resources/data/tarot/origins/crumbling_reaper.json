@@ -1,0 +1,13 @@
+{
+  "name": "The Crumbling Reaper",
+  "description": "Death + Tower identity and fused kits at Seq 1.",
+  "icon": "minecraft:wither_rose",
+  "impact": 3,
+  "order": 25,
+  "powers": [
+    "tarot:crumbling_reaper/marker",
+    "tarot:death/identity_severed_vitality",
+    "tarot:tower/identity_falling_tower",
+    "tarot:crumbling_reaper/identity_wings"
+  ]
+}

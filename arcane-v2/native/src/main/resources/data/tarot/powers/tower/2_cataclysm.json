@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Cataclysm",
+  "description": "Mining Fatigue I to `#tarot:hostile` **AND enemy players** in 5 blocks for 200t. Cooldown 3600t."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Discipline",
+  "description": "Secondary key: next melee stuns 20t. Cooldown 600t."
+}

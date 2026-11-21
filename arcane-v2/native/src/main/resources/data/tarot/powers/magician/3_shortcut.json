@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Shortcut",
+  "description": "KubeJS `BlockBreakEvent`, 10% chance break opposite block if same type."
+}

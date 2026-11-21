@@ -1,0 +1,13 @@
+{
+  "name": "The Binding Contract",
+  "description": "Devil + Judgement Resonance at Sequence 1; both drawbacks persist.",
+  "icon": "minecraft:written_book",
+  "impact": 3,
+  "order": 28,
+  "powers": [
+    "tarot:binding_contract/marker",
+    "tarot:devil/identity_sacred_rejection",
+    "tarot:judgement/identity_no_unlawful_escape",
+    "tarot:binding_contract/identity_wings"
+  ]
+}

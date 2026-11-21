@@ -1,0 +1,12 @@
+{
+  "name": "Justice",
+  "description": "Justice — Arcane V2; native Java grants only slotted sequence powers",
+  "icon": "minecraft:honey_bottle",
+  "impact": 3,
+  "order": 11,
+  "powers": [
+    "tarot:justice/marker",
+    "tarot:justice/identity_compassionate_restraint",
+    "tarot:justice/identity_wings"
+  ]
+}

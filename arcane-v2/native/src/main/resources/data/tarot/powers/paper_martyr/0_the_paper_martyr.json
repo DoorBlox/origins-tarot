@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Paper Martyr",
+  "description": "Primary key. **Duration 700t (35s). Cooldown 18000t (15 min; 12000 if <6 HP).** - −75% damage taken - Creative flight, fire/fall immunity - +50% damage - On-hit: Slowness II + Weakness I 80t - Decoy every 100t (3 Sin each, detonate 3 damage in 3 blocks) - Sin cap removed; 100% Sin conversion - Nova every 80t: 15% stored Sin to `#tarot:hostile` **AND enemy players** in 8 blocks - Melee +5% stored Sin - On expiry: return to activation point, full health, clear effects, Regeneration II + Speed II 200t - 15-block explosion (cap 40 hearts) - Allies within 10 blocks Absorption IV 200t - Killed entities rise as minions 400t"
+}

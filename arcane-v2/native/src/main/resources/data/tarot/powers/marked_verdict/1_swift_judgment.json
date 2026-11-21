@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Swift Judgment",
+  "description": "Lethal → teleport 8 blocks; attacker frozen (Slowness 255) 40t. Cooldown 9600t."
+}

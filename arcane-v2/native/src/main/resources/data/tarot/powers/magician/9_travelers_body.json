@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Traveler’s Body",
+  "description": "`attribute` +12% speed; `modify_damage_taken` fall −0.7."
+}

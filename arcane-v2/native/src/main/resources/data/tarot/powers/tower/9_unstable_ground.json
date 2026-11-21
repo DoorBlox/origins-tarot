@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Unstable Ground",
+  "description": "5% chance on stone break → particle crack."
+}

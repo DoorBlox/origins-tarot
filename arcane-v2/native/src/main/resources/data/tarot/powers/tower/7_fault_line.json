@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Fault Line",
+  "description": "5% chance on stone break → break block above."
+}

@@ -1,0 +1,12 @@
+{
+  "name": "The Hermit",
+  "description": "The Hermit — Arcane V2. Abilities dynamically granted by Sequence slots.",
+  "icon": "minecraft:ender_eye",
+  "impact": 3,
+  "order": 9,
+  "powers": [
+    "tarot:hermit/marker",
+    "tarot:hermit/identity_forbidden_knowledge",
+    "tarot:hermit/identity_wings"
+  ]
+}

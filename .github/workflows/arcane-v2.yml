@@ -1,0 +1,83 @@
+name: Arcane V2 Native Fabric (no KubeJS)
+on:
+  pull_request:
+    paths:
+      - 'arcane-v2/**'
+      - '.github/workflows/arcane-v2.yml'
+  workflow_dispatch:
+    inputs:
+      smoke_server:
+        description: 'Boot Minecraft 1.18.2 + Origins 1.4.1 headlessly to validate mixins/resources'
+        required: false
+        type: boolean
+        default: false
+jobs:
+  compile-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.12.1'
+      - name: Build native Fabric mod and run unit tests
+        working-directory: arcane-v2/native
+        run: gradle build --no-daemon
+      - name: Upload candidate JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarot-arcane-v2-native-unverified
+          path: arcane-v2/native/build/libs/*-0.1.0.jar
+          if-no-files-found: error
+      - name: Download pinned Origins 1.4.1 for a disposable server
+        if: ${{ github.event_name == 'pull_request' || inputs.smoke_server }}
+        working-directory: arcane-v2/native
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, urllib.request
+          ua = {'User-Agent': 'Tarot-Arcane-CI/0.1 (https://github.com/DoorBlox/origins-tarot)'}
+          response = urllib.request.urlopen(urllib.request.Request(
+              'https://api.modrinth.com/v2/version/rBw5PYxY', headers=ua), timeout=40)
+          version = json.load(response)
+          assert version['version_number'] == '1.4.1', version['version_number']
+          artifact = next(f for f in version['files'] if f.get('primary'))
+          target = pathlib.Path('run/mods/Origins-1.18.2-1.4.1.jar')
+          target.parent.mkdir(parents=True, exist_ok=True)
+          with urllib.request.urlopen(urllib.request.Request(artifact['url'], headers=ua), timeout=60) as source:
+              target.write_bytes(source.read())
+          assert target.stat().st_size > 1_000_000
+          print(f"Installed pinned Origins jar: {target.stat().st_size} bytes")
+          PY
+      - name: Headless 1.18.2 + Origins 1.4.1 startup smoke
+        if: ${{ github.event_name == 'pull_request' || inputs.smoke_server }}
+        working-directory: arcane-v2/native
+        run: |
+          printf 'eula=true\n' > run/eula.txt
+          set +e
+          timeout --signal=TERM 180s gradle runServer --no-daemon > server-smoke.log 2>&1
+          code=$?
+          set -e
+          tail -n 180 server-smoke.log
+          if [ -f run/logs/latest.log ]; then
+            if grep -Fq 'Done (' run/logs/latest.log && ! grep -Eqi 'mixinapplyerror|failed to load datapacks|unknown power type|failed to initialize|InvalidInjectionException' run/logs/latest.log; then
+              echo 'Headless Fabric/Origins startup reached Ready.'
+              exit 0
+            fi
+            tail -n 180 run/logs/latest.log
+          fi
+          echo "Server did not reach Ready (runner exit $code)"
+          exit 1
+      - name: Upload startup diagnostics
+        if: ${{ always() && (github.event_name == 'pull_request' || inputs.smoke_server) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarot-arcane-v2-server-smoke-logs
+          path: |
+            arcane-v2/native/server-smoke.log
+            arcane-v2/native/run/logs/latest.log
+          if-no-files-found: warn

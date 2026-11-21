@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Puppet String",
+  "description": "Cooldown 400t. Applies to **hostile mobs AND enemy players**."
+}

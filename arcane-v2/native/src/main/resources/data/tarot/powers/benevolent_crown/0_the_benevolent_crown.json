@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Benevolent Crown",
+  "description": "Primary key. **Duration 1200t (60s). Cooldown 18000t.** - 15-block domain: `#tarot:hostile` **AND enemy players** cannot approach within 3 blocks - All players cannot sprint/jump unless allowed - +20% damage, +20% resist - Allies Regeneration II + 10% speed - Passive mobs immortal - Enemies pacified first 100t - Ally deaths heal allies 2 hearts - One Consort +15% damage +15% resist"
+}

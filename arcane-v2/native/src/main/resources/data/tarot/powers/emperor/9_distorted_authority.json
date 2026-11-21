@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Distorted Authority",
+  "description": "`attacker_action_when_hit` Slowness I 40t. Cooldown 280t."
+}

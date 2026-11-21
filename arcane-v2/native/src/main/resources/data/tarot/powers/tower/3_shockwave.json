@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Shockwave",
+  "description": "4+ block fall lands → 2 damage to **hostile mobs AND enemy players** within 3 blocks."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Astral Lock",
+  "description": "KubeJS `PlayerTeleportEvent` cancels other players' teleport effects."
+}

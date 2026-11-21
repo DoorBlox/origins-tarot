@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Soul Harvest",
+  "description": "Kill **hostile mob OR enemy player** → heal 2 HP. Cooldown 200t."
+}

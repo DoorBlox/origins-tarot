@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Desire",
+  "description": "Crouch-right-click player → held item chat. Cooldown 200t."
+}

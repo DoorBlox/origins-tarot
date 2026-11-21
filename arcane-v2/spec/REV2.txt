@@ -1,0 +1,1846 @@
+# THE TAROT CLUB — ARCANE V2 IMPLEMENTATION HANDBOOK
+
+**Platform:** Minecraft Java 1.18.2 · Fabric · Origins 1.4.1 · Apoli · KubeJS 1802.5.5 (for `[S]`)
+
+**Document structure:**
+- **Part 0 — Global implementation notes** (conventions, required tags, common patterns, integration checklist)
+- **Part A — Individual Pathway Specifications** (22 cards, Sequence 9 → 0)
+- **Part B — Resonance Pair Specifications** (11 pairs, Sequence 9 → 0)
+
+The progression system is externally handled. Every ability below is a **discrete power file** the command-generating AI must produce.
+
+---
+
+# PART 0 — GLOBAL IMPLEMENTATION NOTES
+
+## 0.1 Conventions
+
+- **Cooldowns** are written in seconds. Multiply by **20** to get ticks.
+- **`[D]`** = pure Origins 1.4.1 datapack JSON.
+- **`[S]`** = requires KubeJS or a scoreboard helper. A fallback is stated where applicable.
+- **`[D/S]`** = core effect is datapack-feasible; a sub-effect needs scripting.
+- **`multiply_total`** = percentage modifier of final value.
+- **Amplifier 0** = level I, **amplifier 1** = level II, etc.
+- Damage values in hearts; 2 damage = 1 heart.
+
+## 0.2 REQUIRED CHANGE — Offensive abilities target players too
+
+**Every offensive ability in this document that previously targeted only `#tarot:hostile` now also affects enemy players.** The tag remains the same, but the implementation uses a **combined target selector**: `#tarot:hostile` OR `minecraft:player` (excluding the power holder and their teammates).
+
+**Scoping rules:**
+- **Offensive abilities** (damage, debuffs, forced targeting, negative status effects) → target **hostile mobs AND enemy players**.
+- **Ally-affecting abilities** (healing, buffs, positive status effects) → target **self AND same-team players only**.
+- **Mob-specific abilities** (undead-only, passive-mob-only, villager-specific) → keep their mob restriction unchanged.
+- **Pacification / crowd-control** that removes a mob's ability to act → applies to hostile mobs AND enemy players where possible.
+
+**Implementation for command AI:**
+- For datapack powers using `entity_condition` or `bientity_condition`: use `origins:or` combining `origins:in_tag` (tarot:hostile) and `origins:entity_type` (minecraft:player with team check).
+- For KubeJS abilities: extend target scans from `level.getEntitiesOfClass(Monster.class, aabb)` to `level.getEntitiesOfClass(LivingEntity.class, aabb).filter(e -> e instanceof Monster || (e instanceof ServerPlayerEntity p && !isTeammate(p, holder)))`.
+
+## 0.3 Required custom tags
+
+| Tag | Type | Contents |
+|---|---|---|
+| `#tarot:hostile` | entity | zombie, skeleton, creeper, spider, cave_spider, enderman, witch, slime, magma_cube, blaze, ghast, phantom, pillager, vindicator, evoker, ravager, vex, drowned, husk, stray, wither_skeleton, piglin, piglin_brute, hoglin, zoglin, zombified_piglin, guardian, elder_guardian, shulker, silverfish, endermite, illusioner, wither, ender_dragon |
+| `#tarot:undead` | entity | zombie, zombie_villager, husk, drowned, skeleton, stray, wither_skeleton, phantom, zoglin, zombified_piglin, skeleton_horse, zombie_horse |
+| `#tarot:passive` | entity | cow, pig, sheep, chicken, rabbit, horse, donkey, mule, llama, cat, ocelot, wolf, fox, panda, polar_bear, turtle, bee, squid, glow_squid, cod, salmon, tropical_fish, pufferfish, villager, wandering_trader, axolotl, goat |
+| `#tarot:natural_stone` | block | stone, deepslate, granite, diorite, andesite, tuff, calcite, dripstone_block, netherrack, basalt, blackstone, end_stone |
+| `#tarot:sanctified_ground` | block | chiseled_stone_bricks, quartz_block, quartz_bricks, chiseled_quartz_block, deepslate_tiles, deepslate_bricks, polished_deepslate |
+| `#tarot:books` | item | book, enchanted_book, written_book, writable_book |
+| `#tarot:meat` | item | cooked and raw beef, porkchop, chicken, mutton, rabbit, cod, salmon, tropical_fish, pufferfish, rotten_flesh |
+| `#tarot:unphasable` | block | bedrock, barrier, command_block, chain_command_block, repeating_command_block, structure_block, jigsaw, end_portal_frame, obsidian |
+
+## 0.4 Common power patterns
+
+**Pattern A — Cooldown-gated active:** `origins:multiple` with `origins:cooldown` + `origins:active_self` gated by `resource == 0`.
+
+**Pattern B — Damage reduction:** `origins:modify_damage_taken` with `multiply_total: -X`.
+
+**Pattern C — Damage boost:** `origins:modify_damage_dealt` or `origins:modify_projectile_damage`.
+
+**Pattern D — Area effect (new target rule):** `origins:area_of_effect` with `bientity_condition` = `origins:or[in_tag(tarot:hostile), entity_type(player) with team check]`.
+
+**Pattern E — Conditional attribute:** `origins:conditioned_attribute` with `tick_rate: 20`.
+
+**Pattern F — Reactive:** `self_action_when_hit`, `attacker_action_when_hit`, `target_action_on_hit`.
+
+**Pattern G — Timer:** `origins:action_over_time` with `interval` in ticks.
+
+**Pattern H — Decoy armor stand:** `armor_stand` with `{Marker:1b, Invisible:1b, NoGravity:1b, Tags:["tarot_decoy"]}`.
+
+**Pattern I — Lethal-hit cancellation `[S]`:** KubeJS `LivingEntityDamageEvent`.
+
+**Pattern J — Multi-target on-tick scan `[S]`:** KubeJS throttled to 5-tick intervals, cap 50 entities.
+
+## 0.5 Progression integration
+
+File naming: `tarot:<card>/<seq>_<ability_name>` (e.g., `tarot:fool/9_spirit_vision`). The progression system grants/revokes powers by sequence.
+
+---
+
+# PART A — INDIVIDUAL PATHWAY SPECIFICATIONS
+
+## 00 — THE FOOL
+**Origin ID:** `tarot:fool` · **Elytra:** yes · **Drawback:** Spiritual Expenditure — sprinting and Elytra cost **25% more exhaustion** (reduced from 40%)
+
+### Sequence 9
+
+**Spirit Vision `[D]`** — `origins:active_self` → `origins:area_of_effect`. Secondary key + sneaking. All entities (including self) within 10-block sphere gain Glowing I for 40 ticks. Cooldown 100t.
+
+**Clown’s Mischief `[D]`** — `origins:attacker_action_when_hit`. 20% chance Blindness I on attacker for 20t. Cooldown 100t.
+
+**Spiritual Overload `[D/S]`** — `action_over_time` interval 40 + KubeJS count. Condition: ≥3 entities in `#tarot:hostile` **OR ≥1 enemy player** within 8 blocks. Effect: Nausea I 100t.
+
+**Full Faceless Disguise `[S]`** — Primary key. Out of combat. Replace skin/name/model with random online player for 2400–2880t. Cooldown 6000t. Cancels on attack or G/V use.
+
+### Sequence 8 — Clown
+
+**Trickster’s Favor `[S]`** — KubeJS `LivingChangeTargetEvent`. Hostile mob or enemy player acquires Fool as target → 10% chance retargets nearest other entity within 6 blocks. Cooldown 200t.
+
+### Sequence 7 — Magician
+
+**Stage Magician `[D/S]`** — `self_action_when_hit`. 25% chance teleport 3 blocks backward + decoy armor stand. Cooldown 400t.
+
+### Sequence 6 — Faceless
+
+**Borrowed Face `[S]`** — Secondary key, out of combat. Name-swap with nearest player within 20 blocks for 1800t. On end: Speed II 60t. Cooldown 2400t.
+
+### Sequence 5 — Marionettist
+
+**Puppet String `[D/S]`** — Secondary key + sneaking. Target: nearest entity within 8 blocks from `#tarot:hostile` **OR any player** (teammates excluded). Slowness II 80t (mob) / 40t (player). Mob secondary: next attack 50% damage. **Player secondary: see their coordinates 100t AND they cannot sprint for 40t.** Cooldown 400t.
+
+### Sequence 4 — Scholar of Yore
+
+**Trickster’s Escape `[D/S]`** — `action_over_time` interval 20. Health < 8 → Speed II 60t + decoy. Cooldown 600t.
+
+### Sequence 3 — Miracle Invoker
+
+**Fool’s Bounty `[D/S]`** — `modify_food` +20%. Golden apple → Speed I 100t (via `action_on_item_use` or KubeJS).
+
+### Sequence 2 — Attendant of Mysteries
+
+**Fools’ Gathering `[S]`** — Secondary key. Summon 2 Vex-like allies (4 HP, 1 dmg/hit) for 200t. **Minions attack both hostile mobs AND enemy players.** Cooldown 6000t.
+
+### Sequence 1 — Fool (Angel)
+
+**History Substitution `[S]`** — On lethal hit: cancel, teleport 12 blocks away, set health 20, Invisibility I 60t, Speed II 60t. Cooldown 7200t.
+
+**Paper Figurine Substitute `[D/S]`** — `self_action_when_hit` + chance + cooldown. 25% chance on hostile hit → decoy + Speed II 40t. Cooldown 6000t. Decoy only; never cancels lethal damage; never teleports.
+
+### Sequence 0 — The Fool
+
+**The Legend of The Fool `[S]`** — Primary key. **Duration 700t (35s). Cooldown 18000t (15 min; 12000 if <6 HP at activation).**
+- `modify_damage_taken` −75%
+- `creative_flight`
+- Fire + fall immunity
+- `modify_damage_dealt` +50%
+- On-hit: Slowness II + Weakness I 80t
+- Decoy every 100t
+- Hostile mobs **and enemy players** killed within 10 blocks drop double loot (mob drops only)
+- On expiry: return to activation coordinate, health/food/saturation to 20, clear effects, Regeneration II + Speed II 200t
+- If killed during window, teleport and heal do not trigger
+
+---
+
+## I — THE MAGICIAN
+**Origin ID:** `tarot:magician` · **Elytra:** yes · **Drawback:** Full Moon Ravings (exposed-sky Nausea)
+
+### Sequence 9
+
+**Traveler’s Body `[D]`** — `attribute` +12% speed; `modify_damage_taken` fall −0.7.
+
+**Wayfarer’s Instinct `[D]`** — `modify_jump` +20% when not submerged.
+
+**Threshold Step `[D]`** — `self_action_when_hit` fall damage. 20% chance zero damage + horizontal 2-block teleport. Cooldown 100t. Shares `tarot:fall_save_used` flag with Sleight of Hand.
+
+**Full Moon Ravings `[D/S]`** — `action_over_time` interval 1200, `exposed_to_sky` → Nausea I 100t.
+
+### Sequence 8 — Trickmaster
+
+**Sleight of Hand `[D]`** — Same structure, `chance: 0.3`. Shared cooldown.
+
+### Sequence 7 — Astrologer
+
+**Star Chart `[S]`** — Secondary key + sneaking at night. Particle line toward nearest structure for 100t. Cooldown 1200t.
+
+### Sequence 6 — Scribe
+
+**Recorded Step `[S]`** — Crouch + right-click block stores coordinate; second right-click within 1200t teleports back (max 30 blocks). Cooldown 1200t.
+
+### Sequence 5 — Traveler
+
+**Doorstep `[D]`** — Secondary key. Teleport 8 blocks forward. Cooldown 300t. KubeJS raycast for air preferred.
+
+### Sequence 4 — Secrets Sorcerer
+
+**Sealed Room `[D]`** — Threshold Step also applies **Blindness I 20t to `#tarot:hostile` AND enemy players** within 3 blocks of origin.
+
+### Sequence 3 — Wanderer
+
+**Shortcut `[D/S]`** — KubeJS `BlockBreakEvent`, 10% chance break opposite block if same type.
+
+### Sequence 2 — Planeswalker
+
+**Planar Step `[S]`** — Secondary key. Teleport through up to 4 solid blocks. Cooldown 3600t.
+
+### Sequence 1 — Key of Stars
+
+**Waypoint `[S]`** — Secondary key. Mark up to 3 locations. Once per 180s open 200t passage to a mark, usable by all players. Cooldown 3600t.
+
+**Astral Lock `[D/S]`** — KubeJS `PlayerTeleportEvent` cancels other players' teleport effects.
+
+### Sequence 0 — The Door
+
+**All Paths Converge `[S]`** — Primary key. **Duration 900t (45s). Cooldown 18000t (15 min).**
+- `origins:phasing` (only `#tarot:unphasable` blocked)
+- Block break/place disabled while phased
+- On block exit, pushed to nearest air
+- Doorway feature: personal door to any visited coordinate in last 86400t (optional)
+
+---
+
+## II — THE HIGH PRIESTESS
+**Origin ID:** `tarot:high_priestess` · **Elytra:** yes · **Drawback:** Dependent on Rituals (−20% break speed without offhand book)
+
+### Sequence 9
+
+**Reader’s Aptitude `[D]`** — `modify_xp_gain` +0.35.
+
+**Ritual Focus `[D]`** — `modify_block_break_speed` +0.25 with offhand-book condition. Low-light vision = gated Night Vision.
+
+**Marginalia `[D/S]`** — Choose one: 5% XP refund on enchant (KubeJS), or +1 Looting once/min.
+
+**Scripted Insight `[D]`** — `modify_projectile_damage` +0.2 when not sprinting.
+
+**Dependent on Rituals `[D]`** — `modify_block_break_speed` −0.2 without offhand book.
+
+### Sequence 8 — Reasoning Apprentice
+
+**Deduction `[D]`** — `self_action_on_kill` 20% chance → +1 XP level. Cap 30.
+
+### Sequence 7 — Keeper of Knowledge
+
+**Index `[S]`** — Store 1 book in lectern; retrieve from any lectern within 50 blocks.
+
+### Sequence 6 — Scholar
+
+**Cross-Reference `[S]`** — KubeJS `EnchantmentScreenHandler`, lapis −1 per level (min 1) with offhand book.
+
+### Sequence 5 — Mystic Mentor
+
+**Ritual Circle `[D]`** — Secondary key. 3-block radius marker + `area_of_effect` Regeneration I 100t to players. Cooldown 900t.
+
+### Sequence 4 — Prophet
+
+**Foresight `[D/S]`** — First shot after 300t projectile silence gets Scripted Insight bonus even while sprinting.
+
+### Sequence 3 — Sage
+
+**Sage’s Insight `[S]`** — `BlockBreakEvent` 5% → reveal nearest ore within 8 blocks via particle.
+### Sequence 2 — Angel of Wisdom
+
+**Borrowed Knowledge `[S]`** — Secondary key. Copy one whitelisted passive from nearby player for 1200t. Cooldown 6000t.
+
+### Sequence 1 — All-Knowing Eye
+
+**All-Knowing Gaze `[S]`** — Primary key. **Duration 300t (15s). Cooldown 1800t (90s).** `entity_glow` on all entities within 30 blocks. One-shot `modify_damage_dealt` +0.5 consumed on next hit. Health bars via KubeJS overlay.
+
+**Ritual Mastery `[D]`** — Offhand book +10% break speed (stacks).
+
+### Sequence 0 — The White Tower
+
+**The Archive `[S]`** — Primary key. **Duration 400t (20s). Cooldown 24000t (20 min).** `entity_glow` on all players within 500 blocks. KubeJS structure/ore scan. Read one target inventory. 3 yes/no questions.
+
+---
+
+## III — THE EMPRESS
+**Origin ID:** `tarot:empress` · **Elytra:** yes · **Drawback:** Exposed Reflection (sunlight disables Mirror Veil; arrows +25%)
+
+### Sequence 9
+
+**Witch’s Venom `[D]`** — `target_action_on_hit` Poison I 60t. Cooldown 240t. **Affects hostile mobs AND enemy players.**
+
+**Mirror Veil `[D]`** — `invisibility` while sneaking, light ≤ 7, not exposed to sun. `render_armor: true`.
+
+**Witch’s Grace `[D]`** — +10% speed, Poison immunity.
+
+**Reflected Beauty `[D]`** — `attacker_action_when_hit` Nausea I 40t if light ≥ 12. Cooldown 400t.
+
+**Exposed Reflection `[D]`** — Projectile damage +25%, `exposed_to_sun`.
+
+### Sequence 8 — Instigator
+
+**Whisper `[S]`** — Crouch-right-click passive mob → hostile to nearest player (not Empress) for 200t. Cooldown 1200t.
+
+### Sequence 7 — Witch
+
+**Black Fire `[D]`** — 10% chance melee ignite 20t. No block ignition. **Affects hostile mobs AND enemy players.**
+
+### Sequence 6 — Pleasure
+
+**Thread `[S]`** — Right-click player within 6 blocks → Slowness I 40t. Cooldown 400t.
+
+### Sequence 5 — Affliction
+
+**Plague Touch `[D]`** — Witch’s Venom: Poison 80t + Hunger I 40t.
+
+### Sequence 4 — Despair
+
+**Aura of Despair `[D/S]`** — `action_over_time` interval 40, 10% chance `#tarot:hostile` **AND enemy players** within 5 blocks flee 40t.
+
+### Sequence 3 — Unaging
+
+**Ageless `[D]`** — `modify_exhaustion` −1 for sprint/jump.
+
+### Sequence 2 — Catastrophe
+
+**Mirror Passage `[S]`** — Once per 3600t, teleport through glass up to 10 blocks.
+
+### Sequence 1 — Apocalypse
+
+**Apocalypse’s Herald `[S]`** — Primary key. 5 meteors over 160t in 10-block radius: 6 damage + fire 60t to **#tarot:hostile AND enemy players**. Cooldown 3600t.
+
+**Petrifying Gaze `[D]`** — Sneak 60t charge → Slowness II to `#tarot:hostile` **AND enemy players** within 6 blocks for 60t. Cooldown 1200t.
+
+### Sequence 0 — The Demoness
+
+**The Mirror World `[S]`** — Primary key. **Duration 500t (25s). Cooldown 18000t (15 min).** Invisibility (no armor), invulnerability, free flight. Exit anywhere within 30 blocks of entry. On exit: Poison II + Wither II 100t to **#tarot:hostile AND enemy players** within 8 blocks.
+
+---
+
+## IV — THE EMPEROR
+**Origin ID:** `tarot:emperor` · **Elytra:** no · **Drawback:** Weight of the Crown
+
+### Sequence 9
+
+**Sovereign’s Plate `[D]`** — +3 armor, +40% KB resistance.
+
+**Distorted Authority `[D]`** — `attacker_action_when_hit` Slowness I 40t. Cooldown 280t.
+
+**Imperial Presence `[D]`** — Shield: `modify_damage_taken` −0.1.
+
+**Decree of the Sovereign `[S]`** — Villager discount 10% within 8 blocks while holding shield.
+
+**Weight of the Crown `[D]`** — Shield −25% speed; sprint-in-armor +50% exhaustion.
+
+### Sequence 8 — Barbarian
+
+**Unbound `[D]`** — Weakness immunity below 12 HP.
+
+### Sequence 7 — Briber
+
+**Coin `[D]`** — Active key + gold ingot. Clear target on hostile mob **or pacify enemy player (they cannot attack Emperor for 100t)**. Cooldown 600t.
+
+### Sequence 6 — Baron of Corruption
+
+**Corrupt Ground `[D]`** — Crouch + right-click ground → 5×5 for 600t, Slowness I to `#tarot:hostile` **AND enemy players** inside. Cooldown 1200t.
+
+### Sequence 5 — Mentor of Disorder
+
+**Decree `[D]`** — Secondary key. `#tarot:hostile` **AND enemy players** within 6 blocks forced to target Emperor for 100t. Cooldown 900t.
+
+### Sequence 4 — Earl of the Fallen
+
+**Fallen Aura `[D]`** — Distorted Authority: Slowness I 60t + Weakness I 20t.
+
+### Sequence 3 — Frenzied Mage
+
+**Frenzy `[D]`** — Health < 8 → Speed I + Haste I 100t. Cooldown 600t.
+
+### Sequence 2 — Duke of Entropy
+
+**Entropy Field `[S]`** — 5-block radius where projectiles halved 100t. Cooldown 3600t.
+
+### Sequence 1 — Abolition
+
+**Abolish `[D]`** — Primary key. Strip all positive effects + Slowness II + Weakness I 100t to `#tarot:hostile` **AND enemy players** within 8 blocks. Cooldown 1800t.
+
+**Iron Decree `[D]`** — Imperial Presence 15%.
+
+### Sequence 0 — The Black Emperor
+
+**The Emperor’s Domain `[S]`** — Primary key. **Duration 1200t (60s). Cooldown 18000t (15 min).**
+- `#tarot:hostile` **AND enemy players** pushed outside 3 blocks
+- All players (including allies) cannot sprint/jump unless whitelisted by `/tarot allow <player>`
+- +15% damage, −15% damage taken
+
+---
+
+## V — THE HIEROPHANT
+**Origin ID:** `tarot:hierophant` · **Elytra:** no · **Drawback:** Sacred Dietary Vow
+
+### Sequence 9
+
+**Scripture and Study `[D]`** — +40% XP.
+
+**Consecrated Workspace `[D]`** — Within 8 blocks of lectern/enchanting table: Haste I + −15% exhaustion.
+
+**Sanctified Ground `[D]`** — +5% XP on `#tarot:sanctified_ground`.
+
+**Quiet Benediction `[D]`** — Every 800t, Regeneration I 80t to players within 8 blocks.
+
+**Sacred Dietary Vow `[D]`** — `prevent_item_use` `#tarot:meat`.
+
+### Sequence 8 — Light Suppliant
+
+**Prayer `[D]`** — Crouch 60t → Regeneration I 60t. Cooldown 1200t.
+
+### Sequence 7 — Solar High Priest
+
+**Consecrate `[S]`** — Right-click block with torch → bless 1200t, light 10 in 3 blocks.
+
+### Sequence 6 — Notary
+
+**Contract `[S]`** — Right-click player → health in tab list 12000t.
+
+### Sequence 5 — Hymn
+
+**Hymn `[D]`** — Secondary key: Regeneration I 100t to players within 8 blocks. Cooldown 1200t.
+
+### Sequence 4 — Sanctified Ground II
+
+**Sanctified Ground II `[D]`** — All stone brick variants, radius 5.
+
+### Sequence 3 — Purify
+
+**Purify `[D]`** — Right-click player → clear Poison/Wither. Cooldown 600t.
+
+### Sequence 2 — Sanctuary
+
+**Sanctuary `[S]`** — 5-block radius no hostile entry 200t. Cooldown 6000t.
+
+### Sequence 1 — White Angel
+
+**White Angel `[D]`** — Primary key: light 15 in 15 blocks for 300t. Undead take 3 dmg/sec (undead-specific — unchanged). Allies Regeneration II. Cooldown 3600t.
+
+**Dietary Expansion `[D]`** — Fish allowed.
+
+### Sequence 0 — The Sun
+
+**The Sanctum `[S]`** — Permanent. Primary key. 16-block radius on lectern/enchanting table/bookshelf within 32 blocks of bed/anchor. One sanctum world-wide. Persists across sessions. No hostile spawns, undead 2 dmg/sec, players Regeneration I, hunger slow recovery. Cooldown 24000t.
+
+---
+
+## VI — THE LOVERS
+**Origin ID:** `tarot:lovers` · **Elytra:** yes · **Drawback:** Separation Anxiety
+
+### Sequence 9
+
+**Linked Hearts `[S]`** — Same-team player within 8 blocks: both +10% speed + 1 HP heal every 500t.
+
+**Fertile Hands `[D]`** — +25% self-heal; +20% crop break speed.
+
+**Shared Refuge `[S]`** — Near player → Resistance I pulse every 600t.
+
+**Separation Anxiety `[S]`** — >600t alone: +35% exhaustion, −15% mining.
+
+### Sequence 8 — Doctor
+
+**Triage `[D]`** — Right-click player → heal 1 heart. Cooldown 400t.
+
+### Sequence 7 — Harvest Priest
+
+**Blessing `[D]`** — Crouch-right-click crop → full growth. Cooldown 1200t per crop.
+
+### Sequence 6 — Biologist
+
+**Symbiosis `[D]`** — Passive mob within 4 blocks → +1 max HP.
+
+### Sequence 5 — Druid
+
+**Nature’s Grasp `[D]`** — Secondary key: Slowness II to `#tarot:hostile` **AND enemy players** within 4 blocks for 60t. Cooldown 900t.
+
+### Sequence 4 — Ancient Metallurgist
+
+**Transmute `[D/S]`** — 2 iron → 1 gold. Cooldown 12000t.
+
+### Sequence 3 — Pallbearer
+
+**Requiem `[D]`** — Passive mob dies within 8 blocks → Regeneration I 60t.
+
+### Sequence 2 — Desolate Matriarch
+
+**Withering `[D]`** — Wither I to `#tarot:hostile` **AND enemy players** within 5 blocks for 60t. Cooldown 3600t.
+
+### Sequence 1 — Naturewalker
+
+**Nature’s Step `[D]`** — Primary key: 300t walk-through-leaves; allies within 8 blocks heal 2 hearts + Regeneration I 200t. Cooldown 2400t.
+
+**Shared Refuge II `[D]`** — Resistance pulse + Regeneration I 40t.
+
+### Sequence 0 — The Mother
+
+**The Garden `[D]`** — Primary key. **Duration 1800t (90s). Cooldown 24000t.** 15-block: allies Regeneration II + 10% speed. **Hostile mobs AND enemy players pacified unless attacked** (KubeJS target clear + Slowness I on entry). Passive mobs inside cannot die.
+
+---
+
+## VII — THE CHARIOT
+**Origin ID:** `tarot:chariot` · **Elytra:** yes · **Drawback:** Extinguished Fury
+### Sequence 9
+
+**Hunter’s Momentum `[D]`** — +15% sprinting melee.
+
+**War Rush `[D]`** — Kill → Speed I 160t. Cooldown 360t.
+
+**Pyromaniac `[D]`** — Fire/lava immunity; Strength I when burning.
+
+**Trail of Embers `[D/S]`** — Sprint particles; KubeJS ignition **to hostile mobs AND enemy players** in trail for 40t. Cooldown 300t.
+
+**Extinguished Fury `[D]`** — Rain/submersion → Weakness I + Mining Fatigue I.
+
+### Sequence 8 — Provoker
+
+**Taunt `[D]`** — Crouch-right-click **hostile mob OR enemy player** → force target 60t. Cooldown 400t.
+
+### Sequence 7 — Pyromaniac
+
+**Flame Burst `[D]`** — Trail ignites 40t.
+
+### Sequence 6 — Conspirer
+
+**Plot `[D]`** — 20% kill → +1 XP level.
+
+### Sequence 5 — Reaper
+
+**Reap `[D]`** — Secondary key: next melee +30% within 100t. Cooldown 600t.
+
+### Sequence 4 — Iron-Blooded Knight
+
+**Iron Skin `[D]`** — +1 armor below 12 HP.
+
+### Sequence 3 — War Bishop
+
+**Rally `[D]`** — Kill → players within 8 blocks Speed I 100t. Cooldown 600t.
+
+### Sequence 2 — Weather Warlock
+
+**Storm Call `[S]`** — 20-block rain 600t. Cooldown 6000t.
+
+### Sequence 1 — Red Angel
+
+**Meteor `[D/S]`** — Primary key: dash 15 blocks as blazing meteor; **ignite `#tarot:hostile` AND enemy players in 3-block path for 100t**; immune during dash. Cooldown 2400t.
+
+**Burning Wrath `[D]`** — +20% melee on fire.
+
+### Sequence 0 — The Red Priest
+
+**The Battlefield `[S]`** — Primary key. **Duration 900t (45s). Cooldown 18000t (15 min).**
+- `#tarot:hostile` **AND enemy players** within 20 blocks mutually set hostile (KubeJS `AngryAt` between mobs, PvP aggro between enemy players via a temporary "hostile" team flag)
+- +30% damage, +20% speed, on-hit ignite 100t
+
+---
+
+## VIII — STRENGTH
+**Origin ID:** `tarot:strength` · **Elytra:** no · **Drawback:** The Giant Sinks
+
+### Sequence 9
+
+**Giant’s Grip `[D]`** — +18% melee; +55% KB resistance.
+
+**Quarry Hands `[D]`** — +35% break speed `#tarot:natural_stone`.
+
+**Steel Frame `[D]`** — +2 armor.
+
+**Grounded Slam `[D]`** — 3+ block fall → next melee +10% + Slowness I 20t.
+
+**The Giant Sinks `[D]`** — Swim −45%; no bows/crossbows.
+
+### Sequence 8 — Pugilist
+
+**Iron Fist `[D]`** — Unarmed +2. Does not stack with Giant’s Grip.
+
+### Sequence 7 — Weapon Master
+
+**Master’s Grip `[D]`** — Bows allowed at −25%.
+
+### Sequence 6 — Dawn Paladin
+
+**Dawnlight `[D]`** — Crouch 60t → light 8 in 3 blocks for 200t. Cooldown 1200t.
+
+### Sequence 5 — Guardian
+
+**Bulwark `[D]`** — Secondary key: 100t −30% damage taken, cannot move.
+
+### Sequence 4 — Demon Hunter
+
+**Hunter’s Bane `[D]`** — +15% to `#tarot:undead` and demons.
+
+### Sequence 3 — Silver Knight
+
+**Silver Blade `[D/S]`** — Melee ignores 10% armor.
+
+### Sequence 2 — Glory
+
+**Twilight Blade `[D]`** — Once per 3600t, next melee Slowness II + Weakness I 100t.
+
+### Sequence 1 — Hand of God
+
+**Divine Hand `[S]`** — Primary key: pull **hostile mob OR enemy player** within 15 blocks; stun 60t; next melee +50%. Cooldown 1800t.
+
+**Unyielding `[D]`** — Knockback immunity below 8 HP.
+
+### Sequence 0 — The Twilight Giant
+
+**The Giant’s Decay `[D/S]`** — Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- `#tarot:hostile` **AND enemy players** within 15 blocks: Wither II + Slowness II
+- Armor halved (KubeJS `modify_armor`)
+- +30% damage vs affected
+
+---
+
+## IX — THE HERMIT
+**Origin ID:** `tarot:hermit` · **Elytra:** yes · **Drawback:** Forbidden Knowledge
+
+### Sequence 9
+
+**Mystery Prying `[D]`** — +35% XP (cave bonus).
+
+**Astral Calculation `[D]`** — +20% projectile; Night Vision in low light.
+
+**Prepared Investigator `[D]`** — +20% break speed with offhand book/clock.
+
+**Forbidden Knowledge `[D]`** — XP 30+ → Mining Fatigue I without offhand book.
+
+### Sequence 8 — Melee Scholar
+
+**Combat Insight `[D]`** — 20% chance on damage → Resistance I 40t.
+
+### Sequence 7 — Warlock
+
+**Hex `[D]`** — Right-click **hostile mob OR enemy player** → Weakness I 60t. Cooldown 600t.
+
+### Sequence 6 — Scroll Professor
+
+**Scroll `[S]`** — Crouch-right-click paper → coordinate in NBT.
+
+### Sequence 5 — Astrologer
+
+**Star Read `[D/S]`** — Secondary key at night: reveal `#tarot:hostile` **AND enemy players** health/name within 15 blocks for 100t. Cooldown 1200t.
+
+### Sequence 4 — Mysticologist
+
+**Forbidden Insight `[D/S]`** — +5% enchantment power with offhand book at level 30+.
+
+### Sequence 3 — Prophet
+
+**Omen `[D]`** — 10% chance Speed I 60t when targeted.
+
+### Sequence 2 — Sage
+
+**Sage’s Counsel `[S]`** — Once per 6000t, yes/no structure question.
+
+### Sequence 1 — Knowledge Emperor
+
+**Emperor’s Library `[S]`** — Primary key: 300t copy enchantment (≤5); arrows +50% during window. Cooldown 3600t.
+
+**Prying Eyes `[D]`** — Night Vision to light 3.
+
+### Sequence 0 — The Hermit
+
+**The Unseen `[S]`** — Primary key. **Duration 900t (45s). Cooldown 24000t.** `entity_glow` all players within 100 blocks; structure reveal within 200 blocks; Night Vision; one-shot armor-ignoring critical arrow (2× damage).
+
+---
+
+## X — WHEEL OF FORTUNE
+**Origin ID:** `tarot:wheel_of_fortune` · **Elytra:** yes · **Drawback:** Debt of Fate
+
+### Sequence 9
+
+**Fate Intervenes `[D]`** — 15% chance `modify_damage_taken` −0.5.
+
+**Gentle Fortune `[D]`** — +10% XP; Luck +1.
+
+**Fate’s Current `[D]`** — Every 1800t: random boon OR curse. **Positive outcomes: Speed I, Haste I, Absorption I. Negative: Hunger, Slowness, Mining Fatigue.** Equal chance.
+
+**Lucky Break `[D/S]`** — 10% chance to reroll a bad Fate’s Current.
+
+**Debt of Fate `[D]`** — mandatory inclusion of bad outcomes.
+
+### Sequence 8 — Machine
+
+**Clockwork `[D]`** — 10% chance on damage → reset Fate’s Current.
+
+### Sequence 7 — Lucky One
+
+**Lucky Charm `[D]`** — Luck +1 (max +2 with Gentle Fortune).
+
+### Sequence 6 — Calamity Priest
+
+**Calamity `[D]`** — 10% chance Weakness I 40t on attacker (**hostile mob OR enemy player**).
+
+### Sequence 5 — Winner
+
+**Winning Streak `[D]`** — Kill → next Fate’s Current positive.
+
+### Sequence 4 — Misfortune Mage
+
+**Misfortune `[D]`** — Fate Intervenes −0.6.
+
+### Sequence 3 — Chaos Walker
+
+**Chaos Step `[D]`** — 20% chance on fall damage → teleport 3 blocks random.
+
+### Sequence 2 — Fate’s Favor
+
+**Fate’s Favor `[S]`** — Once per 6000t, reroll bad Fate’s Current.
+
+### Sequence 1 — Wheel’s Turn
+
+**Wheel’s Turn `[D/S]`** — Primary key: 300t all rolls inverted; 50% chance damage reflect. Cooldown 3600t.
+
+**Lucky Break II `[D]`** — 20% reroll.
+
+### Sequence 0 — Slot of Fate
+
+**Slot of Fate `[S]`** — Primary key. Cooldown 24000t. Spin 3 weighted reels (Coin 20, Cherry 20, Bell 20, Star 15, Skull 15, Seven 10). Jackpot (3×Seven): full heal + Strength II + Speed II + Regeneration II + Resistance II + Absorption IV 1200t; 5 guaranteed positive Fate’s Current; nearest **hostile mob OR enemy player** within 20 blocks dies instantly; optional named target loses 75% health. Three-of-a-kind: major symbol effect. Pair: minor effect. No match: Luck I 300t.
+
+**Named target selection:** `/tarot target <player>` before activation.
+
+---
+
+## XI — JUSTICE
+**Origin ID:** `tarot:justice` · **Elytra:** yes · **Drawback:** Compassionate Restraint
+
+### Sequence 9
+
+**Patient Observation `[D]`** — −12% mob damage when not sprinting; periodic reveal.
+
+**Emotional Recoil `[D]`** — `attacker_action_when_hit` Weakness I 80t. Cooldown 360t.
+
+**Calming Presence `[D/S]`** — Passive mobs never flee.
+
+**Therapist’s Presence `[D]`** — Every 900t, Regeneration I 80t to players within 6 blocks.
+
+**Compassionate Restraint `[D/S]`** — −70% damage to `#tarot:passive`/villagers/pets; −30% unprovoked players.
+
+### Sequence 8 — Telepathist
+
+**Mind Read `[D/S]`** — Crouch-right-click player → health chat. Cooldown 200t.
+### Sequence 7 — Psychiatrist
+
+**Calm `[D]`** — Right-click **hostile mob OR enemy player** → Slowness I 60t. Cooldown 400t.
+
+### Sequence 6 — Hypnotist
+
+**Suggestion `[D]`** — Secondary key: **hostile mob OR enemy player** within 6 blocks stops targeting Justice for 100t. Cooldown 600t.
+
+### Sequence 5 — Dreamwalker
+
+**Dream Step `[D]`** — Bed → Regeneration I 200t on wake.
+
+### Sequence 4 — Manipulator
+
+**Emotional Push `[D]`** — Emotional Recoil 100t.
+
+### Sequence 3 — Dream Weaver
+
+**Shared Dream `[D]`** — Crouch 60t → Night Vision 200t to players within 8 blocks. Cooldown 1200t.
+
+### Sequence 2 — Discerner
+
+**Discern `[S]`** — Once per 3600t, reveal player inventory within 6 blocks.
+
+### Sequence 1 — Author
+
+**Author’s Edit `[S]`** — Primary key: 300t chat-word edit + mind read. Cooldown 2400t.
+
+**Compassionate Restraint II `[D]`** — −80% passive damage; +10% hostile damage.
+
+### Sequence 0 — The Visionary
+
+**The Mindscape `[S]`** — Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- `#tarot:hostile` **AND enemy players** within 20 blocks: freeze AI (movement + attack disabled)
+- All players within 20 blocks: no sprint, no jump
+- Symmetric damage cancellation between Justice and all frozen entities
+- Optional ally via `/tarot ally <player>`
+
+---
+
+## XII — THE HANGED MAN
+**Origin ID:** `tarot:hanged_man` · **Elytra:** yes · **Drawback:** Weight of Sin (natural regen stops at 8 hearts)
+
+### Sequence 9
+
+**Shadow of Degeneration `[D]`** — Light ≤ 7: Resistance I, silent footsteps, +5% speed.
+
+**Sin-Bearing `[S]`** — 25% damage taken → Sin (cap 16 HP). Decay: 200t without damage → dissipates. Below 8 HP with Sin active → burst: `area_of_effect` radius 8 = stored Sin to **#tarot:hostile AND enemy players**, Weakness I 80t, heal self 50% of Sin. Sin reset.
+
+**Graze the Soul `[D]`** — Kill **hostile mob OR enemy player** → heal 2 HP + Resistance I 60t. Cooldown 120t.
+
+**Weight of Sin `[D/S]`** — No natural regen above 8 HP. Unlock: kill → 9; Healing potion → 10 for 1200t; still + light ≤ 9 for 160t → 10 for 600t.
+
+### Sequence 8 — Listener
+
+**Shadow Whisper `[D/S]`** — Mobs detect 30% less; 15% chance Resistance I 40t when targeted.
+
+### Sequence 7 — Shadow Ascetic
+
+**Shadow Cloak `[D]`** — Shadow of Degeneration to light ≤ 11.
+
+### Sequence 6 — Rose Bishop
+
+**Flesh Creek `[D/S]`** — 20% chance on damage → heal 2 hearts (flagged non-Sin).
+
+### Sequence 5 — Shepherd
+
+**Burden Bearer `[D/S]`** — 10% damage reduction while Sin active. On Sin dissipate → Regeneration I 60t.
+
+### Sequence 4 — Black Knight
+
+**Dark Blade `[D]`** — Below 12 HP: +15% melee, +10% speed.
+
+### Sequence 3 — Trinity Templar
+
+**Trinity `[D/S]`** — 3 damage sources in 100t → Resistance II 60t + heal 2 hearts.
+
+### Sequence 2 — Profane Presbyter
+
+**Profane Aura `[D/S]`** — 10% chance Weakness I 60t on attacker (**hostile mob OR enemy player**); kill applies Slowness I 40t to nearby entities within 5 blocks. Cooldown 100t.
+
+### Sequence 1 — Dark Angel
+
+**Sin Overflow `[D/S]`** — Burst radius 10, Weakness II + Slowness II 60t, heal 75% of Sin.
+
+**Depraved Dependent `[S]`** — 20% chance on kill → minion for 300t. Cooldown 2400t. Max 2.
+
+### Sequence 0 — The Hanged Man
+
+**Weight of Sin Made Manifest `[S]`** — Primary key. **Duration 1200t (60s). Cooldown 14400t (12 min).**
+- Sin cap removed
+- −75% damage taken
+- 100% Sin conversion
+- Slowed I (−15% movement)
+- Every 80t: nova = 15% stored Sin to **#tarot:hostile AND enemy players** within 8 blocks
+- Melee hits +5% stored Sin
+- 50% chance on kill → minion (max 2)
+- On expiry: 15-block explosion = total Sin (cap 40 hearts), heal 50% (excess → Absorption II 200t), Resistance I 300t, killed entities rise as minions 400t
+- If player dies during window, explosion does not trigger
+
+---
+
+## XIII — DEATH
+**Origin ID:** `tarot:death` · **Elytra:** yes · **Drawback:** Severed Vitality
+
+### Sequence 9
+
+**Soul Harvest `[D]`** — Kill **hostile mob OR enemy player** → heal 2 HP. Cooldown 200t.
+
+**Grave Affinity `[D]`** — −25% damage from `#tarot:undead`; low-light vision.
+
+**Reaper’s Touch `[D]`** — Weakness I 60t on `#tarot:undead` hit. Cooldown 200t.
+
+**Grave Whisper `[D]`** — `#tarot:undead` 10% extra drop.
+
+**Severed Vitality `[D]`** — No natural regen.
+
+### Sequence 8 — Gravedigger
+
+**Grave Dirt `[D]`** — Right-click grave/skull → +1 XP. Cooldown 1200t.
+
+### Sequence 7 — Spirit Medium
+
+**Spirit Sense `[D]`** — Crouch 60t → `#tarot:undead` within 10 blocks glow 100t. Cooldown 600t.
+
+### Sequence 6 — Spirit Guide
+
+**Guide `[D]`** — `#tarot:undead` dies within 8 blocks → +1 HP. Cooldown 20t.
+
+### Sequence 5 — Gatekeeper
+
+**Gate `[D]`** — Secondary key: Nether portal. Cooldown 12000t.
+
+### Sequence 4 — Undying
+
+**Undying `[S]`** — 5% survive lethal at 1 heart. Cooldown 12000t.
+
+### Sequence 3 — Ferryman
+
+**Ferry `[D]`** — Right-click water → walk 100t. Cooldown 1200t.
+
+### Sequence 2 — Death Consul
+
+**Consul `[S]`** — Once per 6000t, one `#tarot:undead` within 8 blocks fights for Death 200t.
+
+### Sequence 1 — Angel of Death
+
+**Reap `[D/S]`** — Primary key: **kill hostile mob OR enemy player below 30% HP within 8 blocks**. Kills apply Weakness I 60t to nearby. Cooldown 2400t.
+
+**Grave Affinity II `[D]`** — Undead −35%.
+
+### Sequence 0 — The Death
+
+**The Final Harvest `[D/S]`** — Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- Every 60t: lowest-health **hostile mob OR enemy player** within 10 blocks dies (bosses capped 50%/tick; enemy players capped at 50% health removed per tick)
+- +1 Absorption heart per kill, cap 10 (amplifier 9)
+- Absorption persists 1200t
+
+---
+
+## XIV — TEMPERANCE
+**Origin ID:** `tarot:temperance` · **Elytra:** yes · **Drawback:** Unstable Manifestation
+
+### Sequence 9
+
+**Wraith’s Veil `[D]`** — Invisibility when sneaking, light ≤ 7.
+
+**Ethereal Landing `[D]`** — −60% fall; Slowness immunity.
+
+**Mirror Passage `[D]`** — Phasing through leaves/cobwebs when sneaking, light ≤ 4, no chestplate.
+
+**Unstable Manifestation `[D]`** — No iron/diamond/netherite chestplate.
+
+### Sequence 8 — Lunatic
+
+**Madness `[D]`** — 10% chance Speed I 60t on damage.
+
+### Sequence 7 — Werewolf
+
+**Beast Form `[D]`** — Crouch-right-click no weapon → +2 melee 200t. Cooldown 1200t.
+
+### Sequence 6 — Zombie
+
+**Rot `[D]`** — Melee Hunger I 40t. Cooldown 300t.
+
+### Sequence 5 — Wraith
+
+**Incorporeal `[D]`** — Secondary key: 60t invisibility + phase leaves/cobwebs. Cooldown 1200t.
+
+### Sequence 4 — Puppet
+
+**Puppet `[D/S]`** — Right-click **hostile mob OR enemy player** → forced to attack nearest other hostile/player for 100t. Cooldown 900t.
+
+### Sequence 3 — Disciple of Silence
+
+**Silence `[D]`** — Silent footsteps.
+
+### Sequence 2 — Ancient Bane
+
+**Bane `[D]`** — Weakness II to `#tarot:hostile` **AND enemy players** within 5 blocks for 100t. Cooldown 3600t.
+
+### Sequence 1 — Abomination
+
+**Abomination `[D]`** — Primary key: 300t +6 armor, +30% resistance, half speed; Wraith’s Veil to light 12. Cooldown 2400t.
+
+**Wraith’s Veil II `[D]`** — Invisibility to light 9.
+
+### Sequence 0 — The Chained
+
+**The Unbound `[S]`** — Primary key. **Duration 500t (25s). Cooldown 24000t.**
+- Clear self debuffs; strip positives from **`#tarot:hostile` AND enemy players** within 15 blocks
+- Invisibility (no armor)
+- Phase all blocks except `#tarot:unphasable`
+- ×2 speed
+- Attack freely (breaks invisibility 40t on hit)
+
+---
+
+## XV — THE DEVIL
+**Origin ID:** `tarot:devil` · **Elytra:** yes · **Drawback:** Sacred Rejection
+
+### Sequence 9
+
+**Hellborn `[D]`** — Fire/lava immunity.
+
+**Corrupting Claws `[D]`** — Melee Wither I 40t to **hostile mobs AND enemy players**. Cooldown 320t.
+
+**Desperate Malice `[D]`** — +18% melee below 40% HP.
+
+**Infernal Vitality `[D]`** — +1 HP per 80t while on fire.
+
+**Sacred Rejection `[D]`** — No golden apples; healing potions ×0.5.
+
+### Sequence 8 — Unwinged Angel
+
+**Fallen Grace `[D]`** — 10% chance Strength I 40t on damage.
+
+### Sequence 7 — Serial Killer
+**Predator `[D]`** — Kill → Speed I 60t.
+
+### Sequence 6 — Devil
+
+**Devil’s Mark `[D]`** — Right-click **hostile mob OR enemy player** → Wither I 40t. Cooldown 400t.
+
+### Sequence 5 — Desire Apostle
+
+**Desire `[D/S]`** — Crouch-right-click player → held item chat. Cooldown 200t.
+
+### Sequence 4 — Demon
+
+**Demon Form `[D]`** — Desperate Malice below 50%.
+
+### Sequence 3 — Blatherer
+
+**Blather `[D/S]`** — 10% chance nearby hostile mobs **AND enemy players** target another mob/player instead.
+
+### Sequence 2 — Bloody Archduke
+
+**Blood Price `[D/S]`** — Once per 3600t, −2 hearts → Strength II 200t.
+
+### Sequence 1 — Chaos Unleashed
+
+**Chaos Unleashed `[D]`** — Primary key: Slowness II + Weakness I to `#tarot:hostile` **AND enemy players** within 10 blocks for 160t; next melee +50% + Wither II 100t. Cooldown 1800t.
+
+**Infernal Vitality II `[D]`** — 1 HP per 60t while on fire.
+
+### Sequence 0 — Descent
+
+**Descent `[S]`** — Primary key. **Duration 800t (40s). Cooldown 18000t.**
+- Strength II, Fire Resistance, +20% speed
+- On-hit Wither I to **hostile mobs AND enemy players**
+- Lifesteal 0.5 hearts/sec
+- 75% chance on kill to raise minion 600t (max 4)
+- +15% damage taken
+- On end: Hunger II 200t + remove Absorption
+
+---
+
+## XVI — THE TOWER
+**Origin ID:** `tarot:tower` · **Elytra:** yes · **Drawback:** Falling Tower
+
+### Sequence 9
+
+**Ruin-Proof `[D]`** — Explosion damage −60%.
+
+**Cracked Foundations `[D]`** — +30% break speed on stone types.
+
+**Unstable Strike `[D]`** — Hits apply Slowness I 20t to **hostile mobs AND enemy players**. Cooldown 260t.
+
+**Unstable Ground `[D]`** — 5% chance on stone break → particle crack.
+
+**Falling Tower `[D]`** — +75% fall damage, +20% KB taken.
+
+### Sequence 8 — Demolisher
+
+**Charge `[D]`** — Crouch-right-click stone → prime 60t → break harmlessly. Cooldown 600t.
+
+### Sequence 7 — Crackshot
+
+**Fault Line `[D/S]`** — 5% chance on stone break → break block above.
+
+### Sequence 6 — Foundation
+
+**Foundation `[D]`** — −20% fall damage with pickaxe.
+
+### Sequence 5 — Collapse
+
+**Collapse `[D]`** — Secondary key: break 3×3 stone. Cooldown 1200t.
+
+### Sequence 4 — Impact
+
+**Impact `[D]`** — Unstable Strike Slowness 40t.
+
+### Sequence 3 — Shockwave
+
+**Shockwave `[D]`** — 4+ block fall lands → 2 damage to **hostile mobs AND enemy players** within 3 blocks.
+
+### Sequence 2 — Cataclysm
+
+**Cataclysm `[D]`** — Mining Fatigue I to `#tarot:hostile` **AND enemy players** in 5 blocks for 200t. Cooldown 3600t.
+
+### Sequence 1 — Tower
+
+**Falling Tower `[D]`** — Primary key: leap 8 blocks + slam → 10 damage + Slowness II 100t to `#tarot:hostile` **AND enemy players** within 6 blocks. Cooldown 2400t.
+
+**Ruin-Proof II `[D]`** — Explosion reduction 80%.
+
+### Sequence 0 — The Fall
+
+**The Fall `[D/S]`** — Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- 15-block radius
+- All solid blocks become unstable → **any entity** (hostile mob, enemy player, ally, self) standing takes 4 damage/sec (throttled 5-tick, cap 50 blocks)
+- All **hostile mobs AND enemy players** within launched 3 blocks upward + fall damage
+
+---
+
+## XVII — THE STAR
+**Origin ID:** `tarot:star` · **Elytra:** yes · **Drawback:** True Sleeplessness
+
+### Sequence 9
+
+**Sleepless `[D]`** — Permanent Night Vision; Darkness/Blindness shortened.
+
+**Nightwatch `[D]`** — Night: +15% speed, +15% damage to `#tarot:undead`.
+
+**Evernight’s Patience `[D]`** — −20% exhaustion at night.
+
+**Sleepless Vigil `[D]`** — Phantoms require 5 days.
+
+**True Sleeplessness `[D]`** — Cannot sleep; bed sets spawn.
+
+### Sequence 8 — Midnight Poet
+
+**Lullaby `[D]`** — Crouch 60t → Slowness I to `#tarot:hostile` **AND enemy players** within 5 blocks for 60t. Cooldown 1200t.
+
+### Sequence 7 — Nightmare
+
+**Nightmare `[D]`** — 20% chance night kill → +1 XP.
+
+### Sequence 6 — Soul Assurer
+
+**Soul Shield `[D]`** — 10% chance night damage → Resistance I 40t.
+
+### Sequence 5 — Spirit Warlock
+
+**Haunt `[D]`** — Secondary key: Blindness I to **hostile mob OR enemy player** within 6 blocks for 60t. Cooldown 900t.
+
+### Sequence 4 — Nightwatcher
+
+**Nightwatch II `[D]`** — Bonuses at light ≤ 7.
+
+### Sequence 3 — Horror Bishop
+
+**Terror `[D/S]`** — 10% chance **hostile mobs AND enemy players** within 5 blocks flee 40t at night.
+
+### Sequence 2 — Servant of Concealment
+
+**Conceal `[D]`** — Once per 3600t, invisibility 100t.
+
+### Sequence 1 — Knight of Misfortune
+
+**Misfortune `[D]`** — Primary key: Weakness II + Slowness II + Blindness 60t to `#tarot:hostile` **AND enemy players** within 10 blocks for 160t. Cooldown 1800t.
+
+**Sleepless Vigil II `[D]`** — Phantoms 7 days.
+
+### Sequence 0 — The Darkness
+
+**The Starless Sky `[S]`** — Primary key. **Duration 800t (40s). Cooldown 24000t.**
+- Extinguish lights within 30 blocks
+- Invisibility
+- Blindness I + Slowness I to `#tarot:hostile` **AND enemy players** within 30 blocks
+- Speed II + 20% damage
+- Attacks do not break invisibility (except critical melee)
+
+---
+
+## XVIII — THE MOON
+**Origin ID:** `tarot:moon` · **Elytra:** yes · **Drawback:** Blood Diet
+
+### Sequence 9
+
+**Sanguine Sight `[D]`** — Permanent Night Vision; +15% night speed.
+
+**Blood’s Renewal `[D]`** — Night: 1 HP per 600t.
+
+**Sanguine Resilience `[D]`** — 10% chance Wither resist at night.
+
+**Pharmacist `[D/S]`** — +25% potion healing.
+
+**Blood Diet `[D]`** — Only `#tarot:meat` restores hunger.
+
+### Sequence 8 — Beast Tamer
+
+**Tame `[D/S]`** — Right-click passive with bone → no flee 1200t.
+
+### Sequence 7 — Vampire
+
+**Blood Drain `[D]`** — Melee heal 0.5 hearts once per 100t **on hostile mobs AND enemy players**.
+
+### Sequence 6 — Potions Professor
+
+**Brew `[D/S]`** — Instant brew. Cooldown 6000t.
+
+### Sequence 5 — Scarlet Scholar
+
+**Scarlet `[D]`** — Secondary key: 200t +50% potion healing. Cooldown 1200t.
+
+### Sequence 4 — Shaman King
+
+**Shaman `[D]`** — Blood’s Renewal 1.5 hearts per 600t.
+
+### Sequence 3 — High Summoner
+
+**Summon `[D/S]`** — Right-click passive → copy fights for Moon 200t. Cooldown 1200t.
+
+### Sequence 2 — Life-Giver
+
+**Life `[S]`** — Once per 3600t, revive dead passive as ally 400t.
+
+### Sequence 1 — Beauty Goddess
+
+**Beauty `[D]`** — Primary key: pacify **hostile mobs AND enemy players** within 10 blocks for 160t (target clear + Slowness I); self + allies Regeneration I 200t. Cooldown 2400t.
+
+**Pharmacist II `[D]`** — +35% potion.
+
+### Sequence 0 — The Scarlet Feast
+
+**The Scarlet Feast `[S]`** — Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- KubeJS moving aura 15 blocks
+- `#tarot:hostile` inside: −1 heart/sec
+- Enemy players inside: −1 heart per 60t
+- Self + allies inside: heal for total drained (cap 30 HP)
+
+---
+
+## XIX — THE SUN
+**Origin ID:** `tarot:sun` · **Elytra:** yes · **Drawback:** Beacon of Faith
+
+### Sequence 9
+
+**Unshadowed `[D]`** — +40% damage to `#tarot:undead` (undead-specific — unchanged).
+
+**Inner Radiance `[D]`** — Night Vision + fire immunity.
+
+**Inner Light `[D]`** — 100t still in light ≤ 4 → 3-block light level 8.
+
+**Purification `[D]`** — Every 900t, cleanse Poison/Weakness.
+
+**Beacon of Faith `[D]`** — Permanent Glowing.
+
+### Sequence 8 — Light Suppliant
+
+**Holy Light `[D]`** — Crouch 60t → heal 1 heart. Cooldown 600t.
+
+### Sequence 7 — Solar High Priest
+
+**Solar Flare `[D]`** — 20% chance Blind `#tarot:undead` attacker 40t (undead-specific).
+### Sequence 6 — Notary
+
+**Witness `[D/S]`** — Right-click player → health 1200t.
+
+### Sequence 5 — Purify
+
+**Purify `[D]`** — Secondary key: remove Poison/Wither/Blindness from self or player within 4 blocks. Cooldown 900t.
+
+### Sequence 4 — Unshadowed II
+
+**Unshadowed II `[D]`** — +50% undead damage.
+
+### Sequence 3 — Radiance
+
+**Radiance `[D]`** — Inner Light radius 5.
+
+### Sequence 2 — Sanctify
+
+**Sanctify `[D]`** — Once per 3600t, consecrate 5-block radius 600t; undead 2 dmg/sec (undead-specific).
+
+### Sequence 1 — White Angel
+
+**White Angel `[D]`** — Primary key: light 15 in 15 blocks 300t; undead 4 dmg/sec (undead-specific); all players Regeneration I. Cooldown 3600t.
+
+**Beacon of Faith II `[D]`** — Glowing within 20 blocks.
+
+### Sequence 0 — The Eternal Day
+
+**The Eternal Day `[S]`** — Primary key. **Duration 2400t (120s). Cooldown 24000t.**
+- 30-block radius
+- No hostile spawns
+- Undead 6 dmg/sec (undead-specific)
+- Players Regeneration I + Night Vision
+- Allies +1 heart per 200t
+- **Enemy players 1 dmg/sec**
+
+---
+
+## XX — JUDGEMENT
+**Origin ID:** `tarot:judgement` · **Elytra:** no · **Drawback:** No Unlawful Escape
+
+### Sequence 9
+
+**Law’s Weight `[D]`** — +2 armor, +45% KB resist.
+
+**Retaliatory Sentence `[D]`** — Attackers Slowed 60t. Cooldown 280t.
+
+**Hold the Line `[D]`** — Not sprinting: −12% melee damage taken.
+
+**Verdict’s Weight `[D]`** — Kill → hostiles within 4 blocks 10% chance flee 40t.
+
+**No Unlawful Escape `[D]`** — No ender pearl/chorus fruit.
+
+### Sequence 8 — Sheriff
+
+**Posse `[D/S]`** — Right-click player → direction tracking 1200t.
+
+### Sequence 7 — Interrogator
+
+**Question `[D]`** — Crouch-right-click **hostile mob OR enemy player** → Weakness I 60t. Cooldown 400t.
+
+### Sequence 6 — Judge
+
+**Verdict `[D]`** — Kill → Slowness I 40t to `#tarot:hostile` **AND enemy players** within 4 blocks. Cooldown 400t.
+
+### Sequence 5 — Disciplinary Paladin
+
+**Discipline `[D]`** — Secondary key: next melee stuns 20t. Cooldown 600t.
+
+### Sequence 4 — Imperative Mage
+
+**Imperative `[D]`** — Hold the Line 18%.
+
+### Sequence 3 — Chaos Hunter
+
+**Chaos Hunter `[D]`** — +10% vs mobs/players targeting another player.
+
+### Sequence 2 — Balancer
+
+**Balance `[S]`** — Once per 3600t, equalize health between Judgement and **hostile mob OR enemy player** within 6 blocks.
+
+### Sequence 1 — Hand of Order
+
+**Order `[D]`** — Primary key: Slowness II + Weakness II to `#tarot:hostile` **AND enemy players** within 8 blocks for 160t; next melee stuns 40t. Cooldown 1800t.
+
+**Law’s Weight II `[D]`** — KB resist 60%.
+
+### Sequence 0 — The Absolute Law
+
+**The Absolute Law `[S]`** — Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- Decree (via `/tarot decree <type>`): no sprint / no jump / no attack / no hostile spawn within 30 blocks
+- Enforced 600t
+- All **hostile mobs AND enemy players** within 30 blocks also Slowed II + Weakness I
+
+---
+
+## XXI — THE WORLD
+**Origin ID:** `tarot:world` · **Elytra:** yes · **Drawback:** Terrifying Reputation
+
+### Sequence 9
+
+**Cold Precision `[D]`** — +25% projectile.
+
+**Marked Prey `[D]`** — `target_action_on_hit` on **hostile mob OR enemy player** → Glowing 120t. Cooldown 200t.
+
+**Hunter’s Tempo `[D]`** — Kill → Speed I 160t. Cooldown 360t.
+
+**Predator’s Patience `[D/S]`** — Still with bow: +5% per 60t, max +30%.
+
+**Terrifying Reputation `[D]`** — Villagers refuse trade.
+
+### Sequence 8 — Clown
+
+**Paper Dagger `[D]`** — 3 damage + Slowness I 40t to **hostile mob OR enemy player**. Consumes paper. Cooldown 200t.
+
+### Sequence 7 — Magician
+
+**Air Cannon `[D/S]`** — Primary key: 14-block projectile. **Hostile mob: 4 damage + strong KB. Enemy player: 3 damage + 50% KB.** No block damage, no piercing, no AoE, no fire. Does not benefit from Cold Precision or Predator’s Patience. Marked Prey may trigger. Cooldown 160t.
+
+### Sequence 6 — Faceless
+
+**Borrowed Face `[S]`** — Duration 600t.
+
+### Sequence 5 — Marionettist
+
+**Puppet String `[D/S]`** — Cooldown 400t. Applies to **hostile mobs AND enemy players**.
+
+### Sequence 4 — Scholar of Yore
+
+**Historical Recall `[D]`** — Marked Prey Glow 160t.
+
+### Sequence 3 — Miracle Invoker
+
+**Small Miracle `[S]`** — Cooldown 9600t.
+
+### Sequence 2 — Attendant of Mysteries
+
+**Mystery Step `[S]`** — Cooldown 4800t.
+
+### Sequence 1 — Fool (Angel)
+
+**Hunter’s Substitution `[S]`** — 9600t CD. Cancel lethal, teleport 8 blocks, 2 hearts.
+
+**Cold Precision II `[D]`** — +30%.
+
+### Sequence 0 — The Perfect Prey
+
+**The Perfect Prey `[S]`** — Primary key. **Duration 900t (45s). Cooldown 24000t.**
+- Mark player within 50 blocks
+- Particle trail tracking
+- Next projectile auto-hits, +100% damage, Slowness II 100t
+- Target dies in window → Speed II + Regeneration I 600t
+
+---
+
+# PART B — RESONANCE PAIR SPECIFICATIONS
+
+**Rule:** Player commits to a pair at Sequence 5. From Sequence 5 onward, gains **one Resonance power per Sequence**. **Both parent drawbacks always active.** Resonance abilities are ~1.3× the power of a single-arcana ability.
+
+## Required tags for Resonance
+Same as Part 0. Additional:
+- `tarot:decoy` — armor stand marker
+- `tarot:shadow_minion` — allied minion tag
+- `tarot:shadow_sin` — Sin-tagged decoy
+
+**All offensive Resonance abilities target `#tarot:hostile` AND enemy players unless stated.**
+
+---
+
+## I. Fool + Hanged Man — The Paper Martyr
+**Origin ID:** `tarot:paper_martyr` · **Elytra:** yes · **Drawbacks:** Spiritual Expenditure (25%) + Weight of Sin
+
+### Sequence 9 — Burdened Beginning `[D/S]`
+Spirit Vision (crouch → 10-block Glowing 100t). Sin storage 25%, cap 8 HP. No natural regen above 8 HP.
+
+### Sequence 8 — Shadow Step `[D]`
+25% chance on damage → decoy (armor stand, `tarot_decoy` tag). Decoy carries 1 Sin; on death deals 2 damage in 2 blocks. Cooldown 400t.
+
+### Sequence 7 — Suffering Sight `[S]`
+Spirit Vision reveals health + highest debuff. Sneak + secondary key → transfer 2 Sin to revealed **hostile mob OR enemy player** (2 damage, Sin −2). Cooldown 200t.
+
+### Sequence 6 — Borrowed Sacrifice `[S]`
+Borrowed Face holds 3 Sin; on break by attack, attacker takes 3 damage. Cooldown 2400t.
+
+### Sequence 5 — Gathering of Martyrs `[S]`
+Secondary key: 2 figurines 200t. Each carries 2 Sin, detonates for 4 damage in 3 blocks. **Minions attack hostile mobs AND enemy players.** Cooldown 6000t.
+
+### Sequence 4 — Burdened Trickster `[S]`
+Decoys carry 2 Sin, detonate for 4 damage. Sin cap 12 HP.
+
+### Sequence 3 — Suffering Sight II `[S]`
+Sin transfer → 3 Sin. Target Glowing 60t.
+
+### Sequence 2 — Sacrificial Gathering `[S]`
+Figurines carry 3 Sin, detonate for 6 damage in 4 blocks.
+
+### Sequence 1 — Martyr’s Substitute `[S]`
+Lethal hit → cancel, teleport 12 blocks, heal 20, Invisibility 60t, Speed II 60t. Origin point leaves a Sin shadow for 100t; if attacked, detonates for all Sin (cap 16 HP) in 10 blocks. Player gains 3 Sin. Cooldown 7200t.
+
+### Sequence 0 — The Paper Martyr `[S]`
+Primary key. **Duration 700t (35s). Cooldown 18000t (15 min; 12000 if <6 HP).**
+- −75% damage taken
+- Creative flight, fire/fall immunity
+- +50% damage
+- On-hit: Slowness II + Weakness I 80t
+- Decoy every 100t (3 Sin each, detonate 3 damage in 3 blocks)
+- Sin cap removed; 100% Sin conversion
+- Nova every 80t: 15% stored Sin to `#tarot:hostile` **AND enemy players** in 8 blocks
+- Melee +5% stored Sin
+- On expiry: return to activation point, full health, clear effects, Regeneration II + Speed II 200t
+- 15-block explosion (cap 40 hearts)
+- Allies within 10 blocks Absorption IV 200t
+- Killed entities rise as minions 400t
+
+---
+
+## II. World + Justice — The Marked Verdict
+**Origin ID:** `tarot:marked_verdict` · **Elytra:** yes · **Drawbacks:** Terrifying Reputation + Compassionate Restraint
+
+### Sequence 9 — Cold Judgment `[D]`
++25% projectile; −12% mob damage taken (not sprinting); −70% passive damage.
+
+### Sequence 8 — Paper Sentence `[D]`
+Paper Dagger (3 dmg, Slowness I 40t) + Weakness I 40t on hit.
+
+### Sequence 7 — Hunter’s Calm `[D/S]`
+Predator’s Patience 2× fast. Still + bow: Slowness I to `#tarot:hostile` **AND enemy players** within 6 blocks.
+
+### Sequence 6 — Silent Witness `[S]`
+Borrowed Face reveals target health 600t. Calming Presence.
+
+### Sequence 5 — Puppet’s Sentence `[D/S]`
+Player: Slowness II 40t + coords. Mob: Slowness II 80t + red outline. **Both target types.**
+
+### Sequence 4 — Marked Judgment `[S]`
+Marked Prey → Weakness I 120t. Direction indicator.
+
+### Sequence 3 — Hunter’s Stillness `[S]`
+Still + bow: Slowness I to nearby enemies.
+### Sequence 2 — The Verdict `[S]`
+Mark-kill → `#tarot:hostile` **AND enemy players** within 8 blocks pacified 60t. Absorption I 600t.
+
+### Sequence 1 — Swift Judgment `[S]`
+Lethal → teleport 8 blocks; attacker frozen (Slowness 255) 40t. Cooldown 9600t.
+
+### Sequence 0 — The Marked Verdict `[S]`
+Primary key. **Duration 900t (45s). Cooldown 24000t.**
+- Mark player within 50 blocks
+- Target cannot sprint/jump
+- +100% damage + Slowness II to target
+- Next projectile auto-hits, freezes 60t, pacifies all enemies within 15 blocks 100t
+- On kill: Speed II + Regeneration I 600t; allies Absorption II 200t
+
+---
+
+## III. Hermit + Chariot — The Burning Archive
+**Origin ID:** `tarot:burning_archive` · **Elytra:** yes · **Drawbacks:** Forbidden Knowledge + Extinguished Fury
+
+### Sequence 9 — Scholar’s Fire `[D]`
++35% XP, fire/lava immunity, +15% sprint melee.
+
+### Sequence 8 — Combat Insight `[D]`
+20% chance Resistance I + Speed I 40t on damage.
+
+### Sequence 7 — Astrologer’s Trail `[D/S]`
+Star Chart. Trail ignites 40t (**hostile mobs AND enemy players**).
+
+### Sequence 6 — Recorded Plot `[D]`
+Scroll coord. 20% kill → +1 XP.
+
+### Sequence 5 — Star Read Reaper `[D]`
+Star Read 5s. Reap +30% + ignite 60t. Cooldown 600t.
+
+### Sequence 4 — Scholar’s Momentum `[S]`
+Book read <1200t → sprint melee +25%.
+
+### Sequence 3 — Insightful Flame `[S]`
+Trail +1 damage + Slowness I 40t; health shown 60t.
+
+### Sequence 2 — Reaper’s Library `[S]`
+Kill → +1 XP + Burn stack (+5% melee, max 3, consumed on crit).
+
+### Sequence 1 — Burning Lecture `[S]`
+Emperor’s Library: melee ignite 100t, arrows ignite 60t. Cooldown 3600t.
+
+### Sequence 0 — The Burning Archive `[S]`
+Primary key. **Duration 900t (45s). Cooldown 24000t.**
+- Players within 100 blocks outlined; structures within 200 blocks
+- One-shot armor-ignoring crit arrow
+- `#tarot:hostile` **AND enemy players** within 20 blocks forced to fight each other
+- +30% damage, +20% speed, melee ignite 100t
+- Kills grant Burn stacks (cap 5)
+- Crit arrow ignites all enemies within 10 blocks 100t
+- On end with 5 stacks: 6 fire damage + fire 100t to remaining enemies within 15 blocks
+
+---
+
+## IV. Death + Tower — The Crumbling Reaper
+**Origin ID:** `tarot:crumbling_reaper` · **Elytra:** yes · **Drawbacks:** Severed Vitality + Falling Tower
+
+### Sequence 9 — Grave Ruin `[D]`
++30% stone break; undead −25%; explosions −60%; fall +75%.
+
+### Sequence 8 — Grave Dirt + Fault Line `[D/S]`
++1 XP grave (1200t). 5% break above.
+
+### Sequence 7 — Spirit Shockwave `[D]`
+Spirit Sense. Shockwave 2 damage to nearby enemies on 4+ block fall.
+
+### Sequence 6 — Guide’s Foundation `[D]`
+Undead death → +1 HP. −20% fall with pickaxe.
+
+### Sequence 5 — Gate Collapse `[D]`
+Secondary key: Nether portal + 3×3 break. Cooldown 12000t.
+
+### Sequence 4 — Falling Harvest `[S]`
+3+ block fall → next kill within 200t heals 4 hearts + explodes 2 damage 3 blocks.
+
+### Sequence 3 — Collapse of the Living `[S]`
+Enemy dies within 8 blocks → crack + 1 damage nearby enemies 3 blocks.
+
+### Sequence 2 — Unstable Souls `[S]`
+Fall damage → nearby enemies same damage. Kills → Soul Harvest heal.
+
+### Sequence 1 — Falling Tower’s Reap `[S]`
+Slam → +instakill enemies below 20%. Kills → +1 Absorption 600t. Cooldown 2400t.
+
+### Sequence 0 — The Crumbling Reaper `[S]`
+Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- Every 60t: lowest-health `#tarot:hostile` **AND enemy player** within 10 blocks dies (bosses 50%/tick cap; enemy players capped 50% HP removed per tick)
+- +1 Absorption per kill (cap 10)
+- 15-block unstable ground: any entity standing takes 4 damage/sec
+- Unstable-kill Absorption applies
+- Absorption cap 15 hearts, persists 1200t
+
+---
+
+## V. Magician + Strength — The Impossible Fist
+**Origin ID:** `tarot:impossible_fist` · **Elytra:** yes · **Drawbacks:** Full Moon Ravings + The Giant Sinks
+
+### Sequence 9 — Traveler’s Might `[D]`
++12% speed, −70% fall, +3 armor, +20% jump.
+
+### Sequence 8 — Sleight of Fist `[D]`
+30% fall teleport. Unarmed +2.
+
+### Sequence 7 — Star Chart Grip `[D]`
+Star Chart. Bows at −25%.
+
+### Sequence 6 — Recorded Dawnlight `[D]`
+Recorded Step. Dawnlight light 8 200t. Cooldown 1200t.
+
+### Sequence 5 — Doorstep Slam `[D]`
+Doorstep 8 blocks → next melee +10% + Slowness I 20t within 60t. Cooldown 300t.
+
+### Sequence 4 — Doorstep Punch `[S]`
+Bonus +15%.
+
+### Sequence 3 — Sealed Slam `[S]`
+Teleport into **hostile mob OR enemy player** → 4 damage + 3 block KB.
+
+### Sequence 2 — Giant’s Shortcut `[S]`
+Phase exit → enemies within 2 blocks take +20% current HP.
+
+### Sequence 1 — Divine Door `[S]`
+Divine Hand pull OR teleport. Stun 60t, next melee +50%. Cooldown 1800t.
+
+### Sequence 0 — The Impossible Fist `[S]`
+Primary key. **Duration 900t (45s). Cooldown 18000t.**
+- Unrestricted phasing
+- Wither II + Slowness II + armor halved to `#tarot:hostile` **AND enemy players** within 15 blocks
+- +30% damage
+- Every phased block: +5% melee (max +50%)
+- Melee reaches through 3-block walls
+- On end: shockwave 2 dmg/Momentum in 5 blocks
+
+---
+
+## VI. Emperor + Lovers — The Benevolent Crown
+**Origin ID:** `tarot:benevolent_crown` · **Elytra:** no · **Drawbacks:** Weight of the Crown + Separation Anxiety
+
+### Sequence 9 — Sovereign’s Care `[D]`
++3 armor, +40% KB resist, +25% self-heal, +5% speed with teammate. Shield −25% speed, +50% exhaustion. Alone 600t: +35% exhaustion, −15% mining.
+
+### Sequence 8 — Unbound Symbiosis `[D]`
+Weakness immunity <12 HP. Passive mob within 4 → +1 HP.
+
+### Sequence 7 — Coin’s Blessing `[D]`
+Coin pacify (100t). Blessing crop (1200t).
+
+### Sequence 6 — Corrupt Symbiosis `[D/S]`
+5×5 Slowness to `#tarot:hostile` **AND enemy players**. Symbiosis to allies.
+
+### Sequence 5 — Decree of Nature `[D]`
+Secondary key: Decree + Slowness II to `#tarot:hostile` **AND enemy players** within 6 blocks. Cooldown 900t.
+
+### Sequence 4 — Linked Crown `[S]`
+Shield: allies within 8 blocks +5% damage reduction + 0.5 heart heal per 200t.
+
+### Sequence 3 — Shared Domain `[S]`
+Allies in Corrupt Ground get Regeneration I.
+
+### Sequence 2 — Emperor’s Hymn `[S]`
+Decree: allies Regeneration I + 10% speed; self +10% resist. Cooldown 900t.
+
+### Sequence 1 — Triage Decree `[S]`
+Triage 1 heart + Slows + 2 damage to nearest enemy. Cooldown 400t.
+
+### Sequence 0 — The Benevolent Crown `[S]`
+Primary key. **Duration 1200t (60s). Cooldown 18000t.**
+- 15-block domain: `#tarot:hostile` **AND enemy players** cannot approach within 3 blocks
+- All players cannot sprint/jump unless allowed
+- +20% damage, +20% resist
+- Allies Regeneration II + 10% speed
+- Passive mobs immortal
+- Enemies pacified first 100t
+- Ally deaths heal allies 2 hearts
+- One Consort +15% damage +15% resist
+
+---
+
+## VII. Devil + Judgement — The Binding Contract
+**Origin ID:** `tarot:binding_contract` · **Elytra:** yes · **Drawbacks:** Sacred Rejection + No Unlawful Escape
+
+### Sequence 9 — Hellborn Verdict `[D]`
+Fire/lava immunity, +2 armor, +45% KB resist. Attackers Slowed 60t. No golden apples or ender pearls.
+
+### Sequence 8 — Fallen Question `[D]`
+10% Strength I 40t on damage. Crouch-right-click mob/player → Weakness I 60t.
+
+### Sequence 7 — Predator’s Calm `[D]`
+Kill → Speed I 60t. Right-click → Slowness I 60t.
+
+### Sequence 6 — Devil’s Verdict `[D]`
+Devil’s Mark Wither I 40t. Kills → Slowness I 40t to nearby enemies.
+
+### Sequence 5 — Desire’s Discipline `[D]`
+Desire. Discipline stun 20t. **Desire also applies Slowness II 60t.**
+
+### Sequence 4 — Infernal Verdict `[S]`
+Claws + Slowness I 40t. Target glows red 80t.
+
+### Sequence 3 — Law of Hell `[S]`
+Attacker takes 2 damage + Slowness II 40t; if <50% HP: Wither I 60t.
+
+### Sequence 2 — Contract Enforcement `[S]`
+Right-click player. Accept: buffs. Refuse: Weakness II 600t + drop item. Cooldown 3600t.
+
+### Sequence 1 — Chaos Law `[S]`
+Chaos Unleashed + any attacker during 160t takes 1 damage + Slowness II 60t. Cooldown 1800t.
+
+### Sequence 0 — The Binding Contract `[S]`
+Primary key. **Duration 800t (40s). Cooldown 18000t.**
+- Strength II, Fire Resistance, +20% speed, Wither I on melee, 0.5 heart lifesteal
+- 75% chance on kill → minion 600t (max 4)
+- All `#tarot:hostile` **AND enemy players** within 15 blocks frozen + Wither II
+- Any player within 15 blocks offered contract
+- Melee Wither II + Slowness I
+- Wither kills → Absorption II 600t
+- +15% damage taken; on end: Hunger II 200t
+
+---
+
+## VIII. Star + Empress — The Starless Poison
+**Origin ID:** `tarot:starless_poison` · **Elytra:** yes · **Drawbacks:** True Sleeplessness + Exposed Reflection
+
+### Sequence 9 — Sleepless Grace `[D]`
+Night Vision, +10% speed, Poison immunity, +15% night speed. No sleep. Arrows +25% in sun.
+
+### Sequence 8 — Lullaby Whisper `[D/S]`
+Lullaby Slowness I 60t (1200t). Whisper (1200t).
+
+### Sequence 7 — Nightmare Fire `[D]`
+20% chance +1 XP on night kill. 10% melee ignite 20t.
+
+### Sequence 6 — Soul Thread `[D/S]`
+10% Resistance I 40t on night damage. Thread Slowness I 40t (400t).
+
+### Sequence 5 — Haunting Plague `[D]`Haunt Blindness I 60t. Witch’s Venom Poison 80t + Hunger I 40t. **Haunt also Poison I 60t.** Cooldown 900t.
+
+### Sequence 4 — Night Venom `[S]`
+Witch’s Venom to nearby at night. Nightwatch damage bonus to poisoned mobs/players.
+
+### Sequence 3 — Poison Conceal `[S]`
+First invisibility attack: Poison II 80t. Does not break invisibility (target glows 40t).
+
+### Sequence 2 — Shadow Whisper `[S]`
+Targeting you → 2 damage + Blindness I 20t + Poison I 40t. Self Speed I 40t.
+
+### Sequence 1 — Midnight Apocalypse `[S]`
+Meteors extinguish light 15 blocks + Blindness I 60t to enemies 15 blocks. Hits → Poison II 60t. Cooldown 3600t.
+
+### Sequence 0 — The Starless Poison `[S]`
+Primary key. **Duration 800t (40s). Cooldown 24000t.**
+- Extinguish light 30 blocks
+- Invisibility (Speed II, +20% damage)
+- `#tarot:hostile` **AND enemy players** within 30 blocks: Blind + Slowed I
+- Poison II every 60t to all enemies within 30 blocks (poisoned take +25%)
+- Attacks break invisibility only 40t
+- Poisoned deaths explode 3-block poison cloud
+- On end: all poisoned enemies take 6 damage + Wither I 100t; self Invisibility 100t
+
+---
+
+## IX. Sun + Moon — The Eclipse
+**Origin ID:** `tarot:eclipse` · **Elytra:** yes · **Drawbacks:** Beacon of Faith + Blood Diet
+
+### Sequence 9 — Unshadowed Sanguine `[D]`
++40% undead damage; Night Vision; 10% Wither resist at night. Glowing always. Only meat restores hunger.
+
+### Sequence 8 — Holy Tamer `[D/S]`
+Holy Light 600t. Tame 1200t.
+
+### Sequence 7 — Solar Drain `[D]`
+20% Blind undead attacker 40t. Melee heal 0.5 hearts per 100t.
+
+### Sequence 6 — Witness Brew `[D/S]`
+Witness 1200t. Brew 6000t.
+
+### Sequence 5 — Purify Scarlet `[D]`
+Purify + Scarlet 200t. **Purify grants Regeneration I 100t.** Cooldown 1200t.
+
+### Sequence 4 — Sunrise `[S]`
+Undead damage → heal 1 heart, drain 0.5 hearts, fire 40t.
+
+### Sequence 3 — Moonshadow `[S]`
+Night Vision in day. Wall vision 5 blocks at night.
+
+### Sequence 2 — Lunar Sanctuary `[S]`
+Sanctify at night drains 1 heart/40t from nearby enemies; heals self. Undead +2 dmg/sec. Cooldown 3600t.
+
+### Sequence 1 — Solar Drain `[S]`
+White Angel: self heal 1 HP/sec, undead +2 dmg/sec. Cooldown 3600t.
+
+### Sequence 0 — The Eclipse `[S]`
+Primary key. **Duration 1200t (60s). Cooldown 24000t.**
+- Sun: 30-block fixed zone (no spawns, undead 6 dmg/sec, players Regeneration I, allies +1 heart/200t, **enemy players 1 dmg/sec**)
+- Moon: 15-block moving aura (hostiles −1 heart/sec, **enemy players −1 heart/60t**, heal drained cap 30 HP)
+- Overlap: undead burned+drained, drop double loot
+- Final pulse (1180t): 10 damage undead, 5 hearts allies, Blindness 300t enemy players
+
+---
+
+## X. Temperance + Hierophant — The Walking Sanctuary
+**Origin ID:** `tarot:walking_sanctuary` · **Elytra:** yes · **Drawbacks:** Unstable Manifestation + Sacred Dietary Vow
+
+### Sequence 9 — Wraith’s Prayer `[D]`
+Wraith’s Veil. −60% fall. Regeneration I every 800t to nearby players. No iron/diamond/netherite chest. No meat.
+
+### Sequence 8 — Madness Consecrate `[D/S]`
+10% Speed I 60t on damage. Consecrate 1200t.
+
+### Sequence 7 — Beast Contract `[D]`
+Beast Form 200t. Contract 12000t.
+
+### Sequence 6 — Rot Sanctum `[D]`
+Melee Hunger I 40t to **hostile mobs AND enemy players**. +5% XP sanctified.
+
+### Sequence 5 — Incorporeal Hymn `[D]`
+Secondary key: Incorporeal 60t + Hymn (Regeneration I 100t to players 8 blocks). **While incorporeal: 3-block Regeneration I pulse.** Cooldown 1200t.
+
+### Sequence 4 — Consecrated Walk `[S]`
+Still 100t → 3-block consecrated 200t. Undead 1 dmg/sec (undead-specific).
+
+### Sequence 3 — Ghost Blessing `[S]`
+Phased → allies Regeneration I.
+
+### Sequence 2 — Mobile Sanctum `[S]`
+On Incorporeal: 3-block sanctum 200t. No hostile spawns, undead 2 dmg/sec, players Regeneration I. Cooldown 1200t.
+
+### Sequence 1 — Spectral White Angel `[S]`
+White Angel + phased: light 15, allies Regeneration II, undead 3 dmg/sec. Cooldown 3600t.
+
+### Sequence 0 — The Walking Sanctuary `[S]`
+Primary key. **Duration 1200t (60s). Cooldown 24000t.**
+- 15-block sanctuary follows player
+- No hostile spawns
+- Undead 4 dmg/sec (undead-specific)
+- Allies Regeneration II
+- Hunger/saturation slow recovery
+- Player permanently phased (except `#tarot:unphasable`)
+- Free attacks (invisibility breaks 40t on attack)
+- **`#tarot:hostile` AND enemy players attacking allies inside take 3 damage + Blindness 40t**
+- Final 3s: 20-block radius, allies Regeneration III, undead 6 dmg/sec
+
+---
+
+## XI. High Priestess + Wheel of Fortune — The Loaded Dice
+**Origin ID:** `tarot:loaded_dice` · **Elytra:** yes · **Drawbacks:** Dependent on Rituals + Debt of Fate
+
+### Sequence 9 — Fated Reader `[D]`
++35% XP. Luck +1. 15% chance −50% damage. −20% break without book. Fate’s Current.
+
+### Sequence 8 — Deduction Machine `[D]`
+20% +1 XP on kill. 10% chance on damage resets Fate’s Current.
+
+### Sequence 7 — Index of Luck `[D/S]`
+Index book. Luck +1 (max +2).
+
+### Sequence 6 — Cross-Reference Clockwork `[D/S]`
+−1 lapis. Winning Streak.
+
+### Sequence 5 — Ritual Winning `[D]`
+Ritual Circle Regeneration I 100t + Luck I 200t to allies. Misfortune −60%. Cooldown 900t.
+
+### Sequence 4 — Fated Deduction `[S]`
+30% kill → +1 XP AND guaranteed positive Fate’s Current.
+
+### Sequence 3 — Prophetic Vision `[S]`
+During Gaze: one random `#tarot:hostile` **OR enemy player** within 30 blocks glows green; kill → 3 banked positive rolls.
+
+### Sequence 2 — Rolled Archive `[S]`
+Accurate yes/no + reveal target health + 5s path.
+
+### Sequence 1 — Loaded Answer `[S]`
+Once per 12000t, ask fate-changing question: crit (yes), hostile dies (yes), player miss (yes). Cooldown 12000t.
+
+### Sequence 0 — The Loaded Dice `[S]`
+Primary key. **Duration 600t (30s). Cooldown 24000t.**
+- Structures/ores/players within 100 blocks revealed
+- Read one inventory
+- 3 yes/no questions
+- All rolls rerolled 3× take best
+- Attacks guaranteed critical
+- One fate-changing question during window (consumes remaining)
+- If unused on end: Luck III 1200t
+
+---
+
+## Implementation Checklist
+
+1. Create all custom tags (§0.3) — including new `tarot:decoy`, `tarot:shadow_minion`, `tarot:shadow_sin`.
+2. **Create the shared `tarot:offensive_target` selector helper** (KubeJS function) that returns `[hostile mobs + enemy players]` and use it everywhere the spec says "`#tarot:hostile` AND enemy players".
+3. Create origin JSONs for all 33 entities (22 individual + 11 resonance). Initial `powers` array contains only Sequence 9.
+4. Build power files per Part A and Part B with naming `tarot:<pathway>/<seq>_<ability>`.
+5. For each `[S]` ability, produce KubeJS in `kubejs/server_scripts/tarot/<pathway>.js` with correct event hook.
+6. For each `[D]` ability, produce JSON power with correct `type`, `condition`, `entity_action`/`bientity_action`, `cooldown`.
+7. Test each power in creative world:
+   - Origin grants correctly
+   - Cooldowns render
+   - Conditions evaluate
+   - **Offensive powers affect both hostile mobs AND enemy players**
+   - **Ally powers do NOT affect enemies**
+   - No log errors
+8. Balance validation:
+   - No permanent Strength II / Resistance II / Regeneration II passives
+   - No permanent creative flight
+   - No auto-win combos
+9. Version-pin to Origins 1.4.1 schema. Validate against `https://origins.readthedocs.io/en/1.4.1/types/power_types/`.
+
+**End of handbook.**

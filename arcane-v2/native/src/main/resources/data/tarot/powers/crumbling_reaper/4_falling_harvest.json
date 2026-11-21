@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Falling Harvest",
+  "description": "3+ block fall → next kill within 200t heals 4 hearts + explodes 2 damage 3 blocks."
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Unyielding",
+  "description": "Knockback immunity below 8 HP."
+}
