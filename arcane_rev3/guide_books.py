@@ -208,7 +208,8 @@ def book_nbt(title, pages, marker):
     """Literal old 1.18.2 NBT written_book; JSON page strings are double escaped."""
     if len(pages) > 100 or not pages:
         raise ValueError("Expected between 1 and 100 book pages")
-    if marker not in ("tarotArcaneGuide:1b", "tarotArcaneTome:1b"):
+    if marker not in ("tarotArcaneGuide:1b", "tarotArcaneTome:1b",
+                      "tarotArcanePartnerTome:1b"):
         raise ValueError("Unrecognized book inventory marker")
     page_strings = [json.dumps(json.dumps(p, ensure_ascii=True), ensure_ascii=True)
                     for p in pages]
@@ -244,6 +245,17 @@ def emit_books(w, compiled, manifest, kits):
          f"run function tarot_arcane:ui/book/path/{card['slug']}"
          for card in CARDS])
 
+    w.f("ui/book/partner",
+        "execute unless score @s a_init matches 1 run tellraw @s " +
+        json.dumps({"text": "[Tarot] Select an Origin first.", "color": "red"}),
+        "execute unless score @s a_seq matches ..4 run tellraw @s " +
+        json.dumps({"text": "[Tarot] Your linked partner becomes available at Sequence 4.",
+                    "color": "yellow"}),
+        [f"execute if score @s a_init matches 1 if score @s a_seq matches ..4 "
+         f"if score @s a_partner matches {card['id']} "
+         f"run function tarot_arcane:ui/book/path_partner/{card['slug']}"
+         for card in CARDS])
+
     for card in CARDS:
         slug = card["slug"]
         pages = pathway_pages(slug, compiled, manifest, kits)
@@ -259,4 +271,14 @@ def emit_books(w, compiled, manifest, kits):
             "tellraw @s " + json.dumps({
                 "text": "[Tarot] Open your Pathway Tome in hand. "
                         "Use /trigger a_book for the general handbook.",
+                "color": "aqua"}, separators=(",", ":")))
+        partner_nbt = book_nbt(card["name"] + " Partner Tome", pages,
+                               marker="tarotArcanePartnerTome:1b")
+        w.f(f"ui/book/path_partner/{slug}",
+            "execute store result score @s a_probe run clear @s minecraft:written_book{tarotArcanePartnerTome:1b} 0",
+            "execute if score @s a_probe matches 0 run give @s minecraft:written_book" +
+            partner_nbt + " 1",
+            "tellraw @s " + json.dumps({
+                "text": "[Tarot] Open your partner's Tome in hand. "
+                        "Read-only; does not equip or unlock powers.",
                 "color": "aqua"}, separators=(",", ":")))
