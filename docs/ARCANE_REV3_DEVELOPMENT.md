@@ -40,6 +40,16 @@ Lovers' Separation Anxiety has a real per-player `a_alone_time` tick counter, ca
 
 All compiled abilities remain test-world-only until actual 1.18.2 Origins 1.4.1 testing.
 
+## Non-OP clickable Tarot menu — mod-independent fallback
+
+The development build includes a **native clickable chat menu**, accessible to any ordinary player through `/trigger a_help`. It does not rely on the Command Aliases mod to parse `/tarot slot` commands, and it does not grant operator permissions.
+
+After opening `/trigger a_slots`, players at Sequence 4–2 can click **Edit slot N**, select the primary or unlocked partner pathway, then select an available Sequence. Each click sends a normal, player-owned `/trigger` command; the server revalidates current Sequence, unlocks, duplicates and remaining slots through the existing `slot/assign` contract. Players can also click **Clear slot N** or **Auto-fill primary slots**. All 22 pathways and eight possible slots are supported.
+
+The associated `a_menu`, `a_card` and `a_seqpick` trigger objectives and `a_pick_slot`, `a_pick_path` scratch scores are scoped to each player. The GUI is disabled by the persistent admin pause and never grants early partner kits.
+
+This is a fallback rather than proof that Command Aliases **1.0.1 for Minecraft 1.18.2** handles long child-command argument chains. Its `schemaVersion:1`, `COMMAND_CUSTOM`, literal `children` and permission-0 shape match the published documentation, but **actual non-OP parser acceptance must be tested** with that exact installed mod. <https://modrinth.com/mod/commandaliases/version/rQr6FUYI> and <https://wiki.commandaliases.flashyreese.me/command-modes/custom>.
+
 ## Official 1.4.1 type compatibility gate
 
 The 1.4.1 audit caught a real earlier incompatibility: Lovers' Fertile Hands used `origins:modify_healing`, a newer-only power type. Its power now uses **native +20% crop-breaking speed** for seven vanilla crops, and its +25% self-healing enhancement is explicitly listed as unimplemented. No unverified healing API is emitted.

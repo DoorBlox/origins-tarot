@@ -72,9 +72,9 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8",
         "a_view_slot","a_view_code","a_view_path","a_view_seq",
-        "a_alone_time","a_iron_count")
+        "a_alone_time","a_iron_count","a_pick_slot","a_pick_path")
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
-          "a_auto","a_reset","a_ascend")
+          "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick")
 
 
 def J(obj):
@@ -88,6 +88,16 @@ def msg(message,color="gold"):
 
 def score(obj):
     return {"score":{"name":"*","objective":obj}}
+
+
+def click(label, trigger, color="green"):
+    """One safe, no-OP command: the clicking player runs their own trigger."""
+    if not trigger.startswith("a_") or any(c in trigger for c in ("@","/",";","\\n")):
+        raise ValueError("click actions must be fixed player-scoped triggers")
+    return "tellraw @s "+J({
+        "text":label, "color":color, "underlined":True,
+        "clickEvent":{"action":"run_command","value":"/trigger "+trigger},
+    })
 
 
 class Pack:
@@ -186,6 +196,9 @@ def emit_player(w,kits):
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
+        "execute unless score @s a_paused matches 1 if score @s a_menu matches 1.. run "+F("ui/menu_slot"),
+        "execute unless score @s a_paused matches 1 if score @s a_card matches 1.. run "+F("ui/menu_card"),
+        "execute unless score @s a_paused matches 1 if score @s a_seqpick matches 1.. run "+F("ui/menu_commit"),
         "execute unless score @s a_paused matches 1 if score @s a_assign matches 1.. run "+F("slot/assign"),
         "execute unless score @s a_paused matches 1 if score @s a_clear matches 1.. run "+F("slot/clear"),
         "execute unless score @s a_paused matches 1 if score @s a_swap matches 1.. run "+F("slot/swap"),
@@ -205,6 +218,8 @@ def emit_player(w,kits):
         w.f("player/init/"+slug,
             "scoreboard players set @s a_init 1",
             "scoreboard players set @s a_paused 0",
+            "scoreboard players set @s a_pick_slot 0",
+            "scoreboard players set @s a_pick_path 0",
             f"scoreboard players set @s a_path {idnum}",
             f"scoreboard players set @s a_partner {NUM[PARTNER[slug]]}",
             "scoreboard players set @s a_seq 9",
@@ -383,7 +398,10 @@ def emit_ui(w):
         msg("Rev3 | /tarot status | /tarot slots | /tarot ascend","aqua"),
         msg("Seq4-2: /tarot slot N tarot:pathway S; /tarot slot N clear","yellow"),
         msg("/tarot slot auto | /tarot slot swap N M | /tarot reset","yellow"),
-        msg("Seq1 Resonance temporarily gated until all 10 pair powers exist.","red"))
+        msg("Seq1 Resonance temporarily gated until all 10 pair powers exist.","red"),
+        click("[View Status]","a_status"),
+        click("[View Slots]","a_slots"),
+        click("[Auto slots on Seq4-2]","a_auto","yellow"))
     w.f("ui/status",
         "execute unless score @s a_init matches 1 run "+msg("Choose a Tarot origin.","red"),
         "execute if score @s a_paused matches 1 run "+msg("Arcane runtime paused by administrator; ask an admin to resume.","red"),
@@ -406,12 +424,15 @@ def emit_ui(w):
         [f"execute if score @s a_init matches 1 if score @s a_max matches {i}.. run "+F(f"ui/slot_{i}")
          for i in range(1,9)],
         "execute if score @s a_mode matches 0 run "+msg("SINGLE: sequence kits auto-fill as you advance.","gold"),
-        "execute if score @s a_mode matches 1 run "+msg("SLOT: /tarot slot N tarot:card S | clear | auto | swap.","yellow"))
+        "execute if score @s a_mode matches 1 run "+msg("SLOT: click Edit by any slot, select pathway, then Sequence.","yellow"),
+        "execute if score @s a_mode matches 1 run "+click("[Auto-fill all primary slots]","a_auto","yellow"))
     for i in range(1,9):
         w.f(f"ui/slot_{i}",
             f"scoreboard players set @s a_view_slot {i}",
             f"scoreboard players operation @s a_view_code = @s a_s{i}",
-            F("ui/slot_render"))
+            F("ui/slot_render"),
+            "execute if score @s a_mode matches 1 run "+click("  [Edit slot "+str(i)+"]","a_menu set "+str(i),"green"),
+            "execute if score @s a_mode matches 1 run "+click("  [Clear slot "+str(i)+"]","a_clear set "+str(i),"red"))
 
     render=[
         "scoreboard players operation @s a_view_path = @s a_view_code",
@@ -428,6 +449,51 @@ def emit_ui(w):
                 {"text":"[Tarot] Slot ","color":"aqua"},score("a_view_slot"),
                 {"text":": "+c["name"]+" — Sequence ","color":"aqua"},score("a_view_seq")]))
     w.f("ui/slot_render",render)
+
+
+    # Fully vanilla, non-OP alternative to Command Aliases 1.0.1.
+    # The 1.18.2 client runs only /trigger; every choice is validated again
+    # by the authoritative slot/assign function before any powers change.
+    w.f("ui/menu_slot",
+        "scoreboard players set @s a_ok 0",
+        "execute if score @s a_mode matches 1 if score @s a_menu matches 1..8 if score @s a_menu <= @s a_max run scoreboard players set @s a_ok 1",
+        "execute if score @s a_ok matches 1 run scoreboard players operation @s a_pick_slot = @s a_menu",
+        "execute if score @s a_ok matches 1 run "+F("ui/menu_cards"),
+        "execute if score @s a_ok matches 0 run "+msg("Click Edit only on an unlocked slot at Seq4-2.","red"))
+    cards=[msg("Select your PRIMARY pathway, or the unlocked partner:","aqua")]
+    for c in CARDS:
+        choice=click("[ "+c["name"]+" ]","a_card set "+str(c["id"]),"green")
+        cards.append(f"execute if score @s a_path matches {c['id']} run "+choice)
+        cards.append(f"execute if score @s a_seq matches ..4 if score @s a_partner matches {c['id']} run "+choice)
+    w.f("ui/menu_cards",cards)
+    w.f("ui/menu_card",
+        "scoreboard players set @s a_ok 0",
+        "execute if score @s a_card = @s a_path run scoreboard players set @s a_ok 1",
+        "execute if score @s a_seq matches ..4 if score @s a_card = @s a_partner run scoreboard players set @s a_ok 1",
+        "execute if score @s a_ok matches 1 if score @s a_pick_slot matches 1..8 if score @s a_pick_slot <= @s a_max run scoreboard players operation @s a_pick_path = @s a_card",
+        "execute if score @s a_ok matches 1 if score @s a_pick_slot matches 1..8 if score @s a_pick_slot <= @s a_max run "+F("ui/menu_sequences"),
+        "execute if score @s a_ok matches 0 run "+msg("This pathway is locked; select your primary or available partner.","red"))
+    choices=[msg("Choose a Sequence kit (no higher than your current progress):","aqua")]
+    for seq in range(9,1,-1):
+        choices.append(f"execute if score @s a_seq matches ..{seq} run "+click("[ Sequence "+str(seq)+" ]","a_seqpick set "+str(seq),"yellow"))
+    w.f("ui/menu_sequences",choices)
+    w.f("ui/menu_commit",
+        "scoreboard players set @s a_ok 0",
+        "execute if score @s a_mode matches 1 if score @s a_pick_slot matches 1..8 if score @s a_pick_slot <= @s a_max if score @s a_seqpick matches 2..9 if score @s a_seqpick >= @s a_seq if score @s a_pick_path = @s a_path run scoreboard players set @s a_ok 1",
+        "execute if score @s a_mode matches 1 if score @s a_pick_slot matches 1..8 if score @s a_pick_slot <= @s a_max if score @s a_seqpick matches 2..9 if score @s a_seqpick >= @s a_seq if score @s a_pick_path = @s a_partner run scoreboard players set @s a_ok 1",
+        "execute if score @s a_ok matches 1 run "+F("ui/menu_assign"),
+        "execute if score @s a_ok matches 0 run "+msg("Cannot equip a locked pathway or Sequence.","red"))
+    w.f("ui/menu_assign",
+        "scoreboard players operation @s a_assign = @s a_pick_slot",
+        "scoreboard players operation @s a_assign *= #10000 a_const",
+        "scoreboard players operation @s a_rcode = @s a_pick_path",
+        "scoreboard players operation @s a_rcode *= #100 a_const",
+        "scoreboard players operation @s a_rcode += @s a_seqpick",
+        "scoreboard players operation @s a_assign += @s a_rcode",
+        F("slot/assign"),
+        "scoreboard players set @s a_assign 0",
+        "scoreboard players set @s a_pick_slot 0",
+        "scoreboard players set @s a_pick_path 0")
 
 
 def emit_progression(w):
