@@ -17,7 +17,7 @@ SOURCE="tarot_arcane:slot_grants"
 PREFIX="tarot_arcane:"
 NUM={slug:i+1 for i,slug in enumerate(PATHWAYS)}
 SCORES=("a_init","a_path","a_partner","a_seq","a_mode","a_max","a_marks","a_phase",
-        "a_actcd","a_combat","a_clock","a_probe","a_has","a_ok","a_a","a_b",
+        "a_actcd","a_combat","a_clock","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
         "a_rslot","a_rcode","a_rpath","a_rseq","a_swap_a","a_swap_b","a_tmp","a_tmpb",
         "a_s1","a_s2","a_s3","a_s4","a_s5","a_s6","a_s7","a_s8")
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
@@ -303,12 +303,19 @@ def emit_progression(w):
         "execute if score @s a_init matches 1 if score @s a_seq matches 2..9 if score @s a_combat matches 0 if entity @s[nbt={OnGround:1b}] unless entity @s[nbt={FallFlying:1b}] if block ~ ~-1 ~ minecraft:lectern if block ~ ~-2 ~ minecraft:crying_obsidian run scoreboard players set @s a_ok 1",
         "execute if score @s a_ok matches 1 run "+F("ascend/check"),
         "execute if score @s a_ok matches 0 run "+msg("Stand at ritual altar (lectern above crying obsidian), grounded and out of combat.","red"))
-    checks=["scoreboard players set @s a_ok 0"]
+    # Snapshot the sequence before dispatch. A successful commit changes
+    # a_seq in-place; testing a_seq again could chain several ascensions
+    # during ONE /tarot ascend when acting marks and offerings are banked.
+    checks=["scoreboard players operation @s a_start_seq = @s a_seq",
+            "scoreboard players set @s a_marks_ok 0",
+            "scoreboard players set @s a_ok 0"]
     for seq in range(9,1,-1):
         checks += [
-            f"execute if score @s a_seq matches {seq} if score @s a_marks matches {ACT_MARKS[seq]}.. run scoreboard players set @s a_ok 1",
-            f"execute if score @s a_seq matches {seq} if score @s a_marks matches {ACT_MARKS[seq]}.. run "+F(f"ascend/check_s{seq}")]
-    checks.append("execute if score @s a_ok matches 0 run "+msg("Not enough acting marks.","red"))
+            f"execute if score @s a_start_seq matches {seq} if score @s a_marks matches {ACT_MARKS[seq]}.. run scoreboard players set @s a_marks_ok 1",
+            f"execute if score @s a_start_seq matches {seq} if score @s a_marks matches {ACT_MARKS[seq]}.. run "+F(f"ascend/check_s{seq}")]
+    # Ingredient failure is reported by check_sN, not misreported as an
+    # acting-mark failure after that helper resets a_ok.
+    checks.append("execute if score @s a_marks_ok matches 0 run "+msg("Not enough acting marks.","red"))
     w.f("ascend/check",checks)
     for seq in range(9,2,-1):
         offerings=list(RITUALS[seq].items())
