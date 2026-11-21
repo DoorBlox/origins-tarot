@@ -1,6 +1,14 @@
 # The Tarot Club — 22 Major Arcana Origins
 
-> **For future AI development sessions:** Start with **[the canonical Arcane V2 Rev3 handoff](CHATGPT_HANDOFF.md)**, [AGENTS.md](AGENTS.md), and [the live unfinished-work tracker #20](https://github.com/DoorBlox/origins-tarot/issues/20). The Arcane Rev3 **development pack** is a separate, **test-only** track from the older V3 Path of Ascension described below; last verified **241/434** power definitions compiled, with partial/blocked mechanics and no SMP deployment. Refresh live status before acting.
+> **Arcane V2 Rev3 is a separate DEVELOPMENT datapack.** Source-complete does not mean gameplay-complete: 434/434 source definitions, 73 full and 361 PARTIAL; 110/110 Resonance entries source-defined, normal Sequence 1 locked. Do not install it alongside legacy Tarot V2/V3 or assume old player scores migrate. Check [the handoff](CHATGPT_HANDOFF.md), [AGENTS.md](AGENTS.md) and [issue #20](https://github.com/DoorBlox/origins-tarot/issues/20) for the live source checkpoint.
+
+## IMPORTANT — choose the correct Actions build
+
+**Arcane Rev3 testers** must use [Build Arcane V2 Rev3 22-Origin Dev Pack](https://github.com/DoorBlox/origins-tarot/actions/workflows/arcane-full.yml). Its artifact is named `tarot-arcane-rev3-22-origin-dev-not-production` and contains the inner `Arcane_Rev3_22_Origins_ONLY_DEV_1.18.2.zip` and `Arcane_Rev3_22_Origins_ADDON_DEV_1.18.2.zip`; use exactly one. Check `ARCANE_REV3_BUILD_SHA.txt` to identify its source. **Do not download `tarot-club-datapacks`** from the generic "Build and validate Tarot Club origins" workflow for Arcane: that is the **legacy V2** build.
+
+**SMP operator:** [read the backup, old-pack removal, command-alias, parser and progression checks](docs/ARCANE_SMP_UPGRADE_PREFLIGHT.md) before replacing files. The developer ZIP remains **NOT production-certified**; previous Arcane-vs-V2 saved power and loader errors require a clean game startup and persistence/upgrade test. Do not delete scoreboard or playerdata to silence missing-power warnings.
+
+---
 
 > **Current: V3 Path of Ascension (ALPHA)** — Adds a tested-in-code (not yet tested in-game) Sequence 9→0 advancement system, acting-method quests, a second unlockable Arcana, controlled switching, minor Echo powers, and curated high-sequence Resonance. **18 native Elytra gliders and the 22 V2 base origins remain unchanged.**
 
