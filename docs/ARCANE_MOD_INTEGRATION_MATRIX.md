@@ -26,13 +26,24 @@
 4. Extra Keybinds controls do not replace server authority, cooldowns, teammate filtering or anti-abuse checks. LambDynamicLights cannot provide persistent in-world light levels.
 5. Test real non-OP command permissions, source-scoped grants, relog/respawn, multiplayer ally/enemy targeting, graphics compatibility, and data persistence with the actual assembled modpack before marking gameplay accepted.
 
+## Verified documentation interfaces, not yet integrated in gameplay
+
+These interfaces are from public project documentation; the **owner's exact installed 1.18.2 jars and combined config are not yet verified**. Do not assume current documentation applies unchanged to the old game release.
+
+- **SkinShifter:** project docs show `/skinshifter set @s <username-or-uuid>`. The `<username-or-uuid>` is a literal argument, **not** a dynamic expression containing a random online player's name. Fool's random-online-person Full Faceless Disguise and Borrowed Face cannot be represented by fabricating a dynamic /skinshifter parameter. Source: https://modrinth.com/mod/skinshifter
+- **Pehkui:** project docs show `/scale set <scale_type> <value> [target]` and `/scale reset <scale_type> [target]`. A temporary Tarot scale change must also revert safely on expiry, death, dimension change, disconnect, pause, and source revoke; do not ship an activation-only /scale command that leaves players permanently resized. Source: https://modrinth.com/mod/pehkui
+- **Origins Extra Keybinds:** current Fabric documentation publishes keys such as `key.originsextrakeybinds.tertiary_active`, but older version **0.2.0 must be checked** for this syntax before changing live ability bindings. Source: https://modrinth.com/project/origins-extra-keybinds
+- **ReMorphed / LuckPerms:** current official ReMorphed permissions documentation says Fabric servers need **Fabric Permissions API** (separate mod), then `usePermissions=true` in ReMorphed config to make LuckPerms permission nodes such as `remorphed.morph` or `remorphed.command.addShape.self` enforceable. This guidance may not match ReMorphed **4.0**; inspect the installed jar/config and verify the exact version-specific permission support before recommending an installation or changing permissions. Do not grant broad `remorphed.*`, `minecraft.selector.*` or OP-level access to normal players. Source: https://tocraft.dev/docs/remorphed/Permissions/
+- **Command Aliases + /trigger:** aliases remain cosmetic convenience. The existing /trigger bridge is the security boundary for non-OP players; LuckPerms cannot be used as a substitute for validating actual server-side command execution.
+
+**Owner input only if needed later:** upload or paste the Fabric startup/mod list and relevant ReMorphed/SkinShifter configs if exact integrations fail. A test character using the installed mods should record real command syntax, permission denials and reset behavior. No additional mods are being installed automatically.
+
 ## Current source checkpoint
 
-PR #30 (https://github.com/DoorBlox/origins-tarot/pull/30) merged at commit a45377cc2a1d33f2f514221c63db3624ef977317 after four exact-head green PR workflows at a41f1ac6301fe3876a21db12803a310d13377d80.
+- **PR #32** merged at `3e35a0974f6160e337a76b7f9f85a07fa991ba23`: 29 source-mapped partial Resonance abilities, including all 11 Seq0 prototype capstones; four exact-head green workflows.
+- **PR #33** merged at `fa2f7ad91a6f4e3cf16840cbd5c67c448390d272`: 30 individual plus six Resonance concrete partial powers; four exact-head green workflows at `c2238fbfa33b09e4db7b7462542bb6cbe8d9e404`.
+- **434 specified; 337 compiled (73 full, 264 partial); 97 blocked.** Individual **239/324 compiled**, Resonance **98/110 compiled**.
+- All eleven Resonance pairs are present in source, but none of their incomplete kits are player-granted. Seq1 development gate remains fail-closed **only until the required gameplay contract is ready**. The handbook's intended design always activates Resonance at Seq1.
+- **No in-game acceptance** and no source-triggered SMP deployment; compiled partially accurate JSON is not a finished/verified player ability.
 
-- 19 new individual and 12 Resonance partial ability definitions, with regression tests and real source-traced effects.
-- **434 specified; 272 compiled (73 full, 199 partial); 162 blocked.**
-- **63/110 Resonance definitions compiled, zero equipped.** Sequence 1 remains fail-closed without consuming offerings.
-- No live server acceptance, no SMP deployment. The 199 partial definitions must not be represented as handbook-complete.
-
-Next: verify documented commands/configs for installed mods, resolve team-aware ability conditions and permanent drawbacks, expand and improve actual kits without fake placeholders, and perform Minecraft 1.18.2 gameplay acceptance.
+Next: complete/verify 12 remaining Resonance + 85 individual blocks and 264 partial-fidelity gaps, implement team-safe PvP and permanent drawbacks, and test documented mod interfaces on the actual 1.18.2 installation.
