@@ -33,7 +33,7 @@ class PlayerGuidePackContracts(unittest.TestCase):
             with self.subTest(variant=variant), ZipFile(self.artifacts[variant]) as z:
                 load = read(z, "load")
                 tick = read(z, "player/tick")
-                for trigger in ("a_guide", "a_abilities", "a_roadmap", "a_kit", "a_detail"):
+                for trigger in ("a_guide", "a_abilities", "a_roadmap", "a_stages", "a_kit", "a_detail"):
                     self.assertIn("scoreboard objectives add " + trigger + " trigger", load)
                     self.assertIn("scoreboard players enable @s " + trigger, tick)
                     self.assertIn("scoreboard players set @s " + trigger + " 0", tick)
@@ -56,7 +56,7 @@ class PlayerGuidePackContracts(unittest.TestCase):
                     with self.subTest(slug=slug, seq=seq):
                         code = NUM[slug] * 100 + seq
                         fn = "ui/codex/kit/" + slug + "_" + str(seq)
-                        self.assertIn(fn.replace("/", "/"), z.namelist()[0] if False else fn)
+                        self.assertIn("data/tarot_arcane/functions/" + fn + ".mcfunction", z.namelist())
                         self.assertIn(
                             f"if score @s a_view_code matches {code} run function tarot_arcane:{fn}",
                             show)
@@ -113,6 +113,12 @@ class PlayerGuidePackContracts(unittest.TestCase):
             self.assertIn("a_combat", roadmap)
             self.assertIn("a_ascend", roadmap)
             self.assertIn("crying obsidian", roadmap)
+            self.assertIn("a_stages", roadmap)
+            stages = read(z, "ui/stages")
+            for seq in range(9, 1, -1):
+                self.assertIn("Sequence " + str(seq), stages)
+                self.assertIn(str(ACT_MARKS[seq]) + " marks", stages)
+            self.assertIn("LOCKED", stages)
             for seq in range(9, 1, -1):
                 step = read(z, "ui/roadmap/seq_" + str(seq))
                 self.assertIn("Sequence " + str(seq), step)
@@ -162,7 +168,7 @@ class PlayerGuidePackContracts(unittest.TestCase):
         alias = json.loads(self.artifacts["alias"].read_text())
         labels = {p["child"] for p in alias["children"]}
         self.assertTrue({"help", "ascend", "status", "slots", "slot",
-                         "guide", "abilities", "roadmap", "kit"}.issubset(labels))
+                         "guide", "abilities", "roadmap", "stages", "kit"}.issubset(labels))
 
 
 if __name__ == "__main__":
