@@ -14,6 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
     @Inject(method="damage",at=@At("HEAD"),cancellable=true)
     private void tarot$rescue(DamageSource source,float amount,CallbackInfoReturnable<Boolean> cir) {
+        if(FoolAbilities.cancelFriendlyMinionHit((LivingEntity)(Object)this,source)) {
+            cir.setReturnValue(false);
+            return;
+        }
         if ((Object)this instanceof ServerPlayerEntity
             && FoolAbilities.rescueIfLethal((ServerPlayerEntity)(Object)this,source,amount))
             cir.setReturnValue(false);

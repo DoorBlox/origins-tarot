@@ -7,6 +7,10 @@ import java.util.Random;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.VexEntity;
+import java.util.UUID;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -111,6 +115,33 @@ public final class FoolAbilities {
         for (ArmorStandEntity decoy : p.getWorld().getEntitiesByClass(ArmorStandEntity.class,
             new Box(p.getBlockPos()).expand(128), e -> e.age >= 100
                 && e.getScoreboardTags().contains("tarot_decoy"))) decoy.discard();
+        if(enabled(r,8)) {
+            // APPROX: poll mob targets every 20 ticks. Players have no MobEntity AI target.
+            List<MobEntity> targeting=p.getWorld().getEntitiesByClass(MobEntity.class,
+                new Box(p.getBlockPos()).expand(24),
+                mob -> mob.getTarget()==p && mob.getType().isIn(HOSTILE));
+            for(MobEntity mob:targeting) {
+                if(RANDOM.nextDouble()>=0.10 || !r.ready("tricksters_favor",now,200)) continue;
+                List<LivingEntity> alternate=p.getWorld().getEntitiesByClass(LivingEntity.class,
+                    new Box(mob.getBlockPos()).expand(6),
+                    e -> e!=mob && e!=p && e.isAlive() && enemy(p,e));
+                alternate.sort(Comparator.comparingDouble(mob::squaredDistanceTo));
+                if(!alternate.isEmpty()) {
+                    mob.setTarget(alternate.get(0));
+                    state.markDirty();
+                    break;
+                }
+            }
+        }
+        // Allied Vex-like minions: bound to owner and targeting hostile mobs AND enemy players.
+        for(VexEntity vex : p.getWorld().getEntitiesByClass(VexEntity.class,
+            new Box(p.getBlockPos()).expand(64), e -> e.getScoreboardTags().contains("tarot_shadow_minion")
+            && e.getScoreboardTags().contains("tarot_owner_"+p.getUuidAsString()))) {
+            List<LivingEntity> eligible = enemies(p,24);
+            eligible.sort(Comparator.comparingDouble(vex::squaredDistanceTo));
+            if(!eligible.isEmpty()) vex.setTarget(eligible.get(0));
+            else vex.setTarget(null);
+        }
         if(enabled(r,9) && now%40==0) {
             int mobs=0; boolean playerEnemy=false;
             for(LivingEntity e:enemies(p,8)) {
@@ -150,8 +181,20 @@ public final class FoolAbilities {
                 } else effect(target,StatusEffects.WEAKNESS,100,0);
                 break;
             case "fools_gathering":
-                // Cannot grant an implemented AI-controlled combat minion using vanilla Vex behavior.
-                return unavailable(p,"Fools' Gathering needs the native minion AI module.");
+                if(!enabled(r,2) || !r.ready(id,now,6000)) return failure(p);
+                for(int i=0;i<2;i++) {
+                    VexEntity vex=EntityType.VEX.create(p.getWorld());
+                    if(vex==null) continue;
+                    vex.refreshPositionAndAngles(p.getX()+(i==0?-1:1),p.getY()+1,p.getZ(),0f,0f);
+                    vex.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(4.0D);
+                    vex.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(1.0D);
+                    vex.setHealth(4.0f);
+                    vex.setLifeTicks(200);
+                    vex.addScoreboardTag("tarot_shadow_minion");
+                    vex.addScoreboardTag("tarot_owner_"+p.getUuidAsString());
+                    p.getWorld().spawnEntity(vex);
+                }
+                break;
             case "full_faceless_disguise":
                 if(!enabled(r,9) || r.inCombat(now) || !r.ready(id,now,6000)) return failure(p);
                 // APPROX: server-only invisibility. Actual player skin/model/name override requires client integration.
@@ -167,6 +210,24 @@ public final class FoolAbilities {
         state.markDirty();
         ArcaneMod.info(p,"Cast "+id+".");
         return 1;
+    }
+    /** A player/teammate cannot be injured by the Fool's own tagged Vex-like minion. */
+    public static boolean cancelFriendlyMinionHit(LivingEntity victim,DamageSource source) {
+        if(!(source.getAttacker() instanceof VexEntity)
+            || !(victim instanceof ServerPlayerEntity)) return false;
+        VexEntity vex=(VexEntity)source.getAttacker();
+        if(!vex.getScoreboardTags().contains("tarot_shadow_minion")) return false;
+        ServerPlayerEntity target=(ServerPlayerEntity)victim;
+        for(String tag:vex.getScoreboardTags()) {
+            if(!tag.startsWith("tarot_owner_")) continue;
+            try {
+                UUID ownerId=UUID.fromString(tag.substring("tarot_owner_".length()));
+                if(ownerId.equals(target.getUuid())) return true;
+                ServerPlayerEntity owner=target.getServer().getPlayerManager().getPlayer(ownerId);
+                if(owner!=null && owner.getScoreboardTeam()!=null && owner.isTeammate(target)) return true;
+            } catch(IllegalArgumentException ignored) { }
+        }
+        return false;
     }
     private static int failure(ServerPlayerEntity p) {
         ArcaneMod.error(p,"Not unlocked, invalid stance, on cooldown, or no valid target.");

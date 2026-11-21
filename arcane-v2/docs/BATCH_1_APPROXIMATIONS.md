@@ -10,9 +10,11 @@ must be provided by native Java handlers.
 | Full Faceless Disguise | Server-only invisibility approximation; real random-online-player name, skin and model require client-side identity rendering and packet synchronization. |
 | Borrowed Face | Server-only invisibility approximation; true name swap, exact end-of-disguise Speed II, and client-visible profile replacement not yet implemented. |
 | Puppet String | Slowness II applies to hostile mobs and enemy players; coordinates are shown immediately, but 100-tick coordinate visibility, exact player sprint denial and mob next-hit half-damage are not yet exact. |
+| Trickster's Favor | Native polling of mob target acquisition every 20 ticks, 10% retarget chance and 200-tick cooldown. There is no equivalent target acquisition for PvP players. |
+| Fools' Gathering | Two native Vex minions spawn with four health, one attack damage and 200-tick life. Targets are recalculated every 20 ticks; vanilla Vex behavior between scans is an approximation. Friendly-fire against owner/teammates is blocked by a mixin. |
 | Stage Magician | Backward teleport and decoy are implemented in native damage callback; safe-location checks and decoy expiry are not yet verified. |
 | Trickster's Escape | Low-health Speed II and decoy implemented; decoy expiry and anti-loop controls require game acceptance. |
-| Spiritual Overload | Uses nearby vanilla hostile class, not all custom `#tarot:hostile` tag entries. |
+| Spiritual Overload | Uses the actual `#tarot:hostile` entity type tag and enemy players, but count scanning occurs at 40-tick intervals. |
 | Clown's Mischief | Damage callback approximation, rather than specific attack-only trigger conditions. |
 | Paper Figurine Substitute | 25% damage callback approximation; attacker hostility qualification is not yet enforced. |
 | Fool's Bounty | +20% food via player mixin, with fractional accumulation; potion/food specifics require live verification. |

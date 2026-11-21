@@ -4,8 +4,6 @@ This draft branch **is not ready for release**. The native KubeJS replacement is
 
 ## Unimplemented / incomplete gameplay (engineering work, not platform blockers)
 
-- Fool Seq 8: Trickster's Favor needs mob AI retargeting and attack acquisition; no working handler.
-- Fool Seq 2: Fools' Gathering needs bounded allied-minion AI; current cast rejects explicitly.
 - Fool Seq 0: Legend of the Fool needs real 35-second timed transformation, damage modification, flight, reset, and loot handling; no working handler.
 - All other 21 individual pathways and all 11 Resonance kits are not implemented or granted in the native registry.
 - A built-in native event listener for player Origin choice, death/respawn/dimension refresh and compatibility with externally managed sequence-up needs acceptance against actual runtime.
