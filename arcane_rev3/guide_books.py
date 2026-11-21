@@ -206,9 +206,10 @@ def general_pages():
             "use /trigger a_roadmap.",
         ], "a_hud set 2"),
     ]
-    for title, lines, trigger in tutorials:
+    for index, (title, lines, trigger) in enumerate(tutorials):
         n = len(pages)
-        page = _page(title, lines, prev=n, next_=n+2 if len(tutorials) > n-38+1 else None)
+        page = _page(title, lines, prev=n,
+                     next_=(n+2 if index < len(tutorials)-1 else None))
         page["extra"].extend([_text("\n"), _action("[OPEN PLAYER MENU]", trigger)])
         pages.append(page)
     # Ensure no dangling forward arrow from final tutorial page.
