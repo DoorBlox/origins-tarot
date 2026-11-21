@@ -283,9 +283,10 @@ public final class WorldJusticeAbilities {
             case "air_cannon": {
                 if(!world(r,7) || !r.ready(ability,t,160))return false;
                 Vec3d start=p.getEyePos();
+                Vec3d aim=start.add(p.getRotationVec(1).multiply(14));
                 LivingEntity target=HangedAbilities.enemies(p,start.add(p.getRotationVec(1).multiply(7)),7)
                     .stream().filter(e->e.squaredDistanceTo(p)<=196)
-                    .min(Comparator.comparingDouble(e->e.getPos().distanceTo(start.add(p.getRotationVec(1).multiply(14)))).orElse(null);
+                    .min(Comparator.comparingDouble(e->e.squaredDistanceTo(aim))).orElse(null);
                 if(target==null)return false;
                 boolean player=target instanceof PlayerEntity;
                 target.damage(DamageSource.MAGIC,player?3f:4f);
