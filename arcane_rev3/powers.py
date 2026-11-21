@@ -488,6 +488,96 @@ def compile_powers(root):
         entity_action=apply("nausea",100)),
         "partial","Full-moon phase and night-time gate not yet enforced")
 
+
+    # Rev2 individual powers, batch 2. All additions are reviewed against
+    # HandbookRev2.txt and use actual Apoli/Origins actions (never no-op stubs).
+    # A "partial" result explicitly retains the unsupported remainder.
+    add("empress", 9, "Mirror Veil", power("Mirror Veil",
+        "Sneaking in dim light out of direct sun makes the Empress invisible, armor visible.",
+        "origins:invisibility", render_armor=True,
+        condition={"type":"origins:and","conditions":[
+            {"type":"origins:sneaking"},
+            {"type":"origins:brightness","comparison":"<=","compare_to":0.2615},
+            {"type":"origins:exposed_to_sun","inverted":True}]}),
+        "partial", "Brightness <=0.2615 approximates light <=7 in Nether but can include light8 in Overworld")
+    add("emperor", 4, "Fallen Aura", power("Fallen Aura",
+        "Hit retaliation: Slowness I 60t and Weakness I 20t; 280t cooldown.",
+        "origins:attacker_action_when_hit", cooldown=280,
+        entity_action={"type":"origins:and","actions":[apply("slowness",60),
+                                                        apply("weakness",20)]}),
+        "partial", "PvP team checks not yet verified; may proc alongside Distorted Authority")
+    add("wheel_of_fortune", 9, "Fate's Current", power("Fate's Current",
+        "Every 1800t get one equal-weight boon or curse: Speed, Haste, Absorption, Hunger, Slowness or Mining Fatigue.",
+        "origins:action_over_time", interval=1800,
+        entity_action={"type":"origins:choice","actions":[
+            {"element":apply(effect,100),"weight":1}
+            for effect in ("speed","haste","absorption","hunger","slowness","mining_fatigue")]}),
+        "partial", "Rev2 does not specify buff/curse durations; developer alpha uses 100 ticks; Lucky Break and Winning Streak rerolls pending")
+    add("justice", 9, "Patient Observation", power("Patient Observation",
+        "12% less incoming damage while not sprinting.",
+        "origins:modify_damage_taken", modifier=mod(-0.12),
+        condition={"type":"origins:sprinting","inverted":True}),
+        "partial", "Source limits reduction to mobs and adds a periodic reveal; generic damage reduction is broader")
+    add("justice", 4, "Emotional Push", power("Emotional Push",
+        "On being hit, inflict Weakness I on attacker for 100t; 360t cooldown.",
+        "origins:attacker_action_when_hit", cooldown=360,
+        entity_action=apply("weakness",100)),
+        "partial", "No team-safe PvP retaliation filter; may also overlap Emotional Recoil")
+    add("hanged_man", 7, "Shadow Cloak", compound("Shadow Cloak",
+        resistance={"type":"origins:action_over_time","interval":20,
+                    "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.5},
+                    "entity_action":apply("resistance",50)},
+        pace={"type":"origins:conditioned_attribute","tick_rate":20,
+              "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.5},
+              "modifier":{**mod(0.05),"attribute":"minecraft:generic.movement_speed"}}),
+        "partial", "Silent footsteps unavailable; overlaps Seq9 shadow bonuses when both equipped")
+    add("sun", 7, "Solar Flare", power("Solar Flare",
+        "20% chance to blind an undead attacker for 40 ticks.",
+        "origins:attacker_action_when_hit", cooldown=1,
+        entity_action={"type":"origins:if_else",
+            "condition":{"type":"origins:in_tag","tag":"tarot:undead"},
+            "if_action":{"type":"origins:chance","chance":0.20,
+                         "action":apply("blindness",40)}}))
+    add("sun", 5, "Purify", power("Purify",
+        "Secondary key cleanses self Poison, Wither and Blindness; 900t cooldown.",
+        "origins:active_self", cooldown=900,
+        key={"key":"key.origins.secondary_active"}, hud_render={"should_render":True},
+        entity_action={"type":"origins:and","actions":[
+            {"type":"origins:clear_effect","effect":"minecraft:poison"},
+            {"type":"origins:clear_effect","effect":"minecraft:wither"},
+            {"type":"origins:clear_effect","effect":"minecraft:blindness"}]}),
+        "partial", "Rev2 also allows targeting an allied player within four blocks; self-only until same-team check is implemented")
+    add("world", 4, "Historical Recall", power("Historical Recall",
+        "Hits on hostile mobs apply Glowing for 160t; 200t cooldown.",
+        "origins:target_action_on_hit", cooldown=200,
+        target_condition={"type":"origins:in_tag","tag":"tarot:hostile"},
+        entity_action=apply("glowing",160)),
+        "partial", "Enemy players omitted to avoid friendly-fire; may stack with Marked Prey on hit")
+    add("tower", 4, "Impact", power("Impact",
+        "Hit hostile mobs with Slowness I for 40 ticks; cooldown 260.",
+        "origins:target_action_on_hit", cooldown=260,
+        target_condition={"type":"origins:in_tag","tag":"tarot:hostile"},
+        entity_action=apply("slowness",40)),
+        "partial", "Enemy players excluded; source specifies upgrade rather than separately stacking with Unstable Strike")
+    add("star", 2, "Conceal", power("Conceal",
+        "Every 3600 ticks become invisible for 100 ticks.",
+        "origins:action_over_time", interval=3600,
+        entity_action=apply("invisibility",100)),
+        "partial", "Rev2 does not specify activation trigger; implementation uses an automatic periodic proc")
+    add("hermit", 1, "Prying Eyes", power("Prying Eyes",
+        "Night Vision while in extremely low light.",
+        "origins:night_vision",
+        condition={"type":"origins:brightness","comparison":"<=","compare_to":0.07}),
+        "partial", "Brightness threshold approximates light<=3 in Overworld and is too strict for Nether ambient light")
+    add("sun", 1, "Beacon of Faith II", power("Beacon of Faith II",
+        "Glowing for all entities within 20 blocks, refreshed every 40 ticks.",
+        "origins:action_over_time", interval=40,
+        entity_action={"type":"origins:area_of_effect","radius":20,
+                       "include_target":True,
+                       "bientity_action":{"type":"origins:target_action",
+                                          "action":apply("glowing",80)}}),
+        "partial", "Exact always-on visual glow semantics and team visibility differ from periodic Glowing effects")
+
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}
