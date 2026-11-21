@@ -13,6 +13,12 @@ with a development pack.
 - `Arcane_Rev3_Resonance_Manual_Preview_TEST_ONLY_1.18.2.zip` is an OP-only **standalone disposable-world preview**, not a companion pack to place on SMP. Ordinary Sequence1 remains locked.
 - `tarot.json` is a Command Aliases 1.0.1 configuration file, not a datapack ZIP. Place it under the corresponding server's `config/commandaliases/` only after saving the previous configuration. Non-OP `/trigger a_help` remains the fallback without aliases.
 
+## Book-first interface, optional private progress HUD
+
+A newer Rev3 build now provides written-book GUIs through vanilla, non-OP `/trigger` commands; **Command Aliases is optional and does not need to be installed**. `/trigger a_book` or `a_guide` gives the Handbook, `/trigger a_tome` or `a_abilities` gives the primary pathway Tome, and `/trigger a_partner_tome` gives the fixed second-path Tome only at Sequence 4 or later. Right-click the book from your hand; Minecraft 1.18.2 datapacks cannot forcibly open a book GUI.
+
+For realtime per-player progress use `/trigger a_hud set 2` to show the opt-in private actionbar, and `/trigger a_hud set 3` to hide it. A shared bossbar is not used because players have different saved scores. Chat remains for short live interactions such as `/trigger a_roadmap` and `/trigger a_slots`. Source-only CI does not prove that an existing SMP has upgraded successfully; back up and follow the same full restore, login and player-state checks before installing the newer ZIP.
+
 ## Player-facing guide added in the next Rev3 build
 
 The updated datapack includes **/trigger a_guide**, **/trigger a_abilities**, **/trigger a_roadmap**, **/trigger a_stages**, and the player-validated **a_kit/a_detail** inspectors. The optional newer Command Aliases file exposes /tarot guide, abilities, roadmap, stages, kit N and detail N. The current ZIP on your SMP will **not** gain these commands merely because GitHub main was updated. After a full backup and actual pack upgrade, verify the commands as a non-OP player; do not attempt Sequence 1 on SMP.
