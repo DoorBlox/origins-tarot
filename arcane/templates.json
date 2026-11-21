@@ -278,30 +278,32 @@
     "power": {
       "type": "origins:multiple",
       "name": "Dark Blade",
-      "description": "Below 12 HP: +15% melee damage and +10% movement speed.",
-      "damage": {
-        "type": "origins:modify_damage_dealt",
+      "description": "Below 12 HP, +15% melee attack damage and +10% movement speed.",
+      "attack": {
+        "type": "origins:conditioned_attribute",
+        "tick_rate": 20,
         "condition": {
           "type": "origins:health",
-          "comparison": "<=",
+          "comparison": "<",
           "compare_to": 12
         },
         "modifier": {
-          "name": "Tarot Arcane Preview",
+          "name": "Tarot Arcane Rev3",
           "operation": "multiply_total",
-          "value": 0.15
+          "value": 0.15,
+          "attribute": "minecraft:generic.attack_damage"
         }
       },
       "speed": {
         "type": "origins:conditioned_attribute",
+        "tick_rate": 20,
         "condition": {
           "type": "origins:health",
-          "comparison": "<=",
+          "comparison": "<",
           "compare_to": 12
         },
-        "tick_rate": 20,
         "modifier": {
-          "name": "Tarot Arcane Preview",
+          "name": "Tarot Arcane Rev3",
           "operation": "multiply_total",
           "value": 0.1,
           "attribute": "minecraft:generic.movement_speed"
@@ -460,7 +462,7 @@
     "power": {
       "type": "origins:action_over_time",
       "name": "Shaman",
-      "description": "At night receive an extra two health points every 600 ticks.",
+      "description": "At night heal 1.5 hearts (3 HP) every 600 ticks; other kits may stack.",
       "condition": {
         "type": "origins:daytime",
         "inverted": true
@@ -468,11 +470,11 @@
       "interval": 600,
       "entity_action": {
         "type": "origins:heal",
-        "amount": 2
+        "amount": 3
       }
     },
-    "accuracy": "full",
-    "missing": ""
+    "accuracy": "partial",
+    "missing": "Rev2 upgrades Blood's Renewal: in slot mode both kits can be equipped, stacking their healing unexpectedly."
   },
   {
     "slug": "sun",
@@ -481,7 +483,7 @@
     "power": {
       "type": "origins:modify_damage_dealt",
       "name": "Unshadowed II",
-      "description": "Raise the combined melee bonus vs undead from roughly 40% to 50%.",
+      "description": "Standalone 50% more damage against undead mobs.",
       "bientity_condition": {
         "type": "origins:target_condition",
         "condition": {
@@ -492,11 +494,11 @@
       "modifier": {
         "name": "Tarot Arcane Preview",
         "operation": "multiply_total",
-        "value": 0.0714285714285714
+        "value": 0.5
       }
     },
-    "accuracy": "full",
-    "missing": ""
+    "accuracy": "partial",
+    "missing": "May stack with Seq9 Unshadowed instead of replacing its 40% bonus when both sequence kits equipped."
   },
   {
     "slug": "judgement",
@@ -526,14 +528,14 @@
     "power": {
       "type": "origins:modify_projectile_damage",
       "name": "Cold Precision II",
-      "description": "Increase total projectile damage from roughly 25% to 30%.",
+      "description": "Standalone 30% additional projectile damage.",
       "modifier": {
         "name": "Tarot Arcane Preview",
         "operation": "multiply_total",
-        "value": 0.040000000000000036
+        "value": 0.3
       }
     },
-    "accuracy": "full",
-    "missing": ""
+    "accuracy": "partial",
+    "missing": "May stack with Seq9 Cold Precision instead of replacing the 25% increase; Seq1 remains resonance locked."
   }
 ]
