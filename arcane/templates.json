@@ -143,17 +143,50 @@
     "sequence": 9,
     "name": "Fertile Hands",
     "power": {
-      "type": "origins:modify_healing",
+      "type": "origins:modify_break_speed",
       "name": "Fertile Hands",
-      "description": "25% increased healing received; crop-breaking boost pending.",
+      "description": "Mine/harvest standard crops 20% faster; the +25% self-healing bonus remains unavailable in Origins 1.4.1.",
+      "block_condition": {
+        "type": "origins:or",
+        "conditions": [
+          {
+            "type": "origins:block",
+            "block": "minecraft:wheat"
+          },
+          {
+            "type": "origins:block",
+            "block": "minecraft:carrots"
+          },
+          {
+            "type": "origins:block",
+            "block": "minecraft:potatoes"
+          },
+          {
+            "type": "origins:block",
+            "block": "minecraft:beetroots"
+          },
+          {
+            "type": "origins:block",
+            "block": "minecraft:nether_wart"
+          },
+          {
+            "type": "origins:block",
+            "block": "minecraft:cocoa"
+          },
+          {
+            "type": "origins:block",
+            "block": "minecraft:sweet_berry_bush"
+          }
+        ]
+      },
       "modifier": {
-        "name": "Tarot Arcane Preview",
+        "name": "Fertile Hands Crop Harvest",
         "operation": "multiply_total",
-        "value": 0.25
+        "value": 0.2
       }
     },
     "accuracy": "partial",
-    "missing": "20% faster crop harvesting"
+    "missing": "Original +25% self-healing modifier cannot be implemented through Origins 1.4.1 (modify_healing is unavailable). Crops are limited to seven vanilla growables."
   },
   {
     "slug": "chariot",
