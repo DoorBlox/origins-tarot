@@ -112,7 +112,7 @@ def audit(log, remorphed=None, skinshifter=None):
             'origins': int(origin_match.group(1)) if origin_match else None,
         },
         'alerts': alerts,
-        'ready_for_arcane_load_test': done and not any(x['severity'] == 'blocker' for x in alerts),
+        'ready_for_arcane_load_test': done and not missing and not any(x['severity'] == 'blocker' for x in alerts),
         'arcane_gameplay_verified': False,
     }
 
