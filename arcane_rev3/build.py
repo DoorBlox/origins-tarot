@@ -115,10 +115,8 @@ def _files():
       'scoreboard players set @s ta_clock 0',
       'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 store success score @s ta_has run power has @s tarot:fool/9_spirit_vision',
       'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 if score @s ta_has matches 0 run power grant @s tarot:fool/9_spirit_vision tarot_slot',
-      'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 run function tarot_arcane:player/reconcile_clown')
-    f('player/reconcile_clown',
-      'execute store success score @s ta_has run power has @s tarot:fool/9_clowns_mischief',
-      'execute if score @s ta_has matches 0 run power grant @s tarot:fool/9_clowns_mischief tarot_slot')
+      'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 store success score @s ta_has run power has @s tarot:fool/9_clowns_mischief',
+      'execute if score @s ta_probe matches 1 if score @s ta_init matches 1 if score @s ta_seq matches 9 if score @s ta_has matches 0 run power grant @s tarot:fool/9_clowns_mischief tarot_slot')
     f('ui/help', 'tellraw @s '+json.dumps({'text':'[Tarot] Rev3 TEST: /tarot status, /tarot slots. Fool Seq9 only; no slot editing yet.', 'color':'gold'}))
     f('ui/status',
       'execute unless score @s ta_init matches 1 run tellraw @s '+json.dumps({'text':'[Tarot] Select Fool to begin this alpha.', 'color':'yellow'}),
