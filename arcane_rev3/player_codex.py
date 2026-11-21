@@ -252,8 +252,32 @@ def emit_roadmap(w):
         "execute if score @s a_init matches 1 if score @s a_seq matches 3..9 run " +
         _click("[Attempt ascension at altar]", "a_ascend", "green"),
         "execute if score @s a_init matches 1 run " +
+        _click("[All Sequence milestones]", "a_stages", "light_purple"),
+        "execute if score @s a_init matches 1 run " +
         _click("[See abilities I have equipped]", "a_abilities"),
         _click("[Main guide]", "a_guide"))
+
+    # A separate high-level overview lets players plan all future non-Seq1
+    # offerings, without exposing any admin transition or editing progress.
+    milestones = [_msg("COMPLETE PROGRESSION MAP (normal gameplay ends at Sequence 2)", "gold")]
+    for seq in range(9, 1, -1):
+        line = f"Sequence {seq} to {seq-1}: {ACT_MARKS[seq]} marks"
+        if seq == 2:
+            line += " | LOCKED: Sequence 1 is an OP-only Resonance development test"
+        else:
+            line += " | " + ", ".join(
+                f"{count} {item.replace('_', ' ')}"
+                for item, count in RITUALS[seq].items())
+            if seq == 5:
+                line += " | fixed partner and 6 slots"
+            elif seq in (4, 3):
+                line += " | one new editable slot"
+        milestones.append(_msg(line, "red" if seq == 2 else "yellow"))
+    milestones.extend([
+        _msg("All steps additionally require the lectern-on-crying-obsidian altar, grounding and no combat.", "gray"),
+        _click("[My next exact task]", "a_roadmap", "green"),
+        _click("[Guide]", "a_guide")])
+    w.f("ui/stages", milestones)
 
     tasks = [_msg("Earn acting marks by alternating a pathway item and an action.", "aqua")]
     for card in CARDS:
