@@ -44,12 +44,14 @@ def register(add):
     # Fool + Hanged Man. Sin transfer and decoys need persistent shared Sin state.
     add("paper_martyr", 7, "Suffering Sight",
         active("Suffering Sight", "Reveal tagged hostile mobs within 10 blocks.",
-               effect(mobs(10), "glowing", 100), 200, crouch=True),
-        "partial", "Reveals mobs with Glowing rather than health/debuff readout; no 2-Sin transfer, damage or safe enemy-player targeting")
+               combined(effect(mobs(10), "glowing", 100),
+                        enemy_effect("glowing", 100, 10)), 200, crouch=True),
+        "partial", "Glowing on mobs and listed enemy teams substitutes for exact health/debuff readout; no 2-Sin transfer, 2 damage or client reveal UI")
     add("paper_martyr", 3, "Suffering Sight II",
         active("Suffering Sight II", "Highlight the nearest hostile mob for 60 ticks.",
-               effect(mobs(10, nearest=True), "glowing", 60), 200, crouch=True),
-        "partial", "Glowing 60t is real; no 3-Sin transfer, player health/debuff display or enemy-player targeting")
+               combined(effect(mobs(10, nearest=True), "glowing", 60),
+                        enemy_effect("glowing", 60, 10)), 200, crouch=True),
+        "partial", "Glowing lasts 60t on mob and listed enemy teams, not an exact single target; no 3-Sin transfer, real damage or player health/debuff UI")
     add("paper_martyr", 0, "The Paper Martyr",
         cap("The Paper Martyr", 18000, 700,
             apply("resistance", 700, 2),
@@ -144,8 +146,11 @@ def register(add):
         active("Emperor's Hymn", "Secondary key regenerates and speeds self, and slows tagged hostiles.",
                combined(apply("regeneration", 200),
                         apply("speed", 200),
+                        apply("resistance", 200),
+                        ally_effect("regeneration", 200, 6),
+                        ally_effect("speed", 200, 6),
                         effect(mobs(6), "slowness", 100)), 900),
-        "partial", "No ally Regeneration/speed, exact 10% resistance or mob target reset; self-only support avoids healing enemies")
+        "partial", "Allies on allowlisted same team get temporary Regen I and Speed I, not exact +10% speed; self Resistance I is a 20% proxy for 10%; no forced mob target reset")
     add("benevolent_crown", 1, "Triage Decree",
         active("Triage Decree", "Secondary key heals self and slows nearest hostile mob.",
                combined({"type": "origins:heal", "amount": 2},
