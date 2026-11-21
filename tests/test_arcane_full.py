@@ -107,6 +107,25 @@ class FullBuildTests(unittest.TestCase):
         self.assertIn("data/tarot_arcane/advancements/acting/fool_a.json",names)
         self.assertIn("data/tarot_arcane/advancements/acting/fool_b.json",names)
 
+    def test_unimplemented_kits_denied_and_identity_drawback_kept(self):
+        bad = self.z.read("data/tarot_arcane/functions/slot/assign.mcfunction").decode()
+        self.assertIn("a_probe matches 0 run scoreboard players set @s a_ok 0", bad)
+        origin = json.loads(self.z.read("data/tarot/origins/fool.json"))
+        self.assertIn("tarot:fool/identity_spiritual_expenditure", origin["powers"])
+        disadvantage = json.loads(
+            self.z.read("data/tarot/powers/fool/identity_spiritual_expenditure.json"))
+        self.assertEqual(disadvantage["type"], "origins:modify_exhaustion")
+        self.assertEqual(disadvantage["modifier"]["value"], 0.25)
+        self.assertEqual(
+            {part["type"] for part in disadvantage["condition"]["conditions"]},
+            {"origins:sprinting", "origins:fall_flying"})
+
+    def test_unavailable_seq_two_to_one_does_not_consume_offerings(self):
+        s = self.z.read("data/tarot_arcane/functions/ascend/check_s2.mcfunction").decode()
+        self.assertIn("Resonance is locked",s)
+        self.assertNotIn("clear @s",s)
+        self.assertNotIn("scoreboard players remove @s a_marks",s)
+
     def test_no_java_kubejs_or_elevated_actions(self):
         self.assertTrue(all(not path.lower().endswith((".java",".js",".jar"))
                             for path in self.z.namelist()))
