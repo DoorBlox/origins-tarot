@@ -143,8 +143,14 @@ def register(add):
             effect(mobs(5,nearest=True),"slowness",60,1),600,crouch=True),
         "partial","Does not reveal held item of a player; cannot stun next melee hit or target enemy players")
     add("binding_contract",4,"Infernal Verdict",
-        hit("Infernal Verdict","wither",40,cooldown=320),
-        "partial","Source requires concurrent Slowness I 40t + red Glowing 80t; only Wither is applied, players omitted")
+        power("Infernal Verdict",
+            "Melee hits on tagged hostiles inflict Wither 40t, Slowness I 40t and Glowing 80t.",
+            "origins:target_action_on_hit", cooldown=320,
+            target_condition={"type": "origins:in_tag", "tag": "tarot:hostile"},
+            entity_action=combined(
+                apply("wither", 40), apply("slowness", 40),
+                apply("glowing", 80))),
+        "partial", "The source demands red Glowing (client color unsupported) and marked player targets; enemy players still omitted, no verified cross-team on-hit predicate")
     add("starless_poison",6,"Soul Thread",
         power("Soul Thread","While night, 10% chance on hit to gain Resistance I 40t.",
             "origins:self_action_when_hit",cooldown=1,
@@ -153,10 +159,13 @@ def register(add):
                            "action":apply("resistance",40)}),
         "partial","Thread's Slowness debuff and 400t active cooldown are not implemented")
     add("starless_poison",5,"Haunting Plague",
-        active("Haunting Plague","Secondary blinds and poisons nearby tagged hostile mobs.",
+        active("Haunting Plague",
+            "Secondary blinds and poisons nearby tagged hostiles and listed enemy teams.",
             combined(close_target(6,"blindness",60),
-                     close_target(6,"poison",60)),900),
-        "partial","Witch's Venom on-hit Poison80/Hunger40 component is not included, and enemy players omitted")
+                     close_target(6,"poison",60),
+                     enemy_effect("blindness",60,6),
+                     enemy_effect("poison",60,6)),900),
+        "partial","Witch's Venom on-hit Poison80/Hunger40 component is not included; area pulses are not per-hit targeting, and neutral/unlisted players remain excluded")
     add("starless_poison",4,"Night Venom",
         periodic("Night Venom","At night periodically poison tagged hostiles in five blocks.",
             combined(close_target(5,"poison",60),
