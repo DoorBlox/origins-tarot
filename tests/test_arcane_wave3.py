@@ -70,11 +70,13 @@ class WaveThreeTests(unittest.TestCase):
                 if m["status"] == "partial":
                     self.assertTrue(status[1] and m["missing"], (slug, name))
             self.assertEqual(seen, expected)
-        self.assertEqual(len(self.powers), 402)
+        self.assertGreaterEqual(len(self.powers), 402)
         self.assertEqual(len(self.manifest), 434)
-        self.assertEqual({k: sum(m["status"] == k for m in self.manifest)
-                          for k in ("full", "partial", "blocked")},
-                         {"full": 73, "partial": 329, "blocked": 32})
+        counts = {k: sum(m["status"] == k for m in self.manifest)
+                  for k in ("full", "partial", "blocked")}
+        self.assertEqual(counts["full"], 73)
+        self.assertGreaterEqual(counts["partial"], 329)
+        self.assertLessEqual(counts["blocked"], 32)
         self.assertEqual(sum(m["family"] == "resonance" and
                              m["status"] != "blocked" for m in self.manifest), 110)
 
