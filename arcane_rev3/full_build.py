@@ -83,7 +83,7 @@ SCORES += RESCUE_COOLDOWNS + ("a_rtest", "a_focus") + SIN_SCORES
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick",
           "a_focus_menu","a_choose","a_guide","a_abilities","a_roadmap",
-          "a_kit","a_detail","a_stages")
+          "a_kit","a_detail","a_stages","a_book","a_tome")
 
 
 def J(obj):
@@ -246,10 +246,12 @@ def emit_player(w,kits,root=ROOT):
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
-        "execute if score @s a_guide matches 1.. run "+F("ui/help"),
-        "execute if score @s a_abilities matches 1.. run "+F("ui/codex/home"),
+        "execute if score @s a_guide matches 1.. run "+F("ui/book/give"),
+        "execute if score @s a_abilities matches 1.. run "+F("ui/book/tome"),
         "execute if score @s a_roadmap matches 1.. run "+F("ui/roadmap"),
-        "execute if score @s a_stages matches 1.. run "+F("ui/stages"),
+        "execute if score @s a_stages matches 1.. run "+F("ui/book/give"),
+        "execute if score @s a_book matches 1.. run "+F("ui/book/give"),
+        "execute if score @s a_tome matches 1.. run "+F("ui/book/tome"),
         "execute if score @s a_kit matches 1.. run "+F("ui/codex/open"),
         "execute if score @s a_detail matches 1.. run "+F("ui/codex/detail_open"),
         # Focus selection is player-triggered and processed only when
@@ -548,14 +550,16 @@ def emit_ui(w):
     from different players cannot overwrite each other's slot display.
     """
     w.f("ui/help",
-        msg("ARCANE REV3 PLAYER GUIDE | Choose a menu below.","gold"),
-        msg("ABILITIES: inspect equipped kits, current effects, activation, and limitations.","aqua"),
+        msg("ARCANE REV3 | Books first: right-click your written handbook to read it.","gold"),
+        msg("ABILITIES: your Pathway Tome covers powers, controls, and incomplete mechanics.","aqua"),
         msg("ROADMAP: next acting task, marks, offerings, ritual, and unlocks.","aqua"),
         msg("Seq9-5 auto equips; Seq4-2 unlocks a fixed partner and editable slots.","yellow"),
         msg("Seq1 Resonance LOCKED for normal SMP players; incomplete powers remain PARTIAL.","red"),
         msg("Vanilla commands: /trigger a_guide, /trigger a_help, /trigger a_abilities, /trigger a_roadmap.","gray"),
-        click("[My abilities]","a_abilities"),
-        click("[My ascension roadmap]","a_roadmap","yellow"),
+        click("[Get Arcane Handbook BOOK]","a_book","gold"),
+        click("[Get my Pathway Tome BOOK]","a_tome","aqua"),
+        click("[My abilities (book)]","a_abilities"),
+        click("[My live marks and next task]","a_roadmap","yellow"),
         click("[All Sequence milestones]","a_stages","light_purple"),
         click("[My status]","a_status"),
         click("[Manage slots]","a_slots"),
@@ -791,6 +795,8 @@ def alias():
             "permission":0,"actions":[a("a_help")],"children":[
                 lit("help",actions=[a("a_help")]),
                 lit("guide",actions=[a("a_guide")]),
+                lit("book",actions=[a("a_book")]),
+                lit("tome",actions=[a("a_tome")]),
                 lit("abilities",actions=[a("a_abilities")]),
                 lit("roadmap",actions=[a("a_roadmap")]),
                 lit("stages",actions=[a("a_stages")]),
@@ -881,6 +887,8 @@ def build(root=ROOT,output=None):
         from .player_codex import emit_player_codex, emit_roadmap
         emit_player_codex(w,compiled,manifest,kits,innate,NUM)
         emit_roadmap(w)
+        from .guide_books import emit_books
+        emit_books(w,compiled,manifest,kits)
         from .active_focus import emit_focus
         emit_focus(w,focus_entries)
         emit_progression(w)
