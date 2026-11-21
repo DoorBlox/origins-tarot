@@ -1,6 +1,6 @@
 # Arcane V2 Rev3 — confirmed installed-mod inventory
 
-**Recorded 2026-11-22** from the owner's uploaded tarotmc(1).pdf, pages 22–25, and their follow-up confirming LuckPerms. This inventory is **owner-reported**; the combined Fabric instance and exact jar versions are not independently verified. Do not silently add dependencies.
+**Updated 2026-11-22** from the owner's uploaded tarotmc(1).pdf, pages 22–25, plus their explicit confirmations that **LuckPerms and Fabric Permissions API are both installed**. This inventory is **owner-reported**; the combined Fabric instance and exact jar versions are not independently verified. Do not silently add dependencies.
 
 | Existing mod | Version recorded in PDF | Placement | Supported potential (requires verifying actual 1.18.2 API/commands) |
 | --- | --- | --- | --- |
@@ -14,16 +14,17 @@
 | CraftedCore | 5.1 | Client + server | ReMorphed dependency |
 | SkinShifter | 1.0 | Client + server | Potential player disguise/skins, require verified command semantics |
 | LambDynamicLights | Version not specified | Client | Cosmetic visual lighting only, not server-authoritative light mechanics |
-| LuckPerms | Version not specified; now confirmed installed | Permission layer | Grant narrowly scoped permission nodes for existing mod commands, not automatic custom command registration |
+| LuckPerms | Version not specified; owner confirmed installed | Permission layer | Manage narrowly scoped permission nodes; **does not establish multiplayer ally/enemy teams** |
+| **Fabric Permissions API** | **Version not specified; owner explicitly confirms installed** | Fabric server | Provides permission-node API compatibility where individual mods actually support it; inspect ReMorphed 4.0 config before enabling its nodes |
 
 **Not installed / not selected:** Immersive Portals (owner declined), KubeJS (unavailable), any custom Java/Fabric companion mod (owner declined). Apugli, FabricTailor and Identity are not assumed installed; SkinShifter and ReMorphed are the chosen alternatives.
 
 ## Hard integration rules
 
 1. Mainline remains an Origins 1.4.1 datapack plus **verified** existing-mod configuration. Version-specific commands must be sourced and tested, never guessed or inserted unverified.
-2. LuckPerms may narrow permissions, but never grant arbitrary operator access, wildcard permissions, or expose internal administrative Arcane functions to normal players. Preserve player-scoped /trigger controls and clickable /trigger a_help fallback.
+2. **LuckPerms + Fabric Permissions API are installed**; that does not prove that ReMorphed 4.0 uses their nodes or that permissions can replace vanilla OP gates. Never grant arbitrary operator access or wildcard permissions or expose Arcane admin functions to normal players. Preserve player-scoped /trigger and clickable /trigger a_help fallback.
 3. Pehkui, ReMorphed and SkinShifter can be considered for scale/transform/disguise abilities after inspecting their exact commands on the owner's build. Any integration must be opt-in, permission-checked, reversible, and run in a disposable test world first.
-4. Extra Keybinds controls do not replace server authority, cooldowns, teammate filtering or anti-abuse checks. LambDynamicLights cannot provide persistent in-world light levels.
+4. Extra Keybinds controls do not replace server authority, cooldowns, teammate filtering or anti-abuse checks. **Vanilla scoreboard teams** are the sole chosen PvP relationship, see [docs/ARCANE_TEAM_POLICY.md](ARCANE_TEAM_POLICY.md); default red/blue/green/gold teams, unassigned neutral. LuckPerms groups do NOT imply combat teams. LambDynamicLights cannot provide persistent in-world light levels.
 5. Test real non-OP command permissions, source-scoped grants, relog/respawn, multiplayer ally/enemy targeting, graphics compatibility, and data persistence with the actual assembled modpack before marking gameplay accepted.
 
 ## Verified documentation interfaces, not yet integrated in gameplay
@@ -33,17 +34,18 @@ These interfaces are from public project documentation; the **owner's exact inst
 - **SkinShifter:** project docs show `/skinshifter set @s <username-or-uuid>`. The `<username-or-uuid>` is a literal argument, **not** a dynamic expression containing a random online player's name. Fool's random-online-person Full Faceless Disguise and Borrowed Face cannot be represented by fabricating a dynamic /skinshifter parameter. Source: https://modrinth.com/mod/skinshifter
 - **Pehkui:** project docs show `/scale set <scale_type> <value> [target]` and `/scale reset <scale_type> [target]`. A temporary Tarot scale change must also revert safely on expiry, death, dimension change, disconnect, pause, and source revoke; do not ship an activation-only /scale command that leaves players permanently resized. Source: https://modrinth.com/mod/pehkui
 - **Origins Extra Keybinds:** current Fabric documentation publishes keys such as `key.originsextrakeybinds.tertiary_active`, but older version **0.2.0 must be checked** for this syntax before changing live ability bindings. Source: https://modrinth.com/project/origins-extra-keybinds
-- **ReMorphed / LuckPerms:** current official ReMorphed permissions documentation says Fabric servers need **Fabric Permissions API** (separate mod), then `usePermissions=true` in ReMorphed config to make LuckPerms permission nodes such as `remorphed.morph` or `remorphed.command.addShape.self` enforceable. This guidance may not match ReMorphed **4.0**; inspect the installed jar/config and verify the exact version-specific permission support before recommending an installation or changing permissions. Do not grant broad `remorphed.*`, `minecraft.selector.*` or OP-level access to normal players. Source: https://tocraft.dev/docs/remorphed/Permissions/
+- **ReMorphed 4.0 / LuckPerms / Fabric Permissions API:** **the owner has now installed both LuckPerms and Fabric Permissions API**. Current official ReMorphed permission docs refer to enabling `usePermissions=true` and nodes such as `remorphed.morph` or `remorphed.command.addShape.self`. **Do NOT assume these exact names/settings exist in installed ReMorphed 4.0**; inspect the installed jar/config and verify 1.18.2 behavior before editing config/permissions or calling mod commands. Do not grant broad `remorphed.*`, `minecraft.selector.*` or OP-level access to normal players. Source: https://tocraft.dev/docs/remorphed/Permissions/
 - **Command Aliases + /trigger:** aliases remain cosmetic convenience. The existing /trigger bridge is the security boundary for non-OP players; LuckPerms cannot be used as a substitute for validating actual server-side command execution.
 
 **Owner input only if needed later:** upload or paste the Fabric startup/mod list and relevant ReMorphed/SkinShifter configs if exact integrations fail. A test character using the installed mods should record real command syntax, permission denials and reset behavior. No additional mods are being installed automatically.
 
-## Current source checkpoint
+## Current source checkpoint (2026-11-22)
 
-- **PR #32** merged at `3e35a0974f6160e337a76b7f9f85a07fa991ba23`: 29 source-mapped partial Resonance abilities, including all 11 Seq0 prototype capstones; four exact-head green workflows.
-- **PR #33** merged at `fa2f7ad91a6f4e3cf16840cbd5c67c448390d272`: 30 individual plus six Resonance concrete partial powers; four exact-head green workflows at `c2238fbfa33b09e4db7b7462542bb6cbe8d9e404`.
-- **434 specified; 337 compiled (73 full, 264 partial); 97 blocked.** Individual **239/324 compiled**, Resonance **98/110 compiled**.
-- All eleven Resonance pairs are present in source, but none of their incomplete kits are player-granted. Seq1 development gate remains fail-closed **only until the required gameplay contract is ready**. The handbook's intended design always activates Resonance at Seq1.
-- **No in-game acceptance** and no source-triggered SMP deployment; compiled partially accurate JSON is not a finished/verified player ability.
+- [PR #37](https://github.com/DoorBlox/origins-tarot/pull/37) implements explicit vanilla team safe PvP and allied effects, excluding unassigned players. See [team policy](ARCANE_TEAM_POLICY.md). This feature is source-CI verified, not game-runtime accepted.
+- [PR #38](https://github.com/DoorBlox/origins-tarot/pull/38) completed the **110/110 source-mapped Resonance definitions** with multiple disclosed safe partial substitutions and added persistent-latch death saves.
+- [PR #39](https://github.com/DoorBlox/origins-tarot/pull/39) adds **OP-opt-in test-only Seq2→1** with all ten paired Resonance source powers and second identity drawback, while normal non-OP progression remains gated. See [test instructions](ARCANE_SEQ1_OPERATOR_TEST.md).
+- [PR #40](https://github.com/DoorBlox/origins-tarot/pull/40) adds 32 more individual abilities through bounded source-backed substitutions, including 10 individual capstone previews.
+- **434 specified; 402 compiled = 73 full + 329 partial; 32 blocked, ALL individual.** Resonance **110/110** compiled but many partial. The 22 pathways, 11 pairs and three dev-only ZIPs do not constitute a production-ready pack.
+- **No Minecraft startup/reload acceptance** and **no live SMP deployment**. Do not represent installed dependencies as proof that mod APIs, skins, size reset, command permission nodes or keybind IDs work under the exact old versions.
 
-Next: complete/verify 12 remaining Resonance + 85 individual blocks and 264 partial-fidelity gaps, implement team-safe PvP and permanent drawbacks, and test documented mod interfaces on the actual 1.18.2 installation.
+Next: verify exact installed mod filenames, Fabric 1.18.2 startup logs and ReMorphed 4.0/SkinShifter 1.0 config/commands in a **disposable world**; implement remaining 32 source blocks and prioritize fidelity of 329 partial mechanics. Ask owner for log/config only when actually necessary to validate interfaces, and continue other work without idle questions.
