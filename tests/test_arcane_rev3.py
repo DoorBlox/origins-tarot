@@ -128,7 +128,7 @@ class Rev3BuildTests(unittest.TestCase):
         self.assertEqual(alias["schemaVersion"], 1)
         self.assertNotIn("customCommand", alias)
         root = alias
-        self.assertEqual((root["parent"], root["permission"]), ("tarot", 0))
+        self.assertEqual((root["command"], root["permission"]), ("tarot", 0))
         self.assertTrue(all(action["commandType"] == "CLIENT"
                             and action["command"].startswith("trigger ta_")
                             for action in root["actions"] + [
