@@ -179,6 +179,181 @@ def compile_powers(root):
         "origins:self_action_on_kill", cooldown=120,
         entity_action={"type":"origins:and","actions":[{"type":"origins:heal","amount":2},apply("resistance",60)]}),
         "partial","Only hostile mob or enemy player kills must count")
+
+    # Additional native 1.4.1 powers. These are real mechanics, with any
+    # unsupplied sub-effects explicitly classified as partial.
+    add("magician",9,"Traveler's Body",compound("Traveler's Body",
+        pace={"type":"origins:attribute","modifier":{**mod(0.12),"attribute":"minecraft:generic.movement_speed"}},
+        fall={"type":"origins:modify_damage_taken",
+              "damage_condition":{"type":"origins:name","name":"fall"},
+              "modifier":mod(-0.7)}))
+    book={"type":"origins:equipped_item","equipment_slot":"offhand",
+          "item_condition":{"type":"origins:ingredient","ingredient":{"tag":"tarot:books"}}}
+    add("high_priestess",9,"Dependent on Rituals",power("Dependent on Rituals",
+        "Without an offhand book, mining is 20% slower.","origins:modify_break_speed",
+        modifier=mod(-0.20),condition={**book,"inverted":True}))
+    add("high_priestess",9,"Ritual Focus",power("Ritual Focus",
+        "Offhand book grants 25% faster mining.","origins:modify_break_speed",
+        modifier=mod(0.25),condition=book),"partial","Low-light vision not yet included")
+    add("emperor",9,"Distorted Authority",power("Distorted Authority",
+        "Attackers receive Slowness I for 40 ticks; 280t cooldown.",
+        "origins:attacker_action_when_hit",entity_action=apply("slowness",40),cooldown=280))
+    shield={"type":"origins:or","conditions":[
+        {"type":"origins:equipped_item","equipment_slot":slot,
+         "item_condition":{"type":"origins:ingredient","ingredient":{"item":"minecraft:shield"}}}
+        for slot in ("mainhand","offhand")]}
+    add("emperor",9,"Imperial Presence",power("Imperial Presence",
+        "Shield in hand reduces incoming damage by 10%.",
+        "origins:modify_damage_taken",condition=shield,modifier=mod(-0.10)))
+    add("emperor",9,"Weight of the Crown",compound("Weight of the Crown",
+        pace={"type":"origins:conditioned_attribute",
+              "condition":shield,"tick_rate":20,
+              "modifier":{**mod(-0.25),"attribute":"minecraft:generic.movement_speed"}},
+        fatigue={"type":"origins:modify_exhaustion",
+                 "condition":{"type":"origins:sprinting"},
+                 "modifier":mod(0.50)}),
+        "partial","Sprint exhaustion should apply only while armored")
+    add("hierophant",9,"Sacred Dietary Vow",power("Sacred Dietary Vow",
+        "Cannot consume meat or fish from the tarot:meat tag.",
+        "origins:prevent_item_use",
+        item_condition={"type":"origins:ingredient","ingredient":{"tag":"tarot:meat"}}))
+    add("chariot",9,"Hunter's Momentum",power("Hunter's Momentum",
+        "While sprinting, melee attacks deal 15% more damage.",
+        "origins:modify_damage_dealt",modifier=mod(0.15),
+        condition={"type":"origins:sprinting"}))
+    add("chariot",9,"Pyromaniac",compound("Pyromaniac",
+        fire={"type":"origins:fire_immunity"},
+        power={"type":"origins:action_over_time","interval":20,
+               "condition":{"type":"origins:on_fire"},
+               "entity_action":apply("strength",40)}))
+    add("chariot",9,"Extinguished Fury",power("Extinguished Fury",
+        "Rain or submersion applies Weakness and Mining Fatigue.",
+        "origins:action_over_time",interval=20,
+        condition={"type":"origins:or","conditions":[
+            {"type":"origins:in_rain"},{"type":"origins:submerged"}]},
+        entity_action={"type":"origins:and","actions":[apply("weakness",50),apply("mining_fatigue",50)]}))
+    add("chariot",6,"Plot",power("Plot","20% chance per kill to gain one XP level.",
+        "origins:self_action_on_kill",
+        entity_action={"type":"origins:chance","chance":0.20,
+                       "action":{"type":"origins:execute_command","command":"experience add @s 1 levels"}}))
+    add("strength",9,"Giant's Grip",compound("Giant's Grip",
+        strength={"type":"origins:attribute","modifier":{**mod(0.18),"attribute":"minecraft:generic.attack_damage"}},
+        knockback={"type":"origins:attribute","modifier":{**mod(0.55,"addition"),"attribute":"minecraft:generic.knockback_resistance"}}))
+    add("strength",9,"Quarry Hands",power("Quarry Hands",
+        "Natural stone breaks 35% faster.","origins:modify_break_speed",
+        block_condition={"type":"origins:in_tag","tag":"tarot:natural_stone"},
+        modifier=mod(0.35)))
+    add("strength",9,"The Giant Sinks",compound("The Giant Sinks",
+        swim={"type":"origins:modify_swim_speed","modifier":mod(-0.45)},
+        weapons={"type":"origins:prevent_item_use",
+                 "item_condition":{"type":"origins:ingredient",
+                                   "ingredient":{"items":["minecraft:bow","minecraft:crossbow"]}}}))
+    add("hermit",9,"Astral Calculation",compound("Astral Calculation",
+        projectile={"type":"origins:modify_projectile_damage","modifier":mod(0.20)},
+        vision={"type":"origins:night_vision",
+                "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.25}}))
+    add("hermit",9,"Prepared Investigator",power("Prepared Investigator",
+        "Mine 20% faster with book or clock offhand.",
+        "origins:modify_break_speed",modifier=mod(0.20),
+        condition={"type":"origins:or","conditions":[
+            book,{"type":"origins:equipped_item","equipment_slot":"offhand",
+                  "item_condition":{"type":"origins:ingredient","ingredient":{"item":"minecraft:clock"}}}]}))
+    add("wheel_of_fortune",9,"Fate Intervenes",power("Fate Intervenes",
+        "15% chance to halve incoming damage.","origins:modify_damage_taken",
+        condition={"type":"origins:chance","chance":0.15},modifier=mod(-0.5)))
+    add("wheel_of_fortune",6,"Calamity",power("Calamity",
+        "10% chance to inflict Weakness I for 40 ticks on attacker.","origins:attacker_action_when_hit",
+        cooldown=1,entity_action={"type":"origins:chance","chance":0.10,
+                                  "action":apply("weakness",40)}))
+    add("death",9,"Severed Vitality",power("Severed Vitality",
+        "Natural regeneration is disabled.","origins:disable_regen"))
+    add("temperance",9,"Wraith's Veil",power("Wraith's Veil",
+        "Sneaking grants invisibility, even without darkness gate.","origins:invisibility",
+        condition={"type":"origins:sneaking"}),"partial","Light level must be <= 7")
+    add("temperance",9,"Ethereal Landing",compound("Ethereal Landing",
+        fall={"type":"origins:modify_damage_taken",
+              "damage_condition":{"type":"origins:name","name":"fall"},"modifier":mod(-0.6)},
+        slow={"type":"origins:effect_immunity","effects":["minecraft:slowness"]}))
+    add("temperance",9,"Unstable Manifestation",power("Unstable Manifestation",
+        "Cannot wear iron, diamond, or netherite chestplates.",
+        "origins:restrict_armor",chest={"type":"origins:ingredient",
+            "ingredient":{"items":["minecraft:iron_chestplate","minecraft:diamond_chestplate","minecraft:netherite_chestplate"]}}))
+    add("temperance",6,"Rot",power("Rot",
+        "Melee hits apply Hunger I for 40 ticks; cooldown 300t.",
+        "origins:target_action_on_hit",entity_action=apply("hunger",40),cooldown=300),
+        "partial","Hitting a teammate or passive must not apply this negative effect")
+    add("devil",9,"Infernal Vitality",power("Infernal Vitality",
+        "Heal one HP every 80 ticks while burning.","origins:action_over_time",
+        interval=80,condition={"type":"origins:on_fire"},
+        entity_action={"type":"origins:heal","amount":1}))
+    add("devil",8,"Fallen Grace",power("Fallen Grace",
+        "10% chance when hit to gain Strength I for 40 ticks.",
+        "origins:self_action_when_hit",cooldown=1,
+        entity_action={"type":"origins:chance","chance":0.10,
+                       "action":apply("strength",40)}))
+    add("devil",1,"Infernal Vitality II",power("Infernal Vitality II",
+        "Heal one HP per 60 ticks while on fire.","origins:action_over_time",
+        interval=60,condition={"type":"origins:on_fire"},
+        entity_action={"type":"origins:heal","amount":1}))
+    add("tower",9,"Cracked Foundations",power("Cracked Foundations",
+        "Mine natural stone 30% faster.","origins:modify_break_speed",
+        block_condition={"type":"origins:in_tag","tag":"tarot:natural_stone"},
+        modifier=mod(0.30)))
+    add("tower",9,"Ruin-Proof",power("Ruin-Proof",
+        "60% less explosion damage.","origins:modify_damage_taken",
+        damage_condition={"type":"origins:name","name":"explosion"},
+        modifier=mod(-0.60)),"partial","Other explosion damage-source variants not included")
+    add("tower",9,"Falling Tower",compound("Falling Tower",
+        falling={"type":"origins:modify_damage_taken",
+                 "damage_condition":{"type":"origins:name","name":"fall"},
+                 "modifier":mod(0.75)},
+        knockback={"type":"origins:attribute",
+                   "modifier":{**mod(-0.20,"addition"),"attribute":"minecraft:generic.knockback_resistance"}}),
+        "partial","Knockback taken cannot be modeled exactly by negative resistance")
+    add("star",9,"Evernight's Patience",power("Evernight's Patience",
+        "Night reduces exhaustion by 20%.","origins:modify_exhaustion",
+        condition={"type":"origins:daytime","inverted":True},modifier=mod(-0.20)))
+    add("star",9,"True Sleeplessness",power("True Sleeplessness",
+        "Cannot sleep, but beds still set spawn point.","origins:prevent_sleep",
+        message="Your vigilance forbids sleep.",set_spawn_point=True))
+    add("star",9,"Nightwatch",compound("Nightwatch",
+        movement={"type":"origins:conditioned_attribute","tick_rate":20,
+                  "condition":{"type":"origins:daytime","inverted":True},
+                  "modifier":{**mod(0.15),"attribute":"minecraft:generic.movement_speed"}},
+        combat={"type":"origins:modify_damage_dealt",
+                "condition":{"type":"origins:daytime","inverted":True},
+                "target_condition":{"type":"origins:in_tag","tag":"tarot:undead"},
+                "modifier":mod(0.15)}))
+    add("moon",9,"Sanguine Sight",compound("Sanguine Sight",
+        vision={"type":"origins:night_vision"},
+        movement={"type":"origins:conditioned_attribute","tick_rate":20,
+                  "condition":{"type":"origins:daytime","inverted":True},
+                  "modifier":{**mod(0.15),"attribute":"minecraft:generic.movement_speed"}}))
+    add("moon",7,"Blood Drain",power("Blood Drain",
+        "Melee hits heal 1 HP, 100t cooldown.",
+        "origins:self_action_on_hit",cooldown=100,
+        entity_action={"type":"origins:heal","amount":1}),
+        "partial","Target must be hostile mob or enemy player")
+    add("sun",9,"Unshadowed",power("Unshadowed",
+        "Melee damage to undead increased by 40%.","origins:modify_damage_dealt",
+        target_condition={"type":"origins:in_tag","tag":"tarot:undead"},modifier=mod(0.40)),
+        "partial","Projectile and other damage types do not benefit")
+    add("judgement",9,"Retaliatory Sentence",power("Retaliatory Sentence",
+        "Attackers suffer Slowness I for 60 ticks; 280t CD.",
+        "origins:attacker_action_when_hit",entity_action=apply("slowness",60),cooldown=280))
+    add("judgement",9,"No Unlawful Escape",power("No Unlawful Escape",
+        "Ender pearls and chorus fruits cannot be used.","origins:prevent_item_use",
+        item_condition={"type":"origins:ingredient",
+                        "ingredient":{"items":["minecraft:ender_pearl","minecraft:chorus_fruit"]}}))
+    add("world",9,"Hunter's Tempo",power("Hunter's Tempo",
+        "Gain Speed I for 160t after kill; 360t CD.","origins:self_action_on_kill",
+        entity_action=apply("speed",160),cooldown=360))
+    add("world",9,"Terrifying Reputation",power("Terrifying Reputation",
+        "Villagers refuse right-click interactions.","origins:prevent_entity_use",
+        bientity_condition={"type":"origins:target_condition",
+                            "condition":{"type":"origins:entity_type","entity_type":"minecraft:villager"}}),
+        "partial","Wandering trader and alternate trade UIs may remain accessible")
+
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}
