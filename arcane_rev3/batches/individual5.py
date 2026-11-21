@@ -58,8 +58,9 @@ def register(add):
     add("empress", 4, "Aura of Despair",
         periodic("Aura of Despair", "10% every 40t: slow tagged hostiles within 5 blocks.",
                  {"type": "origins:chance", "chance": 0.1,
-                  "action": effect(mobs(5), "slowness", 40)}, 40),
-        "partial", "Slowness does not force hostiles to flee and excludes enemy players; source fear effect is not faithfully approximated")
+                  "action": combined(effect(mobs(5), "slowness", 40),
+                                     enemy_effect("slowness", 40, 5))}, 40),
+        "partial", "Slowness does not force hostile AI to flee; listed enemy teams receive the same bounded 10% pulse, not the true fear mechanic")
     add("empress", 1, "Apocalypse's Herald",
         primary("Apocalypse's Herald", 3600,
                 area(10, {"type": "origins:damage", "amount": 6,
