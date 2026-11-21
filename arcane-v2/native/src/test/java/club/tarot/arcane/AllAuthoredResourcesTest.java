@@ -38,7 +38,7 @@ public final class AllAuthoredResourcesTest {
                 }
             }
         }
-        assertEquals("Authored ability count changed; update coverage deliberately",315,keys.size());
+        assertEquals("Authored ability count changed; update coverage deliberately",355,keys.size());
     }
     @Test public void noSequenceKitCanBecomeAnUnremovableOriginPower() throws Exception {
         Set<String> names=new HashSet<>(SlotModel.PAIRS.keySet());

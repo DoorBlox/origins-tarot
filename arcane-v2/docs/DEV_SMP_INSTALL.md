@@ -33,9 +33,9 @@ not need a second Arcane datapack ZIP.
    `tarot:justice`, `tarot:hermit`, `tarot:chariot`, `tarot:death`,
    `tarot:tower`, `tarot:magician`, `tarot:strength`,
    `tarot:emperor`, `tarot:lovers`, `tarot:devil`, `tarot:judgement`,
-   `tarot:star` and `tarot:empress`. The Paper Martyr, Marked Verdict, Burning Archive,
+   `tarot:star`, `tarot:empress`, `tarot:sun`, and `tarot:moon`. The Paper Martyr, Marked Verdict, Burning Archive,
    Crumbling Reaper, Impossible Fist, Benevolent Crown and Binding Contract
-   and Starless Poison Resonances activate at Sequence 1; their Origin JSONs are not
+   Starless Poison and Eclipse Resonances activate at Sequence 1; their Origin JSONs are not
    added as independent character-creation choices.
 6. Check `/tarot slots` and `/tarot status`. Players can alternate
    **Acting A** (acquire/handle the card's designated item) and **Acting B**
@@ -65,6 +65,8 @@ Current supported Acting A / Acting B tracks:
 - **Judgement:** acquire or handle iron bars; then trade with a villager
 - **Star:** acquire or handle a clock; then kill a phantom
 - **Empress:** acquire or handle a spider eye; then kill a spider
+- **Sun:** acquire or handle glowstone dust; then kill a skeleton
+- **Moon:** acquire or handle redstone dust; then kill a spider
 
 Alternate A/B. Each accepted action grants one mark, to a maximum of 20.
 Use `/tarot status` to see mark count, next required action and the
@@ -122,7 +124,7 @@ from a meaningful save without a backup and migration.
 
 ## 6. Acceptance and rollback
 
-Follow `BATCH_1_TEST.md`, `BATCH_2_TEST.md`, `BATCH_3_TEST.md`, `BATCH_4_TEST.md`, `BATCH_5_TEST.md`, `BATCH_6_TEST.md`, `BATCH_7_TEST.md`, `BATCH_8_TEST.md`, `BATCH_9_TEST.md`
+Follow `BATCH_1_TEST.md`, `BATCH_2_TEST.md`, `BATCH_3_TEST.md`, `BATCH_4_TEST.md`, `BATCH_5_TEST.md`, `BATCH_6_TEST.md`, `BATCH_7_TEST.md`, `BATCH_8_TEST.md`, `BATCH_9_TEST.md`, `BATCH_10_TEST.md`
 and the associated gaps documents. Do not confuse successful CI with
 real in-game gameplay acceptance.
 
@@ -130,8 +132,8 @@ To roll back, stop the server, remove the Arcane V2 JAR, restore the
 old V3 datapack and matching world backup. Do **not** mix Arcane V2
 persistent save data with V3 progression data without a migration.
 
-**Status:** Sixteen individual pathways and eight Resonances have named power
-resources in development source (315/434), with 119 remaining. Some of
+**Status:** Eighteen individual pathways and nine Resonances have named power
+resources in development source (355/434), with 79 remaining. Some of
 these entries have incomplete or approximate mechanics; no live SMP acceptance
 is recorded. The Fall can injure **self and allies** by Rev2 design.
 **Do not enable experimental phasing in a protected or public world** until
@@ -152,3 +154,8 @@ Batch 9 includes `/tarot mirror exit` for a temporary Mirror World
 capstone; the control is available only while the corresponding power is
 active. Its safe-flight restoration must be live-tested before enabling
 in survival multiplayer.
+
+Batch 10: `/tarot bind primary the_eclipse` at Sequence1 casts the
+Sun+Moon fused fixed/moving domain. Because Blood Diet is a permanent
+identity drawback, food outside `#tarot:meat` will not restore hunger.
+Do not co-install a previous V3 or legacy Tarot datapack.

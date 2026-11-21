@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Solar Flare",
+  "description": "20% chance Blind `#tarot:undead` attacker 40t (undead-specific)."
+}

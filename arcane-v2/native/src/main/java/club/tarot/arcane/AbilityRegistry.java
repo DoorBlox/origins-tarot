@@ -256,6 +256,36 @@ public final class AbilityRegistry {
         path("starless_poison", 2, "shadow_whisper");
         path("starless_poison", 1, "midnight_apocalypse");
         path("starless_poison", 0, "the_starless_poison");
+        path("sun", 9, "unshadowed", "inner_radiance", "inner_light", "purification", "beacon_of_faith");
+        path("sun", 8, "holy_light");
+        path("sun", 7, "solar_flare");
+        path("sun", 6, "witness");
+        path("sun", 5, "purify");
+        path("sun", 4, "unshadowed_ii");
+        path("sun", 3, "radiance");
+        path("sun", 2, "sanctify");
+        path("sun", 1, "white_angel", "beacon_of_faith_ii");
+        path("sun", 0, "the_eternal_day");
+        path("moon", 9, "sanguine_sight", "bloods_renewal", "sanguine_resilience", "pharmacist", "blood_diet");
+        path("moon", 8, "tame");
+        path("moon", 7, "blood_drain");
+        path("moon", 6, "brew");
+        path("moon", 5, "scarlet");
+        path("moon", 4, "shaman");
+        path("moon", 3, "summon");
+        path("moon", 2, "life");
+        path("moon", 1, "beauty", "pharmacist_ii");
+        path("moon", 0, "the_scarlet_feast");
+        path("eclipse", 9, "unshadowed_sanguine");
+        path("eclipse", 8, "holy_tamer");
+        path("eclipse", 7, "solar_drain");
+        path("eclipse", 6, "witness_brew");
+        path("eclipse", 5, "purify_scarlet");
+        path("eclipse", 4, "sunrise");
+        path("eclipse", 3, "moonshadow");
+        path("eclipse", 2, "lunar_sanctuary");
+        path("eclipse", 1, "solar_drain");
+        path("eclipse", 0, "the_eclipse");
     }
 
     private static void path(String name, int sequence, String... ids) {

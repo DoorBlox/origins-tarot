@@ -39,7 +39,9 @@ public final class Ascension {
         Map.entry("devil",new Objective(Items.BLAZE_ROD,EntityType.BLAZE,false)),
         Map.entry("judgement",new Objective(Items.IRON_BARS,null,true)),
         Map.entry("star",new Objective(Items.CLOCK,EntityType.PHANTOM,false)),
-        Map.entry("empress",new Objective(Items.SPIDER_EYE,EntityType.SPIDER,false))
+        Map.entry("empress",new Objective(Items.SPIDER_EYE,EntityType.SPIDER,false)),
+        Map.entry("sun",new Objective(Items.GLOWSTONE_DUST,EntityType.SKELETON,false)),
+        Map.entry("moon",new Objective(Items.REDSTONE,EntityType.SPIDER,false))
     );
     private static final Map<Integer,List<Offering>> OFFERINGS=new HashMap<>();
     static {

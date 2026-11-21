@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Holy Light",
+  "description": "Crouch 60t → heal 1 heart. Cooldown 600t."
+}

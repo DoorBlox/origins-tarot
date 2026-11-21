@@ -9,6 +9,8 @@ import club.tarot.arcane.EmperorLoversAbilities;
 import club.tarot.arcane.BenevolentCrown;
 import club.tarot.arcane.BindingContract;
 import club.tarot.arcane.StarEmpressAbilities;
+import club.tarot.arcane.SunMoonAbilities;
+import org.spongepowered.asm.mixin.Unique;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.block.BlockState;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,6 +28,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /** Rev 2 spiritual expenditure and Fools' Bounty, no KubeJS. */
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
+    @Unique private int tarot$foodBefore;
+    @Unique private float tarot$saturationBefore;
+    @Unique private boolean tarot$noFood;
+    @Inject(method="eatFood",at=@At("HEAD"))
+    private void tarot$bloodDietBefore(World world,ItemStack consumed,
+        CallbackInfoReturnable<ItemStack> cir){
+        tarot$noFood=false;
+        if(world.isClient || !((Object)this instanceof ServerPlayerEntity p))return;
+        tarot$noFood=SunMoonAbilities.blocksFood(p,consumed);
+        if(tarot$noFood){
+            tarot$foodBefore=p.getHungerManager().getFoodLevel();
+            tarot$saturationBefore=p.getHungerManager().getSaturationLevel();
+        }
+    }
+    @Inject(method="eatFood",at=@At("TAIL"))
+    private void tarot$bloodDietAfter(World world,ItemStack consumed,
+        CallbackInfoReturnable<ItemStack> cir){
+        if(!tarot$noFood || !((Object)this instanceof ServerPlayerEntity p))return;
+        p.getHungerManager().setFoodLevel(tarot$foodBefore);
+        p.getHungerManager().setSaturationLevel(tarot$saturationBefore);
+        tarot$noFood=false;
+    }
     @ModifyVariable(method="addExperience",at=@At("HEAD"),argsOnly=true,index=1)
     private int tarot$xpBonus(int experience) {
         if((Object)this instanceof ServerPlayerEntity player)

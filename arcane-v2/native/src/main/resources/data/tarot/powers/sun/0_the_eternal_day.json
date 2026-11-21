@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Eternal Day",
+  "description": "Primary key. **Duration 2400t (120s). Cooldown 24000t.**"
+}

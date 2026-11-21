@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Unshadowed",
+  "description": "+40% damage to `#tarot:undead` (undead-specific — unchanged)."
+}

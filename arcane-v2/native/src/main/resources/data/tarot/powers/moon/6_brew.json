@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Brew",
+  "description": "Instant brew. Cooldown 6000t."
+}

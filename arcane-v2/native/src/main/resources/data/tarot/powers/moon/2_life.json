@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Life",
+  "description": "Once per 3600t, revive dead passive as ally 400t."
+}

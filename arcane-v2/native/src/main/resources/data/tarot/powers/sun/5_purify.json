@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Purify",
+  "description": "Secondary key: remove Poison/Wither/Blindness from self or player within 4 blocks. Cooldown 900t."
+}

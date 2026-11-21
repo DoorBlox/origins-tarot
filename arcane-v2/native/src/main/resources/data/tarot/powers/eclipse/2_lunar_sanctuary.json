@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Lunar Sanctuary",
+  "description": "Sanctify at night drains 1 heart/40t from nearby enemies; heals self. Undead +2 dmg/sec. Cooldown 3600t."
+}

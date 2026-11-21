@@ -98,6 +98,15 @@ public final class ArcaneSave extends PersistentState {
                 record.mirrorRestorePending=n.getBoolean("mirrorRestorePending");
                 record.mirrorOldMayFly=n.getBoolean("mirrorOldMayFly");
                 record.mirrorOldFlying=n.getBoolean("mirrorOldFlying");
+                record.sunCrouchTicks=n.getInt("sunCrouchTicks");
+                record.sunStillTicks=n.getInt("sunStillTicks");
+                record.moonPotionUntil=n.getLong("moonPotionUntil");
+                record.scarletUntil=n.getLong("scarletUntil");
+                record.sanctifyUntil=n.getLong("sanctifyUntil");
+                record.whiteAngelUntil=n.getLong("whiteAngelUntil");
+                record.witnessUntil=n.getLong("witnessUntil");
+                if(n.contains("witnessTarget",NbtElement.INT_ARRAY_TYPE))
+                    record.witnessTarget=n.getUuid("witnessTarget");
                 if(n.contains("recordedStepX") && n.contains("recordedStepY") && n.contains("recordedStepZ"))
                     record.recordedStep=new net.minecraft.util.math.BlockPos(
                         n.getInt("recordedStepX"),n.getInt("recordedStepY"),n.getInt("recordedStepZ"));
@@ -190,6 +199,14 @@ public final class ArcaneSave extends PersistentState {
             n.putBoolean("mirrorRestorePending",record.mirrorRestorePending);
             n.putBoolean("mirrorOldMayFly",record.mirrorOldMayFly);
             n.putBoolean("mirrorOldFlying",record.mirrorOldFlying);
+            n.putInt("sunCrouchTicks",record.sunCrouchTicks);
+            n.putInt("sunStillTicks",record.sunStillTicks);
+            n.putLong("moonPotionUntil",record.moonPotionUntil);
+            n.putLong("scarletUntil",record.scarletUntil);
+            n.putLong("sanctifyUntil",record.sanctifyUntil);
+            n.putLong("whiteAngelUntil",record.whiteAngelUntil);
+            n.putLong("witnessUntil",record.witnessUntil);
+            if(record.witnessTarget!=null)n.putUuid("witnessTarget",record.witnessTarget);
             if(record.recordedStep!=null){
                 n.putInt("recordedStepX",record.recordedStep.getX());
                 n.putInt("recordedStepY",record.recordedStep.getY());
@@ -280,6 +297,14 @@ public final class ArcaneSave extends PersistentState {
         public boolean mirrorRestorePending;
         public boolean mirrorOldMayFly;
         public boolean mirrorOldFlying;
+        public int sunCrouchTicks;
+        public int sunStillTicks;
+        public long moonPotionUntil;
+        public long scarletUntil;
+        public long sanctifyUntil;
+        public long whiteAngelUntil;
+        public long witnessUntil;
+        public UUID witnessTarget;
         /** Crash recovery for temporary capstone flight; only ours is restored. */
         public boolean restoreFlightPending;
         public boolean legendPriorMayFly;

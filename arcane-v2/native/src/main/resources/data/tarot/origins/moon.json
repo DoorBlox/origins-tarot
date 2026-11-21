@@ -1,0 +1,12 @@
+{
+  "name": "The Moon",
+  "description": "Arcane V2 The Moon, kit powers granted dynamically.",
+  "icon": "minecraft:redstone",
+  "impact": 3,
+  "order": 18,
+  "powers": [
+    "tarot:moon/marker",
+    "tarot:moon/identity_blood_diet",
+    "tarot:moon/identity_wings"
+  ]
+}

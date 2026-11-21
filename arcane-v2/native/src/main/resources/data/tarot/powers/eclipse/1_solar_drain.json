@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Solar Drain",
+  "description": "White Angel: self heal 1 HP/sec, undead +2 dmg/sec. Cooldown 3600t."
+}

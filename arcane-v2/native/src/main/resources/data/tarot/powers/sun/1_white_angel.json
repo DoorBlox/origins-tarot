@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "White Angel",
+  "description": "Primary key: light 15 in 15 blocks 300t; undead 4 dmg/sec (undead-specific); all players Regeneration I. Cooldown 3600t."
+}

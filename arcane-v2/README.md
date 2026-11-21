@@ -107,3 +107,13 @@ or safe return. Exact phantom spawn rules, decorative darkness, and passive
 hostile AI remain incomplete; see `docs/BATCH_9_GAPS.md` and the manual
 `docs/BATCH_9_TEST.md` list. Source coverage is **315/434** (119 remaining),
 not a claim that 315 effects have been proven in multiplayer.
+
+## Sun / Moon / Eclipse — native Batch 10
+
+The next 40 names (15 Sun, 15 Moon, 10 Eclipse) are implemented through
+native event handlers for light/fire/undead effects, food restrictions,
+rapid potions, life drain, ally healing, and combined fixed/moving
+auras. Permanent identity drawbacks include the Sun's Glowing and the
+Moon's meat-only hunger. `docs/BATCH_10_TEST.md` contains in-game checks;
+`docs/BATCH_10_GAPS.md` identifies dynamic-light, actual spawn blocking,
+animal AI and double-loot gaps. Source count **355/434**, 79 remaining.

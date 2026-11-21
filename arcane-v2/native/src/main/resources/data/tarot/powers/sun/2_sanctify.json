@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Sanctify",
+  "description": "Once per 3600t, consecrate 5-block radius 600t; undead 2 dmg/sec (undead-specific)."
+}

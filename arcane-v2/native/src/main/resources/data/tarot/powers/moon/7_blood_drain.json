@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Blood Drain",
+  "description": "Melee heal 0.5 hearts once per 100t **on hostile mobs AND enemy players**."
+}

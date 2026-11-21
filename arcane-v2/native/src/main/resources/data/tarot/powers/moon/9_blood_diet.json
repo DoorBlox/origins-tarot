@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Blood Diet",
+  "description": "Only `#tarot:meat` restores hunger."
+}

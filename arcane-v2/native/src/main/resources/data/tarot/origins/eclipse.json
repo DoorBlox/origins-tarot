@@ -1,0 +1,13 @@
+{
+  "name": "The Eclipse",
+  "description": "Sun + Moon Resonance at Sequence1 with permanent Beacon of Faith and Blood Diet.",
+  "icon": "minecraft:nether_star",
+  "impact": 3,
+  "order": 30,
+  "powers": [
+    "tarot:eclipse/marker",
+    "tarot:sun/identity_beacon_of_faith",
+    "tarot:moon/identity_blood_diet",
+    "tarot:eclipse/identity_wings"
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "Sunrise",
+  "description": "Undead damage → heal 1 heart, drain 0.5 hearts, fire 40t."
+}

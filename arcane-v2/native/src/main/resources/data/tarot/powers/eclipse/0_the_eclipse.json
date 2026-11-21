@@ -1,0 +1,5 @@
+{
+  "type": "origins:simple",
+  "name": "The Eclipse",
+  "description": "Primary key. **Duration 1200t (60s). Cooldown 24000t.** - Sun: 30-block fixed zone (no spawns, undead 6 dmg/sec, players Regeneration I, allies +1 heart/200t, **enemy players 1 dmg/sec**) - Moon: 15-block moving aura (hostiles −1 heart/sec, **enemy players −1 heart/60t**, heal drained cap 30 HP) - Overlap: undead burned+drained, drop double loot - Final pulse (1180t): 10 damage undead, 5 hearts allies, Blindness 300t enemy players"
+}

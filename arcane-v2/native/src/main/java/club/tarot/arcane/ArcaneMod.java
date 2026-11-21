@@ -153,6 +153,7 @@ public final class ArcaneMod implements ModInitializer {
                 EmperorLoversAbilities.tick(player,state,record);
                 DevilJudgementAbilities.tick(player,state,record);
                 StarEmpressAbilities.tick(player,state,record);
+                SunMoonAbilities.tick(player,state,record);
             }
             EmperorLoversAbilities.updateAllies(server);
         });
@@ -166,6 +167,7 @@ public final class ArcaneMod implements ModInitializer {
         EmperorLoversAbilities.register();
         DevilJudgementAbilities.register();
         StarEmpressAbilities.register();
+        SunMoonAbilities.register();
         ServerPlayConnectionEvents.DISCONNECT.register((handler,server) ->
             server.execute(() -> {
                 FoolLegend.stopOnDisconnect(handler.getPlayer());
@@ -178,6 +180,7 @@ public final class ArcaneMod implements ModInitializer {
                 EmperorLoversAbilities.stopOnDisconnect(handler.getPlayer());
                 DevilJudgementAbilities.stopOnDisconnect(handler.getPlayer());
                 StarEmpressAbilities.stopOnDisconnect(handler.getPlayer());
+                SunMoonAbilities.stopOnDisconnect(handler.getPlayer());
             }));
         LOG.info("Arcane V2 native runtime initialized (KubeJS not required)");
     }
@@ -274,6 +277,12 @@ public final class ArcaneMod implements ModInitializer {
                 || "the_starless_sky".equals(ability)
                 || "the_mirror_world".equals(ability)
                 || "the_starless_poison".equals(ability)
+                || "white_angel".equals(ability)
+                || "solar_drain".equals(ability)
+                || "beauty".equals(ability)
+                || "the_eternal_day".equals(ability)
+                || "the_scarlet_feast".equals(ability)
+                || "the_eclipse".equals(ability)
                 || "reap".equals(ability);
         return "secondary".equals(binding) && (
             "paper_dagger".equals(ability) || "paper_sentence".equals(ability)
@@ -295,12 +304,20 @@ public final class ArcaneMod implements ModInitializer {
             || "desires_discipline".equals(ability) || "balance".equals(ability)
             || "haunt".equals(ability) || "haunting_plague".equals(ability)
             || "mirror_passage".equals(ability)
+            || "purify".equals(ability)
+            || "purify_scarlet".equals(ability)
+            || "scarlet".equals(ability)
+            || "sanctify".equals(ability)
+            || "lunar_sanctuary".equals(ability)
             || "consul".equals(ability)
             || "burdened_beginning".equals(ability) || "suffering_sight".equals(ability)
             || "borrowed_sacrifice".equals(ability) || "gathering_of_martyrs".equals(ability));
     }
     private static int cast(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r,String ability) {
         if(AbilityRegistry.isActive(r.profile,ability)) {
+            if(SunMoonAbilities.cast(p,state,r,ability)) {
+                info(p,"Cast "+ability);return 1;
+            }
             if(StarEmpressAbilities.cast(p,state,r,ability)) {
                 info(p,"Cast "+ability);return 1;
             }
@@ -421,6 +438,9 @@ public final class ArcaneMod implements ModInitializer {
         if(before.stream().anyMatch(id->id.contains("star/")
             || id.contains("empress/") || id.contains("starless_poison/")))
             StarEmpressAbilities.stopOnDisconnect(player);
+        if(before.stream().anyMatch(id->id.contains("sun/")
+            || id.contains("moon/") || id.contains("eclipse/")))
+            SunMoonAbilities.stopOnDisconnect(player);
     }
     static void run(ServerPlayerEntity player, String command) {
         MinecraftServer server=player.getServer();
@@ -452,6 +472,8 @@ public final class ArcaneMod implements ModInitializer {
                 case "judgement" -> "tarot:devil/identity_sacred_rejection";
                 case "star" -> "tarot:empress/identity_exposed_reflection";
                 case "empress" -> "tarot:star/identity_true_sleeplessness";
+                case "sun" -> "tarot:moon/identity_blood_diet";
+                case "moon" -> "tarot:sun/identity_beacon_of_faith";
                 default -> null;
             };
             if(secondaryIdentity!=null)
@@ -469,7 +491,9 @@ public final class ArcaneMod implements ModInitializer {
         }
         // Clear stale input bindings when a Sequence has been removed.
         if(!AbilityRegistry.isActive(profile,r.primaryBinding)) {
-            String[] priorities={"the_starless_poison","the_mirror_world","the_starless_sky",
+            String[] priorities={"the_eclipse","the_eternal_day","the_scarlet_feast",
+                "white_angel","solar_drain","beauty",
+                "the_starless_poison","the_mirror_world","the_starless_sky",
                 "midnight_apocalypse","apocalypses_herald","misfortune",
                 "the_binding_contract","the_absolute_law","descent",
                 "chaos_law","chaos_unleashed","order",
@@ -490,7 +514,8 @@ public final class ArcaneMod implements ModInitializer {
                 }
         }
         if(!AbilityRegistry.isActive(profile,r.secondaryBinding)) {
-            String[] priorities={"haunting_plague","haunt","mirror_passage",
+            String[] priorities={"lunar_sanctuary","purify_scarlet","purify","scarlet","sanctify",
+                "haunting_plague","haunt","mirror_passage",
                 "desires_discipline","discipline","blood_price","balance",
                 "emperors_hymn","decree_of_nature",
                 "decree","coins_blessing","coin","natures_grasp","transmute",
@@ -555,6 +580,7 @@ public final class ArcaneMod implements ModInitializer {
         EmperorLoversAbilities.stopOnDisconnect(p);
         DevilJudgementAbilities.stopOnDisconnect(p);
         StarEmpressAbilities.stopOnDisconnect(p);
+        SunMoonAbilities.stopOnDisconnect(p);
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_secondary_identity");
         run(p,"power revokeall "+p.getUuidAsString()+" tarot_input");
         run(p,"power revokeall "+p.getUuidAsString()+" "+SOURCE);

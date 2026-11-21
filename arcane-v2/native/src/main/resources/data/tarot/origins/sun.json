@@ -1,0 +1,12 @@
+{
+  "name": "The Sun",
+  "description": "Arcane V2 The Sun, kit powers granted dynamically.",
+  "icon": "minecraft:glowstone",
+  "impact": 3,
+  "order": 19,
+  "powers": [
+    "tarot:sun/marker",
+    "tarot:sun/identity_beacon_of_faith",
+    "tarot:sun/identity_wings"
+  ]
+}
