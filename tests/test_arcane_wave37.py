@@ -81,9 +81,14 @@ class SecondWaveSourceTests(unittest.TestCase):
                         command=node["command"]
                         self.assertEqual(node["permission_level"],2)
                         self.assertNotIn("\n",command)
-                        if "minecraft:slowness" in command or "minecraft:weakness" in command:
-                            self.assertIn("@e[type=#tarot:hostile",command)
-                        self.assertNotIn(" @a[distance=",command)
+                        is_hostile_effect=any("minecraft:"+effect in command for effect in
+                              ("slowness","weakness","wither","poison","blindness","mining_fatigue"))
+                        if is_hostile_effect:
+                            self.assertTrue("@e[type=#tarot:hostile" in command or
+                                            "@e[type=#tarot:undead" in command,command)
+                            self.assertNotIn(" @a[distance=",command)
+                        # Positive effects such as Regeneration are allowed
+                        # on nearby players, albeit not yet team-filtered.
                         self.assertNotIn(" op ",command)
 
     def test_cooldowns_and_safety_fail_closed_examples(self):
