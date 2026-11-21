@@ -557,10 +557,10 @@ def emit_ui(w):
     """
     w.f("ui/help",
         msg("ARCANE REV3 | Books first: right-click your written handbook to read it.","gold"),
-        msg("ABILITIES: your Pathway Tome covers powers, controls, and incomplete mechanics.","aqua"),
+        msg("ABILITIES: your Pathway Tome explains powers and controls.","aqua"),
         msg("ROADMAP: next acting task, marks, offerings, ritual, and unlocks.","aqua"),
         msg("Seq9-5 auto equips; Seq4-2 unlocks a fixed partner and editable slots.","yellow"),
-        msg("Seq1 Resonance LOCKED for normal SMP players; incomplete powers remain PARTIAL.","red"),
+        msg("Sequence 1 cannot be unlocked through normal ascension yet.","red"),
         msg("Vanilla commands: /trigger a_guide, /trigger a_help, /trigger a_abilities, /trigger a_roadmap.","gray"),
         click("[Get Arcane Handbook BOOK]","a_book","gold"),
         click("[Get my Pathway Tome BOOK]","a_tome","aqua"),
@@ -579,7 +579,7 @@ def emit_ui(w):
         "execute if score @s a_paused matches 1 run "+msg("Arcane runtime paused by administrator; ask an admin to resume.","red"),
         "execute if score @s a_init matches 1 run "+F("ui/status_primary"),
         "execute if score @s a_init matches 1 if score @s a_seq matches ..4 run "+F("ui/status_partner"),
-        "execute if score @s a_mode matches 2 run "+msg("OP-enabled Seq1 Resonance preview active; not game-verified.","light_purple"),
+        "execute if score @s a_mode matches 2 run "+msg("Resonance form active.","light_purple"),
         "execute if score @s a_init matches 1 if score @s a_seq matches 5.. run "+msg("Partner unlocks at Sequence 4.","yellow"),
         "execute if score @s a_init matches 1 run tellraw @s "+J([
             {"text":"[Tarot] Sequence: ","color":"gold"},score("a_seq"),
@@ -600,7 +600,7 @@ def emit_ui(w):
          for i in range(1,9)],
         "execute if score @s a_mode matches 0 run "+msg("SINGLE: sequence kits auto-fill as you advance.","gold"),
         "execute if score @s a_mode matches 1 run "+msg("SLOT: click Edit by any slot, select pathway, then Sequence.","yellow"),
-        "execute if score @s a_mode matches 2 run "+msg("RESONANCE TEST: all ten paired powers active. Slot UI disabled.","light_purple"),
+        "execute if score @s a_mode matches 2 run "+msg("Resonance abilities active. Slot editing unavailable.","light_purple"),
         "execute if score @s a_mode matches 1 run "+click("[Auto-fill all primary slots]","a_auto","yellow"),
         click("[Inspect equipped abilities]","a_abilities","aqua"))
     for i in range(1,9):
@@ -923,12 +923,18 @@ def build(root=ROOT,output=None):
                              indent=2,ensure_ascii=False)+"\n",encoding="utf8")
     alias_path=output/"tarot.json"
     alias_path.write_text(json.dumps(alias(),indent=2)+"\n",encoding="utf8")
-    from .player_codex import generate_player_manual
+    from .player_codex import generate_player_manual, generate_developer_ability_report
     manual_path = output/"Arcane_Rev3_Player_Ability_Reference.md"
     manual_path.write_text(generate_player_manual(manifest,compiled,kits,innate),
                            encoding="utf8")
+    developer_path = output/"Arcane_Rev3_Developer_Ability_Report.md"
+    developer_path.write_text(
+        generate_developer_ability_report(manifest,compiled,kits,innate),
+        encoding="utf8",
+    )
     artifacts.update(manifest=manifest_path,alias=alias_path,
-                     player_manual=manual_path)
+                     player_manual=manual_path,
+                     developer_ability_report=developer_path)
     return artifacts
 
 
