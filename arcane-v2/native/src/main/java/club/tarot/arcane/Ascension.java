@@ -23,19 +23,19 @@ public final class Ascension {
     private Ascension() {}
     private record Objective(Item item,EntityType<?> victimType,boolean trade) {}
     private record Offering(Item item,int count) {}
-    private static final Map<String,Objective> ACTS=Map.of(
-        "fool",new Objective(Items.COMPASS,EntityType.SPIDER,false),
-        "hanged_man",new Objective(Items.KELP,EntityType.DROWNED,false),
-        "world",new Objective(Items.CROSSBOW,EntityType.PILLAGER,false),
-        "justice",new Objective(Items.HONEY_BOTTLE,null,true),
-        "hermit",new Objective(Items.LAPIS_LAZULI,null,true),
-        "chariot",new Objective(Items.FLINT_AND_STEEL,EntityType.BLAZE,false),
-        "death",new Objective(Items.BONE,EntityType.SKELETON,false),
-        "tower",new Objective(Items.TNT,EntityType.CREEPER,false),
-        "magician",new Objective(Items.ENDER_PEARL,EntityType.ENDERMAN,false),
-        "strength",new Objective(Items.IRON_INGOT,EntityType.ZOMBIE,false),
-        "emperor",new Objective(Items.SHIELD,EntityType.PILLAGER,false),
-        "lovers",new Objective(Items.POPPY,null,true)
+    private static final Map<String,Objective> ACTS=Map.ofEntries(
+        Map.entry("fool",new Objective(Items.COMPASS,EntityType.SPIDER,false)),
+        Map.entry("hanged_man",new Objective(Items.KELP,EntityType.DROWNED,false)),
+        Map.entry("world",new Objective(Items.CROSSBOW,EntityType.PILLAGER,false)),
+        Map.entry("justice",new Objective(Items.HONEY_BOTTLE,null,true)),
+        Map.entry("hermit",new Objective(Items.LAPIS_LAZULI,null,true)),
+        Map.entry("chariot",new Objective(Items.FLINT_AND_STEEL,EntityType.BLAZE,false)),
+        Map.entry("death",new Objective(Items.BONE,EntityType.SKELETON,false)),
+        Map.entry("tower",new Objective(Items.TNT,EntityType.CREEPER,false)),
+        Map.entry("magician",new Objective(Items.ENDER_PEARL,EntityType.ENDERMAN,false)),
+        Map.entry("strength",new Objective(Items.IRON_INGOT,EntityType.ZOMBIE,false)),
+        Map.entry("emperor",new Objective(Items.SHIELD,EntityType.PILLAGER,false)),
+        Map.entry("lovers",new Objective(Items.POPPY,null,true))
     );
     private static final Map<Integer,List<Offering>> OFFERINGS=new HashMap<>();
     static {
