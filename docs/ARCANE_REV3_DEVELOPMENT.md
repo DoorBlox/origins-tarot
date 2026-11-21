@@ -10,7 +10,13 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 - Pure datapack/scoreboard runtime: Sequence 9 through 2, 22 distinct acting quest tracks, altar requirements, combat lock, fixed second pathway at Sequence 4, 6/7/8 editable slots, grant/revoke and re-login reconciliation. No KubeJS or custom Fabric mod.
 - Non-OP `/tarot`, `/tarot status`, `/tarot slots`, `/tarot ascend`, `/tarot slot N tarot:card S`, `/tarot slot N clear`, `/tarot slot auto`, `/tarot slot swap N M`, and `/tarot reset` via player-scoped CLIENT `/trigger` operations. Command Aliases schema uses permission 0. Both `/tarot status` and `/tarot slots` display actual Arcana titles and Sequence numbers rather than internal numeric kit codes; the partner is revealed at Sequence 4.
 - The full 434-entry source manifest identifies every ability, its flag, exact description, compiled power (when present), and remaining work. **120 powers compiled (72 fully translated, 48 explicitly partial), 314 still blocked.** No fake `origins:simple` abilities are emitted.
-- Fool's identity drawback (+25% exhaustion sprinting/Elytra) remains on its Origin independently of slots.
+- Permanent primary-pathway drawbacks are innate Origin powers, **not removable Sequence-9 slot abilities**: Fool's +25% exhaustion plus 17 more compiled pathway drawbacks are attached directly to their Origins, outside the source-grant/revoke cycle.
+
+## Rev3 identity-drawback integrity
+
+The first version only pinned the Fool's Spiritual Expenditure permanently. This allowed players from 17 other pathways to remove the encoded Seq9 drawback when they switched slots at Sequence 4. The build now extracts the compiled penalty from each corresponding Seq9 kit and puts it into the **primary Origin's power list**. Every other Seq9 power remains in the removable slot kit. This also means administrators' `rollback_player` only revokes sequence-granted powers, not inherent identity penalties.
+
+**Four primary pathways still lack a complete native identity drawback:** Lovers (Separation Anxiety), Wheel of Fortune (Debt of Fate), Justice (Compassionate Restraint), and Hanged Man (Weight of Sin). These remain visible release blockers; never claim all 22 drawbacks are active. The 434-ability source-manifest count is unchanged, because the fix rehomes existing powers rather than inventing new abilities.
 
 ## Additional source-traced abilities
 
