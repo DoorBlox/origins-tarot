@@ -198,7 +198,7 @@ def emit_player_codex(w, compiled, manifest, kits, innate, num):
                 shown_detail = [
                     _msg(row["name"], "gold"),
                     _text("What it does: " +
-                          str(implemented.get("description", "See the effects of your equipped ability.")), "aqua"),
+                          player_effect_text(implemented), "aqua"),
                     _text("How to use: " + how_to_use(implemented), "green"),
                 ]
                 shown_detail.extend([
@@ -315,12 +315,41 @@ def emit_roadmap(w):
         w.f(f"ui/roadmap/seq_{seq}", lines)
 
 
+def player_effect_text(power):
+    """Keep actual gameplay effects, omit implementation-gap commentary.
+
+    Never substitute the original lore promise for what is compiled. If a
+    description contains a second clause about unfinished mechanics, only
+    show the implemented effect clause to players.
+    """
+    import re
+
+    description = str(power.get("description", "")).strip()
+    if not description:
+        return "Check your equipped power's effect in game."
+    clauses = re.split(r";\\s*", description)
+    gameplay = [
+        clause for clause in clauses
+        if not re.search(
+            r"\\b(?:not included|not implemented|pending|unsupported|"
+            r"unimplemented|placeholder|TODO|source-only)\\b",
+            clause, flags=re.IGNORECASE,
+        )
+    ]
+    value = "; ".join(gameplay).strip() or description
+    value = re.sub(r"\\bpartial manifestation\\b", "manifestation",
+                   value, flags=re.IGNORECASE)
+    value = re.sub(r"\\bfallback\\b", "basic effect",
+                   value, flags=re.IGNORECASE)
+    return value
+
+
 def generate_player_manual(manifest, compiled, kits, innate):
     """Readable abilities and controls, with development diagnostics excluded."""
     lines = [
         "# Arcane Rev3 Player Ability Reference",
         "",
-        "Explore 434 Arcana and Resonance ability entries, organized by pathway and Sequence.",
+        "Explore your pathways and the abilities available through normal ascension.",
         "",
         "## How to play",
         "",
@@ -335,7 +364,6 @@ def generate_player_manual(manifest, compiled, kits, innate):
     ]
     for family, title in (
         ("individual", "22 Major Arcana pathways"),
-        ("resonance", "Resonance paths (not yet available)"),
     ):
         lines.extend(["## " + title, ""])
         pathways = list(dict.fromkeys(
@@ -345,7 +373,8 @@ def generate_player_manual(manifest, compiled, kits, innate):
             lines.extend(["### " + slug.replace("_", " ").title(), ""])
             sequences = sorted(
                 {row["sequence"] for row in manifest
-                 if row["family"] == family and row["pathway"] == slug},
+                 if row["family"] == family and row["pathway"] == slug
+                 and 2 <= row["sequence"] <= 9},
                 reverse=True,
             )
             for seq in sequences:
@@ -359,9 +388,8 @@ def generate_player_manual(manifest, compiled, kits, innate):
                     lines.append("- **" + row["name"] + "**" +
                                  (" (permanent Origin trait)" if identity else ""))
                     lines.append("  - What it does: " +
-                                 str(power.get("description", "An ability of this pathway.")))
-                    if family == "individual":
-                        lines.append("  - How to use: " + how_to_use(power))
+                                 player_effect_text(power))
+                    lines.append("  - How to use: " + how_to_use(power))
                 lines.append("")
     return "\n".join(lines)
 
