@@ -480,7 +480,7 @@ def emit_ui(w):
         msg("Rev3 | /tarot status | /tarot slots | /tarot ascend","aqua"),
         msg("Seq4-2: /tarot slot N tarot:pathway S; /tarot slot N clear","yellow"),
         msg("/tarot slot auto | /tarot slot swap N M | /tarot reset","yellow"),
-        msg("Seq1 Resonance temporarily gated until all 10 pair powers exist.","red"),
+        msg("Seq1 requires OP-enabled development test until in-game acceptance. All ten source powers per pair exist; many are partial.","red"),
         click("[View Status]","a_status"),
         click("[View Slots]","a_slots"),
         click("[Auto slots on Seq4-2]","a_auto","yellow"))
@@ -489,6 +489,7 @@ def emit_ui(w):
         "execute if score @s a_paused matches 1 run "+msg("Arcane runtime paused by administrator; ask an admin to resume.","red"),
         "execute if score @s a_init matches 1 run "+F("ui/status_primary"),
         "execute if score @s a_init matches 1 if score @s a_seq matches ..4 run "+F("ui/status_partner"),
+        "execute if score @s a_mode matches 2 run "+msg("OP-enabled Seq1 Resonance preview active; not game-verified.","light_purple"),
         "execute if score @s a_init matches 1 if score @s a_seq matches 5.. run "+msg("Partner unlocks at Sequence 4.","yellow"),
         "execute if score @s a_init matches 1 run tellraw @s "+J([
             {"text":"[Tarot] Sequence: ","color":"gold"},score("a_seq"),
@@ -507,6 +508,7 @@ def emit_ui(w):
          for i in range(1,9)],
         "execute if score @s a_mode matches 0 run "+msg("SINGLE: sequence kits auto-fill as you advance.","gold"),
         "execute if score @s a_mode matches 1 run "+msg("SLOT: click Edit by any slot, select pathway, then Sequence.","yellow"),
+        "execute if score @s a_mode matches 2 run "+msg("RESONANCE TEST: all ten paired powers active. Slot UI disabled.","light_purple"),
         "execute if score @s a_mode matches 1 run "+click("[Auto-fill all primary slots]","a_auto","yellow"))
     for i in range(1,9):
         w.f(f"ui/slot_{i}",
@@ -646,8 +648,41 @@ def emit_progression(w):
                        msg("New slot unlocked.","light_purple")]
         w.f(f"ascend/commit_s{seq}",commit,F("powers/refresh"),
             msg(f"Ascended to Sequence {seq-1}.","green"))
+    # Normal player progression stays fail-closed. Only the operator-set
+    # per-player a_rtest flag enables a true, fully-offered Seq2 -> Seq1
+    # test transition. No magic "fast forward" / skip / admin OP exposure.
     w.f("ascend/check_s2",
-        msg("Seq1 Resonance is locked until every pair has all ten implemented powers. No materials consumed.","red"))
+        "execute unless score @s a_rtest matches 1 run " +
+        msg("Resonance is locked in normal alpha. An OP can opt in on a BACKED-UP TEST WORLD. No materials consumed.", "red"),
+        "execute if score @s a_rtest matches 1 run " +
+        F("ascend/check_s2_dev"))
+    (first, n1), (second, n2) = tuple(RITUALS[2].items())
+    w.f("ascend/check_s2_dev",
+        "execute store result score @s a_a run clear @s minecraft:" + first + " 0",
+        "execute store result score @s a_b run clear @s minecraft:" + second + " 0",
+        "scoreboard players set @s a_ok 0",
+        "execute if score @s a_rtest matches 1 if score @s a_seq matches 2 "
+        "if score @s a_mode matches 1 "
+        f"if score @s a_a matches {n1}.. if score @s a_b matches {n2}.. "
+        "run scoreboard players set @s a_ok 1",
+        "execute if score @s a_ok matches 1 run " +
+        F("ascend/commit_s2_dev"),
+        "execute if score @s a_ok matches 0 run " +
+        msg(f"Test ascension requires {n1} {first} and {n2} {second}. Nothing taken.", "red"))
+    w.f("ascend/commit_s2_dev",
+        f"clear @s minecraft:{first} {n1}",
+        f"clear @s minecraft:{second} {n2}",
+        f"scoreboard players remove @s a_marks {ACT_MARKS[2]}",
+        "scoreboard players set @s a_seq 1",
+        "scoreboard players set @s a_mode 2",
+        "scoreboard players set @s a_max 0",
+        [f"scoreboard players set @s a_s{slot} 0" for slot in range(1, 9)],
+        "scoreboard players set @s a_pick_slot 0",
+        "scoreboard players set @s a_pick_path 0",
+        F("powers/refresh"),
+        "particle minecraft:enchant ~ ~1 ~ 1 1 1 0.35 120 force @s",
+        "playsound minecraft:entity.evoker.prepare_summon master @s ~ ~ ~ 1 0.8",
+        msg("RESONANCE TEST ACTIVE: your two pathways have merged into all ten partial source powers. Keep a backup and verify effects!", "light_purple"))
 
 
 def alias():
