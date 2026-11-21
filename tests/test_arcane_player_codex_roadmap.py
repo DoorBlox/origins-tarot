@@ -169,16 +169,21 @@ class PlayerGuidePackContracts(unittest.TestCase):
         path = self.artifacts["player_manual"]
         content = path.read_text(encoding="utf8")
         self.assertIn("Arcane Rev3 Player Ability Reference", content)
-        self.assertIn("434", content)
-        self.assertIn("Sequence 1", content)
-        self.assertIn("Resonance", content)
+        self.assertIn("Sequence 1 is not available", content)
+        self.assertIn("22 Major Arcana pathways", content)
         self.assertIn("What it does", content)
         self.assertIn("How to use", content)
         self.assertNotIn("Still missing", content)
         self.assertNotIn("PARTIAL", content)
         self.assertNotIn("source-full", content)
+        self.assertNotIn("#### Sequence 0", content)
+        self.assertNotIn("#### Sequence 1", content)
         for entry in self.manifest:
-            self.assertIn(entry["name"], content)
+            if entry["family"] == "individual" and 2 <= entry["sequence"] <= 9:
+                self.assertIn(entry["name"], content)
+        developer = self.artifacts["developer_ability_report"].read_text(encoding="utf8")
+        for entry in self.manifest:
+            self.assertIn(entry["power_id"], developer)
 
     def test_alias_keeps_existing_commands_and_adds_guide(self):
         alias = json.loads(self.artifacts["alias"].read_text())
