@@ -1,5 +1,7 @@
 # The Tarot Club — 22 Major Arcana Origins
 
+> **For future AI development sessions:** Start with **[the canonical Arcane V2 Rev3 handoff](CHATGPT_HANDOFF.md)**, [AGENTS.md](AGENTS.md), and [the live unfinished-work tracker #20](https://github.com/DoorBlox/origins-tarot/issues/20). The Arcane Rev3 **development pack** is a separate, **test-only** track from the older V3 Path of Ascension described below; last verified **241/434** power definitions compiled, with partial/blocked mechanics and no SMP deployment. Refresh live status before acting.
+
 > **Current: V3 Path of Ascension (ALPHA)** — Adds a tested-in-code (not yet tested in-game) Sequence 9→0 advancement system, acting-method quests, a second unlockable Arcana, controlled switching, minor Echo powers, and curated high-sequence Resonance. **18 native Elytra gliders and the 22 V2 base origins remain unchanged.**
 
 ### Install the latest V3
