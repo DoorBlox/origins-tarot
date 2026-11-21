@@ -1,0 +1,14 @@
+{
+  "type": "origins:active_self",
+  "name": "Full Faceless Disguise",
+  "description": "Out-of-combat disguise for 120-144 seconds; server-side approximation uses invisibility.",
+  "entity_action": {
+    "type": "origins:execute_command",
+    "command": "tarot cast full_faceless_disguise",
+    "permission_level": 0
+  },
+  "key": {
+    "key": "key.origins.primary_active",
+    "continuous": false
+  }
+}

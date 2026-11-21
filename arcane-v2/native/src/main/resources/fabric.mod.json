@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "tarot_arcane_v2",
+  "version": "${version}",
+  "name": "The Tarot Club — Arcane V2",
+  "description": "KubeJS-free Fabric runtime for the Arcane V2 Origins datapack.",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "club.tarot.arcane.ArcaneMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.25",
+    "minecraft": "1.18.2",
+    "java": ">=17",
+    "fabric-api": "*",
+    "origins": ">=1.4.1"
+  }
+}

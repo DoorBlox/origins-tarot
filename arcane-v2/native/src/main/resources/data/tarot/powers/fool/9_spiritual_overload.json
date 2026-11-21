@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Spiritual Overload",
+  "description": "Three hostile mobs or an enemy player within eight blocks trigger Nausea for 100 ticks.",
+  "hidden": false
+}

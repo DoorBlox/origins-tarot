@@ -1,0 +1,30 @@
+name: Arcane V2 Native Fabric (no KubeJS)
+on:
+  pull_request:
+    paths:
+      - 'arcane-v2/**'
+      - '.github/workflows/arcane-v2.yml'
+  workflow_dispatch:
+jobs:
+  compile-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.12.1'
+      - name: Build native Fabric mod and run unit tests
+        working-directory: arcane-v2/native
+        run: gradle build --no-daemon
+      - name: Upload candidate JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: tarot-arcane-v2-native-unverified
+          path: arcane-v2/native/build/libs/*-0.1.0.jar
+          if-no-files-found: error

@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Fool Identity",
+  "description": "The Fool is your starting Arcana.",
+  "hidden": true
+}

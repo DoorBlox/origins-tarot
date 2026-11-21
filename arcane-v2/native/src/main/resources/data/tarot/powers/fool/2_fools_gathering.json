@@ -1,0 +1,14 @@
+{
+  "type": "origins:active_self",
+  "name": "Fools' Gathering",
+  "description": "Summon two fragile allied flying fighters for 200 ticks; 6000-tick cooldown.",
+  "entity_action": {
+    "type": "origins:execute_command",
+    "command": "tarot cast fools_gathering",
+    "permission_level": 0
+  },
+  "key": {
+    "key": "key.origins.secondary_active",
+    "continuous": false
+  }
+}

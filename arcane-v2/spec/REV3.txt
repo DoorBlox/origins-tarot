@@ -1,0 +1,715 @@
+# THE TAROT CLUB — ARCANE V2 IMPLEMENTATION HANDBOOK (REV 3)
+
+**This document supersedes Rev 2's mechanical framework.** All **individual ability implementations** from Rev 2 remain valid and unchanged. Rev 3 changes **when and how** abilities activate, adds a **slot system**, and shifts the **Resonance trigger from Sequence 5 to Sequence 1**.
+
+**Read this handbook for:**
+- New progression timeline (Part 0)
+- Slot system specification (Part C)
+- Updated progression integration (Part D)
+
+**Reference Rev 2 for:**
+- Full JSON/implementation details for every individual ability (Seq 9-0)
+- Full JSON/implementation details for every Resonance ability (Seq 9-0)
+- Target rules (offensive = hostile mobs + enemy players; ally = same-team only)
+- Required tags, common power patterns, and per-ability mechanics
+
+---
+
+# PART 0 — GLOBAL NOTES + NEW MECHANICS
+
+## 0.1 Progression Timeline
+
+| Seq | State | Mechanism |
+|---|---|---|
+| **9** | Start | 1 pathway unlocked. **1 ability slot.** Seq 9 auto-active. |
+| **8** | Progress | 1 pathway. **2 slots.** Seq 9, 8 auto-active. |
+| **7** | Progress | 1 pathway. **3 slots.** Seq 9-7 auto-active. |
+| **6** | Progress | 1 pathway. **4 slots.** Seq 9-6 auto-active. |
+| **5** | Progress | 1 pathway. **5 slots.** Seq 9-5 auto-active. |
+| **4** | **2nd pathway unlocks** | 2 pathways. **6 slots.** Player must allocate sequences from either pathway. |
+| **3** | Slot choice | 2 pathways. **7 slots.** |
+| **2** | Slot choice | 2 pathways. **8 slots.** |
+| **1** | **Resonance activates** | Slots abolished. **Full Resonance kit** for Seq 9-0 auto-active. |
+| **0** | Resonance capstone | Included in Seq 1 Resonance suite. |
+
+**Slot formula:** `slots = 10 - current_sequence`. Confirmed at Seq 4 = 6 slots.
+
+## 0.2 Slot System Summary
+
+- Each **slot** holds **ONE (pathway, sequence) pair**.
+- Selecting a (pathway, sequence) grants **ALL abilities** from that sequence.
+- **Before Seq 4:** Slots are trivially auto-filled with the single pathway's sequences in order.
+- **At Seq 4:** 2nd pathway unlocks. Player has 6 slots and 12 possible sequences (6 per pathway). They choose which 6.
+- **At Seq 3:** 7 slots, 14 possible sequences (7 per pathway).
+- **At Seq 2:** 8 slots, 16 possible sequences (8 per pathway).
+- **At Seq 1:** Slots no longer gate. All **Resonance Seq 9-0 abilities** become active.
+
+## 0.3 Target Rules (unchanged from Rev 2)
+
+- **Offensive abilities** (damage, debuffs, forced targeting, negative effects) target **`#tarot:hostile` AND enemy players**.
+- **Ally abilities** (healing, buffs, positive effects) target **self AND same-team players**.
+- **Mob-specific abilities** (undead-only, passive-mob-only, villager-specific) keep their mob restriction unchanged.
+- Team check: use `origins:in_tag` (tarot:hostile) OR (`origins:entity_type` player + team ≠ holder's team).
+- KubeJS: `level.getEntitiesOfClass(LivingEntity.class, aabb).filter(e -> e instanceof Monster || (e instanceof ServerPlayerEntity p && !isTeammate(p, holder)))`.
+
+## 0.4 Required tags (unchanged from Rev 2)
+
+`#tarot:hostile` · `#tarot:undead` · `#tarot:passive` · `#tarot:natural_stone` · `#tarot:sanctified_ground` · `#tarot:books` · `#tarot:meat` · `#tarot:unphasable` · `#tarot:decoy` · `#tarot:shadow_minion` · `#tarot:shadow_sin`
+
+## 0.5 Fool's weakness (updated)
+
+**Spiritual Expenditure:** Sprinting and Elytra cost **25% more exhaustion** (was 40%).
+
+---
+
+# PART A — INDIVIDUAL PATHWAY REFERENCE
+
+**Note:** Full JSON specs for each ability below are in **Rev 2, Part A**. Use Rev 2 for implementation details. This section lists ability names and brief descriptions to confirm what each sequence grants.
+
+## 00 — THE FOOL
+**Drawback:** Spiritual Expenditure (25% exhaustion)
+
+- **Seq 9:** Spirit Vision · Clown's Mischief · Spiritual Overload · *(G-key)* Full Faceless Disguise
+- **Seq 8:** Trickster's Favor
+- **Seq 7:** Stage Magician
+- **Seq 6:** Borrowed Face
+- **Seq 5:** Puppet String
+- **Seq 4:** Trickster's Escape
+- **Seq 3:** Fool's Bounty
+- **Seq 2:** Fools' Gathering
+- **Seq 1:** History Substitution · Paper Figurine Substitute
+- **Seq 0:** The Legend of The Fool (35s, 15min CD, 75% DR, flight, decoys, full-health rewind)
+
+## I — THE MAGICIAN
+- **Seq 9:** Traveler's Body · Wayfarer's Instinct · Threshold Step · Full Moon Ravings
+- **Seq 8:** Sleight of Hand
+- **Seq 7:** Star Chart
+- **Seq 6:** Recorded Step
+- **Seq 5:** Doorstep
+- **Seq 4:** Sealed Room
+- **Seq 3:** Shortcut
+- **Seq 2:** Planar Step
+- **Seq 1:** Waypoint · Astral Lock
+- **Seq 0:** All Paths Converge (45s, unrestricted phasing)
+
+## II — THE HIGH PRIESTESS
+- **Seq 9:** Reader's Aptitude · Ritual Focus · Marginalia · Scripted Insight · Dependent on Rituals
+- **Seq 8:** Deduction
+- **Seq 7:** Index
+- **Seq 6:** Cross-Reference
+- **Seq 5:** Ritual Circle
+- **Seq 4:** Foresight
+- **Seq 3:** Sage's Insight
+- **Seq 2:** Borrowed Knowledge
+- **Seq 1:** All-Knowing Gaze · Ritual Mastery
+- **Seq 0:** The Archive (20s, 500-block omniscience)
+
+## III — THE EMPRESS
+- **Seq 9:** Witch's Venom · Mirror Veil · Witch's Grace · Reflected Beauty · Exposed Reflection
+- **Seq 8:** Whisper
+- **Seq 7:** Black Fire
+- **Seq 6:** Thread
+- **Seq 5:** Plague Touch
+- **Seq 4:** Aura of Despair
+- **Seq 3:** Ageless
+- **Seq 2:** Mirror Passage
+- **Seq 1:** Apocalypse's Herald · Petrifying Gaze
+- **Seq 0:** The Mirror World (25s, invulnerable escape, Poison II + Wither II burst)
+
+## IV — THE EMPEROR
+- **Seq 9:** Sovereign's Plate · Distorted Authority · Imperial Presence · Decree of the Sovereign · Weight of the Crown
+- **Seq 8:** Unbound
+- **Seq 7:** Coin
+- **Seq 6:** Corrupt Ground
+- **Seq 5:** Decree
+- **Seq 4:** Fallen Aura
+- **Seq 3:** Frenzy
+- **Seq 2:** Entropy Field
+- **Seq 1:** Abolish · Iron Decree
+- **Seq 0:** The Emperor's Domain (60s, 15-block rule)
+
+## V — THE HIEROPHANT
+- **Seq 9:** Scripture and Study · Consecrated Workspace · Sanctified Ground · Quiet Benediction · Sacred Dietary Vow
+- **Seq 8:** Prayer
+- **Seq 7:** Consecrate
+- **Seq 6:** Contract
+- **Seq 5:** Hymn
+- **Seq 4:** Sanctified Ground II
+- **Seq 3:** Purify
+- **Seq 2:** Sanctuary
+- **Seq 1:** White Angel · Dietary Expansion
+- **Seq 0:** The Sanctum (permanent 16-block sanctuary)
+
+## VI — THE LOVERS
+- **Seq 9:** Linked Hearts · Fertile Hands · Shared Refuge · Separation Anxiety
+- **Seq 8:** Triage
+- **Seq 7:** Blessing
+- **Seq 6:** Symbiosis
+- **Seq 5:** Nature's Grasp
+- **Seq 4:** Transmute
+- **Seq 3:** Requiem
+- **Seq 2:** Withering
+- **Seq 1:** Nature's Step · Shared Refuge II
+- **Seq 0:** The Garden (90s, 15-block pacification + passive immortality)
+
+## VII — THE CHARIOT
+- **Seq 9:** Hunter's Momentum · War Rush · Pyromaniac · Trail of Embers · Extinguished Fury
+- **Seq 8:** Taunt
+- **Seq 7:** Flame Burst
+- **Seq 6:** Plot
+- **Seq 5:** Reap
+- **Seq 4:** Iron Skin
+- **Seq 3:** Rally
+- **Seq 2:** Storm Call
+- **Seq 1:** Meteor · Burning Wrath
+- **Seq 0:** The Battlefield (45s, 20-block forced combat)
+
+## VIII — STRENGTH
+- **Seq 9:** Giant's Grip · Quarry Hands · Steel Frame · Grounded Slam · The Giant Sinks
+- **Seq 8:** Iron Fist
+- **Seq 7:** Master's Grip
+- **Seq 6:** Dawnlight
+- **Seq 5:** Bulwark
+- **Seq 4:** Hunter's Bane
+- **Seq 3:** Silver Blade
+- **Seq 2:** Twilight Blade
+- **Seq 1:** Divine Hand · Unyielding
+- **Seq 0:** The Giant's Decay (30s, Wither II + armor halving)
+
+## IX — THE HERMIT
+- **Seq 9:** Mystery Prying · Astral Calculation · Prepared Investigator · Forbidden Knowledge
+- **Seq 8:** Combat Insight
+- **Seq 7:** Hex
+- **Seq 6:** Scroll
+- **Seq 5:** Star Read
+- **Seq 4:** Forbidden Insight
+- **Seq 3:** Omen
+- **Seq 2:** Sage's Counsel
+- **Seq 1:** Emperor's Library · Prying Eyes
+- **Seq 0:** The Unseen (45s, 100-block omniscience + guaranteed crit)
+
+## X — WHEEL OF FORTUNE
+- **Seq 9:** Fate Intervenes · Gentle Fortune · Fate's Current · Lucky Break · Debt of Fate
+- **Seq 8:** Clockwork
+- **Seq 7:** Lucky Charm
+- **Seq 6:** Calamity
+- **Seq 5:** Winning Streak
+- **Seq 4:** Misfortune
+- **Seq 3:** Chaos Step
+- **Seq 2:** Fate's Favor
+- **Seq 1:** Wheel's Turn · Lucky Break II
+- **Seq 0:** Slot of Fate (3-reel weighted, Jackpot at ~0.5%)
+
+## XI — JUSTICE
+- **Seq 9:** Patient Observation · Emotional Recoil · Calming Presence · Therapist's Presence · Compassionate Restraint
+- **Seq 8:** Mind Read
+- **Seq 7:** Calm
+- **Seq 6:** Suggestion
+- **Seq 5:** Dream Step
+- **Seq 4:** Emotional Push
+- **Seq 3:** Shared Dream
+- **Seq 2:** Discern
+- **Seq 1:** Author's Edit · Compassionate Restraint II
+- **Seq 0:** The Mindscape (30s, freeze + symmetric damage cancellation)
+
+## XII — THE HANGED MAN
+- **Seq 9:** Shadow of Degeneration · Sin-Bearing · Graze the Soul · Weight of Sin
+- **Seq 8:** Shadow Whisper
+- **Seq 7:** Shadow Cloak
+- **Seq 6:** Flesh Creek
+- **Seq 5:** Burden Bearer
+- **Seq 4:** Dark Blade
+- **Seq 3:** Trinity
+- **Seq 2:** Profane Aura
+- **Seq 1:** Sin Overflow · Depraved Dependent
+- **Seq 0:** Weight of Sin Made Manifest (60s, 75% DR, unlimited Sin cap, 15-block explosion)
+
+## XIII — DEATH
+- **Seq 9:** Soul Harvest · Grave Affinity · Reaper's Touch · Grave Whisper · Severed Vitality
+- **Seq 8:** Grave Dirt
+- **Seq 7:** Spirit Sense
+- **Seq 6:** Guide
+- **Seq 5:** Gate
+- **Seq 4:** Undying
+- **Seq 3:** Ferry
+- **Seq 2:** Consul
+- **Seq 1:** Reap · Grave Affinity II
+- **Seq 0:** The Final Harvest (30s, instakill lowest-health + Absorption cap 10)
+
+## XIV — TEMPERANCE
+- **Seq 9:** Wraith's Veil · Ethereal Landing · Mirror Passage · Unstable Manifestation- **Seq 8:** Madness
+- **Seq 7:** Beast Form
+- **Seq 6:** Rot
+- **Seq 5:** Incorporeal
+- **Seq 4:** Puppet
+- **Seq 3:** Silence
+- **Seq 2:** Bane
+- **Seq 1:** Abomination · Wraith's Veil II
+- **Seq 0:** The Unbound (25s, unrestricted phasing + attacks)
+
+## XV — THE DEVIL
+- **Seq 9:** Hellborn · Corrupting Claws · Desperate Malice · Infernal Vitality · Sacred Rejection
+- **Seq 8:** Fallen Grace
+- **Seq 7:** Predator
+- **Seq 6:** Devil's Mark
+- **Seq 5:** Desire
+- **Seq 4:** Demon Form
+- **Seq 3:** Blather
+- **Seq 2:** Blood Price
+- **Seq 1:** Chaos Unleashed · Infernal Vitality II
+- **Seq 0:** Descent (40s, infernal form + minions)
+
+## XVI — THE TOWER
+- **Seq 9:** Ruin-Proof · Cracked Foundations · Unstable Strike · Unstable Ground · Falling Tower
+- **Seq 8:** Charge
+- **Seq 7:** Fault Line
+- **Seq 6:** Foundation
+- **Seq 5:** Collapse
+- **Seq 4:** Impact
+- **Seq 3:** Shockwave
+- **Seq 2:** Cataclysm
+- **Seq 1:** Falling Tower · Ruin-Proof II
+- **Seq 0:** The Fall (30s, 15-block unstable ground)
+
+## XVII — THE STAR
+- **Seq 9:** Sleepless · Nightwatch · Evernight's Patience · Sleepless Vigil · True Sleeplessness
+- **Seq 8:** Lullaby
+- **Seq 7:** Nightmare
+- **Seq 6:** Soul Shield
+- **Seq 5:** Haunt
+- **Seq 4:** Nightwatch II
+- **Seq 3:** Terror
+- **Seq 2:** Conceal
+- **Seq 1:** Misfortune · Sleepless Vigil II
+- **Seq 0:** The Starless Sky (40s, light extinguish + mass blind/slow)
+
+## XVIII — THE MOON
+- **Seq 9:** Sanguine Sight · Blood's Renewal · Sanguine Resilience · Pharmacist · Blood Diet
+- **Seq 8:** Tame
+- **Seq 7:** Blood Drain
+- **Seq 6:** Brew
+- **Seq 5:** Scarlet
+- **Seq 4:** Shaman
+- **Seq 3:** Summon
+- **Seq 2:** Life
+- **Seq 1:** Beauty · Pharmacist II
+- **Seq 0:** The Scarlet Feast (30s, moving blood aura)
+
+## XIX — THE SUN
+- **Seq 9:** Unshadowed · Inner Radiance · Inner Light · Purification · Beacon of Faith
+- **Seq 8:** Holy Light
+- **Seq 7:** Solar Flare
+- **Seq 6:** Witness
+- **Seq 5:** Purify
+- **Seq 4:** Unshadowed II
+- **Seq 3:** Radiance
+- **Seq 2:** Sanctify
+- **Seq 1:** White Angel · Beacon of Faith II
+- **Seq 0:** The Eternal Day (120s, 30-block daylight zone)
+
+## XX — JUDGEMENT
+- **Seq 9:** Law's Weight · Retaliatory Sentence · Hold the Line · Verdict's Weight · No Unlawful Escape
+- **Seq 8:** Posse
+- **Seq 7:** Question
+- **Seq 6:** Verdict
+- **Seq 5:** Discipline
+- **Seq 4:** Imperative
+- **Seq 3:** Chaos Hunter
+- **Seq 2:** Balance
+- **Seq 1:** Order · Law's Weight II
+- **Seq 0:** The Absolute Law (30s, server-wide decree)
+
+## XXI — THE WORLD
+- **Seq 9:** Cold Precision · Marked Prey · Hunter's Tempo · Predator's Patience · Terrifying Reputation
+- **Seq 8:** Paper Dagger
+- **Seq 7:** **Air Cannon** *(14-block projectile, mob 4 dmg/player 3 dmg, 8s CD)*
+- **Seq 6:** Borrowed Face (30s)
+- **Seq 5:** Puppet String (20s CD)
+- **Seq 4:** Historical Recall
+- **Seq 3:** Small Miracle (8min CD)
+- **Seq 2:** Mystery Step (4min CD)
+- **Seq 1:** Hunter's Substitution · Cold Precision II
+- **Seq 0:** The Perfect Prey (45s, marked target lockdown)
+
+---
+
+# PART B — RESONANCE PAIR REFERENCE
+
+**Note:** Full JSON specs for each Resonance ability are in **Rev 2, Part B**. **Activation timing changed:** All Resonance abilities activate at **Sequence 1**, not Sequence 5. At Seq 1, the player transitions from slot-based individual pathway abilities to the full Resonance kit (Seq 9-0). Slots no longer gate Resonance abilities.
+
+## I. Fool + Hanged Man — *The Paper Martyr*
+Seq 9-0: Burdened Beginning → Shadow Step → Suffering Sight → Borrowed Sacrifice → Gathering of Martyrs → Burdened Trickster → Suffering Sight II → Sacrificial Gathering → Martyr's Substitute → **The Paper Martyr** (35s, Sin-fueled transformation + 15-block explosion)
+
+## II. World + Justice — *The Marked Verdict*
+Seq 9-0: Cold Judgment → Paper Sentence → Hunter's Calm → Silent Witness → Puppet's Sentence → Marked Judgment → Hunter's Stillness → The Verdict → Swift Judgment → **The Marked Verdict** (45s, target lockdown + pacification)
+
+## III. Hermit + Chariot — *The Burning Archive*
+Seq 9-0: Scholar's Fire → Combat Insight → Astrologer's Trail → Recorded Plot → Star Read Reaper → Scholar's Momentum → Insightful Flame → Reaper's Library → Burning Lecture → **The Burning Archive** (45s, mass ignition + crit arrow)
+
+## IV. Death + Tower — *The Crumbling Reaper*
+Seq 9-0: Grave Ruin → Grave Dirt + Fault Line → Spirit Shockwave → Guide's Foundation → Gate Collapse → Falling Harvest → Collapse of the Living → Unstable Souls → Falling Tower's Reap → **The Crumbling Reaper** (30s, Absorption harvest + unstable ground)
+
+## V. Magician + Strength — *The Impossible Fist*
+Seq 9-0: Traveler's Might → Sleight of Fist → Star Chart Grip → Recorded Dawnlight → Doorstep Slam → Doorstep Punch → Sealed Slam → Giant's Shortcut → Divine Door → **The Impossible Fist** (45s, unrestricted phasing + wall-punch)
+
+## VI. Emperor + Lovers — *The Benevolent Crown*
+Seq 9-0: Sovereign's Care → Unbound Symbiosis → Coin's Blessing → Corrupt Symbiosis → Decree of Nature → Linked Crown → Shared Domain → Emperor's Hymn → Triage Decree → **The Benevolent Crown** (60s, walking garden domain)
+
+## VII. Devil + Judgement — *The Binding Contract*
+Seq 9-0: Hellborn Verdict → Fallen Question → Predator's Calm → Devil's Verdict → Desire's Discipline → Infernal Verdict → Law of Hell → Contract Enforcement → Chaos Law → **The Binding Contract** (40s, contracts + freeze)
+
+## VIII. Star + Empress — *The Starless Poison*
+Seq 9-0: Sleepless Grace → Lullaby Whisper → Nightmare Fire → Soul Thread → Haunting Plague → Night Venom → Poison Conceal → Shadow Whisper → Midnight Apocalypse → **The Starless Poison** (40s, mass poison + light extinguish)
+
+## IX. Sun + Moon — *The Eclipse*
+Seq 9-0: Unshadowed Sanguine → Holy Tamer → Solar Drain → Witness Brew → Purify Scarlet → Sunrise → Moonshadow → Lunar Sanctuary → Solar Drain → **The Eclipse** (60s, dual-zone overlap)
+
+## X. Temperance + Hierophant — *The Walking Sanctuary*
+Seq 9-0: Wraith's Prayer → Madness Consecrate → Beast Contract → Rot Sanctum → Incorporeal Hymn → Consecrated Walk → Ghost Blessing → Mobile Sanctum → Spectral White Angel → **The Walking Sanctuary** (60s, mobile holy ground)
+
+## XI. High Priestess + Wheel — *The Loaded Dice*
+Seq 9-0: Fated Reader → Deduction Machine → Index of Luck → Cross-Reference Clockwork → Ritual Winning → Fated Deduction → Prophetic Vision → Rolled Archive → Loaded Answer → **The Loaded Dice** (30s, triple advantage + fate-changing question)
+
+---
+
+# PART C — SLOT SYSTEM SPECIFICATION
+
+## C.1 Data model
+
+Each player has a persistent **slot array** stored in player persistent data (`tarot_slots`):
+
+```
+{
+  "slots": [
+    { "pathway": "tarot:fool", "sequence": 9 },   // slot 1
+    { "pathway": "tarot:fool", "sequence": 8 },   // slot 2
+    { "pathway": null, "sequence": null },         // empty
+    ...
+  ],
+  "max_slots": 6,
+  "mode": "single" | "slot" | "resonance"
+}
+```
+
+**Field definitions:**
+- `pathway`: Origin ID (e.g., `tarot:fool`, `tarot:hanged_man`) or `null` for empty.
+- `sequence`: Integer 0-9 or `null` for empty.
+- `max_slots`: `10 - current_sequence` (calculated on Sequence change).
+- `mode`: `"single"` (Seq 9-5), `"slot"` (Seq 4-2), `"resonance"` (Seq 1-0).
+
+## C.2 Modes
+
+### Mode: `single` (Seq 9-5)
+- Player has **one pathway** (their starting Arcana).
+- Slots auto-filled in order: Seq 9 → Seq 8 → ... → Seq 5 in slots 1-5.
+- **All abilities from Seq 9-5 are active.** No choice needed.
+- No player interaction with slots.
+
+### Mode: `slot` (Seq 4-2)
+- Player has **two pathways** (starting Arcana + registered second).
+- Both pathways are at the **same sequence** as the player (progressed together).
+- **Available sequences:** For each pathway, Seq 9 through the player's current sequence.
+  - Example at Seq 4: Fool has {Seq 9, 8, 7, 6, 5, 4}, Hanged Man has {Seq 9, 8, 7, 6, 5, 4} = 12 options.
+- **Slots:** `10 - current_sequence` (6 at Seq 4, 7 at Seq 3, 8 at Seq 2).
+- Player **must pick** which sequences to activate, up to `max_slots`.
+- **Only the abilities within activated sequences are usable.**
+
+### Mode: `resonance` (Seq 1-0)
+- Slots are **ignored**.
+- **All Resonance abilities (Seq 9-0) become active automatically.**
+- Individual pathway abilities are **disabled**.
+- Player no longer has a slot UI.
+
+## C.3 Slot commands
+
+Provide via KubeJS command:
+
+**`/tarot slots`**
+- Opens slot management GUI OR prints a chat summary showing current slot assignments.
+
+**`/tarot slot <slot_number> <pathway> <sequence>`**
+- Assign a sequence to a specific slot.
+- Example: `/tarot slot 1 tarot:fool 9` → assigns Fool Seq 9 to slot 1.
+- Validates: pathway is one of the player's registered paths, sequence is unlocked, slot_number ≤ max_slots.
+
+**`/tarot slot <slot_number> clear`**
+- Clears a specific slot.
+
+**`/tarot slot auto`**
+- Auto-fills slots with the highest available sequences from the primary pathway (useful default before player customizes).
+
+**`/tarot slot swap <slot_a> <slot_b>`**
+- Swaps two slots for convenience.
+
+**`/tarot reset`**
+- Resets all slots to defaults (primary pathway sequences in order). Useful if the player accidentally misconfigures.
+
+**Permission:** Only the player themselves can run these commands on their own slots (no admin override needed for gameplay).
+
+## C.4 Grant/revoke mechanism
+
+**On any slot change (assignment, clear, swap, reset):**
+
+1. **Revoke all pathway-related powers** from the player:
+   - For each sequence (9-0) of each pathway, call `power revoke <player> tarot:<pathway>/<seq>_*`.
+   - Also revoke the Resonance powers if in slot mode (they should never be active in slot mode).
+
+2. **Iterate through `slots[]`:**
+   - For each non-empty slot `{pathway, sequence}`, grant all powers belonging to that sequence:
+     - `power grant <player> tarot:<pathway>/<seq>_ability1`
+     - `power grant <player> tarot:<pathway>/<seq>_ability2`
+     - etc.
+
+3. **Update HUD** (if present): render current slot assignments in a custom HUD bar.
+
+**On Sequence change:**
+
+- When entering Seq 4 (mode transitions from single → slot):
+  - Increase `max_slots` to 6.
+  - Keep existing slots 1-5 (Seq 9-5 of primary pathway).
+  - Add empty slot 6.
+  - Notify player: *"Second pathway unlocked. You now have 6 slots. Use `/tarot slot` to customize."*
+- When reaching Seq 3:
+  - Increase `max_slots` to 7.
+  - Notify player.
+- When reaching Seq 2:
+  - Increase `max_slots` to 8.
+- When reaching Seq 1 (mode transitions from slot → resonance):
+  - **Revoke all individual pathway powers.**
+  - **Grant all Resonance powers** for Seq 9-0 (all 10 Resonance abilities in the pair).  - Clear slots (no longer relevant).
+  - Notify player: *"Resonance achieved. The two pathways have merged."*
+
+## C.5 Enforcement (preventing unassigned abilities)
+
+Two enforcement layers (use both):
+
+**Layer 1 — Grant/revoke:**
+- Player literally does not have the power granted if their sequence isn't slotted.
+- This is the primary enforcement. No `condition` check needed.
+
+**Layer 2 — Runtime guard (belt-and-suspenders):**
+- For `[S]` KubeJS abilities, add a guard at the top of every event handler:
+  ```javascript
+  function isSequenceActive(player, pathway, sequence) {
+    const slotData = player.persistentData.tarot_slots;
+    return slotData.slots.some(s => s.pathway === pathway && s.sequence === sequence);
+  }
+  ```
+- If not active, return early. Prevents ghost triggers from stale cooldowns or persistent effects.
+
+**Layer 3 — Passive cleanup on transition:**
+- When switching to resonance mode, actively `clear_effect` any lingering passive buffs (Resistance I from Shadow of Degeneration, etc.) that came from individual abilities.
+- Same when a slot is cleared.
+
+## C.6 Transition sequence
+
+### At Seq 5 → 4 (single → slot):
+
+1. Grant access to the 2nd pathway's origin (should already be pre-registered).
+2. Set `mode = "slot"`.
+3. Set `max_slots = 6`.
+4. Slots remain filled with primary pathway Seq 9-5 (5 slots).
+5. Slot 6 is empty.
+6. Display notification with a tutorial popup explaining the slot system.
+7. Optionally auto-fill slot 6 with the highest available sequence from either pathway (player can override).
+
+**IMPORTANT:** The 2nd pathway's sequences 9-4 must be **unlocked but not granted** at this point. The origin should have access but the powers are not active until slotted.
+
+### At Seq 4 → 3 → 2 (slot count increases):
+
+1. Set `max_slots = 10 - current_sequence`.
+2. Do NOT auto-fill new slots (let player choose).
+3. Display notification of new slot count.
+
+### At Seq 2 → 1 (slot → resonance):
+
+1. Revoke ALL individual pathway powers (Seq 9-0 of both pathways).
+2. Set `mode = "resonance"`.
+3. Clear `slots[]` (set all to `{pathway: null, sequence: null}`).
+4. Grant all Resonance abilities for the pair (Seq 9-0, 10 abilities).
+5. Clear lingering passive effects from previous abilities.
+6. Play a dramatic visual (particle burst, sound, chat message).
+7. Display notification: *"Your two pathways have merged. You have achieved Resonance."*
+
+### At Seq 1 → 0 (resonance → resonance capstone):
+
+1. Nothing special — Seq 0 Resonance ability is already in the Resonance kit granted at Seq 1.
+
+## C.7 Edge cases
+
+**Player relogs or dies:**
+- Slot data persists in player persistent data.
+- On respawn/login, re-apply the grant/revoke cycle to ensure the powers match the slots.
+- Use a `PlayerRespawnEvent` + `PlayerLoggedInEvent` KubeJS hook.
+
+**Player attempts to slot a sequence they don't have:**
+- Reject with error message: *"You have not unlocked Sequence X in Pathway Y."*
+
+**Player attempts to slot more sequences than slots:**
+- Reject with error message: *"All slots are full. Clear one first."*
+
+**Player at Seq 4 has both pathways at same Seq:**
+- Correct — both pathways progress together.
+
+**Player at Seq 2 has 8 slots and 16 available sequences:**
+- Correct — they pick 8 of 16.
+
+**Player reaches Seq 1 without ever customizing slots:**
+- At the transition, slots are auto-cleared and Resonance is granted. Their previous slot choices are discarded (they get the better Resonance kit anyway).
+
+**Player reaches Seq 0 while at Seq 1:**
+- No change — Resonance already active.
+
+**Transitioning while abilities are on cooldown:**
+- Cooldowns are revoked with the abilities (cooldown data is per-power, not per-player, so revoking the power resets it).
+- When re-granted (or when Resonance activates), cooldowns start fresh.
+
+## C.8 UI recommendations
+
+Provide a HUD overlay (KubeJS + client-side mod, e.g., `Cardinal Components` or `Origins` HUD hooks) showing:
+- Current mode (single/slot/resonance)
+- Slot count: `N / max_slots` filled
+- List of active (pathway, sequence) pairs with icons or abbreviations (e.g., "F9" for Fool Seq 9)
+
+Alternatively, provide `/tarot slots` chat output listing the current configuration.
+
+**Suggested chat format:**
+```
+═══════ TAROT SLOTS (6/6) ═══════
+[1] Fool 9    [2] Fool 8    [3] Fool 7
+[4] HM   9    [5] HM   8    [6] HM   7
+════════════════════════════════
+Mode: SLOT · Sequence 4
+```
+
+## C.9 KubeJS integration pseudocode
+
+```javascript
+// On player login/respawn:
+PlayerEvents.loggedIn(event => refreshSlots(event.player));
+PlayerEvents.respawned(event => refreshSlots(event.player));
+
+// On sequence change:
+// (called by progression system)
+function onSequenceChange(player, oldSeq, newSeq) {
+  const oldMax = 10 - oldSeq;
+  const newMax = 10 - newSeq;
+  
+  // Handle mode transitions
+  if (oldSeq >= 6 && newSeq <= 5 && newSeq > 1) {
+    // Enter slot mode at Seq 4
+    // (only fires when newSeq === 4)
+  }
+  if (newSeq === 4) enterSlotMode(player);
+  if (newSeq === 1) enterResonanceMode(player);
+  
+  // Update max slots
+  player.persistentData.tarot_maxSlots = newMax;
+}
+
+function enterSlotMode(player) {
+  player.persistentData.tarot_mode = "slot";
+  player.persistentData.tarot_maxSlots = 6;
+  // Keep existing slots 1-5 filled with primary pathway
+  // Slot 6 empty
+  refreshSlots(player);
+  player.sendMessage("Second pathway unlocked. Use /tarot slot to configure.");
+}
+
+function enterResonanceMode(player) {
+  player.persistentData.tarot_mode = "resonance";
+  // Revoke all individual pathway powers
+  revokeAllPathwayPowers(player);
+  // Grant all Resonance powers
+  grantAllResonancePowers(player);
+  // Clear slot data
+  player.persistentData.tarot_slots = emptySlots();
+  player.sendMessage("Your paths have merged. Resonance achieved.");
+}
+
+function refreshSlots(player) {
+  const mode = player.persistentData.tarot_mode;
+  if (mode === "resonance") return; // handled elsewhere
+  
+  // Revoke all pathway powers
+  revokeAllPathwayPowers(player);
+  
+  // Grant powers for each filled slot
+  const slots = player.persistentData.tarot_slots;
+  slots.forEach(slot => {
+    if (slot.pathway && slot.sequence !== null) {
+      grantSequencePowers(player, slot.pathway, slot.sequence);
+    }
+  });
+}
+
+function revokeAllPathwayPowers(player) {
+  // Iterate all 22 pathways × 10 sequences × N abilities
+  ALL_POWERS.forEach(powerId => {
+    if (playerHasPower(player, powerId)) {
+      revokePower(player, powerId);
+    }
+  });
+}
+
+function grantSequencePowers(player, pathway, sequence) {
+  const powers = POWERS_BY_SEQUENCE[pathway][sequence] || [];
+  powers.forEach(powerId => grantPower(player, powerId));
+}
+```
+
+---
+
+# PART D — IMPLEMENTATION CHECKLIST
+
+## D.1 Content creation
+
+1. **Create all required tags** from Part 0.4 (unchanged from Rev 2).
+2. **Create the 22 individual origin JSONs** (Rev 2 spec). Each contains only Seq 9 powers in initial `powers` array.
+3. **Create the 11 resonance origin JSONs** (Rev 2 spec). Each contains no abilities until Resonance activates.
+4. **Build all individual power files** per Rev 2 Part A. Naming: `tarot:<pathway>/<seq>_<ability>`.
+5. **Build all resonance power files** per Rev 2 Part B. Naming: `tarot:<resonance_id>/<seq>_<ability>`.
+6. **Do NOT include resonance powers in origin's initial `powers` array.** They are granted dynamically at Seq 1.
+
+## D.2 Slot system implementation
+
+7. **Implement `/tarot slot`, `/tarot slots`, `/tarot slot auto`, `/tarot reset`** KubeJS commands per Part C.3.
+8. **Implement grant/revoke cycle** per Part C.4 — the core function that syncs active powers to slot assignments.
+9. **Implement mode transitions** per Part C.6 — single → slot at Seq 4, slot → resonance at Seq 1.
+10. **Implement login/respawn refresh** per Part C.7 — re-apply grant/revoke on player load.
+11. **Implement HUD or chat output** per Part C.8 — player visibility of current slots.
+
+## D.3 Progression integration
+
+12. **Hook into sequence-up event** — call `onSequenceChange(player, oldSeq, newSeq)` from the progression system.
+13. **Verify progression system grants individual pathway sequences** correctly (both primary and secondary pathways progress together).
+14. **Pre-register the 2nd pathway** for each player at start (so the resonance pair is known from day one).
+
+## D.4 Testing requirements
+
+15. **Test all 22 individual pathways** at Seq 9-5 (single pathway mode). Verify all Seq 9-5 abilities fire correctly and only those sequences are active.
+16. **Test slot mode at Seq 4** — player picks 6 sequences from 12, verify only those 6 activate.
+17. **Test slot mode transitions** — Seq 4 → 3 → 2 with slot count increases.
+18. **Test resonance transition** — Seq 2 → 1, verify all individual powers are revoked and all Resonance Seq 9-0 powers are granted.
+19. **Test all 11 resonance pairs at Seq 1 and Seq 0** — verify capstone abilities work as specified.
+20. **Test relog/respawn persistence** — verify slot assignments survive logout/login and death/respawn.
+21. **Test edge cases** per Part C.7 — invalid slot assignments, slot overflow, cooldown cleanup on transition.
+22. **Verify target rules** — all offensive abilities affect hostile mobs AND enemy players; all ally abilities affect only same-team players.
+23. **Verify Fool's Spiritual Expenditure** is 25% (not 40%).
+
+## D.5 Balance validation
+
+24. **No permanent Strength II / Resistance II / Regeneration II passives.** All as temporary effects.
+25. **No permanent creative flight.** Only during Sequence 0/Resonance windows.
+26. **No auto-win combos.** Slot system naturally gates most, but verify e.g. Wheel's Turn + Slot of Fate cannot both be active (they're in the same sequence slot).
+27. **Verify slot system prevents double-dipping** — you cannot activate both Fool Seq 9 AND Hanged Man Seq 9 simultaneously at Seq 4 if you only have 6 slots and both pathways offer 6 sequences (you'd need 12 slots to take everything). The 6-slot limit forces choice.
+28. **Verify resonance transition is a power spike but not broken** — the player goes from ~6-8 individual abilities to the full Resonance kit. This is intended for Sequence 1 (Angel level in LOTM).
+
+## D.6 Version pinning
+
+29. **Origins 1.4.1 schema** — validate every power JSON against `https://origins.readthedocs.io/en/1.4.1/types/power_types/`. Drop or replace any field not present in 1.4.1.
+30. **KubeJS 1802.5.5** — pin KubeJS version; test all `[S]` abilities against this version specifically.
+
+---
+
+**End of Rev 3 handbook.**

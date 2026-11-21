@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Stage Magician",
+  "description": "25% on hit: teleport backward three blocks and leave a decoy. 400-tick cooldown.",
+  "hidden": false
+}

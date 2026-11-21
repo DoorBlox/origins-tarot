@@ -1,0 +1,11 @@
+{
+  "name": "The Fool",
+  "description": "Trickster, guardian of history, and master of misdirection. Arcane V2; sequence kits are granted by the native runtime.",
+  "icon": "minecraft:totem_of_undying",
+  "impact": 3,
+  "order": 0,
+  "powers": [
+    "tarot:fool/marker",
+    "tarot:fool/identity_spiritual_expenditure"
+  ]
+}

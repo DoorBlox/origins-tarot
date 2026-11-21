@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "History Substitution",
+  "description": "Prevent a lethal hit, teleport twelve blocks, heal and become briefly invisible. 7200-tick cooldown.",
+  "hidden": false
+}

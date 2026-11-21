@@ -1,0 +1,6 @@
+{
+  "type": "origins:simple",
+  "name": "Paper Figurine Substitute",
+  "description": "25% on hostile hit: decoy and Speed II for 40 ticks. No lethal cancellation.",
+  "hidden": false
+}
