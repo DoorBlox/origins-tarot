@@ -98,6 +98,49 @@ class CompleteCatalogTests(unittest.TestCase):
             self.assertIn("missing",found[0])
             self.assertTrue(found[0]["missing"])
 
+    def test_ten_new_source_traced_pathway_upgrades(self):
+        """Upgrades must have real effects; overlapping originals are partial."""
+        from arcane_rev3.powers import norm
+        root=Path(__file__).resolve().parents[1]
+        powers,manifest,kits=compile_powers(root)
+        wanted=[
+            ("devil",4,"Demon Form","partial"),
+            ("tower",1,"Ruin-Proof II","partial"),
+            ("wheel_of_fortune",4,"Misfortune","partial"),
+            ("judgement",1,"Law's Weight II","partial"),
+            ("moon",4,"Shaman","partial"),
+            ("world",1,"Cold Precision II","partial"),
+            ("sun",4,"Unshadowed II","partial"),
+            ("hanged_man",4,"Dark Blade","full"),
+            ("star",4,"Nightwatch II","partial"),
+            ("empress",5,"Plague Touch","partial"),
+        ]
+        self.assertEqual(len(wanted),10)
+        for slug,seq,name,status in wanted:
+            records=[m for m in manifest if m["family"]=="individual"
+                     and m["pathway"]==slug and m["sequence"]==seq
+                     and norm(m["name"])==norm(name)]
+            self.assertEqual(len(records),1,(slug,seq,name))
+            item=records[0]
+            self.assertEqual(item["status"],status,name)
+            self.assertIn(item["power_id"],powers)
+            self.assertIn(item["power_id"],kits[(slug,seq)])
+            self.assertNotEqual(powers[item["power_id"]]["type"],"origins:simple")
+            if status=="partial":
+                self.assertTrue(item["missing"],name)
+        # Dark Blade's two independent conditioned attributes are both
+        # unlocked by the player's actual health, not by damage taken.
+        blade=powers["tarot:hanged_man/4_dark_blade"]
+        self.assertEqual(blade["type"],"origins:multiple")
+        for component in ("attack","speed"):
+            active=blade[component]
+            self.assertEqual(active["type"],"origins:conditioned_attribute")
+            self.assertEqual(active["condition"]["type"],"origins:health")
+            self.assertEqual(active["condition"]["comparison"],"<")
+            self.assertEqual(active["condition"]["compare_to"],12)
+        self.assertEqual(blade["attack"]["modifier"]["value"],0.15)
+        self.assertEqual(blade["speed"]["modifier"]["value"],0.10)
+
     def test_alias_is_nonop_and_player_scoped(self):
         doc=alias()
         self.assertEqual((doc["schemaVersion"],doc["commandMode"],doc["command"],doc["permission"]),
