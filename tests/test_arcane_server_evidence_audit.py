@@ -49,6 +49,47 @@ class ServerEvidenceAuditTests(unittest.TestCase):
         self.assertEqual({x['id'] for x in result['alerts']},
                          {'heap_oom', 'unauthenticated_server'})
 
+    def test_owner_acknowledged_dev_exceptions_do_not_claim_security_or_gameplay(self):
+        log = (BASE + 'Done (68.464s)!\n'
+               + "Couldn't load structure terralith:spire: java.lang.OutOfMemoryError: Java heap space\n"
+               + '**** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!\n')
+        # Default baseline remains fail-closed.
+        normal = audit(log)
+        self.assertFalse(normal['ready_for_arcane_load_test'])
+        self.assertEqual(normal['owner_acknowledged_conditions'],
+                         {'first_worldgen_heap_oom': False,
+                          'intentional_offline_mode': False})
+        for args in ({'acknowledge_worldgen_oom': True},
+                     {'intentional_offline_mode': True}):
+            with self.subTest(args=args):
+                self.assertFalse(audit(log, **args)['ready_for_arcane_load_test'])
+        accepted = audit(log, acknowledge_worldgen_oom=True,
+                         intentional_offline_mode=True)
+        self.assertTrue(accepted['ready_for_arcane_load_test'])
+        self.assertFalse(accepted['arcane_gameplay_verified'])
+        self.assertFalse(accepted['log_contains_arcane_datapack_proof'])
+        self.assertEqual(accepted['owner_acknowledged_conditions'],
+                         {'first_worldgen_heap_oom': True,
+                          'intentional_offline_mode': True})
+        warnings = {a['id']: a for a in accepted['alerts']}
+        self.assertEqual(warnings['heap_oom']['severity'], 'warning')
+        self.assertEqual(warnings['unauthenticated_server']['severity'], 'warning')
+        self.assertIn('spoofable', warnings['unauthenticated_server']['finding'])
+        self.assertIn('repeated OOM', warnings['heap_oom']['finding'])
+
+    def test_acknowledgements_do_not_override_missing_mods_or_failed_startup(self):
+        flags = {'acknowledge_worldgen_oom': True,
+                 'intentional_offline_mode': True}
+        log = ('Loading 1 mods:\n - origins 1.4.1\nSpongePowered MIXIN\n'
+               'Done (1s)!\nOutOfMemoryError\nOFFLINE/INSECURE MODE')
+        report = audit(log, **flags)
+        self.assertFalse(report['ready_for_arcane_load_test'])
+        self.assertIn('fabric-permissions-api-v0', report['required_missing_from_log'])
+        self.assertFalse(audit(BASE + '\nOutOfMemoryError\nOFFLINE/INSECURE MODE',
+                               **flags)['ready_for_arcane_load_test'])
+        self.assertFalse(audit(BASE + '\nOutOfMemoryError\nOFFLINE/INSECURE MODE',
+                               **flags)['owner_acknowledged_conditions']['first_worldgen_heap_oom'])
+
     def test_legacy_config_does_not_claim_modern_permissions(self):
         report = audit(BASE + 'Done (1.1s)!', remorphed={
             'creativeUnlockAll': True, 'killToUnlock': 1,
