@@ -305,7 +305,9 @@ def emit_player(w,kits,root=ROOT):
             f"scoreboard players set @s a_s1 {idnum*100+9}",
             [f"scoreboard players set @s a_s{i} 0" for i in range(2,9)],
             F("powers/refresh"),
-            msg("Awakened "+slug+" at Sequence 9. /tarot status for instructions.","aqua"))
+            msg("Awakened "+slug+" at Sequence 9. Open the player guide to get started.","aqua"),
+            click("[Open player guide]","a_guide","yellow"),
+            click("[See my abilities]","a_abilities","green"))
     w.f("player/detect",detection)
     # Origin power owns init and recovery. Avoid the broken 1.4.1
     # origin-has-origin parser and never force Origin selection.
@@ -726,7 +728,9 @@ def emit_progression(w):
             commit += [f"scoreboard players set @s a_s{11-seq} 0",
                        msg("New slot unlocked.","light_purple")]
         w.f(f"ascend/commit_s{seq}",commit,F("powers/refresh"),
-            msg(f"Ascended to Sequence {seq-1}.","green"))
+            msg(f"Ascended to Sequence {seq-1}.","green"),
+            click("[See unlocked abilities]","a_abilities","green"),
+            click("[View next ascension goal]","a_roadmap","yellow"))
     # Normal player progression stays fail-closed. Only the operator-set
     # per-player a_rtest flag enables a true, fully-offered Seq2 -> Seq1
     # test transition. No magic "fast forward" / skip / admin OP exposure.
