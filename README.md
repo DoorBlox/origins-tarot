@@ -30,6 +30,10 @@ Read the [full passive-first design rationale](docs/ARCANA_V2_PASSIVE_REDESIGN.m
 
 **Back up your working V1 pack and world** before installing V2. This repository change does not automatically deploy anything to your Minecraft host.
 
+## Arcane handbook expansion (experimental)
+
+A new [Arcane V2 implementation status report](docs/ARCANE_IMPLEMENTATION_STATUS.md) tracks the supplied 434-power / 33-form design, a small separately built Origins 1.4.1 preview and the larger KubeJS-dependent backlog. **This is not the main V3 datapack**. Do not install or merge it into the production SMP without live testing.
+
 ## Quick start
 
 ### Download a ready-made datapack
