@@ -26,6 +26,9 @@ REPLACEMENTS = (
     ("tarot:devil/9_desperate_malice", "tarot:devil/4_demon_form"),
     ("tarot:empress/9_witch_s_venom", "tarot:empress/5_plague_touch"),
     ("tarot:hierophant/9_sanctified_ground", "tarot:hierophant/4_sanctified_ground_ii"),
+    # Both are the same book/potion-held periodic healing niche; avoid
+    # stacking doubled regeneration pulses when Seq1 upgrades are slotted.
+    ("tarot:moon/9_pharmacist", "tarot:moon/1_pharmacist_ii"),
 )
 
 
