@@ -136,6 +136,17 @@ class PlayerGuidePackContracts(unittest.TestCase):
             self.assertIn("a_phase matches 0", task)
             self.assertIn("a_phase matches 1", task)
 
+    def test_join_and_ascension_show_next_step_navigation(self):
+        with ZipFile(self.artifacts["only"]) as z:
+            for card in CARDS:
+                init = read(z, "player/init/" + card["slug"])
+                self.assertIn("/trigger a_guide", init)
+                self.assertIn("/trigger a_abilities", init)
+            for seq in range(9, 2, -1):
+                commit = read(z, "ascend/commit_s" + str(seq))
+                self.assertIn("/trigger a_abilities", commit)
+                self.assertIn("/trigger a_roadmap", commit)
+
     def test_all_chat_clicks_stay_player_scoped(self):
         with ZipFile(self.artifacts["only"]) as z:
             for name in z.namelist():
