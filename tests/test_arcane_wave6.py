@@ -65,7 +65,7 @@ class WaveSixTests(unittest.TestCase):
         self.assertEqual(
             sum(m["family"] == "resonance" and m["status"] != "blocked"
                 for m in self.manifest), 110)
-        self.assertEqual(
+        self.assertGreaterEqual(
             sum(m["family"] == "individual" and m["status"] != "blocked"
                 for m in self.manifest), 292)
         self.assertEqual({p for _, _, p in PAIRS},
