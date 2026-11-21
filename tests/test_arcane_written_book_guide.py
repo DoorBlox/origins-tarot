@@ -46,9 +46,10 @@ class BookContracts(unittest.TestCase):
         self.assertIn("Sequence 4", flatten)
         for card in CARDS:
             self.assertIn(card["name"], flatten)
-        for seq in range(9, 1, -1):
+        for seq in range(9, 2, -1):
             for item in RITUALS[seq]:
                 self.assertIn(item.replace("_", " "), flatten)
+        self.assertNotIn("nether star", flatten)  # blocked Seq1 offering is hidden
         for page in pages:
             self.assertLess(len(json.dumps(page)), 4000)
 
