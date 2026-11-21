@@ -239,6 +239,9 @@ def emit_roadmap(w):
         "execute if score @s a_init matches 1 run tellraw @s " + _j([
             {"text": "[Tarot] Proof cooldown (ticks remaining): ", "color": "gray"},
             _score("a_actcd"), {"text": " | Combat timer: "}, _score("a_combat")]),
+        "execute if score @s a_init matches 1 run tellraw @s " + _j([
+            {"text": "[Tarot] Next acting phase (0=item, 1=event): ", "color": "gray"},
+            _score("a_phase")]),
         "execute if score @s a_init matches 1 if score @s a_seq matches 2..9 "
         "run " + _f("ui/roadmap/tasks"),
         [f"execute if score @s a_init matches 1 if score @s a_seq matches {seq} "
