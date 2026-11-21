@@ -327,19 +327,19 @@ def player_effect_text(power):
     description = str(power.get("description", "")).strip()
     if not description:
         return "Check your equipped power's effect in game."
-    clauses = re.split(r";\\s*", description)
+    clauses = re.split(r";\s*", description)
     gameplay = [
         clause for clause in clauses
         if not re.search(
-            r"\\b(?:not included|not implemented|pending|unsupported|"
-            r"unimplemented|placeholder|TODO|source-only)\\b",
+            r"\b(?:not included|not implemented|pending|unsupported|"
+            r"unimplemented|placeholder|TODO|source-only)\b",
             clause, flags=re.IGNORECASE,
         )
     ]
     value = "; ".join(gameplay).strip() or description
-    value = re.sub(r"\\bpartial manifestation\\b", "manifestation",
+    value = re.sub(r"\bpartial manifestation\b", "manifestation",
                    value, flags=re.IGNORECASE)
-    value = re.sub(r"\\bfallback\\b", "basic effect",
+    value = re.sub(r"\bfallback\b", "basic effect",
                    value, flags=re.IGNORECASE)
     return value
 
