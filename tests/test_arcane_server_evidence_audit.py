@@ -74,6 +74,7 @@ class ServerEvidenceAuditTests(unittest.TestCase):
     def test_missing_mods_detected_without_guessing_jar_versions(self):
         report = audit('Loading 1 mods:\n - origins 1.4.1\nSpongePowered MIXIN\nDone (1s)!')
         self.assertIn('fabric-permissions-api-v0', report['required_missing_from_log'])
+        self.assertFalse(report['ready_for_arcane_load_test'])
         self.assertTrue(any(x['id'] == 'required_mods_not_in_log' for x in report['alerts']))
         self.assertFalse(report['arcane_gameplay_verified'])
 
