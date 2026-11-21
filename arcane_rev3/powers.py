@@ -674,6 +674,11 @@ def compile_powers(root):
     from .batches import resonance2, individual3
     resonance2.register(add)
     individual3.register(add)
+    # The Rev3 slot system can equip both a source bonus and its explicit
+    # replacement at once. Keep grant ownership unchanged, but condition the
+    # superseded effect on absence of its source-scoped upgrade power.
+    from .upgrade_policy import apply_replacement_conditions
+    apply_replacement_conditions(compiled)
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}
