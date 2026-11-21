@@ -13,6 +13,12 @@ with a development pack.
 - `Arcane_Rev3_Resonance_Manual_Preview_TEST_ONLY_1.18.2.zip` is an OP-only **standalone disposable-world preview**, not a companion pack to place on SMP. Ordinary Sequence1 remains locked.
 - `tarot.json` is a Command Aliases 1.0.1 configuration file, not a datapack ZIP. Place it under the corresponding server's `config/commandaliases/` only after saving the previous configuration. Non-OP `/trigger a_help` remains the fallback without aliases.
 
+## Player-facing guide added in the next Rev3 build
+
+The updated datapack includes **/trigger a_guide**, **/trigger a_abilities**, **/trigger a_roadmap**, **/trigger a_stages**, and the player-validated **a_kit/a_detail** inspectors. The optional newer Command Aliases file exposes /tarot guide, abilities, roadmap, stages, kit N and detail N. The current ZIP on your SMP will **not** gain these commands merely because GitHub main was updated. After a full backup and actual pack upgrade, verify the commands as a non-OP player; do not attempt Sequence 1 on SMP.
+
+For detailed descriptions of all 434 source-defined abilities, the same build artifact includes Arcane_Rev3_Player_Ability_Reference.md. The static beginner guide is [here](ARCANE_REV3_PLAYER_GUIDE.md).
+
 ## Incremental Rev3-to-Rev3 upgrades while playing
 
 - Your current working Rev3 build can remain installed while development continues in GitHub. **New source commits do not change your live SMP** until you personally install a newer inner ZIP and restart/reload. Playing now does not force a world reset, but it does not guarantee every future migration will be possible.

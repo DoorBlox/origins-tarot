@@ -82,7 +82,8 @@ RESCUE_COOLDOWNS = ("a_cd_martyr", "a_cd_swift", "a_cd_history", "a_cd_hunter", 
 SCORES += RESCUE_COOLDOWNS + ("a_rtest", "a_focus") + SIN_SCORES
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
           "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick",
-          "a_focus_menu","a_choose")
+          "a_focus_menu","a_choose","a_guide","a_abilities","a_roadmap",
+          "a_kit","a_detail","a_stages")
 
 
 def J(obj):
@@ -245,6 +246,12 @@ def emit_player(w,kits,root=ROOT):
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
+        "execute if score @s a_guide matches 1.. run "+F("ui/help"),
+        "execute if score @s a_abilities matches 1.. run "+F("ui/codex/home"),
+        "execute if score @s a_roadmap matches 1.. run "+F("ui/roadmap"),
+        "execute if score @s a_stages matches 1.. run "+F("ui/stages"),
+        "execute if score @s a_kit matches 1.. run "+F("ui/codex/open"),
+        "execute if score @s a_detail matches 1.. run "+F("ui/codex/detail_open"),
         # Focus selection is player-triggered and processed only when
         # unpaused. Nothing changes to original keys until opt-in.
         "execute unless score @s a_paused matches 1 if score @s a_focus_menu matches 1.. run "+F("ui/focus/menu"),
@@ -298,7 +305,9 @@ def emit_player(w,kits,root=ROOT):
             f"scoreboard players set @s a_s1 {idnum*100+9}",
             [f"scoreboard players set @s a_s{i} 0" for i in range(2,9)],
             F("powers/refresh"),
-            msg("Awakened "+slug+" at Sequence 9. /tarot status for instructions.","aqua"))
+            msg("Awakened "+slug+" at Sequence 9. Open the player guide to get started.","aqua"),
+            click("[Open player guide]","a_guide","yellow"),
+            click("[See my abilities]","a_abilities","green"))
     w.f("player/detect",detection)
     # Origin power owns init and recovery. Avoid the broken 1.4.1
     # origin-has-origin parser and never force Origin selection.
@@ -539,14 +548,19 @@ def emit_ui(w):
     from different players cannot overwrite each other's slot display.
     """
     w.f("ui/help",
-        msg("Rev3 | /tarot status | /tarot slots | /tarot ascend","aqua"),
-        msg("Seq4-2: /tarot slot N tarot:pathway S; /tarot slot N clear","yellow"),
-        msg("/tarot slot auto | /tarot slot swap N M | /tarot reset","yellow"),
-        msg("Seq1 requires OP-enabled development test until in-game acceptance. All ten source powers per pair exist; many are partial.","red"),
-        click("[View Status]","a_status"),
-        click("[View Slots]","a_slots"),
-        click("[Focus active ability]","a_focus_menu"),
-        click("[Auto slots on Seq4-2]","a_auto","yellow"))
+        msg("ARCANE REV3 PLAYER GUIDE | Choose a menu below.","gold"),
+        msg("ABILITIES: inspect equipped kits, current effects, activation, and limitations.","aqua"),
+        msg("ROADMAP: next acting task, marks, offerings, ritual, and unlocks.","aqua"),
+        msg("Seq9-5 auto equips; Seq4-2 unlocks a fixed partner and editable slots.","yellow"),
+        msg("Seq1 Resonance LOCKED for normal SMP players; incomplete powers remain PARTIAL.","red"),
+        msg("Vanilla commands: /trigger a_guide, /trigger a_help, /trigger a_abilities, /trigger a_roadmap.","gray"),
+        click("[My abilities]","a_abilities"),
+        click("[My ascension roadmap]","a_roadmap","yellow"),
+        click("[All Sequence milestones]","a_stages","light_purple"),
+        click("[My status]","a_status"),
+        click("[Manage slots]","a_slots"),
+        click("[Choose active key focus]","a_focus_menu"),
+        msg("Seq4-2: /tarot slot N tarot:pathway S | /tarot slot N clear | /tarot slot auto.","gray"))
     w.f("ui/status",
         "execute unless score @s a_init matches 1 run "+msg("Choose a Tarot origin.","red"),
         "execute if score @s a_paused matches 1 run "+msg("Arcane runtime paused by administrator; ask an admin to resume.","red"),
@@ -557,7 +571,9 @@ def emit_ui(w):
         "execute if score @s a_init matches 1 run tellraw @s "+J([
             {"text":"[Tarot] Sequence: ","color":"gold"},score("a_seq"),
             {"text":" | Slots: "},score("a_max"),
-            {"text":" | Acting marks: "},score("a_marks")]))
+            {"text":" | Acting marks: "},score("a_marks")]),
+        click("[How to ascend next]","a_roadmap","yellow"),
+        click("[View my active abilities]","a_abilities"))
     w.f("ui/status_primary",[
         f"execute if score @s a_path matches {c['id']} run "+msg("Primary: "+c["name"],"aqua")
         for c in CARDS])
@@ -572,12 +588,14 @@ def emit_ui(w):
         "execute if score @s a_mode matches 0 run "+msg("SINGLE: sequence kits auto-fill as you advance.","gold"),
         "execute if score @s a_mode matches 1 run "+msg("SLOT: click Edit by any slot, select pathway, then Sequence.","yellow"),
         "execute if score @s a_mode matches 2 run "+msg("RESONANCE TEST: all ten paired powers active. Slot UI disabled.","light_purple"),
-        "execute if score @s a_mode matches 1 run "+click("[Auto-fill all primary slots]","a_auto","yellow"))
+        "execute if score @s a_mode matches 1 run "+click("[Auto-fill all primary slots]","a_auto","yellow"),
+        click("[Inspect equipped abilities]","a_abilities","aqua"))
     for i in range(1,9):
         w.f(f"ui/slot_{i}",
             f"scoreboard players set @s a_view_slot {i}",
             f"scoreboard players operation @s a_view_code = @s a_s{i}",
             F("ui/slot_render"),
+            "execute if score @s a_view_code matches 1.. run "+click("  [View abilities in slot "+str(i)+"]","a_kit set "+str(i),"aqua"),
             "execute if score @s a_mode matches 1 run "+click("  [Edit slot "+str(i)+"]","a_menu set "+str(i),"green"),
             "execute if score @s a_mode matches 1 run "+click("  [Clear slot "+str(i)+"]","a_clear set "+str(i),"red"))
 
@@ -710,7 +728,9 @@ def emit_progression(w):
             commit += [f"scoreboard players set @s a_s{11-seq} 0",
                        msg("New slot unlocked.","light_purple")]
         w.f(f"ascend/commit_s{seq}",commit,F("powers/refresh"),
-            msg(f"Ascended to Sequence {seq-1}.","green"))
+            msg(f"Ascended to Sequence {seq-1}.","green"),
+            click("[See unlocked abilities]","a_abilities","green"),
+            click("[View next ascension goal]","a_roadmap","yellow"))
     # Normal player progression stays fail-closed. Only the operator-set
     # per-player a_rtest flag enables a true, fully-offered Seq2 -> Seq1
     # test transition. No magic "fast forward" / skip / admin OP exposure.
@@ -770,6 +790,14 @@ def alias():
     return {"schemaVersion":1,"commandMode":"COMMAND_CUSTOM","command":"tarot",
             "permission":0,"actions":[a("a_help")],"children":[
                 lit("help",actions=[a("a_help")]),
+                lit("guide",actions=[a("a_guide")]),
+                lit("abilities",actions=[a("a_abilities")]),
+                lit("roadmap",actions=[a("a_roadmap")]),
+                lit("stages",actions=[a("a_stages")]),
+                lit("kit",[lit(i,actions=[a("a_kit set "+str(i))])
+                           for i in range(1,9)]),
+                lit("detail",[lit(i,actions=[a("a_detail set "+str(i))])
+                              for i in range(1,17)]),
                 lit("status",actions=[a("a_status")]),
                 lit("slots",actions=[a("a_slots")]),
                 lit("focus",[lit("legacy",actions=[a("a_choose set 1")])],
@@ -850,6 +878,9 @@ def build(root=ROOT,output=None):
         emit_slots(w,kits)
         emit_grants(w,kits,innate,focus_entries)
         emit_ui(w)
+        from .player_codex import emit_player_codex, emit_roadmap
+        emit_player_codex(w,compiled,manifest,kits,innate,NUM)
+        emit_roadmap(w)
         from .active_focus import emit_focus
         emit_focus(w,focus_entries)
         emit_progression(w)
@@ -868,7 +899,12 @@ def build(root=ROOT,output=None):
                              indent=2,ensure_ascii=False)+"\n",encoding="utf8")
     alias_path=output/"tarot.json"
     alias_path.write_text(json.dumps(alias(),indent=2)+"\n",encoding="utf8")
-    artifacts.update(manifest=manifest_path,alias=alias_path)
+    from .player_codex import generate_player_manual
+    manual_path = output/"Arcane_Rev3_Player_Ability_Reference.md"
+    manual_path.write_text(generate_player_manual(manifest,compiled,kits,innate),
+                           encoding="utf8")
+    artifacts.update(manifest=manifest_path,alias=alias_path,
+                     player_manual=manual_path)
     return artifacts
 
 
