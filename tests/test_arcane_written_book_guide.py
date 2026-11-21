@@ -28,13 +28,13 @@ class BookContracts(unittest.TestCase):
             with ZipFile(self.data[variant]) as z:
                 load = function(z, "load")
                 tick = function(z, "player/tick")
-                for name in ("a_book", "a_tome"):
+                for name in ("a_book", "a_tome", "a_partner_tome"):
                     self.assertIn(f"scoreboard objectives add {name} trigger", load)
                     self.assertIn(f"scoreboard players enable @s {name}", tick)
                     self.assertIn(f"scoreboard players set @s {name} 0", tick)
                     self.assertIn(f"if score @s {name} matches 1..", tick)
                 self.assertIn("a_book", function(z, "ui/help"))
-                self.assertIn("a_tome", function(z, "ui/codex/home"))
+                self.assertIn("a_tome", function(z, "ui/help"))
 
     def test_general_guide_has_page_navigation_and_real_unlocks(self):
         pages = general_pages()
@@ -80,6 +80,13 @@ class BookContracts(unittest.TestCase):
             self.assertNotIn("item replace", give)
             self.assertNotIn("clear @s minecraft:written_book{tarotArcaneGuide:1b} 1", give)
             self.assertNotIn("op @s", give)
+            partner = function(z, "ui/book/partner")
+            self.assertIn("a_seq matches ..4", partner)
+            self.assertIn("a_partner matches", partner)
+            for card in CARDS:
+                self.assertIn(f"ui/book/path_partner/{card['slug']}", partner)
+                path = function(z, f"ui/book/path_partner/{card['slug']}")
+                self.assertIn("tarotArcanePartnerTome:1b", path)
             tome = function(z, "ui/book/tome")
             for card in CARDS:
                 self.assertIn(f"if score @s a_path matches {card['id']}", tome)
@@ -101,7 +108,20 @@ class BookContracts(unittest.TestCase):
     def test_alias_has_book_and_tome(self):
         alias = json.loads(self.data["alias"].read_text())
         labels = {c["child"] for c in alias["children"]}
-        self.assertTrue({"book", "tome"}.issubset(labels))
+        self.assertTrue({"book", "tome", "partner-tome"}.issubset(labels))
+
+    def test_book_jumps_do_not_point_outside_contents(self):
+        compiled, manifest, kits = compile_powers(Path(__file__).resolve().parents[1])
+        all_books = [general_pages()] + [
+            pathway_pages(c["slug"], compiled, manifest, kits) for c in CARDS
+        ]
+        for pages in all_books:
+            for page in pages:
+                for obj in page["extra"]:
+                    action = obj.get("clickEvent", {})
+                    if action.get("action") == "change_page":
+                        self.assertGreaterEqual(int(action["value"]), 1)
+                        self.assertLessEqual(int(action["value"]), len(pages))
 
     def test_book_nbt_does_not_use_modern_item_component_syntax(self):
         nbt = book_nbt("Test", [{"text": "Hello"}], marker="tarotArcaneGuide:1b")
