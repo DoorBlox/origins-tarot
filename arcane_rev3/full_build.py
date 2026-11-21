@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from zipfile import ZipFile, ZIP_DEFLATED
 from .model import PATHWAYS, PAIRS, PARTNER
-from .powers import compile_powers
+from .powers import compile_powers, norm
 from progression.catalog import CARDS, ACT_MARKS, RITUALS
 from progression.build import quest
 
@@ -16,6 +16,53 @@ ROOT=Path(__file__).resolve().parent.parent
 SOURCE="tarot_arcane:slot_grants"
 PREFIX="tarot_arcane:"
 NUM={slug:i+1 for i,slug in enumerate(PATHWAYS)}
+# Every pathway has an identity drawback in Rev2. These 17 are already
+# implemented as native Origins powers. Keep them on the PRIMARY Origin
+# independently of Sequence slots: unslotting Seq9 must not remove penalties.
+# The four remaining pathway drawbacks are tracked as blocked, not faked.
+IDENTITY_DRAWBACK_NAMES = {
+    "magician": "Full Moon Ravings",
+    "high_priestess": "Dependent on Rituals",
+    "empress": "Exposed Reflection",
+    "emperor": "Weight of the Crown",
+    "hierophant": "Sacred Dietary Vow",
+    "chariot": "Extinguished Fury",
+    "strength": "The Giant Sinks",
+    "hermit": "Forbidden Knowledge",
+    "death": "Severed Vitality",
+    "temperance": "Unstable Manifestation",
+    "devil": "Sacred Rejection",
+    "tower": "Falling Tower",
+    "star": "True Sleeplessness",
+    "moon": "Blood Diet",
+    "sun": "Beacon of Faith",
+    "judgement": "No Unlawful Escape",
+    "world": "Terrifying Reputation",
+}
+
+
+def pin_identity_drawbacks(compiled, kits):
+    """Move identity penalties out of removable Seq9 source-grant kits."""
+    result = {}
+    for slug, name in IDENTITY_DRAWBACK_NAMES.items():
+        matching = [
+            ident for ident, definition in compiled.items()
+            if ident.startswith(f"tarot:{slug}/9_")
+            and norm(definition["name"]) == norm(name)
+        ]
+        if len(matching) != 1:
+            raise ValueError(f"Missing or ambiguous native identity drawback: {slug}: {name}")
+        ident = matching[0]
+        key = (slug, 9)
+        if ident not in kits.get(key, []):
+            raise ValueError(f"Identity drawback absent from original kit: {ident}")
+        kits[key] = [power for power in kits[key] if power != ident]
+        result[slug] = ident
+    if len(result) != 17:
+        raise ValueError("Native identity drawback extraction incomplete")
+    return result
+
+
 SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_marks","a_phase",
         "a_actcd","a_combat","a_clock","a_seen_dealt","a_seen_taken",
         "a_seen_bow","a_seen_crossbow","a_seen_trident","a_probe","a_has","a_ok","a_marks_ok","a_start_seq","a_a","a_b",
@@ -55,7 +102,7 @@ class Pack:
         self.files[path]=("\n".join(l for l in flat if l)+"\n").encode()
 
 
-def emit_content(w,root,compiled,variant):
+def emit_content(w,root,compiled,variant,identity_powers):
     from .powers import current_catalog
     catalog=current_catalog(root)
     info={card["slug"]:card for card in CARDS}
@@ -75,9 +122,10 @@ def emit_content(w,root,compiled,variant):
     for slug in PATHWAYS:
         c=info[slug]
         wings=["tarot:"+slug+"/wings"] if c["glider"] else []
-        # Rev2's Fool weakness is an identity drawback, not one of its four
-        # named Seq9 abilities. It survives slot reconfiguration.
-        identity=["tarot:fool/identity_spiritual_expenditure"] if slug=="fool" else []
+        # Sequence-9 identity penalties are inherent to the primary Origin;
+        # unlike chosen sequence kits they cannot be removed via /tarot slot.
+        identity=(["tarot:fool/identity_spiritual_expenditure"] if slug=="fool"
+                  else [identity_powers[slug]] if slug in identity_powers else [])
         w.j("data/tarot/origins/"+slug+".json",{
              "powers":wings+identity, "icon":"minecraft:paper", "name":c["name"],
              "description":"Rev3 player-owned slot kits; "+c["lore"],
@@ -465,10 +513,11 @@ def build(root=ROOT,output=None):
     output=Path(output) if output else root/"output"
     output.mkdir(parents=True,exist_ok=True)
     compiled,manifest,kits=compile_powers(root)
+    innate = pin_identity_drawbacks(compiled, kits)
     artifacts={}
     for variant in ("only","addon"):
         w=Pack()
-        emit_content(w,root,compiled,variant)
+        emit_content(w,root,compiled,variant,innate)
         emit_player(w,kits)
         emit_slots(w,kits)
         emit_grants(w,kits)
