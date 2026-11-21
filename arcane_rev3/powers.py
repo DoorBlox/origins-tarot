@@ -120,9 +120,11 @@ def compile_powers(root):
         "Sneak + secondary key: Glowing I, 10 blocks, 40 ticks; 100t cooldown.",
         "origins:active_self", cooldown=100, hud_render={"should_render":True},
         key={"key":"key.origins.secondary_active"}, condition={"type":"origins:sneaking"},
-        entity_action={"type":"origins:area_of_effect", "radius":10,
-             "include_target":True, "bientity_action":{"type":"origins:target_action",
-                                                       "action":apply("glowing",40)}}))
+        entity_action={"type":"origins:execute_command",
+             # Vanilla distance selectors are spherical in 1.18.2.
+             # The fixed power action is server-trusted, not a /tarot alias.
+             "permission_level":2,
+             "command":"execute at @s run effect give @e[distance=..10] minecraft:glowing 2 0 true"}))
     add("fool", 9, "Clown's Mischief", power("Clown's Mischief",
         "20% chance to blind attacker for 20 ticks; 100t cooldown.",
         "origins:attacker_action_when_hit", cooldown=100,
