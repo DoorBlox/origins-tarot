@@ -79,9 +79,10 @@ SCORES=("a_init","a_paused","a_path","a_partner","a_seq","a_mode","a_max","a_mar
         "a_view_slot","a_view_code","a_view_path","a_view_seq",
         "a_alone_time","a_iron_count","a_pick_slot","a_pick_path")
 RESCUE_COOLDOWNS = ("a_cd_martyr", "a_cd_swift", "a_cd_history", "a_cd_hunter", "a_cd_undying")
-SCORES += RESCUE_COOLDOWNS + ("a_rtest",) + SIN_SCORES
+SCORES += RESCUE_COOLDOWNS + ("a_rtest", "a_focus") + SIN_SCORES
 TRIGGERS=("a_help","a_status","a_slots","a_assign","a_clear","a_swap",
-          "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick")
+          "a_auto","a_reset","a_ascend","a_menu","a_card","a_seqpick",
+          "a_focus_menu","a_choose")
 
 
 def J(obj):
@@ -244,6 +245,10 @@ def emit_player(w,kits,root=ROOT):
         "execute if score @s a_help matches 1.. run "+F("ui/help"),
         "execute if score @s a_status matches 1.. run "+F("ui/status"),
         "execute if score @s a_slots matches 1.. run "+F("ui/slots"),
+        # Focus selection is player-triggered and processed only when
+        # unpaused. Nothing changes to original keys until opt-in.
+        "execute unless score @s a_paused matches 1 if score @s a_focus_menu matches 1.. run "+F("ui/focus/menu"),
+        "execute unless score @s a_paused matches 1 if score @s a_choose matches 1.. run "+F("ui/focus/choose"),
         "execute unless score @s a_paused matches 1 if score @s a_menu matches 1.. run "+F("ui/menu_slot"),
         "execute unless score @s a_paused matches 1 if score @s a_card matches 1.. run "+F("ui/menu_card"),
         "execute unless score @s a_paused matches 1 if score @s a_seqpick matches 1.. run "+F("ui/menu_commit"),
@@ -266,6 +271,7 @@ def emit_player(w,kits,root=ROOT):
             "scoreboard players set @s a_rtest 0",
             "scoreboard players set @s a_pick_slot 0",
             "scoreboard players set @s a_pick_path 0",
+            "scoreboard players set @s a_focus 0",
             f"scoreboard players set @s a_path {idnum}",
             f"scoreboard players set @s a_partner {NUM[PARTNER[slug]]}",
             "scoreboard players set @s a_seq 9",
@@ -413,7 +419,7 @@ def emit_slots(w,kits):
     w.f("slot/swap_ok",swap,F("powers/refresh"),msg("Slots swapped.","green"))
 
 
-def emit_grants(w, kits, identity_powers):
+def emit_grants(w, kits, identity_powers, focus_entries=()):
     """Refresh slot OR opt-in Seq1 sources while preserving native identities.
 
     No player-facing trigger can toggle a_rtest or directly call these
@@ -482,6 +488,11 @@ def emit_grants(w, kits, identity_powers):
             refresh.append(guard + F(f"resonance/{primary}/grant"))
             repair.append(guard + F(f"resonance/{primary}/repair"))
 
+    if focus_entries:
+        # Validate focus ONLY after powers have been refreshed and as part
+        # of the existing periodic reconciliation, not every player tick.
+        refresh.append(F("ui/focus/validate"))
+        repair.append(F("ui/focus/validate"))
     w.f("powers/refresh", refresh)
     w.f("powers/reconcile", repair)
     w.f("admin/rollback_player",
@@ -489,6 +500,8 @@ def emit_grants(w, kits, identity_powers):
         "power revokeall @s " + SOURCE,
         "power revokeall @s " + RESONANCE_SOURCE,
         "power revokeall @s " + PARTNER_IDENTITY_SOURCE,
+        "power revokeall @s tarot_arcane:ability_focus",
+        "scoreboard players set @s a_focus 0",
         msg("Arcane PAUSED; slot and Resonance test sources revoked until admin resume.", "yellow"))
     w.f("admin/rollback_all",
         "execute as @a run " + F("admin/rollback_player"))
@@ -532,6 +545,7 @@ def emit_ui(w):
         msg("Seq1 requires OP-enabled development test until in-game acceptance. All ten source powers per pair exist; many are partial.","red"),
         click("[View Status]","a_status"),
         click("[View Slots]","a_slots"),
+        click("[Focus active ability]","a_focus_menu"),
         click("[Auto slots on Seq4-2]","a_auto","yellow"))
     w.f("ui/status",
         "execute unless score @s a_init matches 1 run "+msg("Choose a Tarot origin.","red"),
@@ -758,6 +772,8 @@ def alias():
                 lit("help",actions=[a("a_help")]),
                 lit("status",actions=[a("a_status")]),
                 lit("slots",actions=[a("a_slots")]),
+                lit("focus",[lit("legacy",actions=[a("a_choose set 1")])],
+                    actions=[a("a_focus_menu")]),
                 lit("ascend",actions=[a("a_ascend")]),
                 lit("reset",actions=[a("a_reset")]),
                 lit("slot",[lit("auto",actions=[a("a_auto")]),lit("swap",swaps)]+slots)]}
@@ -821,14 +837,21 @@ def build(root=ROOT,output=None):
     output.mkdir(parents=True,exist_ok=True)
     compiled,manifest,kits=compile_powers(root)
     innate = pin_identity_drawbacks(compiled, kits)
+    # Client-side active_self must use synced power-token conditions,
+    # NOT server-only origins:scoreboard conditions. Legacy all-keys
+    # remains the default unless the player selects an owned ability.
+    from .active_focus import apply_active_focus
+    focus_entries = apply_active_focus(compiled)
     artifacts={}
     for variant in ("only","addon"):
         w=Pack()
         emit_content(w,root,compiled,variant,innate)
         emit_player(w,kits,root)
         emit_slots(w,kits)
-        emit_grants(w,kits,innate)
+        emit_grants(w,kits,innate,focus_entries)
         emit_ui(w)
+        from .active_focus import emit_focus
+        emit_focus(w,focus_entries)
         emit_progression(w)
         dest=output/f"Arcane_Rev3_22_Origins_{variant.upper()}_DEV_1.18.2.zip"
         with ZipFile(dest,"w",ZIP_DEFLATED,compresslevel=9) as z:
