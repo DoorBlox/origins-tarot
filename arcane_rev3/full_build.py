@@ -123,6 +123,7 @@ class Pack:
 
 def emit_content(w,root,compiled,variant,identity_powers):
     from .powers import current_catalog
+    from .compat_141 import adapt_141, chance_predicate
     catalog=current_catalog(root)
     info={card["slug"]:card for card in CARDS}
     w.j("pack.mcmeta",{"pack":{"pack_format":9,
@@ -146,9 +147,21 @@ def emit_content(w,root,compiled,variant,identity_powers):
         identity=(["tarot:fool/identity_spiritual_expenditure"] if slug=="fool"
                   else [identity_powers[slug]] if slug in identity_powers else [])
         w.j("data/tarot/origins/"+slug+".json",{
-             "powers":wings+identity, "icon":"minecraft:paper", "name":c["name"],
+             "powers":wings+identity+["tarot:"+slug+"/runtime_sync"],
+             "icon":"minecraft:paper", "name":c["name"],
              "description":"Rev3 player-owned slot kits; "+c["lore"],
              "impact":3,"order":c["id"]-1})
+        # The 1.18.2 server rejected "origin has origin" during function
+        # compilation. Use the chosen Origin's own power to initialize
+        # its matching scoreboard path; no player OP is granted.
+        w.j("data/tarot/powers/"+slug+"/runtime_sync.json",{
+            "type":"origins:action_over_time", "interval":20,
+            "hidden":True,
+            "name":"Internal Arcane state sync",
+            "description":"Synchronizes this selected Tarot Origin with scoreboard state.",
+            "entity_action":{"type":"origins:execute_command",
+                             "permission_level":2,
+                             "command":F("player/sync/"+slug)}})
         if wings:
             w.j("data/tarot/powers/"+slug+"/wings.json",{
                 "type":"origins:elytra_flight","render_elytra":True,
@@ -169,8 +182,16 @@ def emit_content(w,root,compiled,variant,identity_powers):
             "name":"The "+res.replace("_"," ").title(),
             "description":"Resonance for "+a+" + "+b+"; development-only, not selectable.",
             "impact":3,"unchoosable":True})
+    chance_rates=set()
     for ident,power in compiled.items():
-        w.j("data/tarot/powers/"+ident.split(":")[1]+".json",power)
+        adapted, rates, changes = adapt_141(power)
+        chance_rates.update(rates)
+        w.j("data/tarot/powers/"+ident.split(":")[1]+".json", adapted)
+    # Minecraft 1.18.2 has vanilla random-chance loot predicates;
+    # Apoli 2.3.3 has NO "origins:chance" entity condition.
+    for basis in sorted(chance_rates):
+        w.j(f"data/tarot_arcane/predicates/chance/{basis}.json",
+            chance_predicate(basis))
 
 
 def emit_player(w,kits,root=ROOT):
@@ -217,11 +238,8 @@ def emit_player(w,kits,root=ROOT):
         "execute if score @s a_actcd matches 1.. run scoreboard players remove @s a_actcd 1",
         "execute if score @s a_combat matches 1.. run scoreboard players remove @s a_combat 1",
         "execute if score @s a_init matches 1 if score @s a_clock matches 600.. run "+F("player/periodic"))
-    detection=[]
+    detection=["# Detect via each chosen Origin's intrinsic runtime_sync power."]
     for slug,idnum in NUM.items():
-        detection.extend([
-            "execute unless score @s a_init matches 1 store success score @s a_probe run origin has origin @s origins:origin tarot:"+slug,
-            "execute unless score @s a_init matches 1 if score @s a_probe matches 1 run "+F("player/init/"+slug)])
         w.f("player/init/"+slug,
             "scoreboard players set @s a_init 1",
             "scoreboard players set @s a_paused 0",
@@ -249,12 +267,14 @@ def emit_player(w,kits,root=ROOT):
             F("powers/refresh"),
             msg("Awakened "+slug+" at Sequence 9. /tarot status for instructions.","aqua"))
     w.f("player/detect",detection)
-    verify=[]
+    # Origin power owns init and recovery. Avoid the broken 1.4.1
+    # origin-has-origin parser and never force Origin selection.
     for slug,i in NUM.items():
-        verify.extend([
-            f"execute if score @s a_path matches {i} store success score @s a_probe run origin has origin @s origins:origin tarot:{slug}",
-            f"execute if score @s a_path matches {i} if score @s a_probe matches 0 run origin set @s origins:origin tarot:{slug}"])
-    w.f("player/verify",verify)
+        w.f(f"player/sync/{slug}",
+            f"execute unless score @s a_init matches 1 run "+F(f"player/init/{slug}"),
+            f"execute if score @s a_init matches 1 unless score @s a_path matches {i} run "+F(f"player/init/{slug}"))
+    w.f("player/verify",
+        "# Origin identity checked by the selected Origin's runtime_sync power.")
     # Same-team-only Lovers isolation counter. Only configured vanilla team
     # members count as allies; enemy and teamless players do not reset it.
     # Team membership is admin-defined, never changed by Arcane runtime.
