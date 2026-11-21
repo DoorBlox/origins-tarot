@@ -104,12 +104,24 @@ class ResonancePackReleaseGateTests(unittest.TestCase):
                 self.assertNotIn("clear @s",asc)
                 self.assertNotIn("scoreboard players set @s a_mode 2",asc)
 
-    def test_no_resonance_grants_in_any_function(self):
+    def test_resonance_grants_only_in_operator_test_source_functions(self):
+        # Normal slot/trigger functions still cannot grant any Resonance.
+        # The 22 pair grant/repair functions are only dispatched from
+        # mode=2 + a_rtest=1 + validated fixed primary/partner checks.
         for variant in ("only","addon"):
             with ZipFile(self.artifacts[variant]) as pack:
                 for file in pack.namelist():
                     if not file.endswith(".mcfunction"):continue
                     content=pack.read(file).decode()
+                    if "/functions/resonance/" in file:
+                        self.assertIn("power grant @s tarot:",content)
+                        self.assertTrue(
+                            "tarot_arcane:resonance_seq1_test" in content)
+                        continue
                     for slug in EXPECTED:
                         self.assertNotIn("power grant @s tarot:"+slug+"/",content,
                                          (variant,file,slug))
+                dispatch=pack.read(
+                    "data/tarot_arcane/functions/powers/refresh.mcfunction").decode()
+                self.assertIn("a_mode matches 2",dispatch)
+                self.assertIn("a_rtest matches 1",dispatch)
