@@ -7,7 +7,7 @@ mutation or command requiring privileges is exposed to an ordinary user.
 """
 from ..powers import apply, compound, mod, power
 from .shared import active, combined, cmd, effect, mobs, periodic
-from ..team_policy import enemy_effect, ally_effect
+from ..team_policy import enemy_effect, ally_effect, nearby_ally_condition
 
 
 HOSTILE = {"type": "origins:in_tag", "tag": "tarot:hostile"}
@@ -81,14 +81,12 @@ def register(add):
                combined(effect(mobs(5), "slowness", 200, 1),
                         effect(mobs(5), "weakness", 200)), 6000),
         "partial", "Weakness and Slowness do not prevent hostile entry; no persistent zone or enemy-player boundary logic")
-    near_player = {"type": "origins:command",
-                   "command": "execute at @s if entity @a[distance=0.01..8]",
-                   "comparison": ">=", "compare_to": 1}
+    near_teammate = nearby_ally_condition(8)
     add("lovers", 9, "Linked Hearts",
         periodic("Linked Hearts", "Near another player, heal self one health point every 500t.",
                  {"type": "origins:heal", "amount": 1},
-                 500, condition=near_player),
-        "partial", "Any nearby player triggers the self-heal (not same-team only); no paired ally healing or +10% speed on both players")
+                 500, condition=near_teammate),
+        "partial", "No paired ally healing or +10% speed on both players; teammate detection is limited to configured vanilla combat teams")
     add("chariot", 9, "Trail of Embers",
         periodic("Trail of Embers", "While sprinting, ignite tagged hostile mobs within two blocks.",
                  area(2, {"type": "origins:set_on_fire", "duration": 2}),
