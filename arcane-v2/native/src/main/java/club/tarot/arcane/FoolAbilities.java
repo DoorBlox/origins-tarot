@@ -11,7 +11,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.tag.TagKey;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -26,6 +28,7 @@ import net.minecraft.util.math.Vec3d;
 public final class FoolAbilities {
     private FoolAbilities() { }
     private static final Random RANDOM=new Random();
+    private static final TagKey<EntityType<?>> HOSTILE = TagKey.of(Registry.ENTITY_TYPE_KEY,new Identifier("tarot","hostile"));
 
     private static boolean enabled(ArcaneSave.Record r,int seq) {
         return r.profile.active("fool",seq);
@@ -37,7 +40,7 @@ public final class FoolAbilities {
             // Unteamed players are enemies for Tarot combat targeting.
             return true;
         }
-        return target instanceof HostileEntity;
+        return target.getType().isIn(HOSTILE);
     }
     private static List<LivingEntity> enemies(ServerPlayerEntity p,double radius) {
         List<LivingEntity> out=new ArrayList<>();
@@ -58,8 +61,7 @@ public final class FoolAbilities {
         stand.setCustomName(new LiteralText("Paper Decoy"));
         stand.setCustomNameVisible(true);
         p.world.spawnEntity(stand);
-        // Cleanup without orphaned chunk-loading / persistent ghost armor stands.
-        p.getServer().execute(() -> { /* decoy expiry is maintained by tick cleanup below */ });
+        // The native server tick discards decoys once they are 100 ticks old.
     }
     public static void register() {
         // LivingEntityMixin installs the native 1.18.2 damage hooks.
@@ -106,6 +108,9 @@ public final class FoolAbilities {
     }
     public static void tick(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r) {
         long now=p.getWorld().getTime();
+        for (ArmorStandEntity decoy : p.getWorld().getEntitiesByClass(ArmorStandEntity.class,
+            new Box(p.getBlockPos()).expand(128), e -> e.age >= 100
+                && e.getScoreboardTags().contains("tarot_decoy"))) decoy.discard();
         if(enabled(r,9) && now%40==0) {
             int mobs=0; boolean playerEnemy=false;
             for(LivingEntity e:enemies(p,8)) {

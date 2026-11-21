@@ -5,6 +5,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
@@ -51,12 +53,21 @@ public final class ArcaneMod implements ModInitializer {
         )));
         ServerPlayConnectionEvents.JOIN.register((handler,sender,server) ->
             server.execute(() -> enrollAndRefresh(handler.getPlayer())));
+        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer,newPlayer,alive) ->
+            enrollAndRefresh(newPlayer));
+        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player,from,to) ->
+            enrollAndRefresh(player));
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             if (server.getTicks() % 20 != 0) return;
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
                 ArcaneSave state = ArcaneSave.get(server);
                 ArcaneSave.Record record = state.getPlayer(player.getUuid());
-                if (record != null) FoolAbilities.tick(player,state,record);
+                // Origins choice can occur after JOIN; discover the selected Arcana without KubeJS.
+                if (record == null) {
+                    if (server.getTicks() % 100 == 0) enrollAndRefresh(player);
+                    continue;
+                }
+                FoolAbilities.tick(player,state,record);
             }
         });
         FoolAbilities.register();
