@@ -9,7 +9,7 @@ import json
 import textwrap
 
 from progression.catalog import CARDS, ACT_MARKS, RITUALS
-from .player_codex import how_to_use
+from .player_codex import how_to_use, player_effect_text
 
 
 def _text(value, color="black", bold=False):
@@ -257,7 +257,7 @@ def pathway_pages(slug, compiled, manifest, kits):
         ], prev=len(pages), next_=len(pages)+2))
         for row in chunk:
             power = compiled.get(row["power_id"], {})
-            summary = _short(power.get("description", "See your equipped power effects."), 135)
+            summary = _short(player_effect_text(power), 135)
             usage = _short(how_to_use(power), 105)
             lines = [
                 row["name"],
