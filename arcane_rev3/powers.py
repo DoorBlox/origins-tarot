@@ -354,6 +354,140 @@ def compile_powers(root):
                             "condition":{"type":"origins:entity_type","entity_type":"minecraft:villager"}}),
         "partial","Wandering trader and alternate trade UIs may remain accessible")
 
+
+    # Additional Rev2 powers implemented or explicitly marked partial when
+    # pure datapack rules cannot enforce the source's PvP/team restrictions.
+    hostile={"type":"origins:in_tag","tag":"tarot:hostile"}
+    add("high_priestess",8,"Deduction",power("Deduction",
+        "20% chance after any kill to earn one experience level, capped at level 30.",
+        "origins:self_action_on_kill",entity_action={
+            "type":"origins:chance","chance":0.2,
+            "action":{"type":"origins:execute_command",
+                      "command":"execute if entity @s[level=..29] run experience add @s 1 levels"}}))
+    add("empress",9,"Exposed Reflection",power("Exposed Reflection",
+        "Sunlight makes incoming projectile damage 25% stronger.",
+        "origins:modify_damage_taken",modifier=mod(0.25),
+        condition={"type":"origins:exposed_to_sun"},
+        damage_condition={"type":"origins:projectile"}))
+    add("empress",9,"Reflected Beauty",power("Reflected Beauty",
+        "Bright surroundings trigger Nausea I on the attacker for 40 ticks.",
+        "origins:attacker_action_when_hit",cooldown=400,
+        condition={"type":"origins:brightness","comparison":">=","compare_to":0.8},
+        entity_action=apply("nausea",40)),
+        "partial","Brightness >= 0.8 approximates light level 12 and lacks dynamic team protection")
+    add("empress",9,"Witch's Venom",power("Witch's Venom",
+        "Poison I for 60 ticks when hitting a hostile mob; 240t cooldown.",
+        "origins:target_action_on_hit",cooldown=240,
+        target_condition=hostile,entity_action=apply("poison",60)),
+        "partial","Enemy players must also be poisoned; player targeting is gated until dynamic team checks are available")
+    add("empress",7,"Black Fire",power("Black Fire",
+        "10% chance to ignite a hostile mob for 20 ticks on hit.",
+        "origins:target_action_on_hit",cooldown=1,
+        target_condition=hostile,entity_action={"type":"origins:chance",
+                    "chance":0.10,"action":{"type":"origins:set_on_fire","duration":1}}),
+        "partial","Enemy players not yet targeted; origin fire duration measured in seconds, approximate one second")
+    add("hierophant",9,"Sanctified Ground",power("Sanctified Ground",
+        "Receive 5% more XP while standing on sanctified blocks.",
+        "origins:modify_xp_gain",modifier=mod(0.05),
+        condition={"type":"origins:on_block",
+                   "block_condition":{"type":"origins:in_tag","tag":"tarot:sanctified_ground"}}))
+    add("emperor",3,"Frenzy",power("Frenzy",
+        "At low health, occasionally gain Speed and Haste for 100 ticks.",
+        "origins:action_over_time",interval=600,
+        condition={"type":"origins:health","comparison":"<","compare_to":8},
+        entity_action={"type":"origins:and","actions":[apply("speed",100),apply("haste",100)]}),
+        "partial","Checks on 600-tick interval rather than immediately on crossing below 8 health")
+    add("emperor",1,"Iron Decree",power("Iron Decree",
+        "Holding a shield reduces damage taken by 15%.",
+        "origins:modify_damage_taken",modifier=mod(-0.15),condition=shield),
+        "partial","Stacks with existing Imperial Presence; desired effect replaces 10% with 15%")
+    add("strength",4,"Hunter's Bane",power("Hunter's Bane",
+        "15% more melee damage against undead.",
+        "origins:modify_damage_dealt",target_condition={
+            "type":"origins:in_tag","tag":"tarot:undead"},modifier=mod(0.15)),
+        "partial","Demon-type opponents beyond the undead tag are not included")
+    add("hermit",9,"Forbidden Knowledge",power("Forbidden Knowledge",
+        "At XP 30+ without a book in the offhand, gain Mining Fatigue I.",
+        "origins:action_over_time",interval=40,
+        condition={"type":"origins:and","conditions":[
+            {"type":"origins:xp_levels","comparison":">=","compare_to":30},
+            {**book,"inverted":True}]},
+        entity_action=apply("mining_fatigue",80)))
+    add("hermit",3,"Omen",power("Omen",
+        "10% chance on hit received to gain Speed I for 60 ticks.",
+        "origins:self_action_when_hit",cooldown=1,
+        entity_action={"type":"origins:chance","chance":0.10,
+                       "action":apply("speed",60)}),
+        "partial","Triggers when hit rather than when merely targeted")
+    add("hanged_man",9,"Shadow of Degeneration",compound("Shadow of Degeneration",
+        defense={"type":"origins:action_over_time","interval":20,
+                 "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.467},
+                 "entity_action":apply("resistance",50)},
+        speed={"type":"origins:conditioned_attribute","tick_rate":20,
+               "condition":{"type":"origins:brightness","comparison":"<=","compare_to":0.467},
+               "modifier":{**mod(0.05),"attribute":"minecraft:generic.movement_speed"}}),
+        "partial","Footstep silence unsupported and brightness approximates light <=7")
+    add("death",9,"Reaper's Touch",power("Reaper's Touch",
+        "Undead melee victims receive Weakness I 60 ticks; CD 200.",
+        "origins:target_action_on_hit",cooldown=200,
+        target_condition={"type":"origins:in_tag","tag":"tarot:undead"},
+        entity_action=apply("weakness",60)))
+    add("devil",9,"Sacred Rejection",power("Sacred Rejection",
+        "Golden apples cannot be eaten.",
+        "origins:prevent_item_use",
+        item_condition={"type":"origins:ingredient",
+                        "ingredient":{"items":["minecraft:golden_apple","minecraft:enchanted_golden_apple"]}}),
+        "partial","Instant Healing and regeneration from healing potions should be halved")
+    add("devil",9,"Corrupting Claws",power("Corrupting Claws",
+        "Hostile mobs receive Wither I 40 ticks on hit; 320t cooldown.",
+        "origins:target_action_on_hit",cooldown=320,
+        target_condition=hostile,entity_action=apply("wither",40)),
+        "partial","Enemy players omitted pending same-team safety")
+    add("tower",9,"Unstable Strike",power("Unstable Strike",
+        "Hostile mobs hit receive Slowness I 20 ticks; 260t cooldown.",
+        "origins:target_action_on_hit",cooldown=260,
+        target_condition=hostile,entity_action=apply("slowness",20)),
+        "partial","Must also apply to enemy players while never hitting allies")
+    add("moon",9,"Blood Diet",power("Blood Diet",
+        "Cannot eat foods outside the tarot:meat item tag.",
+        "origins:prevent_item_use",item_condition={"type":"origins:and","conditions":[
+            {"type":"origins:food"},
+            {"type":"origins:not","condition":{"type":"origins:ingredient",
+                                            "ingredient":{"tag":"tarot:meat"}}}]}),
+        "partial","Blocks eating nonmeat instead of allowing consumption with zero hunger restoration")
+    add("sun",9,"Purification",power("Purification",
+        "Every 900 ticks cleanse Poison and Weakness.",
+        "origins:action_over_time",interval=900,
+        entity_action={"type":"origins:and","actions":[
+            {"type":"origins:clear_effect","effect":"minecraft:poison"},
+            {"type":"origins:clear_effect","effect":"minecraft:weakness"}]}))
+    add("sun",8,"Holy Light",power("Holy Light",
+        "While sneaking, periodically heal two health points.",
+        "origins:action_over_time",interval=600,
+        condition={"type":"origins:sneaking"},
+        entity_action={"type":"origins:heal","amount":2}),
+        "partial","Source requires a continuous 60-tick crouch charge and a 600-tick ability cooldown")
+    add("judgement",9,"Hold the Line",power("Hold the Line",
+        "While not sprinting, damage taken is reduced by 12%.",
+        "origins:modify_damage_taken",modifier=mod(-0.12),
+        condition={"type":"origins:sprinting","inverted":True}),
+        "partial","Also reduces non-melee attacks; original applies only to melee")
+    add("world",9,"Marked Prey",power("Marked Prey",
+        "Melee hitting a hostile mob marks it with Glowing for 120 ticks.",
+        "origins:target_action_on_hit",cooldown=200,
+        target_condition=hostile,entity_action=apply("glowing",120)),
+        "partial","Enemy player targeting withheld until team safety is implemented")
+    add("chariot",1,"Burning Wrath",power("Burning Wrath",
+        "While burning, melee damage increases by 20%.",
+        "origins:modify_damage_dealt",condition={"type":"origins:on_fire"},
+        modifier=mod(0.20)))
+    add("magician",9,"Full Moon Ravings",power("Full Moon Ravings",
+        "Outdoors every 1200 ticks suffer Nausea I for 100 ticks.",
+        "origins:action_over_time",interval=1200,
+        condition={"type":"origins:exposed_to_sky"},
+        entity_action=apply("nausea",100)),
+        "partial","Full-moon phase and night-time gate not yet enforced")
+
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}
