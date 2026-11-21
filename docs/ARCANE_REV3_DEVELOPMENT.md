@@ -40,6 +40,10 @@ Lovers' Separation Anxiety has a real per-player `a_alone_time` tick counter, ca
 
 All compiled abilities remain test-world-only until actual 1.18.2 Origins 1.4.1 testing.
 
+## Official 1.4.1 type compatibility gate
+
+The build regression suite now includes `tests/test_arcane_141_schema.py`: the official [Origins/Apoli 1.4.1 power registry](https://origins.readthedocs.io/en/1.4.1/types/power_types/) is baked into a checked allowlist for top-level and nested `origins:multiple` power types. It rejects newer-only power type identifiers and checks common required fields, cooldowns, player-owned grant references and hard-coded privileged action commands. Compatible JSON still needs an actual Minecraft 1.18.2 acceptance test, since type registration does not confirm effect semantics or config mod compatibility.
+
 ## Resonance wave 2 and individual combat wave: 37 additional powers
 
 A second independently auditable module `arcane_rev3/batches/resonance2.py` adds **28 named middle-sequence Resonance skills** across marked_verdict, burning_archive, crumbling_reaper, impossible_fist, benevolent_crown, binding_contract, starless_poison, eclipse, walking_sanctuary and loaded_dice. These include real tagged-hostile status effects, XP gains, undead-linked healing, sneak/bow conditions and fixed ability key cooldowns. The separate `individual3.py` adds **nine individual pathway combat/utility abilities**: Reap, Bulwark, Guide, Verdict, Grave Whisper, Twilight Blade, Sanguine Resilience, Nature's Step and Sanctify.
