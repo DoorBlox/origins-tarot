@@ -1,13 +1,13 @@
 # The Tarot Club — 22 Major Arcana Origins
 
-> **Arcane V2 Rev3 is a separate DEVELOPMENT datapack.** Source-complete does not mean gameplay-complete: 434/434 source definitions, 73 full and 361 PARTIAL; 110/110 Resonance entries source-defined, normal Sequence 1 locked. Do not install it alongside legacy Tarot V2/V3 or assume old player scores migrate. Check [the handoff](CHATGPT_HANDOFF.md), [AGENTS.md](AGENTS.md) and [issue #20](https://github.com/DoorBlox/origins-tarot/issues/20) for the live source checkpoint.
+> **Arcane Rev3 is a separate datapack from legacy Tarot V2/V3.** Begin at Sequence 9, learn your abilities with the Handbook and Pathway Tome, and advance toward Sequence 2. Sequence 1 cannot currently be unlocked through normal play. Before updating an existing SMP world, make a full backup and use only one matching Arcane Rev3 ZIP. For engineering status and compatibility caveats, see the [developer handoff](CHATGPT_HANDOFF.md) and [release tracker](https://github.com/DoorBlox/origins-tarot/issues/20).
 
 ## Arcane Rev3 — written books (no Command Aliases needed)
 
-**Vanilla Minecraft 1.18.2 can display interactive written books**, so the latest Arcane development build uses them by default instead of long chat explanations.
+**Vanilla Minecraft 1.18.2 supports interactive written books**, so Arcane Rev3 uses them for guides instead of long chat explanations.
 
 - **`/trigger a_book`** or **`/trigger a_guide`**: receive the Arcane Handbook, including setup, controls, quests and every normal ritual milestone. **Right-click it in your inventory to open the book screen.**
-- **`/trigger a_tome`** or **`/trigger a_abilities`**: receive your own pathway's source-grounded ability Tome, with Sequence-index page links, actual effects, activation and incomplete mechanics.
+- **`/trigger a_tome`** or **`/trigger a_abilities`**: receive your pathway's ability Tome, with Sequence links, effects, activation controls and cooldowns.
 - **`/trigger a_partner_tome`**: receive the linked second-path Tome after unlocking Sequence 4.
 - **`/trigger a_hud set 2`**: show a private Sequence/acting-mark/next-phase progress actionbar; **`/trigger a_hud set 3`** turns it off. This is player-scoped and optional; a shared vanilla bossbar could show the wrong player's progress.
 - **`/trigger a_roadmap`** and **`/trigger a_slots`**: retain the short live status and slot controls in chat; a written book's pages cannot display live, changing scoreboard values.
@@ -18,7 +18,7 @@
 
 **[Read the Arcane Rev3 Player Guide](docs/ARCANE_REV3_PLAYER_GUIDE.md)** for an exact Sequence 9→2 ascension roadmap, all 22 acting methods, ritual ingredients, editable slots, active keys, and the non-OP in-game commands.
 
-In an updated Arcane Rev3 datapack, open **/trigger a_guide** (or **/tarot guide** with Command Aliases), **/trigger a_abilities** (inspect equipped kits and click DETAILS), **/trigger a_roadmap** (next proof and offerings), and **/trigger a_stages** (all milestones). A full source-backed **434-ability reference** is included in the Arcane GitHub Actions artifact as **Arcane_Rev3_Player_Ability_Reference.md**. **PARTIAL** abilities explicitly disclose what's unfinished; normal Sequence 1 Resonance is locked.
+Use **/trigger a_book** for the Handbook, **/trigger a_tome** for the ability Tome, **/trigger a_roadmap** for your next proof and ritual, and **/trigger a_hud set 2** for an optional private progress display. The downloadable **Arcane_Rev3_Player_Ability_Reference.md** covers the normal Sequence 9–2 pathway abilities. Developer implementation reports are kept separate from player-facing reading material.
 
 ## IMPORTANT — choose the correct Actions build
 
