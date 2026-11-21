@@ -18,6 +18,12 @@ Authoritative specifications: `docs/HandbookRev3.txt` governs progression and sl
 
 Structural CI does **not** prove compatibility in a live Minecraft 1.18.2 / Fabric / Origins 1.4.1 / Command Aliases 1.0.1 server. Gameplay, non-OP command parsing, party-team targeting, and world-reload verification are **NOT RUN**. The developer pack also does **not** migrate existing V3 `tc_*` progression scores or player save state.
 
+## Minecraft 1.18.2-compatible combat lock
+
+The developer runtime prevents ascension for 200 ticks (10 seconds) after damage received, direct melee damage dealt, or firing a bow, crossbow, or trident. It uses the 1.18.2 scoreboard criteria `minecraft.custom:minecraft.damage_taken`, `minecraft.custom:minecraft.damage_dealt` and `minecraft.used:minecraft.{bow,crossbow,trident}` with saved per-player baselines. Damage received also retains the supported `minecraft:entity_hurt_player` advancement as a backup.
+
+The previous attacker-side `minecraft:player_hurt_entity` advancement is removed because that advancement trigger is unavailable in Minecraft 1.18.2. Projectile firing locks ascension proactively rather than waiting for an arrow to land; damage-dealt statistics alone count melee damage and are insufficient for ranged weapons. Other ranged attacks, modded combat systems and the precise scoreboard behavior must still be verified in the disposable test server.
+
 ## Admin-only persistent pause and recovery
 
 The developer pack includes an emergency **slot-power pause** that persists across relogs, death, manual power refresh, and periodic reconciliation. It does not change the player's sequence or delete saved slot allocations. The persistent flag is a scoreboard objective named `a_paused`.
