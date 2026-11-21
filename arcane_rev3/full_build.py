@@ -308,7 +308,8 @@ def emit_player(w,kits,root=ROOT):
             f"scoreboard players set @s a_s1 {idnum*100+9}",
             [f"scoreboard players set @s a_s{i} 0" for i in range(2,9)],
             F("powers/refresh"),
-            msg("Awakened "+slug+" at Sequence 9. Open the player guide to get started.","aqua"),
+            F("ui/book/give"),
+            msg("Awakened "+slug+" at Sequence 9. Your Arcane Handbook is in your inventory.","aqua"),
             click("[Open player guide]","a_guide","yellow"),
             click("[See my abilities]","a_abilities","green"))
     w.f("player/detect",detection)
