@@ -21,6 +21,20 @@ def _jump(label, page):
             "clickEvent": {"action": "change_page", "value": str(page)}}
 
 
+def _action(label, trigger):
+    """Book actions may run ONLY explicit player-owned triggers, never admin."""
+    accepted = {
+        "a_slots", "a_focus_menu", "a_roadmap",
+        "a_tome", "a_partner_tome", "a_book", "a_status",
+        "a_hud set 2", "a_hud set 3",
+    }
+    if trigger not in accepted:
+        raise ValueError("Unsafe tutorial action")
+    return {"text": label, "color": "dark_green", "underlined": True,
+            "clickEvent": {"action": "run_command",
+                           "value": "/trigger " + trigger}}
+
+
 def _page(title, lines, *, home=1, prev=None, next_=None):
     """Short, legible pages; stable 1-based page destinations."""
     parts = [_text(title + "\n", "dark_purple", True),
@@ -149,12 +163,66 @@ def general_pages():
             "At Seq4, partner unlocks.",
             "For abilities: /trigger a_tome",
         ], prev=len(pages), next_=(len(pages)+2 if card is not CARDS[-1] else None)))
+    # Read-only tutorial pages with optional vanilla-trigger shortcuts:
+    # clickable triggers never confer OP or bypass existing kit validation.
+    tutorials = [
+        ("SET UP POWERS", [
+            "1. Select a Tarot Origin.",
+            "2. Seq9-5 kits equip automatically.",
+            "3. Open your Pathway Tome.",
+            "4. Bind Origins keys in Controls.",
+            "5. At Seq4 use the slot menu.",
+            "6. Equip an unlocked kit.",
+            "7. Inspect abilities in Tome.",
+        ], "a_tome"),
+        ("SLOT EQUIPMENT", [
+            "At Sequence 4 you get a",
+            "fixed linked second pathway.",
+            "Open /trigger a_slots.",
+            "Choose Edit slot, pathway,",
+            "then an UNLOCKED Sequence.",
+            "One slot equips a whole kit.",
+            "No duplicates or locked kits.",
+            "Seq4/3/2: 6/7/8 slots.",
+        ], "a_slots"),
+        ("FOCUS AND KEYS", [
+            "Client Controls > Key Binds",
+            "> Origins: Primary & Secondary.",
+            "Some active powers share keys.",
+            "Use /trigger a_focus_menu",
+            "to choose the owned action.",
+            "Passive powers work on their",
+            "specified event/condition.",
+            "Read Tome for each cooldown.",
+        ], "a_focus_menu"),
+        ("PROGRESS DISPLAY", [
+            "Use /trigger a_hud set 2",
+            "to show your PRIVATE HUD.",
+            "It shows Sequence, marks,",
+            "next item/event, and cooldown.",
+            "Use /trigger a_hud set 3",
+            "to hide it again.",
+            "For exact next ritual",
+            "use /trigger a_roadmap.",
+        ], "a_hud set 2"),
+    ]
+    for title, lines, trigger in tutorials:
+        n = len(pages)
+        page = _page(title, lines, prev=n, next_=n+2 if len(tutorials) > n-38+1 else None)
+        page["extra"].extend([_text("\n"), _action("[OPEN PLAYER MENU]", trigger)])
+        pages.append(page)
+    # Ensure no dangling forward arrow from final tutorial page.
+    pages[-1]["extra"] = [
+        part for part in pages[-1]["extra"]
+        if not (isinstance(part, dict) and part.get("text") == "Next >")
+    ]
     # Main-page jump links avoid clicking through 38 sequential pages.
     pages[0]["extra"].extend([
         _text("\n\n"),
         _jump("[Getting Started]", 2), _text("\n"),
         _jump("[Ascension Costs]", 9), _text("\n"),
-        _jump("[All 22 Pathways]", 17),
+        _jump("[All 22 Pathways]", 17), _text("\n"),
+        _jump("[Power Setup Tutorial]", 39),
     ])
     if len(pages) > 100:
         raise ValueError("Minecraft books allow at most 100 pages")
