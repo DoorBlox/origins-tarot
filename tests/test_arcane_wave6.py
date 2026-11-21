@@ -56,16 +56,16 @@ class WaveSixTests(unittest.TestCase):
 
     def test_counts_all_110_resonance_entries_are_meaningful_but_not_playable(self):
         self.assertEqual(len(self.manifest), 434)
-        self.assertEqual(len(self.powers), 370)
+        self.assertEqual(len(self.powers), 402)
         self.assertEqual({st: sum(m["status"] == st for m in self.manifest)
                          for st in ("full", "partial", "blocked")},
-                         {"full": 73, "partial": 297, "blocked": 64})
+                         {"full": 73, "partial": 329, "blocked": 32})
         self.assertEqual(
             sum(m["family"] == "resonance" and m["status"] != "blocked"
                 for m in self.manifest), 110)
         self.assertEqual(
             sum(m["family"] == "individual" and m["status"] != "blocked"
-                for m in self.manifest), 260)
+                for m in self.manifest), 292)
         self.assertEqual({p for _, _, p in PAIRS},
                          {m["pathway"] for m in self.manifest
                           if m["family"] == "resonance"})

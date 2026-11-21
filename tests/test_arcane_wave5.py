@@ -104,11 +104,11 @@ class WaveFiveTests(unittest.TestCase):
 
     def test_counts_and_resonance_still_fail_closed(self):
         self.assertEqual(len(self.manifest), 434)
-        self.assertEqual(len(self.powers), 370)
+        self.assertEqual(len(self.powers), 402)
         self.assertEqual(
             {status: sum(m["status"] == status for m in self.manifest)
              for status in ("full", "partial", "blocked")},
-            {"full": 73, "partial": 297, "blocked": 64})
+            {"full": 73, "partial": 329, "blocked": 32})
         self.assertEqual(
             sum(m["family"] == "resonance" and m["status"] != "blocked"
                 for m in self.manifest), 110)
