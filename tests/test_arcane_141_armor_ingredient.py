@@ -109,10 +109,10 @@ class RestrictArmorCompat141Tests(unittest.TestCase):
         raw = {
             "type": "origins:multiple",
             "armor": {"type": "origins:restrict_armor",
-                      slot: {"type": "origins:ingredient",
-                             "ingredient": {"items": ["minecraft:iron_boots",
-                                                      "minecraft:diamond_boots"]}}
-                      for slot in ARMOR_SLOTS},
+                      **{slot: {"type": "origins:ingredient",
+                                "ingredient": {"items": ["minecraft:iron_boots",
+                                                         "minecraft:diamond_boots"]}}
+                         for slot in ARMOR_SLOTS}},
             "other": {"type": "origins:ingredient",
                       "ingredient": {"item": "minecraft:stone"}}}
         cooked, _, _ = adapt_141(raw)
