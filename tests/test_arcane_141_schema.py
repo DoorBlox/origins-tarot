@@ -54,9 +54,9 @@ def leaf_power_nodes(power,place):
     yield place,power
     if power.get("type")=="origins:multiple":
         for key,val in power.items():
-            if isinstance(val,dict) and "type" in val and
-               key not in ("condition","entity_action","damage_condition",
-                           "item_condition","block_condition"):
+            if (isinstance(val,dict) and "type" in val and
+                key not in ("condition","entity_action","damage_condition",
+                            "item_condition","block_condition")):
                 yield from leaf_power_nodes(val,place+"."+key)
 
 
