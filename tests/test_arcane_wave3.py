@@ -12,8 +12,7 @@ from arcane_rev3.powers import compile_powers, norm
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_INDIVIDUAL = {
-    "death": {"Reaper's Touch"},
-    "strength": {"Hunter's Bane", "Master's Grip"},
+    "strength": {"Master's Grip"},
     "temperance": {"Mirror Passage", "Beast Form", "Abomination"},
     "wheel_of_fortune": {"Clockwork", "Winning Streak", "Chaos Step"},
     "emperor": {"Corrupt Ground"},
@@ -53,7 +52,7 @@ class WaveThreeTests(unittest.TestCase):
                       for m in cls.manifest}
 
     def test_33_new_source_abilities_and_exact_manifest(self):
-        self.assertEqual(len(entries(individual4)), 21)
+        self.assertEqual(len(entries(individual4)), 19)
         self.assertEqual(len(entries(resonance3)), 12)
         for family, module, expected in (
             ("individual", individual4, EXPECTED_INDIVIDUAL),
@@ -71,11 +70,11 @@ class WaveThreeTests(unittest.TestCase):
                 if m["status"] == "partial":
                     self.assertTrue(status[1] and m["missing"], (slug, name))
             self.assertEqual(seen, expected)
-        self.assertEqual(len(self.powers), 274)
+        self.assertEqual(len(self.powers), 272)
         self.assertEqual(len(self.manifest), 434)
         self.assertEqual({k: sum(m["status"] == k for m in self.manifest)
                           for k in ("full", "partial", "blocked")},
-                         {"full": 74, "partial": 200, "blocked": 160})
+                         {"full": 73, "partial": 199, "blocked": 162})
         self.assertEqual(sum(m["family"] == "resonance" and
                              m["status"] != "blocked" for m in self.manifest), 63)
 
