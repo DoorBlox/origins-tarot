@@ -1,0 +1,5948 @@
+{
+  "version": "2026-11-21",
+  "target": "Minecraft 1.18.2 / Origins 1.4.1",
+  "compatibility": "not executable until translated and validated",
+  "lore_note": "Major Arcana names are not identical to canonical pathways",
+  "source_file": "docs/HisyamOrigins.txt",
+  "individual": [
+    {
+      "index": "00",
+      "name": "THE FOOL",
+      "slug": "fool",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "spirit_vision",
+              "name": "Spirit Vision",
+              "flag": "D",
+              "description": "`origins:active_self` → `origins:area_of_effect`. Secondary key + sneaking. All entities (including self) within 10-block sphere gain Glowing I for 40 ticks. Cooldown 100t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "clown_s_mischief",
+              "name": "Clown’s Mischief",
+              "flag": "D",
+              "description": "`origins:attacker_action_when_hit`. 20% chance Blindness I on attacker for 20t. Cooldown 100t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "spiritual_overload",
+              "name": "Spiritual Overload",
+              "flag": "D/S",
+              "description": "`action_over_time` interval 40 + KubeJS count. Condition: ≥3 entities in `#tarot:hostile` **OR ≥1 enemy player** within 8 blocks. Effect: Nausea I 100t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "full_faceless_disguise",
+              "name": "Full Faceless Disguise",
+              "flag": "S",
+              "description": "Primary key. Out of combat. Replace skin/name/model with random online player for 2400–2880t. Cooldown 6000t. Cancels on attack or G/V use.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Clown",
+          "abilities": [
+            {
+              "slug": "trickster_s_favor",
+              "name": "Trickster’s Favor",
+              "flag": "S",
+              "description": "KubeJS `LivingChangeTargetEvent`. Hostile mob or enemy player acquires Fool as target → 10% chance retargets nearest other entity within 6 blocks. Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Magician",
+          "abilities": [
+            {
+              "slug": "stage_magician",
+              "name": "Stage Magician",
+              "flag": "D/S",
+              "description": "`self_action_when_hit`. 25% chance teleport 3 blocks backward + decoy armor stand. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Faceless",
+          "abilities": [
+            {
+              "slug": "borrowed_face",
+              "name": "Borrowed Face",
+              "flag": "S",
+              "description": "Secondary key, out of combat. Name-swap with nearest player within 20 blocks for 1800t. On end: Speed II 60t. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Marionettist",
+          "abilities": [
+            {
+              "slug": "puppet_string",
+              "name": "Puppet String",
+              "flag": "D/S",
+              "description": "Secondary key + sneaking. Target: nearest entity within 8 blocks from `#tarot:hostile` **OR any player** (teammates excluded). Slowness II 80t (mob) / 40t (player). Mob secondary: next attack 50% damage. **Player secondary: see their coordinates 100t AND they cannot sprint for 40t.** Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Scholar of Yore",
+          "abilities": [
+            {
+              "slug": "trickster_s_escape",
+              "name": "Trickster’s Escape",
+              "flag": "D/S",
+              "description": "`action_over_time` interval 20. Health < 8 → Speed II 60t + decoy. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Miracle Invoker",
+          "abilities": [
+            {
+              "slug": "fool_s_bounty",
+              "name": "Fool’s Bounty",
+              "flag": "D/S",
+              "description": "`modify_food` +20%. Golden apple → Speed I 100t (via `action_on_item_use` or KubeJS).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Attendant of Mysteries",
+          "abilities": [
+            {
+              "slug": "fools_gathering",
+              "name": "Fools’ Gathering",
+              "flag": "S",
+              "description": "Secondary key. Summon 2 Vex-like allies (4 HP, 1 dmg/hit) for 200t. **Minions attack both hostile mobs AND enemy players.** Cooldown 6000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Fool (Angel)",
+          "abilities": [
+            {
+              "slug": "history_substitution",
+              "name": "History Substitution",
+              "flag": "S",
+              "description": "On lethal hit: cancel, teleport 12 blocks away, set health 20, Invisibility I 60t, Speed II 60t. Cooldown 7200t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "paper_figurine_substitute",
+              "name": "Paper Figurine Substitute",
+              "flag": "D/S",
+              "description": "`self_action_when_hit` + chance + cooldown. 25% chance on hostile hit → decoy + Speed II 40t. Cooldown 6000t. Decoy only; never cancels lethal damage; never teleports.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Fool",
+          "abilities": [
+            {
+              "slug": "the_legend_of_the_fool",
+              "name": "The Legend of The Fool",
+              "flag": "S",
+              "description": "Primary key. **Duration 700t (35s). Cooldown 18000t (15 min; 12000 if <6 HP at activation).**",
+              "details": [
+                "`modify_damage_taken` −75%",
+                "`creative_flight`",
+                "Fire + fall immunity",
+                "`modify_damage_dealt` +50%",
+                "On-hit: Slowness II + Weakness I 80t",
+                "Decoy every 100t",
+                "Hostile mobs **and enemy players** killed within 10 blocks drop double loot (mob drops only)",
+                "On expiry: return to activation coordinate, health/food/saturation to 20, clear effects, Regeneration II + Speed II 200t",
+                "If killed during window, teleport and heal do not trigger"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "I",
+      "name": "THE MAGICIAN",
+      "slug": "magician",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "traveler_s_body",
+              "name": "Traveler’s Body",
+              "flag": "D",
+              "description": "`attribute` +12% speed; `modify_damage_taken` fall −0.7.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "wayfarer_s_instinct",
+              "name": "Wayfarer’s Instinct",
+              "flag": "D",
+              "description": "`modify_jump` +20% when not submerged.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "threshold_step",
+              "name": "Threshold Step",
+              "flag": "D",
+              "description": "`self_action_when_hit` fall damage. 20% chance zero damage + horizontal 2-block teleport. Cooldown 100t. Shares `tarot:fall_save_used` flag with Sleight of Hand.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "full_moon_ravings",
+              "name": "Full Moon Ravings",
+              "flag": "D/S",
+              "description": "`action_over_time` interval 1200, `exposed_to_sky` → Nausea I 100t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Trickmaster",
+          "abilities": [
+            {
+              "slug": "sleight_of_hand",
+              "name": "Sleight of Hand",
+              "flag": "D",
+              "description": "Same structure, `chance: 0.3`. Shared cooldown.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Astrologer",
+          "abilities": [
+            {
+              "slug": "star_chart",
+              "name": "Star Chart",
+              "flag": "S",
+              "description": "Secondary key + sneaking at night. Particle line toward nearest structure for 100t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Scribe",
+          "abilities": [
+            {
+              "slug": "recorded_step",
+              "name": "Recorded Step",
+              "flag": "S",
+              "description": "Crouch + right-click block stores coordinate; second right-click within 1200t teleports back (max 30 blocks). Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Traveler",
+          "abilities": [
+            {
+              "slug": "doorstep",
+              "name": "Doorstep",
+              "flag": "D",
+              "description": "Secondary key. Teleport 8 blocks forward. Cooldown 300t. KubeJS raycast for air preferred.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Secrets Sorcerer",
+          "abilities": [
+            {
+              "slug": "sealed_room",
+              "name": "Sealed Room",
+              "flag": "D",
+              "description": "Threshold Step also applies **Blindness I 20t to `#tarot:hostile` AND enemy players** within 3 blocks of origin.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Wanderer",
+          "abilities": [
+            {
+              "slug": "shortcut",
+              "name": "Shortcut",
+              "flag": "D/S",
+              "description": "KubeJS `BlockBreakEvent`, 10% chance break opposite block if same type.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Planeswalker",
+          "abilities": [
+            {
+              "slug": "planar_step",
+              "name": "Planar Step",
+              "flag": "S",
+              "description": "Secondary key. Teleport through up to 4 solid blocks. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Key of Stars",
+          "abilities": [
+            {
+              "slug": "waypoint",
+              "name": "Waypoint",
+              "flag": "S",
+              "description": "Secondary key. Mark up to 3 locations. Once per 180s open 200t passage to a mark, usable by all players. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "astral_lock",
+              "name": "Astral Lock",
+              "flag": "D/S",
+              "description": "KubeJS `PlayerTeleportEvent` cancels other players' teleport effects.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Door",
+          "abilities": [
+            {
+              "slug": "all_paths_converge",
+              "name": "All Paths Converge",
+              "flag": "S",
+              "description": "Primary key. **Duration 900t (45s). Cooldown 18000t (15 min).**",
+              "details": [
+                "`origins:phasing` (only `#tarot:unphasable` blocked)",
+                "Block break/place disabled while phased",
+                "On block exit, pushed to nearest air",
+                "Doorway feature: personal door to any visited coordinate in last 86400t (optional)"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "II",
+      "name": "THE HIGH PRIESTESS",
+      "slug": "high_priestess",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "reader_s_aptitude",
+              "name": "Reader’s Aptitude",
+              "flag": "D",
+              "description": "`modify_xp_gain` +0.35.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "ritual_focus",
+              "name": "Ritual Focus",
+              "flag": "D",
+              "description": "`modify_block_break_speed` +0.25 with offhand-book condition. Low-light vision = gated Night Vision.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "marginalia",
+              "name": "Marginalia",
+              "flag": "D/S",
+              "description": "Choose one: 5% XP refund on enchant (KubeJS), or +1 Looting once/min.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "scripted_insight",
+              "name": "Scripted Insight",
+              "flag": "D",
+              "description": "`modify_projectile_damage` +0.2 when not sprinting.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "dependent_on_rituals",
+              "name": "Dependent on Rituals",
+              "flag": "D",
+              "description": "`modify_block_break_speed` −0.2 without offhand book.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Reasoning Apprentice",
+          "abilities": [
+            {
+              "slug": "deduction",
+              "name": "Deduction",
+              "flag": "D",
+              "description": "`self_action_on_kill` 20% chance → +1 XP level. Cap 30.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Keeper of Knowledge",
+          "abilities": [
+            {
+              "slug": "index",
+              "name": "Index",
+              "flag": "S",
+              "description": "Store 1 book in lectern; retrieve from any lectern within 50 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Scholar",
+          "abilities": [
+            {
+              "slug": "cross_reference",
+              "name": "Cross-Reference",
+              "flag": "S",
+              "description": "KubeJS `EnchantmentScreenHandler`, lapis −1 per level (min 1) with offhand book.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Mystic Mentor",
+          "abilities": [
+            {
+              "slug": "ritual_circle",
+              "name": "Ritual Circle",
+              "flag": "D",
+              "description": "Secondary key. 3-block radius marker + `area_of_effect` Regeneration I 100t to players. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Prophet",
+          "abilities": [
+            {
+              "slug": "foresight",
+              "name": "Foresight",
+              "flag": "D/S",
+              "description": "First shot after 300t projectile silence gets Scripted Insight bonus even while sprinting.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Sage",
+          "abilities": [
+            {
+              "slug": "sage_s_insight",
+              "name": "Sage’s Insight",
+              "flag": "S",
+              "description": "`BlockBreakEvent` 5% → reveal nearest ore within 8 blocks via particle.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Angel of Wisdom",
+          "abilities": [
+            {
+              "slug": "borrowed_knowledge",
+              "name": "Borrowed Knowledge",
+              "flag": "S",
+              "description": "Secondary key. Copy one whitelisted passive from nearby player for 1200t. Cooldown 6000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "All-Knowing Eye",
+          "abilities": [
+            {
+              "slug": "all_knowing_gaze",
+              "name": "All-Knowing Gaze",
+              "flag": "S",
+              "description": "Primary key. **Duration 300t (15s). Cooldown 1800t (90s).** `entity_glow` on all entities within 30 blocks. One-shot `modify_damage_dealt` +0.5 consumed on next hit. Health bars via KubeJS overlay.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "ritual_mastery",
+              "name": "Ritual Mastery",
+              "flag": "D",
+              "description": "Offhand book +10% break speed (stacks).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The White Tower",
+          "abilities": [
+            {
+              "slug": "the_archive",
+              "name": "The Archive",
+              "flag": "S",
+              "description": "Primary key. **Duration 400t (20s). Cooldown 24000t (20 min).** `entity_glow` on all players within 500 blocks. KubeJS structure/ore scan. Read one target inventory. 3 yes/no questions.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "III",
+      "name": "THE EMPRESS",
+      "slug": "empress",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "witch_s_venom",
+              "name": "Witch’s Venom",
+              "flag": "D",
+              "description": "`target_action_on_hit` Poison I 60t. Cooldown 240t. **Affects hostile mobs AND enemy players.**",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "mirror_veil",
+              "name": "Mirror Veil",
+              "flag": "D",
+              "description": "`invisibility` while sneaking, light ≤ 7, not exposed to sun. `render_armor: true`.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "witch_s_grace",
+              "name": "Witch’s Grace",
+              "flag": "D",
+              "description": "+10% speed, Poison immunity.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "reflected_beauty",
+              "name": "Reflected Beauty",
+              "flag": "D",
+              "description": "`attacker_action_when_hit` Nausea I 40t if light ≥ 12. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "exposed_reflection",
+              "name": "Exposed Reflection",
+              "flag": "D",
+              "description": "Projectile damage +25%, `exposed_to_sun`.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Instigator",
+          "abilities": [
+            {
+              "slug": "whisper",
+              "name": "Whisper",
+              "flag": "S",
+              "description": "Crouch-right-click passive mob → hostile to nearest player (not Empress) for 200t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Witch",
+          "abilities": [
+            {
+              "slug": "black_fire",
+              "name": "Black Fire",
+              "flag": "D",
+              "description": "10% chance melee ignite 20t. No block ignition. **Affects hostile mobs AND enemy players.**",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Pleasure",
+          "abilities": [
+            {
+              "slug": "thread",
+              "name": "Thread",
+              "flag": "S",
+              "description": "Right-click player within 6 blocks → Slowness I 40t. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Affliction",
+          "abilities": [
+            {
+              "slug": "plague_touch",
+              "name": "Plague Touch",
+              "flag": "D",
+              "description": "Witch’s Venom: Poison 80t + Hunger I 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Despair",
+          "abilities": [
+            {
+              "slug": "aura_of_despair",
+              "name": "Aura of Despair",
+              "flag": "D/S",
+              "description": "`action_over_time` interval 40, 10% chance `#tarot:hostile` **AND enemy players** within 5 blocks flee 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Unaging",
+          "abilities": [
+            {
+              "slug": "ageless",
+              "name": "Ageless",
+              "flag": "D",
+              "description": "`modify_exhaustion` −1 for sprint/jump.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Catastrophe",
+          "abilities": [
+            {
+              "slug": "mirror_passage",
+              "name": "Mirror Passage",
+              "flag": "S",
+              "description": "Once per 3600t, teleport through glass up to 10 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Apocalypse",
+          "abilities": [
+            {
+              "slug": "apocalypse_s_herald",
+              "name": "Apocalypse’s Herald",
+              "flag": "S",
+              "description": "Primary key. 5 meteors over 160t in 10-block radius: 6 damage + fire 60t to **#tarot:hostile AND enemy players**. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "petrifying_gaze",
+              "name": "Petrifying Gaze",
+              "flag": "D",
+              "description": "Sneak 60t charge → Slowness II to `#tarot:hostile` **AND enemy players** within 6 blocks for 60t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Demoness",
+          "abilities": [
+            {
+              "slug": "the_mirror_world",
+              "name": "The Mirror World",
+              "flag": "S",
+              "description": "Primary key. **Duration 500t (25s). Cooldown 18000t (15 min).** Invisibility (no armor), invulnerability, free flight. Exit anywhere within 30 blocks of entry. On exit: Poison II + Wither II 100t to **#tarot:hostile AND enemy players** within 8 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "IV",
+      "name": "THE EMPEROR",
+      "slug": "emperor",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "sovereign_s_plate",
+              "name": "Sovereign’s Plate",
+              "flag": "D",
+              "description": "+3 armor, +40% KB resistance.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "distorted_authority",
+              "name": "Distorted Authority",
+              "flag": "D",
+              "description": "`attacker_action_when_hit` Slowness I 40t. Cooldown 280t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "imperial_presence",
+              "name": "Imperial Presence",
+              "flag": "D",
+              "description": "Shield: `modify_damage_taken` −0.1.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "decree_of_the_sovereign",
+              "name": "Decree of the Sovereign",
+              "flag": "S",
+              "description": "Villager discount 10% within 8 blocks while holding shield.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "weight_of_the_crown",
+              "name": "Weight of the Crown",
+              "flag": "D",
+              "description": "Shield −25% speed; sprint-in-armor +50% exhaustion.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Barbarian",
+          "abilities": [
+            {
+              "slug": "unbound",
+              "name": "Unbound",
+              "flag": "D",
+              "description": "Weakness immunity below 12 HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Briber",
+          "abilities": [
+            {
+              "slug": "coin",
+              "name": "Coin",
+              "flag": "D",
+              "description": "Active key + gold ingot. Clear target on hostile mob **or pacify enemy player (they cannot attack Emperor for 100t)**. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Baron of Corruption",
+          "abilities": [
+            {
+              "slug": "corrupt_ground",
+              "name": "Corrupt Ground",
+              "flag": "D",
+              "description": "Crouch + right-click ground → 5×5 for 600t, Slowness I to `#tarot:hostile` **AND enemy players** inside. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Mentor of Disorder",
+          "abilities": [
+            {
+              "slug": "decree",
+              "name": "Decree",
+              "flag": "D",
+              "description": "Secondary key. `#tarot:hostile` **AND enemy players** within 6 blocks forced to target Emperor for 100t. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Earl of the Fallen",
+          "abilities": [
+            {
+              "slug": "fallen_aura",
+              "name": "Fallen Aura",
+              "flag": "D",
+              "description": "Distorted Authority: Slowness I 60t + Weakness I 20t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Frenzied Mage",
+          "abilities": [
+            {
+              "slug": "frenzy",
+              "name": "Frenzy",
+              "flag": "D",
+              "description": "Health < 8 → Speed I + Haste I 100t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Duke of Entropy",
+          "abilities": [
+            {
+              "slug": "entropy_field",
+              "name": "Entropy Field",
+              "flag": "S",
+              "description": "5-block radius where projectiles halved 100t. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Abolition",
+          "abilities": [
+            {
+              "slug": "abolish",
+              "name": "Abolish",
+              "flag": "D",
+              "description": "Primary key. Strip all positive effects + Slowness II + Weakness I 100t to `#tarot:hostile` **AND enemy players** within 8 blocks. Cooldown 1800t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "iron_decree",
+              "name": "Iron Decree",
+              "flag": "D",
+              "description": "Imperial Presence 15%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Black Emperor",
+          "abilities": [
+            {
+              "slug": "the_emperor_s_domain",
+              "name": "The Emperor’s Domain",
+              "flag": "S",
+              "description": "Primary key. **Duration 1200t (60s). Cooldown 18000t (15 min).**",
+              "details": [
+                "`#tarot:hostile` **AND enemy players** pushed outside 3 blocks",
+                "All players (including allies) cannot sprint/jump unless whitelisted by `/tarot allow <player>`",
+                "+15% damage, −15% damage taken"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "V",
+      "name": "THE HIEROPHANT",
+      "slug": "hierophant",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "scripture_and_study",
+              "name": "Scripture and Study",
+              "flag": "D",
+              "description": "+40% XP.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "consecrated_workspace",
+              "name": "Consecrated Workspace",
+              "flag": "D",
+              "description": "Within 8 blocks of lectern/enchanting table: Haste I + −15% exhaustion.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "sanctified_ground",
+              "name": "Sanctified Ground",
+              "flag": "D",
+              "description": "+5% XP on `#tarot:sanctified_ground`.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "quiet_benediction",
+              "name": "Quiet Benediction",
+              "flag": "D",
+              "description": "Every 800t, Regeneration I 80t to players within 8 blocks.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "sacred_dietary_vow",
+              "name": "Sacred Dietary Vow",
+              "flag": "D",
+              "description": "`prevent_item_use` `#tarot:meat`.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Light Suppliant",
+          "abilities": [
+            {
+              "slug": "prayer",
+              "name": "Prayer",
+              "flag": "D",
+              "description": "Crouch 60t → Regeneration I 60t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Solar High Priest",
+          "abilities": [
+            {
+              "slug": "consecrate",
+              "name": "Consecrate",
+              "flag": "S",
+              "description": "Right-click block with torch → bless 1200t, light 10 in 3 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Notary",
+          "abilities": [
+            {
+              "slug": "contract",
+              "name": "Contract",
+              "flag": "S",
+              "description": "Right-click player → health in tab list 12000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Hymn",
+          "abilities": [
+            {
+              "slug": "hymn",
+              "name": "Hymn",
+              "flag": "D",
+              "description": "Secondary key: Regeneration I 100t to players within 8 blocks. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Sanctified Ground II",
+          "abilities": [
+            {
+              "slug": "sanctified_ground_ii",
+              "name": "Sanctified Ground II",
+              "flag": "D",
+              "description": "All stone brick variants, radius 5.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Purify",
+          "abilities": [
+            {
+              "slug": "purify",
+              "name": "Purify",
+              "flag": "D",
+              "description": "Right-click player → clear Poison/Wither. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Sanctuary",
+          "abilities": [
+            {
+              "slug": "sanctuary",
+              "name": "Sanctuary",
+              "flag": "S",
+              "description": "5-block radius no hostile entry 200t. Cooldown 6000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "White Angel",
+          "abilities": [
+            {
+              "slug": "white_angel",
+              "name": "White Angel",
+              "flag": "D",
+              "description": "Primary key: light 15 in 15 blocks for 300t. Undead take 3 dmg/sec (undead-specific — unchanged). Allies Regeneration II. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "dietary_expansion",
+              "name": "Dietary Expansion",
+              "flag": "D",
+              "description": "Fish allowed.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Sun",
+          "abilities": [
+            {
+              "slug": "the_sanctum",
+              "name": "The Sanctum",
+              "flag": "S",
+              "description": "Permanent. Primary key. 16-block radius on lectern/enchanting table/bookshelf within 32 blocks of bed/anchor. One sanctum world-wide. Persists across sessions. No hostile spawns, undead 2 dmg/sec, players Regeneration I, hunger slow recovery. Cooldown 24000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "VI",
+      "name": "THE LOVERS",
+      "slug": "lovers",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "linked_hearts",
+              "name": "Linked Hearts",
+              "flag": "S",
+              "description": "Same-team player within 8 blocks: both +10% speed + 1 HP heal every 500t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "fertile_hands",
+              "name": "Fertile Hands",
+              "flag": "D",
+              "description": "+25% self-heal; +20% crop break speed.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "shared_refuge",
+              "name": "Shared Refuge",
+              "flag": "S",
+              "description": "Near player → Resistance I pulse every 600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "separation_anxiety",
+              "name": "Separation Anxiety",
+              "flag": "S",
+              "description": ">600t alone: +35% exhaustion, −15% mining.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Doctor",
+          "abilities": [
+            {
+              "slug": "triage",
+              "name": "Triage",
+              "flag": "D",
+              "description": "Right-click player → heal 1 heart. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Harvest Priest",
+          "abilities": [
+            {
+              "slug": "blessing",
+              "name": "Blessing",
+              "flag": "D",
+              "description": "Crouch-right-click crop → full growth. Cooldown 1200t per crop.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Biologist",
+          "abilities": [
+            {
+              "slug": "symbiosis",
+              "name": "Symbiosis",
+              "flag": "D",
+              "description": "Passive mob within 4 blocks → +1 max HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Druid",
+          "abilities": [
+            {
+              "slug": "nature_s_grasp",
+              "name": "Nature’s Grasp",
+              "flag": "D",
+              "description": "Secondary key: Slowness II to `#tarot:hostile` **AND enemy players** within 4 blocks for 60t. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Ancient Metallurgist",
+          "abilities": [
+            {
+              "slug": "transmute",
+              "name": "Transmute",
+              "flag": "D/S",
+              "description": "2 iron → 1 gold. Cooldown 12000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Pallbearer",
+          "abilities": [
+            {
+              "slug": "requiem",
+              "name": "Requiem",
+              "flag": "D",
+              "description": "Passive mob dies within 8 blocks → Regeneration I 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Desolate Matriarch",
+          "abilities": [
+            {
+              "slug": "withering",
+              "name": "Withering",
+              "flag": "D",
+              "description": "Wither I to `#tarot:hostile` **AND enemy players** within 5 blocks for 60t. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Naturewalker",
+          "abilities": [
+            {
+              "slug": "nature_s_step",
+              "name": "Nature’s Step",
+              "flag": "D",
+              "description": "Primary key: 300t walk-through-leaves; allies within 8 blocks heal 2 hearts + Regeneration I 200t. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "shared_refuge_ii",
+              "name": "Shared Refuge II",
+              "flag": "D",
+              "description": "Resistance pulse + Regeneration I 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Mother",
+          "abilities": [
+            {
+              "slug": "the_garden",
+              "name": "The Garden",
+              "flag": "D",
+              "description": "Primary key. **Duration 1800t (90s). Cooldown 24000t.** 15-block: allies Regeneration II + 10% speed. **Hostile mobs AND enemy players pacified unless attacked** (KubeJS target clear + Slowness I on entry). Passive mobs inside cannot die.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "VII",
+      "name": "THE CHARIOT",
+      "slug": "chariot",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "hunter_s_momentum",
+              "name": "Hunter’s Momentum",
+              "flag": "D",
+              "description": "+15% sprinting melee.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "war_rush",
+              "name": "War Rush",
+              "flag": "D",
+              "description": "Kill → Speed I 160t. Cooldown 360t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "pyromaniac",
+              "name": "Pyromaniac",
+              "flag": "D",
+              "description": "Fire/lava immunity; Strength I when burning.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "trail_of_embers",
+              "name": "Trail of Embers",
+              "flag": "D/S",
+              "description": "Sprint particles; KubeJS ignition **to hostile mobs AND enemy players** in trail for 40t. Cooldown 300t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "extinguished_fury",
+              "name": "Extinguished Fury",
+              "flag": "D",
+              "description": "Rain/submersion → Weakness I + Mining Fatigue I.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Provoker",
+          "abilities": [
+            {
+              "slug": "taunt",
+              "name": "Taunt",
+              "flag": "D",
+              "description": "Crouch-right-click **hostile mob OR enemy player** → force target 60t. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Pyromaniac",
+          "abilities": [
+            {
+              "slug": "flame_burst",
+              "name": "Flame Burst",
+              "flag": "D",
+              "description": "Trail ignites 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Conspirer",
+          "abilities": [
+            {
+              "slug": "plot",
+              "name": "Plot",
+              "flag": "D",
+              "description": "20% kill → +1 XP level.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Reaper",
+          "abilities": [
+            {
+              "slug": "reap",
+              "name": "Reap",
+              "flag": "D",
+              "description": "Secondary key: next melee +30% within 100t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Iron-Blooded Knight",
+          "abilities": [
+            {
+              "slug": "iron_skin",
+              "name": "Iron Skin",
+              "flag": "D",
+              "description": "+1 armor below 12 HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "War Bishop",
+          "abilities": [
+            {
+              "slug": "rally",
+              "name": "Rally",
+              "flag": "D",
+              "description": "Kill → players within 8 blocks Speed I 100t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Weather Warlock",
+          "abilities": [
+            {
+              "slug": "storm_call",
+              "name": "Storm Call",
+              "flag": "S",
+              "description": "20-block rain 600t. Cooldown 6000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Red Angel",
+          "abilities": [
+            {
+              "slug": "meteor",
+              "name": "Meteor",
+              "flag": "D/S",
+              "description": "Primary key: dash 15 blocks as blazing meteor; **ignite `#tarot:hostile` AND enemy players in 3-block path for 100t**; immune during dash. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "burning_wrath",
+              "name": "Burning Wrath",
+              "flag": "D",
+              "description": "+20% melee on fire.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Red Priest",
+          "abilities": [
+            {
+              "slug": "the_battlefield",
+              "name": "The Battlefield",
+              "flag": "S",
+              "description": "Primary key. **Duration 900t (45s). Cooldown 18000t (15 min).**",
+              "details": [
+                "`#tarot:hostile` **AND enemy players** within 20 blocks mutually set hostile (KubeJS `AngryAt` between mobs, PvP aggro between enemy players via a temporary \"hostile\" team flag)",
+                "+30% damage, +20% speed, on-hit ignite 100t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "VIII",
+      "name": "STRENGTH",
+      "slug": "strength",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "giant_s_grip",
+              "name": "Giant’s Grip",
+              "flag": "D",
+              "description": "+18% melee; +55% KB resistance.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "quarry_hands",
+              "name": "Quarry Hands",
+              "flag": "D",
+              "description": "+35% break speed `#tarot:natural_stone`.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "steel_frame",
+              "name": "Steel Frame",
+              "flag": "D",
+              "description": "+2 armor.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "grounded_slam",
+              "name": "Grounded Slam",
+              "flag": "D",
+              "description": "3+ block fall → next melee +10% + Slowness I 20t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "the_giant_sinks",
+              "name": "The Giant Sinks",
+              "flag": "D",
+              "description": "Swim −45%; no bows/crossbows.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Pugilist",
+          "abilities": [
+            {
+              "slug": "iron_fist",
+              "name": "Iron Fist",
+              "flag": "D",
+              "description": "Unarmed +2. Does not stack with Giant’s Grip.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Weapon Master",
+          "abilities": [
+            {
+              "slug": "master_s_grip",
+              "name": "Master’s Grip",
+              "flag": "D",
+              "description": "Bows allowed at −25%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Dawn Paladin",
+          "abilities": [
+            {
+              "slug": "dawnlight",
+              "name": "Dawnlight",
+              "flag": "D",
+              "description": "Crouch 60t → light 8 in 3 blocks for 200t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Guardian",
+          "abilities": [
+            {
+              "slug": "bulwark",
+              "name": "Bulwark",
+              "flag": "D",
+              "description": "Secondary key: 100t −30% damage taken, cannot move.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Demon Hunter",
+          "abilities": [
+            {
+              "slug": "hunter_s_bane",
+              "name": "Hunter’s Bane",
+              "flag": "D",
+              "description": "+15% to `#tarot:undead` and demons.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Silver Knight",
+          "abilities": [
+            {
+              "slug": "silver_blade",
+              "name": "Silver Blade",
+              "flag": "D/S",
+              "description": "Melee ignores 10% armor.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Glory",
+          "abilities": [
+            {
+              "slug": "twilight_blade",
+              "name": "Twilight Blade",
+              "flag": "D",
+              "description": "Once per 3600t, next melee Slowness II + Weakness I 100t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Hand of God",
+          "abilities": [
+            {
+              "slug": "divine_hand",
+              "name": "Divine Hand",
+              "flag": "S",
+              "description": "Primary key: pull **hostile mob OR enemy player** within 15 blocks; stun 60t; next melee +50%. Cooldown 1800t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "unyielding",
+              "name": "Unyielding",
+              "flag": "D",
+              "description": "Knockback immunity below 8 HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Twilight Giant",
+          "abilities": [
+            {
+              "slug": "the_giant_s_decay",
+              "name": "The Giant’s Decay",
+              "flag": "D/S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "`#tarot:hostile` **AND enemy players** within 15 blocks: Wither II + Slowness II",
+                "Armor halved (KubeJS `modify_armor`)",
+                "+30% damage vs affected"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "IX",
+      "name": "THE HERMIT",
+      "slug": "hermit",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "mystery_prying",
+              "name": "Mystery Prying",
+              "flag": "D",
+              "description": "+35% XP (cave bonus).",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "astral_calculation",
+              "name": "Astral Calculation",
+              "flag": "D",
+              "description": "+20% projectile; Night Vision in low light.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "prepared_investigator",
+              "name": "Prepared Investigator",
+              "flag": "D",
+              "description": "+20% break speed with offhand book/clock.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "forbidden_knowledge",
+              "name": "Forbidden Knowledge",
+              "flag": "D",
+              "description": "XP 30+ → Mining Fatigue I without offhand book.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Melee Scholar",
+          "abilities": [
+            {
+              "slug": "combat_insight",
+              "name": "Combat Insight",
+              "flag": "D",
+              "description": "20% chance on damage → Resistance I 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Warlock",
+          "abilities": [
+            {
+              "slug": "hex",
+              "name": "Hex",
+              "flag": "D",
+              "description": "Right-click **hostile mob OR enemy player** → Weakness I 60t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Scroll Professor",
+          "abilities": [
+            {
+              "slug": "scroll",
+              "name": "Scroll",
+              "flag": "S",
+              "description": "Crouch-right-click paper → coordinate in NBT.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Astrologer",
+          "abilities": [
+            {
+              "slug": "star_read",
+              "name": "Star Read",
+              "flag": "D/S",
+              "description": "Secondary key at night: reveal `#tarot:hostile` **AND enemy players** health/name within 15 blocks for 100t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Mysticologist",
+          "abilities": [
+            {
+              "slug": "forbidden_insight",
+              "name": "Forbidden Insight",
+              "flag": "D/S",
+              "description": "+5% enchantment power with offhand book at level 30+.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Prophet",
+          "abilities": [
+            {
+              "slug": "omen",
+              "name": "Omen",
+              "flag": "D",
+              "description": "10% chance Speed I 60t when targeted.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Sage",
+          "abilities": [
+            {
+              "slug": "sage_s_counsel",
+              "name": "Sage’s Counsel",
+              "flag": "S",
+              "description": "Once per 6000t, yes/no structure question.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Knowledge Emperor",
+          "abilities": [
+            {
+              "slug": "emperor_s_library",
+              "name": "Emperor’s Library",
+              "flag": "S",
+              "description": "Primary key: 300t copy enchantment (≤5); arrows +50% during window. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "prying_eyes",
+              "name": "Prying Eyes",
+              "flag": "D",
+              "description": "Night Vision to light 3.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Hermit",
+          "abilities": [
+            {
+              "slug": "the_unseen",
+              "name": "The Unseen",
+              "flag": "S",
+              "description": "Primary key. **Duration 900t (45s). Cooldown 24000t.** `entity_glow` all players within 100 blocks; structure reveal within 200 blocks; Night Vision; one-shot armor-ignoring critical arrow (2× damage).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "X",
+      "name": "WHEEL OF FORTUNE",
+      "slug": "wheel_of_fortune",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "fate_intervenes",
+              "name": "Fate Intervenes",
+              "flag": "D",
+              "description": "15% chance `modify_damage_taken` −0.5.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "gentle_fortune",
+              "name": "Gentle Fortune",
+              "flag": "D",
+              "description": "+10% XP; Luck +1.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "fate_s_current",
+              "name": "Fate’s Current",
+              "flag": "D",
+              "description": "Every 1800t: random boon OR curse. **Positive outcomes: Speed I, Haste I, Absorption I. Negative: Hunger, Slowness, Mining Fatigue.** Equal chance.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "lucky_break",
+              "name": "Lucky Break",
+              "flag": "D/S",
+              "description": "10% chance to reroll a bad Fate’s Current.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "debt_of_fate",
+              "name": "Debt of Fate",
+              "flag": "D",
+              "description": "mandatory inclusion of bad outcomes.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Machine",
+          "abilities": [
+            {
+              "slug": "clockwork",
+              "name": "Clockwork",
+              "flag": "D",
+              "description": "10% chance on damage → reset Fate’s Current.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Lucky One",
+          "abilities": [
+            {
+              "slug": "lucky_charm",
+              "name": "Lucky Charm",
+              "flag": "D",
+              "description": "Luck +1 (max +2 with Gentle Fortune).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Calamity Priest",
+          "abilities": [
+            {
+              "slug": "calamity",
+              "name": "Calamity",
+              "flag": "D",
+              "description": "10% chance Weakness I 40t on attacker (**hostile mob OR enemy player**).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Winner",
+          "abilities": [
+            {
+              "slug": "winning_streak",
+              "name": "Winning Streak",
+              "flag": "D",
+              "description": "Kill → next Fate’s Current positive.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Misfortune Mage",
+          "abilities": [
+            {
+              "slug": "misfortune",
+              "name": "Misfortune",
+              "flag": "D",
+              "description": "Fate Intervenes −0.6.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Chaos Walker",
+          "abilities": [
+            {
+              "slug": "chaos_step",
+              "name": "Chaos Step",
+              "flag": "D",
+              "description": "20% chance on fall damage → teleport 3 blocks random.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Fate’s Favor",
+          "abilities": [
+            {
+              "slug": "fate_s_favor",
+              "name": "Fate’s Favor",
+              "flag": "S",
+              "description": "Once per 6000t, reroll bad Fate’s Current.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Wheel’s Turn",
+          "abilities": [
+            {
+              "slug": "wheel_s_turn",
+              "name": "Wheel’s Turn",
+              "flag": "D/S",
+              "description": "Primary key: 300t all rolls inverted; 50% chance damage reflect. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "lucky_break_ii",
+              "name": "Lucky Break II",
+              "flag": "D",
+              "description": "20% reroll.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "Slot of Fate",
+          "abilities": [
+            {
+              "slug": "slot_of_fate",
+              "name": "Slot of Fate",
+              "flag": "S",
+              "description": "Primary key. Cooldown 24000t. Spin 3 weighted reels (Coin 20, Cherry 20, Bell 20, Star 15, Skull 15, Seven 10). Jackpot (3×Seven): full heal + Strength II + Speed II + Regeneration II + Resistance II + Absorption IV 1200t; 5 guaranteed positive Fate’s Current; nearest **hostile mob OR enemy player** within 20 blocks dies instantly; optional named target loses 75% health. Three-of-a-kind: major symbol effect. Pair: minor effect. No match: Luck I 300t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XI",
+      "name": "JUSTICE",
+      "slug": "justice",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "patient_observation",
+              "name": "Patient Observation",
+              "flag": "D",
+              "description": "−12% mob damage when not sprinting; periodic reveal.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "emotional_recoil",
+              "name": "Emotional Recoil",
+              "flag": "D",
+              "description": "`attacker_action_when_hit` Weakness I 80t. Cooldown 360t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "calming_presence",
+              "name": "Calming Presence",
+              "flag": "D/S",
+              "description": "Passive mobs never flee.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "therapist_s_presence",
+              "name": "Therapist’s Presence",
+              "flag": "D",
+              "description": "Every 900t, Regeneration I 80t to players within 6 blocks.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "compassionate_restraint",
+              "name": "Compassionate Restraint",
+              "flag": "D/S",
+              "description": "−70% damage to `#tarot:passive`/villagers/pets; −30% unprovoked players.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Telepathist",
+          "abilities": [
+            {
+              "slug": "mind_read",
+              "name": "Mind Read",
+              "flag": "D/S",
+              "description": "Crouch-right-click player → health chat. Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Psychiatrist",
+          "abilities": [
+            {
+              "slug": "calm",
+              "name": "Calm",
+              "flag": "D",
+              "description": "Right-click **hostile mob OR enemy player** → Slowness I 60t. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Hypnotist",
+          "abilities": [
+            {
+              "slug": "suggestion",
+              "name": "Suggestion",
+              "flag": "D",
+              "description": "Secondary key: **hostile mob OR enemy player** within 6 blocks stops targeting Justice for 100t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Dreamwalker",
+          "abilities": [
+            {
+              "slug": "dream_step",
+              "name": "Dream Step",
+              "flag": "D",
+              "description": "Bed → Regeneration I 200t on wake.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Manipulator",
+          "abilities": [
+            {
+              "slug": "emotional_push",
+              "name": "Emotional Push",
+              "flag": "D",
+              "description": "Emotional Recoil 100t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Dream Weaver",
+          "abilities": [
+            {
+              "slug": "shared_dream",
+              "name": "Shared Dream",
+              "flag": "D",
+              "description": "Crouch 60t → Night Vision 200t to players within 8 blocks. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Discerner",
+          "abilities": [
+            {
+              "slug": "discern",
+              "name": "Discern",
+              "flag": "S",
+              "description": "Once per 3600t, reveal player inventory within 6 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Author",
+          "abilities": [
+            {
+              "slug": "author_s_edit",
+              "name": "Author’s Edit",
+              "flag": "S",
+              "description": "Primary key: 300t chat-word edit + mind read. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "compassionate_restraint_ii",
+              "name": "Compassionate Restraint II",
+              "flag": "D",
+              "description": "−80% passive damage; +10% hostile damage.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Visionary",
+          "abilities": [
+            {
+              "slug": "the_mindscape",
+              "name": "The Mindscape",
+              "flag": "S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "`#tarot:hostile` **AND enemy players** within 20 blocks: freeze AI (movement + attack disabled)",
+                "All players within 20 blocks: no sprint, no jump",
+                "Symmetric damage cancellation between Justice and all frozen entities",
+                "Optional ally via `/tarot ally <player>`"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XII",
+      "name": "THE HANGED MAN",
+      "slug": "hanged_man",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "shadow_of_degeneration",
+              "name": "Shadow of Degeneration",
+              "flag": "D",
+              "description": "Light ≤ 7: Resistance I, silent footsteps, +5% speed.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "sin_bearing",
+              "name": "Sin-Bearing",
+              "flag": "S",
+              "description": "25% damage taken → Sin (cap 16 HP). Decay: 200t without damage → dissipates. Below 8 HP with Sin active → burst: `area_of_effect` radius 8 = stored Sin to **#tarot:hostile AND enemy players**, Weakness I 80t, heal self 50% of Sin. Sin reset.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "graze_the_soul",
+              "name": "Graze the Soul",
+              "flag": "D",
+              "description": "Kill **hostile mob OR enemy player** → heal 2 HP + Resistance I 60t. Cooldown 120t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "weight_of_sin",
+              "name": "Weight of Sin",
+              "flag": "D/S",
+              "description": "No natural regen above 8 HP. Unlock: kill → 9; Healing potion → 10 for 1200t; still + light ≤ 9 for 160t → 10 for 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Listener",
+          "abilities": [
+            {
+              "slug": "shadow_whisper",
+              "name": "Shadow Whisper",
+              "flag": "D/S",
+              "description": "Mobs detect 30% less; 15% chance Resistance I 40t when targeted.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Shadow Ascetic",
+          "abilities": [
+            {
+              "slug": "shadow_cloak",
+              "name": "Shadow Cloak",
+              "flag": "D",
+              "description": "Shadow of Degeneration to light ≤ 11.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Rose Bishop",
+          "abilities": [
+            {
+              "slug": "flesh_creek",
+              "name": "Flesh Creek",
+              "flag": "D/S",
+              "description": "20% chance on damage → heal 2 hearts (flagged non-Sin).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Shepherd",
+          "abilities": [
+            {
+              "slug": "burden_bearer",
+              "name": "Burden Bearer",
+              "flag": "D/S",
+              "description": "10% damage reduction while Sin active. On Sin dissipate → Regeneration I 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Black Knight",
+          "abilities": [
+            {
+              "slug": "dark_blade",
+              "name": "Dark Blade",
+              "flag": "D",
+              "description": "Below 12 HP: +15% melee, +10% speed.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Trinity Templar",
+          "abilities": [
+            {
+              "slug": "trinity",
+              "name": "Trinity",
+              "flag": "D/S",
+              "description": "3 damage sources in 100t → Resistance II 60t + heal 2 hearts.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Profane Presbyter",
+          "abilities": [
+            {
+              "slug": "profane_aura",
+              "name": "Profane Aura",
+              "flag": "D/S",
+              "description": "10% chance Weakness I 60t on attacker (**hostile mob OR enemy player**); kill applies Slowness I 40t to nearby entities within 5 blocks. Cooldown 100t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Dark Angel",
+          "abilities": [
+            {
+              "slug": "sin_overflow",
+              "name": "Sin Overflow",
+              "flag": "D/S",
+              "description": "Burst radius 10, Weakness II + Slowness II 60t, heal 75% of Sin.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "depraved_dependent",
+              "name": "Depraved Dependent",
+              "flag": "S",
+              "description": "20% chance on kill → minion for 300t. Cooldown 2400t. Max 2.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Hanged Man",
+          "abilities": [
+            {
+              "slug": "weight_of_sin_made_manifest",
+              "name": "Weight of Sin Made Manifest",
+              "flag": "S",
+              "description": "Primary key. **Duration 1200t (60s). Cooldown 14400t (12 min).**",
+              "details": [
+                "Sin cap removed",
+                "−75% damage taken",
+                "100% Sin conversion",
+                "Slowed I (−15% movement)",
+                "Every 80t: nova = 15% stored Sin to **#tarot:hostile AND enemy players** within 8 blocks",
+                "Melee hits +5% stored Sin",
+                "50% chance on kill → minion (max 2)",
+                "On expiry: 15-block explosion = total Sin (cap 40 hearts), heal 50% (excess → Absorption II 200t), Resistance I 300t, killed entities rise as minions 400t",
+                "If player dies during window, explosion does not trigger"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XIII",
+      "name": "DEATH",
+      "slug": "death",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "soul_harvest",
+              "name": "Soul Harvest",
+              "flag": "D",
+              "description": "Kill **hostile mob OR enemy player** → heal 2 HP. Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "grave_affinity",
+              "name": "Grave Affinity",
+              "flag": "D",
+              "description": "−25% damage from `#tarot:undead`; low-light vision.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "reaper_s_touch",
+              "name": "Reaper’s Touch",
+              "flag": "D",
+              "description": "Weakness I 60t on `#tarot:undead` hit. Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "grave_whisper",
+              "name": "Grave Whisper",
+              "flag": "D",
+              "description": "`#tarot:undead` 10% extra drop.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "severed_vitality",
+              "name": "Severed Vitality",
+              "flag": "D",
+              "description": "No natural regen.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Gravedigger",
+          "abilities": [
+            {
+              "slug": "grave_dirt",
+              "name": "Grave Dirt",
+              "flag": "D",
+              "description": "Right-click grave/skull → +1 XP. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Spirit Medium",
+          "abilities": [
+            {
+              "slug": "spirit_sense",
+              "name": "Spirit Sense",
+              "flag": "D",
+              "description": "Crouch 60t → `#tarot:undead` within 10 blocks glow 100t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Spirit Guide",
+          "abilities": [
+            {
+              "slug": "guide",
+              "name": "Guide",
+              "flag": "D",
+              "description": "`#tarot:undead` dies within 8 blocks → +1 HP. Cooldown 20t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Gatekeeper",
+          "abilities": [
+            {
+              "slug": "gate",
+              "name": "Gate",
+              "flag": "D",
+              "description": "Secondary key: Nether portal. Cooldown 12000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Undying",
+          "abilities": [
+            {
+              "slug": "undying",
+              "name": "Undying",
+              "flag": "S",
+              "description": "5% survive lethal at 1 heart. Cooldown 12000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Ferryman",
+          "abilities": [
+            {
+              "slug": "ferry",
+              "name": "Ferry",
+              "flag": "D",
+              "description": "Right-click water → walk 100t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Death Consul",
+          "abilities": [
+            {
+              "slug": "consul",
+              "name": "Consul",
+              "flag": "S",
+              "description": "Once per 6000t, one `#tarot:undead` within 8 blocks fights for Death 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Angel of Death",
+          "abilities": [
+            {
+              "slug": "reap",
+              "name": "Reap",
+              "flag": "D/S",
+              "description": "Primary key: **kill hostile mob OR enemy player below 30% HP within 8 blocks**. Kills apply Weakness I 60t to nearby. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "grave_affinity_ii",
+              "name": "Grave Affinity II",
+              "flag": "D",
+              "description": "Undead −35%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Death",
+          "abilities": [
+            {
+              "slug": "the_final_harvest",
+              "name": "The Final Harvest",
+              "flag": "D/S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "Every 60t: lowest-health **hostile mob OR enemy player** within 10 blocks dies (bosses capped 50%/tick; enemy players capped at 50% health removed per tick)",
+                "+1 Absorption heart per kill, cap 10 (amplifier 9)",
+                "Absorption persists 1200t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XIV",
+      "name": "TEMPERANCE",
+      "slug": "temperance",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "wraith_s_veil",
+              "name": "Wraith’s Veil",
+              "flag": "D",
+              "description": "Invisibility when sneaking, light ≤ 7.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "ethereal_landing",
+              "name": "Ethereal Landing",
+              "flag": "D",
+              "description": "−60% fall; Slowness immunity.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "mirror_passage",
+              "name": "Mirror Passage",
+              "flag": "D",
+              "description": "Phasing through leaves/cobwebs when sneaking, light ≤ 4, no chestplate.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "unstable_manifestation",
+              "name": "Unstable Manifestation",
+              "flag": "D",
+              "description": "No iron/diamond/netherite chestplate.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Lunatic",
+          "abilities": [
+            {
+              "slug": "madness",
+              "name": "Madness",
+              "flag": "D",
+              "description": "10% chance Speed I 60t on damage.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Werewolf",
+          "abilities": [
+            {
+              "slug": "beast_form",
+              "name": "Beast Form",
+              "flag": "D",
+              "description": "Crouch-right-click no weapon → +2 melee 200t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Zombie",
+          "abilities": [
+            {
+              "slug": "rot",
+              "name": "Rot",
+              "flag": "D",
+              "description": "Melee Hunger I 40t. Cooldown 300t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Wraith",
+          "abilities": [
+            {
+              "slug": "incorporeal",
+              "name": "Incorporeal",
+              "flag": "D",
+              "description": "Secondary key: 60t invisibility + phase leaves/cobwebs. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Puppet",
+          "abilities": [
+            {
+              "slug": "puppet",
+              "name": "Puppet",
+              "flag": "D/S",
+              "description": "Right-click **hostile mob OR enemy player** → forced to attack nearest other hostile/player for 100t. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Disciple of Silence",
+          "abilities": [
+            {
+              "slug": "silence",
+              "name": "Silence",
+              "flag": "D",
+              "description": "Silent footsteps.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Ancient Bane",
+          "abilities": [
+            {
+              "slug": "bane",
+              "name": "Bane",
+              "flag": "D",
+              "description": "Weakness II to `#tarot:hostile` **AND enemy players** within 5 blocks for 100t. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Abomination",
+          "abilities": [
+            {
+              "slug": "abomination",
+              "name": "Abomination",
+              "flag": "D",
+              "description": "Primary key: 300t +6 armor, +30% resistance, half speed; Wraith’s Veil to light 12. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "wraith_s_veil_ii",
+              "name": "Wraith’s Veil II",
+              "flag": "D",
+              "description": "Invisibility to light 9.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Chained",
+          "abilities": [
+            {
+              "slug": "the_unbound",
+              "name": "The Unbound",
+              "flag": "S",
+              "description": "Primary key. **Duration 500t (25s). Cooldown 24000t.**",
+              "details": [
+                "Clear self debuffs; strip positives from **`#tarot:hostile` AND enemy players** within 15 blocks",
+                "Invisibility (no armor)",
+                "Phase all blocks except `#tarot:unphasable`",
+                "×2 speed",
+                "Attack freely (breaks invisibility 40t on hit)"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XV",
+      "name": "THE DEVIL",
+      "slug": "devil",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "hellborn",
+              "name": "Hellborn",
+              "flag": "D",
+              "description": "Fire/lava immunity.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "corrupting_claws",
+              "name": "Corrupting Claws",
+              "flag": "D",
+              "description": "Melee Wither I 40t to **hostile mobs AND enemy players**. Cooldown 320t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "desperate_malice",
+              "name": "Desperate Malice",
+              "flag": "D",
+              "description": "+18% melee below 40% HP.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "infernal_vitality",
+              "name": "Infernal Vitality",
+              "flag": "D",
+              "description": "+1 HP per 80t while on fire.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "sacred_rejection",
+              "name": "Sacred Rejection",
+              "flag": "D",
+              "description": "No golden apples; healing potions ×0.5.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Unwinged Angel",
+          "abilities": [
+            {
+              "slug": "fallen_grace",
+              "name": "Fallen Grace",
+              "flag": "D",
+              "description": "10% chance Strength I 40t on damage.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Serial Killer",
+          "abilities": [
+            {
+              "slug": "predator",
+              "name": "Predator",
+              "flag": "D",
+              "description": "Kill → Speed I 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Devil",
+          "abilities": [
+            {
+              "slug": "devil_s_mark",
+              "name": "Devil’s Mark",
+              "flag": "D",
+              "description": "Right-click **hostile mob OR enemy player** → Wither I 40t. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Desire Apostle",
+          "abilities": [
+            {
+              "slug": "desire",
+              "name": "Desire",
+              "flag": "D/S",
+              "description": "Crouch-right-click player → held item chat. Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Demon",
+          "abilities": [
+            {
+              "slug": "demon_form",
+              "name": "Demon Form",
+              "flag": "D",
+              "description": "Desperate Malice below 50%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Blatherer",
+          "abilities": [
+            {
+              "slug": "blather",
+              "name": "Blather",
+              "flag": "D/S",
+              "description": "10% chance nearby hostile mobs **AND enemy players** target another mob/player instead.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Bloody Archduke",
+          "abilities": [
+            {
+              "slug": "blood_price",
+              "name": "Blood Price",
+              "flag": "D/S",
+              "description": "Once per 3600t, −2 hearts → Strength II 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Chaos Unleashed",
+          "abilities": [
+            {
+              "slug": "chaos_unleashed",
+              "name": "Chaos Unleashed",
+              "flag": "D",
+              "description": "Primary key: Slowness II + Weakness I to `#tarot:hostile` **AND enemy players** within 10 blocks for 160t; next melee +50% + Wither II 100t. Cooldown 1800t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "infernal_vitality_ii",
+              "name": "Infernal Vitality II",
+              "flag": "D",
+              "description": "1 HP per 60t while on fire.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "Descent",
+          "abilities": [
+            {
+              "slug": "descent",
+              "name": "Descent",
+              "flag": "S",
+              "description": "Primary key. **Duration 800t (40s). Cooldown 18000t.**",
+              "details": [
+                "Strength II, Fire Resistance, +20% speed",
+                "On-hit Wither I to **hostile mobs AND enemy players**",
+                "Lifesteal 0.5 hearts/sec",
+                "75% chance on kill to raise minion 600t (max 4)",
+                "+15% damage taken",
+                "On end: Hunger II 200t + remove Absorption"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XVI",
+      "name": "THE TOWER",
+      "slug": "tower",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "ruin_proof",
+              "name": "Ruin-Proof",
+              "flag": "D",
+              "description": "Explosion damage −60%.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "cracked_foundations",
+              "name": "Cracked Foundations",
+              "flag": "D",
+              "description": "+30% break speed on stone types.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "unstable_strike",
+              "name": "Unstable Strike",
+              "flag": "D",
+              "description": "Hits apply Slowness I 20t to **hostile mobs AND enemy players**. Cooldown 260t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "unstable_ground",
+              "name": "Unstable Ground",
+              "flag": "D",
+              "description": "5% chance on stone break → particle crack.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "falling_tower",
+              "name": "Falling Tower",
+              "flag": "D",
+              "description": "+75% fall damage, +20% KB taken.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Demolisher",
+          "abilities": [
+            {
+              "slug": "charge",
+              "name": "Charge",
+              "flag": "D",
+              "description": "Crouch-right-click stone → prime 60t → break harmlessly. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Crackshot",
+          "abilities": [
+            {
+              "slug": "fault_line",
+              "name": "Fault Line",
+              "flag": "D/S",
+              "description": "5% chance on stone break → break block above.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Foundation",
+          "abilities": [
+            {
+              "slug": "foundation",
+              "name": "Foundation",
+              "flag": "D",
+              "description": "−20% fall damage with pickaxe.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Collapse",
+          "abilities": [
+            {
+              "slug": "collapse",
+              "name": "Collapse",
+              "flag": "D",
+              "description": "Secondary key: break 3×3 stone. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Impact",
+          "abilities": [
+            {
+              "slug": "impact",
+              "name": "Impact",
+              "flag": "D",
+              "description": "Unstable Strike Slowness 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Shockwave",
+          "abilities": [
+            {
+              "slug": "shockwave",
+              "name": "Shockwave",
+              "flag": "D",
+              "description": "4+ block fall lands → 2 damage to **hostile mobs AND enemy players** within 3 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Cataclysm",
+          "abilities": [
+            {
+              "slug": "cataclysm",
+              "name": "Cataclysm",
+              "flag": "D",
+              "description": "Mining Fatigue I to `#tarot:hostile` **AND enemy players** in 5 blocks for 200t. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Tower",
+          "abilities": [
+            {
+              "slug": "falling_tower",
+              "name": "Falling Tower",
+              "flag": "D",
+              "description": "Primary key: leap 8 blocks + slam → 10 damage + Slowness II 100t to `#tarot:hostile` **AND enemy players** within 6 blocks. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "ruin_proof_ii",
+              "name": "Ruin-Proof II",
+              "flag": "D",
+              "description": "Explosion reduction 80%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Fall",
+          "abilities": [
+            {
+              "slug": "the_fall",
+              "name": "The Fall",
+              "flag": "D/S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "15-block radius",
+                "All solid blocks become unstable → **any entity** (hostile mob, enemy player, ally, self) standing takes 4 damage/sec (throttled 5-tick, cap 50 blocks)",
+                "All **hostile mobs AND enemy players** within launched 3 blocks upward + fall damage"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XVII",
+      "name": "THE STAR",
+      "slug": "star",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "sleepless",
+              "name": "Sleepless",
+              "flag": "D",
+              "description": "Permanent Night Vision; Darkness/Blindness shortened.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "nightwatch",
+              "name": "Nightwatch",
+              "flag": "D",
+              "description": "Night: +15% speed, +15% damage to `#tarot:undead`.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "evernight_s_patience",
+              "name": "Evernight’s Patience",
+              "flag": "D",
+              "description": "−20% exhaustion at night.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "sleepless_vigil",
+              "name": "Sleepless Vigil",
+              "flag": "D",
+              "description": "Phantoms require 5 days.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "true_sleeplessness",
+              "name": "True Sleeplessness",
+              "flag": "D",
+              "description": "Cannot sleep; bed sets spawn.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Midnight Poet",
+          "abilities": [
+            {
+              "slug": "lullaby",
+              "name": "Lullaby",
+              "flag": "D",
+              "description": "Crouch 60t → Slowness I to `#tarot:hostile` **AND enemy players** within 5 blocks for 60t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Nightmare",
+          "abilities": [
+            {
+              "slug": "nightmare",
+              "name": "Nightmare",
+              "flag": "D",
+              "description": "20% chance night kill → +1 XP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Soul Assurer",
+          "abilities": [
+            {
+              "slug": "soul_shield",
+              "name": "Soul Shield",
+              "flag": "D",
+              "description": "10% chance night damage → Resistance I 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Spirit Warlock",
+          "abilities": [
+            {
+              "slug": "haunt",
+              "name": "Haunt",
+              "flag": "D",
+              "description": "Secondary key: Blindness I to **hostile mob OR enemy player** within 6 blocks for 60t. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Nightwatcher",
+          "abilities": [
+            {
+              "slug": "nightwatch_ii",
+              "name": "Nightwatch II",
+              "flag": "D",
+              "description": "Bonuses at light ≤ 7.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Horror Bishop",
+          "abilities": [
+            {
+              "slug": "terror",
+              "name": "Terror",
+              "flag": "D/S",
+              "description": "10% chance **hostile mobs AND enemy players** within 5 blocks flee 40t at night.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Servant of Concealment",
+          "abilities": [
+            {
+              "slug": "conceal",
+              "name": "Conceal",
+              "flag": "D",
+              "description": "Once per 3600t, invisibility 100t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Knight of Misfortune",
+          "abilities": [
+            {
+              "slug": "misfortune",
+              "name": "Misfortune",
+              "flag": "D",
+              "description": "Primary key: Weakness II + Slowness II + Blindness 60t to `#tarot:hostile` **AND enemy players** within 10 blocks for 160t. Cooldown 1800t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "sleepless_vigil_ii",
+              "name": "Sleepless Vigil II",
+              "flag": "D",
+              "description": "Phantoms 7 days.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Darkness",
+          "abilities": [
+            {
+              "slug": "the_starless_sky",
+              "name": "The Starless Sky",
+              "flag": "S",
+              "description": "Primary key. **Duration 800t (40s). Cooldown 24000t.**",
+              "details": [
+                "Extinguish lights within 30 blocks",
+                "Invisibility",
+                "Blindness I + Slowness I to `#tarot:hostile` **AND enemy players** within 30 blocks",
+                "Speed II + 20% damage",
+                "Attacks do not break invisibility (except critical melee)"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XVIII",
+      "name": "THE MOON",
+      "slug": "moon",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "sanguine_sight",
+              "name": "Sanguine Sight",
+              "flag": "D",
+              "description": "Permanent Night Vision; +15% night speed.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "blood_s_renewal",
+              "name": "Blood’s Renewal",
+              "flag": "D",
+              "description": "Night: 1 HP per 600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "sanguine_resilience",
+              "name": "Sanguine Resilience",
+              "flag": "D",
+              "description": "10% chance Wither resist at night.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "pharmacist",
+              "name": "Pharmacist",
+              "flag": "D/S",
+              "description": "+25% potion healing.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "blood_diet",
+              "name": "Blood Diet",
+              "flag": "D",
+              "description": "Only `#tarot:meat` restores hunger.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Beast Tamer",
+          "abilities": [
+            {
+              "slug": "tame",
+              "name": "Tame",
+              "flag": "D/S",
+              "description": "Right-click passive with bone → no flee 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Vampire",
+          "abilities": [
+            {
+              "slug": "blood_drain",
+              "name": "Blood Drain",
+              "flag": "D",
+              "description": "Melee heal 0.5 hearts once per 100t **on hostile mobs AND enemy players**.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Potions Professor",
+          "abilities": [
+            {
+              "slug": "brew",
+              "name": "Brew",
+              "flag": "D/S",
+              "description": "Instant brew. Cooldown 6000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Scarlet Scholar",
+          "abilities": [
+            {
+              "slug": "scarlet",
+              "name": "Scarlet",
+              "flag": "D",
+              "description": "Secondary key: 200t +50% potion healing. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Shaman King",
+          "abilities": [
+            {
+              "slug": "shaman",
+              "name": "Shaman",
+              "flag": "D",
+              "description": "Blood’s Renewal 1.5 hearts per 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "High Summoner",
+          "abilities": [
+            {
+              "slug": "summon",
+              "name": "Summon",
+              "flag": "D/S",
+              "description": "Right-click passive → copy fights for Moon 200t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Life-Giver",
+          "abilities": [
+            {
+              "slug": "life",
+              "name": "Life",
+              "flag": "S",
+              "description": "Once per 3600t, revive dead passive as ally 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Beauty Goddess",
+          "abilities": [
+            {
+              "slug": "beauty",
+              "name": "Beauty",
+              "flag": "D",
+              "description": "Primary key: pacify **hostile mobs AND enemy players** within 10 blocks for 160t (target clear + Slowness I); self + allies Regeneration I 200t. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "pharmacist_ii",
+              "name": "Pharmacist II",
+              "flag": "D",
+              "description": "+35% potion.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Scarlet Feast",
+          "abilities": [
+            {
+              "slug": "the_scarlet_feast",
+              "name": "The Scarlet Feast",
+              "flag": "S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "KubeJS moving aura 15 blocks",
+                "`#tarot:hostile` inside: −1 heart/sec",
+                "Enemy players inside: −1 heart per 60t",
+                "Self + allies inside: heal for total drained (cap 30 HP)"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XIX",
+      "name": "THE SUN",
+      "slug": "sun",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "unshadowed",
+              "name": "Unshadowed",
+              "flag": "D",
+              "description": "+40% damage to `#tarot:undead` (undead-specific — unchanged).",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "inner_radiance",
+              "name": "Inner Radiance",
+              "flag": "D",
+              "description": "Night Vision + fire immunity.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "inner_light",
+              "name": "Inner Light",
+              "flag": "D",
+              "description": "100t still in light ≤ 4 → 3-block light level 8.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "purification",
+              "name": "Purification",
+              "flag": "D",
+              "description": "Every 900t, cleanse Poison/Weakness.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "beacon_of_faith",
+              "name": "Beacon of Faith",
+              "flag": "D",
+              "description": "Permanent Glowing.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Light Suppliant",
+          "abilities": [
+            {
+              "slug": "holy_light",
+              "name": "Holy Light",
+              "flag": "D",
+              "description": "Crouch 60t → heal 1 heart. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Solar High Priest",
+          "abilities": [
+            {
+              "slug": "solar_flare",
+              "name": "Solar Flare",
+              "flag": "D",
+              "description": "20% chance Blind `#tarot:undead` attacker 40t (undead-specific).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Notary",
+          "abilities": [
+            {
+              "slug": "witness",
+              "name": "Witness",
+              "flag": "D/S",
+              "description": "Right-click player → health 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Purify",
+          "abilities": [
+            {
+              "slug": "purify",
+              "name": "Purify",
+              "flag": "D",
+              "description": "Secondary key: remove Poison/Wither/Blindness from self or player within 4 blocks. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Unshadowed II",
+          "abilities": [
+            {
+              "slug": "unshadowed_ii",
+              "name": "Unshadowed II",
+              "flag": "D",
+              "description": "+50% undead damage.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Radiance",
+          "abilities": [
+            {
+              "slug": "radiance",
+              "name": "Radiance",
+              "flag": "D",
+              "description": "Inner Light radius 5.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Sanctify",
+          "abilities": [
+            {
+              "slug": "sanctify",
+              "name": "Sanctify",
+              "flag": "D",
+              "description": "Once per 3600t, consecrate 5-block radius 600t; undead 2 dmg/sec (undead-specific).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "White Angel",
+          "abilities": [
+            {
+              "slug": "white_angel",
+              "name": "White Angel",
+              "flag": "D",
+              "description": "Primary key: light 15 in 15 blocks 300t; undead 4 dmg/sec (undead-specific); all players Regeneration I. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "beacon_of_faith_ii",
+              "name": "Beacon of Faith II",
+              "flag": "D",
+              "description": "Glowing within 20 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Eternal Day",
+          "abilities": [
+            {
+              "slug": "the_eternal_day",
+              "name": "The Eternal Day",
+              "flag": "S",
+              "description": "Primary key. **Duration 2400t (120s). Cooldown 24000t.**",
+              "details": [
+                "30-block radius",
+                "No hostile spawns",
+                "Undead 6 dmg/sec (undead-specific)",
+                "Players Regeneration I + Night Vision",
+                "Allies +1 heart per 200t",
+                "**Enemy players 1 dmg/sec**"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XX",
+      "name": "JUDGEMENT",
+      "slug": "judgement",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "law_s_weight",
+              "name": "Law’s Weight",
+              "flag": "D",
+              "description": "+2 armor, +45% KB resist.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "retaliatory_sentence",
+              "name": "Retaliatory Sentence",
+              "flag": "D",
+              "description": "Attackers Slowed 60t. Cooldown 280t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "hold_the_line",
+              "name": "Hold the Line",
+              "flag": "D",
+              "description": "Not sprinting: −12% melee damage taken.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "verdict_s_weight",
+              "name": "Verdict’s Weight",
+              "flag": "D",
+              "description": "Kill → hostiles within 4 blocks 10% chance flee 40t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "no_unlawful_escape",
+              "name": "No Unlawful Escape",
+              "flag": "D",
+              "description": "No ender pearl/chorus fruit.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Sheriff",
+          "abilities": [
+            {
+              "slug": "posse",
+              "name": "Posse",
+              "flag": "D/S",
+              "description": "Right-click player → direction tracking 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Interrogator",
+          "abilities": [
+            {
+              "slug": "question",
+              "name": "Question",
+              "flag": "D",
+              "description": "Crouch-right-click **hostile mob OR enemy player** → Weakness I 60t. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Judge",
+          "abilities": [
+            {
+              "slug": "verdict",
+              "name": "Verdict",
+              "flag": "D",
+              "description": "Kill → Slowness I 40t to `#tarot:hostile` **AND enemy players** within 4 blocks. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Disciplinary Paladin",
+          "abilities": [
+            {
+              "slug": "discipline",
+              "name": "Discipline",
+              "flag": "D",
+              "description": "Secondary key: next melee stuns 20t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Imperative Mage",
+          "abilities": [
+            {
+              "slug": "imperative",
+              "name": "Imperative",
+              "flag": "D",
+              "description": "Hold the Line 18%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Chaos Hunter",
+          "abilities": [
+            {
+              "slug": "chaos_hunter",
+              "name": "Chaos Hunter",
+              "flag": "D",
+              "description": "+10% vs mobs/players targeting another player.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Balancer",
+          "abilities": [
+            {
+              "slug": "balance",
+              "name": "Balance",
+              "flag": "S",
+              "description": "Once per 3600t, equalize health between Judgement and **hostile mob OR enemy player** within 6 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Hand of Order",
+          "abilities": [
+            {
+              "slug": "order",
+              "name": "Order",
+              "flag": "D",
+              "description": "Primary key: Slowness II + Weakness II to `#tarot:hostile` **AND enemy players** within 8 blocks for 160t; next melee stuns 40t. Cooldown 1800t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "law_s_weight_ii",
+              "name": "Law’s Weight II",
+              "flag": "D",
+              "description": "KB resist 60%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Absolute Law",
+          "abilities": [
+            {
+              "slug": "the_absolute_law",
+              "name": "The Absolute Law",
+              "flag": "S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "Decree (via `/tarot decree <type>`): no sprint / no jump / no attack / no hostile spawn within 30 blocks",
+                "Enforced 600t",
+                "All **hostile mobs AND enemy players** within 30 blocks also Slowed II + Weakness I"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XXI",
+      "name": "THE WORLD",
+      "slug": "world",
+      "family": "individual",
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "",
+          "abilities": [
+            {
+              "slug": "cold_precision",
+              "name": "Cold Precision",
+              "flag": "D",
+              "description": "+25% projectile.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "marked_prey",
+              "name": "Marked Prey",
+              "flag": "D",
+              "description": "`target_action_on_hit` on **hostile mob OR enemy player** → Glowing 120t. Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "hunter_s_tempo",
+              "name": "Hunter’s Tempo",
+              "flag": "D",
+              "description": "Kill → Speed I 160t. Cooldown 360t.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "predator_s_patience",
+              "name": "Predator’s Patience",
+              "flag": "D/S",
+              "description": "Still with bow: +5% per 60t, max +30%.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "terrifying_reputation",
+              "name": "Terrifying Reputation",
+              "flag": "D",
+              "description": "Villagers refuse trade.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Clown",
+          "abilities": [
+            {
+              "slug": "paper_dagger",
+              "name": "Paper Dagger",
+              "flag": "D",
+              "description": "3 damage + Slowness I 40t to **hostile mob OR enemy player**. Consumes paper. Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Magician",
+          "abilities": [
+            {
+              "slug": "air_cannon",
+              "name": "Air Cannon",
+              "flag": "D/S",
+              "description": "Primary key: 14-block projectile. **Hostile mob: 4 damage + strong KB. Enemy player: 3 damage + 50% KB.** No block damage, no piercing, no AoE, no fire. Does not benefit from Cold Precision or Predator’s Patience. Marked Prey may trigger. Cooldown 160t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Faceless",
+          "abilities": [
+            {
+              "slug": "borrowed_face",
+              "name": "Borrowed Face",
+              "flag": "S",
+              "description": "Duration 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Marionettist",
+          "abilities": [
+            {
+              "slug": "puppet_string",
+              "name": "Puppet String",
+              "flag": "D/S",
+              "description": "Cooldown 400t. Applies to **hostile mobs AND enemy players**.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Scholar of Yore",
+          "abilities": [
+            {
+              "slug": "historical_recall",
+              "name": "Historical Recall",
+              "flag": "D",
+              "description": "Marked Prey Glow 160t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Miracle Invoker",
+          "abilities": [
+            {
+              "slug": "small_miracle",
+              "name": "Small Miracle",
+              "flag": "S",
+              "description": "Cooldown 9600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Attendant of Mysteries",
+          "abilities": [
+            {
+              "slug": "mystery_step",
+              "name": "Mystery Step",
+              "flag": "S",
+              "description": "Cooldown 4800t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Fool (Angel)",
+          "abilities": [
+            {
+              "slug": "hunter_s_substitution",
+              "name": "Hunter’s Substitution",
+              "flag": "S",
+              "description": "9600t CD. Cancel lethal, teleport 8 blocks, 2 hearts.",
+              "details": [],
+              "implementation": "planned"
+            },
+            {
+              "slug": "cold_precision_ii",
+              "name": "Cold Precision II",
+              "flag": "D",
+              "description": "+30%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Perfect Prey",
+          "abilities": [
+            {
+              "slug": "the_perfect_prey",
+              "name": "The Perfect Prey",
+              "flag": "S",
+              "description": "Primary key. **Duration 900t (45s). Cooldown 24000t.**",
+              "details": [
+                "Mark player within 50 blocks",
+                "Particle trail tracking",
+                "Next projectile auto-hits, +100% damage, Slowness II 100t",
+                "Target dies in window → Speed II + Regeneration I 600t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "resonance": [
+    {
+      "index": "I",
+      "name": "The Paper Martyr",
+      "slug": "paper_martyr",
+      "family": "resonance",
+      "parents": [
+        "fool",
+        "hanged_man"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Burdened Beginning",
+          "abilities": [
+            {
+              "slug": "burdened_beginning",
+              "name": "Burdened Beginning",
+              "flag": "D/S",
+              "description": "Spirit Vision (crouch → 10-block Glowing 100t). Sin storage 25%, cap 8 HP. No natural regen above 8 HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Shadow Step",
+          "abilities": [
+            {
+              "slug": "shadow_step",
+              "name": "Shadow Step",
+              "flag": "D",
+              "description": "25% chance on damage → decoy (armor stand, `tarot_decoy` tag). Decoy carries 1 Sin; on death deals 2 damage in 2 blocks. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Suffering Sight",
+          "abilities": [
+            {
+              "slug": "suffering_sight",
+              "name": "Suffering Sight",
+              "flag": "S",
+              "description": "Spirit Vision reveals health + highest debuff. Sneak + secondary key → transfer 2 Sin to revealed **hostile mob OR enemy player** (2 damage, Sin −2). Cooldown 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Borrowed Sacrifice",
+          "abilities": [
+            {
+              "slug": "borrowed_sacrifice",
+              "name": "Borrowed Sacrifice",
+              "flag": "S",
+              "description": "Borrowed Face holds 3 Sin; on break by attack, attacker takes 3 damage. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Gathering of Martyrs",
+          "abilities": [
+            {
+              "slug": "gathering_of_martyrs",
+              "name": "Gathering of Martyrs",
+              "flag": "S",
+              "description": "Secondary key: 2 figurines 200t. Each carries 2 Sin, detonates for 4 damage in 3 blocks. **Minions attack hostile mobs AND enemy players.** Cooldown 6000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Burdened Trickster",
+          "abilities": [
+            {
+              "slug": "burdened_trickster",
+              "name": "Burdened Trickster",
+              "flag": "S",
+              "description": "Decoys carry 2 Sin, detonate for 4 damage. Sin cap 12 HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Suffering Sight II",
+          "abilities": [
+            {
+              "slug": "suffering_sight_ii",
+              "name": "Suffering Sight II",
+              "flag": "S",
+              "description": "Sin transfer → 3 Sin. Target Glowing 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Sacrificial Gathering",
+          "abilities": [
+            {
+              "slug": "sacrificial_gathering",
+              "name": "Sacrificial Gathering",
+              "flag": "S",
+              "description": "Figurines carry 3 Sin, detonate for 6 damage in 4 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Martyr’s Substitute",
+          "abilities": [
+            {
+              "slug": "martyr_s_substitute",
+              "name": "Martyr’s Substitute",
+              "flag": "S",
+              "description": "Lethal hit → cancel, teleport 12 blocks, heal 20, Invisibility 60t, Speed II 60t. Origin point leaves a Sin shadow for 100t; if attacked, detonates for all Sin (cap 16 HP) in 10 blocks. Player gains 3 Sin. Cooldown 7200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Paper Martyr",
+          "abilities": [
+            {
+              "slug": "the_paper_martyr",
+              "name": "The Paper Martyr",
+              "flag": "S",
+              "description": "Primary key. **Duration 700t (35s). Cooldown 18000t (15 min; 12000 if <6 HP).**",
+              "details": [
+                "−75% damage taken",
+                "Creative flight, fire/fall immunity",
+                "+50% damage",
+                "On-hit: Slowness II + Weakness I 80t",
+                "Decoy every 100t (3 Sin each, detonate 3 damage in 3 blocks)",
+                "Sin cap removed; 100% Sin conversion",
+                "Nova every 80t: 15% stored Sin to `#tarot:hostile` **AND enemy players** in 8 blocks",
+                "Melee +5% stored Sin",
+                "On expiry: return to activation point, full health, clear effects, Regeneration II + Speed II 200t",
+                "15-block explosion (cap 40 hearts)",
+                "Allies within 10 blocks Absorption IV 200t",
+                "Killed entities rise as minions 400t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "II",
+      "name": "The Marked Verdict",
+      "slug": "marked_verdict",
+      "family": "resonance",
+      "parents": [
+        "world",
+        "justice"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Cold Judgment",
+          "abilities": [
+            {
+              "slug": "cold_judgment",
+              "name": "Cold Judgment",
+              "flag": "D",
+              "description": "+25% projectile; −12% mob damage taken (not sprinting); −70% passive damage.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Paper Sentence",
+          "abilities": [
+            {
+              "slug": "paper_sentence",
+              "name": "Paper Sentence",
+              "flag": "D",
+              "description": "Paper Dagger (3 dmg, Slowness I 40t) + Weakness I 40t on hit.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Hunter’s Calm",
+          "abilities": [
+            {
+              "slug": "hunter_s_calm",
+              "name": "Hunter’s Calm",
+              "flag": "D/S",
+              "description": "Predator’s Patience 2× fast. Still + bow: Slowness I to `#tarot:hostile` **AND enemy players** within 6 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Silent Witness",
+          "abilities": [
+            {
+              "slug": "silent_witness",
+              "name": "Silent Witness",
+              "flag": "S",
+              "description": "Borrowed Face reveals target health 600t. Calming Presence.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Puppet’s Sentence",
+          "abilities": [
+            {
+              "slug": "puppet_s_sentence",
+              "name": "Puppet’s Sentence",
+              "flag": "D/S",
+              "description": "Player: Slowness II 40t + coords. Mob: Slowness II 80t + red outline. **Both target types.**",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Marked Judgment",
+          "abilities": [
+            {
+              "slug": "marked_judgment",
+              "name": "Marked Judgment",
+              "flag": "S",
+              "description": "Marked Prey → Weakness I 120t. Direction indicator.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Hunter’s Stillness",
+          "abilities": [
+            {
+              "slug": "hunter_s_stillness",
+              "name": "Hunter’s Stillness",
+              "flag": "S",
+              "description": "Still + bow: Slowness I to nearby enemies.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "The Verdict",
+          "abilities": [
+            {
+              "slug": "the_verdict",
+              "name": "The Verdict",
+              "flag": "S",
+              "description": "Mark-kill → `#tarot:hostile` **AND enemy players** within 8 blocks pacified 60t. Absorption I 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Swift Judgment",
+          "abilities": [
+            {
+              "slug": "swift_judgment",
+              "name": "Swift Judgment",
+              "flag": "S",
+              "description": "Lethal → teleport 8 blocks; attacker frozen (Slowness 255) 40t. Cooldown 9600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Marked Verdict",
+          "abilities": [
+            {
+              "slug": "the_marked_verdict",
+              "name": "The Marked Verdict",
+              "flag": "S",
+              "description": "Primary key. **Duration 900t (45s). Cooldown 24000t.**",
+              "details": [
+                "Mark player within 50 blocks",
+                "Target cannot sprint/jump",
+                "+100% damage + Slowness II to target",
+                "Next projectile auto-hits, freezes 60t, pacifies all enemies within 15 blocks 100t",
+                "On kill: Speed II + Regeneration I 600t; allies Absorption II 200t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "III",
+      "name": "The Burning Archive",
+      "slug": "burning_archive",
+      "family": "resonance",
+      "parents": [
+        "hermit",
+        "chariot"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Scholar’s Fire",
+          "abilities": [
+            {
+              "slug": "scholar_s_fire",
+              "name": "Scholar’s Fire",
+              "flag": "D",
+              "description": "+35% XP, fire/lava immunity, +15% sprint melee.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Combat Insight",
+          "abilities": [
+            {
+              "slug": "combat_insight",
+              "name": "Combat Insight",
+              "flag": "D",
+              "description": "20% chance Resistance I + Speed I 40t on damage.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Astrologer’s Trail",
+          "abilities": [
+            {
+              "slug": "astrologer_s_trail",
+              "name": "Astrologer’s Trail",
+              "flag": "D/S",
+              "description": "Star Chart. Trail ignites 40t (**hostile mobs AND enemy players**).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Recorded Plot",
+          "abilities": [
+            {
+              "slug": "recorded_plot",
+              "name": "Recorded Plot",
+              "flag": "D",
+              "description": "Scroll coord. 20% kill → +1 XP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Star Read Reaper",
+          "abilities": [
+            {
+              "slug": "star_read_reaper",
+              "name": "Star Read Reaper",
+              "flag": "D",
+              "description": "Star Read 5s. Reap +30% + ignite 60t. Cooldown 600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Scholar’s Momentum",
+          "abilities": [
+            {
+              "slug": "scholar_s_momentum",
+              "name": "Scholar’s Momentum",
+              "flag": "S",
+              "description": "Book read <1200t → sprint melee +25%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Insightful Flame",
+          "abilities": [
+            {
+              "slug": "insightful_flame",
+              "name": "Insightful Flame",
+              "flag": "S",
+              "description": "Trail +1 damage + Slowness I 40t; health shown 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Reaper’s Library",
+          "abilities": [
+            {
+              "slug": "reaper_s_library",
+              "name": "Reaper’s Library",
+              "flag": "S",
+              "description": "Kill → +1 XP + Burn stack (+5% melee, max 3, consumed on crit).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Burning Lecture",
+          "abilities": [
+            {
+              "slug": "burning_lecture",
+              "name": "Burning Lecture",
+              "flag": "S",
+              "description": "Emperor’s Library: melee ignite 100t, arrows ignite 60t. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Burning Archive",
+          "abilities": [
+            {
+              "slug": "the_burning_archive",
+              "name": "The Burning Archive",
+              "flag": "S",
+              "description": "Primary key. **Duration 900t (45s). Cooldown 24000t.**",
+              "details": [
+                "Players within 100 blocks outlined; structures within 200 blocks",
+                "One-shot armor-ignoring crit arrow",
+                "`#tarot:hostile` **AND enemy players** within 20 blocks forced to fight each other",
+                "+30% damage, +20% speed, melee ignite 100t",
+                "Kills grant Burn stacks (cap 5)",
+                "Crit arrow ignites all enemies within 10 blocks 100t",
+                "On end with 5 stacks: 6 fire damage + fire 100t to remaining enemies within 15 blocks"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "IV",
+      "name": "The Crumbling Reaper",
+      "slug": "crumbling_reaper",
+      "family": "resonance",
+      "parents": [
+        "death",
+        "tower"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Grave Ruin",
+          "abilities": [
+            {
+              "slug": "grave_ruin",
+              "name": "Grave Ruin",
+              "flag": "D",
+              "description": "+30% stone break; undead −25%; explosions −60%; fall +75%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Grave Dirt + Fault Line",
+          "abilities": [
+            {
+              "slug": "grave_dirt_fault_line",
+              "name": "Grave Dirt + Fault Line",
+              "flag": "D/S",
+              "description": "+1 XP grave (1200t). 5% break above.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Spirit Shockwave",
+          "abilities": [
+            {
+              "slug": "spirit_shockwave",
+              "name": "Spirit Shockwave",
+              "flag": "D",
+              "description": "Spirit Sense. Shockwave 2 damage to nearby enemies on 4+ block fall.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Guide’s Foundation",
+          "abilities": [
+            {
+              "slug": "guide_s_foundation",
+              "name": "Guide’s Foundation",
+              "flag": "D",
+              "description": "Undead death → +1 HP. −20% fall with pickaxe.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Gate Collapse",
+          "abilities": [
+            {
+              "slug": "gate_collapse",
+              "name": "Gate Collapse",
+              "flag": "D",
+              "description": "Secondary key: Nether portal + 3×3 break. Cooldown 12000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Falling Harvest",
+          "abilities": [
+            {
+              "slug": "falling_harvest",
+              "name": "Falling Harvest",
+              "flag": "S",
+              "description": "3+ block fall → next kill within 200t heals 4 hearts + explodes 2 damage 3 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Collapse of the Living",
+          "abilities": [
+            {
+              "slug": "collapse_of_the_living",
+              "name": "Collapse of the Living",
+              "flag": "S",
+              "description": "Enemy dies within 8 blocks → crack + 1 damage nearby enemies 3 blocks.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Unstable Souls",
+          "abilities": [
+            {
+              "slug": "unstable_souls",
+              "name": "Unstable Souls",
+              "flag": "S",
+              "description": "Fall damage → nearby enemies same damage. Kills → Soul Harvest heal.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Falling Tower’s Reap",
+          "abilities": [
+            {
+              "slug": "falling_tower_s_reap",
+              "name": "Falling Tower’s Reap",
+              "flag": "S",
+              "description": "Slam → +instakill enemies below 20%. Kills → +1 Absorption 600t. Cooldown 2400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Crumbling Reaper",
+          "abilities": [
+            {
+              "slug": "the_crumbling_reaper",
+              "name": "The Crumbling Reaper",
+              "flag": "S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "Every 60t: lowest-health `#tarot:hostile` **AND enemy player** within 10 blocks dies (bosses 50%/tick cap; enemy players capped 50% HP removed per tick)",
+                "+1 Absorption per kill (cap 10)",
+                "15-block unstable ground: any entity standing takes 4 damage/sec",
+                "Unstable-kill Absorption applies",
+                "Absorption cap 15 hearts, persists 1200t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "V",
+      "name": "The Impossible Fist",
+      "slug": "impossible_fist",
+      "family": "resonance",
+      "parents": [
+        "magician",
+        "strength"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Traveler’s Might",
+          "abilities": [
+            {
+              "slug": "traveler_s_might",
+              "name": "Traveler’s Might",
+              "flag": "D",
+              "description": "+12% speed, −70% fall, +3 armor, +20% jump.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Sleight of Fist",
+          "abilities": [
+            {
+              "slug": "sleight_of_fist",
+              "name": "Sleight of Fist",
+              "flag": "D",
+              "description": "30% fall teleport. Unarmed +2.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Star Chart Grip",
+          "abilities": [
+            {
+              "slug": "star_chart_grip",
+              "name": "Star Chart Grip",
+              "flag": "D",
+              "description": "Star Chart. Bows at −25%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Recorded Dawnlight",
+          "abilities": [
+            {
+              "slug": "recorded_dawnlight",
+              "name": "Recorded Dawnlight",
+              "flag": "D",
+              "description": "Recorded Step. Dawnlight light 8 200t. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Doorstep Slam",
+          "abilities": [
+            {
+              "slug": "doorstep_slam",
+              "name": "Doorstep Slam",
+              "flag": "D",
+              "description": "Doorstep 8 blocks → next melee +10% + Slowness I 20t within 60t. Cooldown 300t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Doorstep Punch",
+          "abilities": [
+            {
+              "slug": "doorstep_punch",
+              "name": "Doorstep Punch",
+              "flag": "S",
+              "description": "Bonus +15%.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Sealed Slam",
+          "abilities": [
+            {
+              "slug": "sealed_slam",
+              "name": "Sealed Slam",
+              "flag": "S",
+              "description": "Teleport into **hostile mob OR enemy player** → 4 damage + 3 block KB.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Giant’s Shortcut",
+          "abilities": [
+            {
+              "slug": "giant_s_shortcut",
+              "name": "Giant’s Shortcut",
+              "flag": "S",
+              "description": "Phase exit → enemies within 2 blocks take +20% current HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Divine Door",
+          "abilities": [
+            {
+              "slug": "divine_door",
+              "name": "Divine Door",
+              "flag": "S",
+              "description": "Divine Hand pull OR teleport. Stun 60t, next melee +50%. Cooldown 1800t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Impossible Fist",
+          "abilities": [
+            {
+              "slug": "the_impossible_fist",
+              "name": "The Impossible Fist",
+              "flag": "S",
+              "description": "Primary key. **Duration 900t (45s). Cooldown 18000t.**",
+              "details": [
+                "Unrestricted phasing",
+                "Wither II + Slowness II + armor halved to `#tarot:hostile` **AND enemy players** within 15 blocks",
+                "+30% damage",
+                "Every phased block: +5% melee (max +50%)",
+                "Melee reaches through 3-block walls",
+                "On end: shockwave 2 dmg/Momentum in 5 blocks"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "VI",
+      "name": "The Benevolent Crown",
+      "slug": "benevolent_crown",
+      "family": "resonance",
+      "parents": [
+        "emperor",
+        "lovers"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Sovereign’s Care",
+          "abilities": [
+            {
+              "slug": "sovereign_s_care",
+              "name": "Sovereign’s Care",
+              "flag": "D",
+              "description": "+3 armor, +40% KB resist, +25% self-heal, +5% speed with teammate. Shield −25% speed, +50% exhaustion. Alone 600t: +35% exhaustion, −15% mining.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Unbound Symbiosis",
+          "abilities": [
+            {
+              "slug": "unbound_symbiosis",
+              "name": "Unbound Symbiosis",
+              "flag": "D",
+              "description": "Weakness immunity <12 HP. Passive mob within 4 → +1 HP.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Coin’s Blessing",
+          "abilities": [
+            {
+              "slug": "coin_s_blessing",
+              "name": "Coin’s Blessing",
+              "flag": "D",
+              "description": "Coin pacify (100t). Blessing crop (1200t).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Corrupt Symbiosis",
+          "abilities": [
+            {
+              "slug": "corrupt_symbiosis",
+              "name": "Corrupt Symbiosis",
+              "flag": "D/S",
+              "description": "5×5 Slowness to `#tarot:hostile` **AND enemy players**. Symbiosis to allies.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Decree of Nature",
+          "abilities": [
+            {
+              "slug": "decree_of_nature",
+              "name": "Decree of Nature",
+              "flag": "D",
+              "description": "Secondary key: Decree + Slowness II to `#tarot:hostile` **AND enemy players** within 6 blocks. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Linked Crown",
+          "abilities": [
+            {
+              "slug": "linked_crown",
+              "name": "Linked Crown",
+              "flag": "S",
+              "description": "Shield: allies within 8 blocks +5% damage reduction + 0.5 heart heal per 200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Shared Domain",
+          "abilities": [
+            {
+              "slug": "shared_domain",
+              "name": "Shared Domain",
+              "flag": "S",
+              "description": "Allies in Corrupt Ground get Regeneration I.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Emperor’s Hymn",
+          "abilities": [
+            {
+              "slug": "emperor_s_hymn",
+              "name": "Emperor’s Hymn",
+              "flag": "S",
+              "description": "Decree: allies Regeneration I + 10% speed; self +10% resist. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Triage Decree",
+          "abilities": [
+            {
+              "slug": "triage_decree",
+              "name": "Triage Decree",
+              "flag": "S",
+              "description": "Triage 1 heart + Slows + 2 damage to nearest enemy. Cooldown 400t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Benevolent Crown",
+          "abilities": [
+            {
+              "slug": "the_benevolent_crown",
+              "name": "The Benevolent Crown",
+              "flag": "S",
+              "description": "Primary key. **Duration 1200t (60s). Cooldown 18000t.**",
+              "details": [
+                "15-block domain: `#tarot:hostile` **AND enemy players** cannot approach within 3 blocks",
+                "All players cannot sprint/jump unless allowed",
+                "+20% damage, +20% resist",
+                "Allies Regeneration II + 10% speed",
+                "Passive mobs immortal",
+                "Enemies pacified first 100t",
+                "Ally deaths heal allies 2 hearts",
+                "One Consort +15% damage +15% resist"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "VII",
+      "name": "The Binding Contract",
+      "slug": "binding_contract",
+      "family": "resonance",
+      "parents": [
+        "devil",
+        "judgement"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Hellborn Verdict",
+          "abilities": [
+            {
+              "slug": "hellborn_verdict",
+              "name": "Hellborn Verdict",
+              "flag": "D",
+              "description": "Fire/lava immunity, +2 armor, +45% KB resist. Attackers Slowed 60t. No golden apples or ender pearls.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Fallen Question",
+          "abilities": [
+            {
+              "slug": "fallen_question",
+              "name": "Fallen Question",
+              "flag": "D",
+              "description": "10% Strength I 40t on damage. Crouch-right-click mob/player → Weakness I 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Predator’s Calm",
+          "abilities": [
+            {
+              "slug": "predator_s_calm",
+              "name": "Predator’s Calm",
+              "flag": "D",
+              "description": "Kill → Speed I 60t. Right-click → Slowness I 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Devil’s Verdict",
+          "abilities": [
+            {
+              "slug": "devil_s_verdict",
+              "name": "Devil’s Verdict",
+              "flag": "D",
+              "description": "Devil’s Mark Wither I 40t. Kills → Slowness I 40t to nearby enemies.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Desire’s Discipline",
+          "abilities": [
+            {
+              "slug": "desire_s_discipline",
+              "name": "Desire’s Discipline",
+              "flag": "D",
+              "description": "Desire. Discipline stun 20t. **Desire also applies Slowness II 60t.**",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Infernal Verdict",
+          "abilities": [
+            {
+              "slug": "infernal_verdict",
+              "name": "Infernal Verdict",
+              "flag": "S",
+              "description": "Claws + Slowness I 40t. Target glows red 80t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Law of Hell",
+          "abilities": [
+            {
+              "slug": "law_of_hell",
+              "name": "Law of Hell",
+              "flag": "S",
+              "description": "Attacker takes 2 damage + Slowness II 40t; if <50% HP: Wither I 60t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Contract Enforcement",
+          "abilities": [
+            {
+              "slug": "contract_enforcement",
+              "name": "Contract Enforcement",
+              "flag": "S",
+              "description": "Right-click player. Accept: buffs. Refuse: Weakness II 600t + drop item. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Chaos Law",
+          "abilities": [
+            {
+              "slug": "chaos_law",
+              "name": "Chaos Law",
+              "flag": "S",
+              "description": "Chaos Unleashed + any attacker during 160t takes 1 damage + Slowness II 60t. Cooldown 1800t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Binding Contract",
+          "abilities": [
+            {
+              "slug": "the_binding_contract",
+              "name": "The Binding Contract",
+              "flag": "S",
+              "description": "Primary key. **Duration 800t (40s). Cooldown 18000t.**",
+              "details": [
+                "Strength II, Fire Resistance, +20% speed, Wither I on melee, 0.5 heart lifesteal",
+                "75% chance on kill → minion 600t (max 4)",
+                "All `#tarot:hostile` **AND enemy players** within 15 blocks frozen + Wither II",
+                "Any player within 15 blocks offered contract",
+                "Melee Wither II + Slowness I",
+                "Wither kills → Absorption II 600t",
+                "+15% damage taken; on end: Hunger II 200t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "VIII",
+      "name": "The Starless Poison",
+      "slug": "starless_poison",
+      "family": "resonance",
+      "parents": [
+        "star",
+        "empress"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Sleepless Grace",
+          "abilities": [
+            {
+              "slug": "sleepless_grace",
+              "name": "Sleepless Grace",
+              "flag": "D",
+              "description": "Night Vision, +10% speed, Poison immunity, +15% night speed. No sleep. Arrows +25% in sun.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Lullaby Whisper",
+          "abilities": [
+            {
+              "slug": "lullaby_whisper",
+              "name": "Lullaby Whisper",
+              "flag": "D/S",
+              "description": "Lullaby Slowness I 60t (1200t). Whisper (1200t).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Nightmare Fire",
+          "abilities": [
+            {
+              "slug": "nightmare_fire",
+              "name": "Nightmare Fire",
+              "flag": "D",
+              "description": "20% chance +1 XP on night kill. 10% melee ignite 20t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Soul Thread",
+          "abilities": [
+            {
+              "slug": "soul_thread",
+              "name": "Soul Thread",
+              "flag": "D/S",
+              "description": "10% Resistance I 40t on night damage. Thread Slowness I 40t (400t).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Haunting Plague",
+          "abilities": [
+            {
+              "slug": "haunting_plague",
+              "name": "Haunting Plague",
+              "flag": "D",
+              "description": "Haunt Blindness I 60t. Witch’s Venom Poison 80t + Hunger I 40t. **Haunt also Poison I 60t.** Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Night Venom",
+          "abilities": [
+            {
+              "slug": "night_venom",
+              "name": "Night Venom",
+              "flag": "S",
+              "description": "Witch’s Venom to nearby at night. Nightwatch damage bonus to poisoned mobs/players.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Poison Conceal",
+          "abilities": [
+            {
+              "slug": "poison_conceal",
+              "name": "Poison Conceal",
+              "flag": "S",
+              "description": "First invisibility attack: Poison II 80t. Does not break invisibility (target glows 40t).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Shadow Whisper",
+          "abilities": [
+            {
+              "slug": "shadow_whisper",
+              "name": "Shadow Whisper",
+              "flag": "S",
+              "description": "Targeting you → 2 damage + Blindness I 20t + Poison I 40t. Self Speed I 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Midnight Apocalypse",
+          "abilities": [
+            {
+              "slug": "midnight_apocalypse",
+              "name": "Midnight Apocalypse",
+              "flag": "S",
+              "description": "Meteors extinguish light 15 blocks + Blindness I 60t to enemies 15 blocks. Hits → Poison II 60t. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Starless Poison",
+          "abilities": [
+            {
+              "slug": "the_starless_poison",
+              "name": "The Starless Poison",
+              "flag": "S",
+              "description": "Primary key. **Duration 800t (40s). Cooldown 24000t.**",
+              "details": [
+                "Extinguish light 30 blocks",
+                "Invisibility (Speed II, +20% damage)",
+                "`#tarot:hostile` **AND enemy players** within 30 blocks: Blind + Slowed I",
+                "Poison II every 60t to all enemies within 30 blocks (poisoned take +25%)",
+                "Attacks break invisibility only 40t",
+                "Poisoned deaths explode 3-block poison cloud",
+                "On end: all poisoned enemies take 6 damage + Wither I 100t; self Invisibility 100t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "IX",
+      "name": "The Eclipse",
+      "slug": "eclipse",
+      "family": "resonance",
+      "parents": [
+        "sun",
+        "moon"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Unshadowed Sanguine",
+          "abilities": [
+            {
+              "slug": "unshadowed_sanguine",
+              "name": "Unshadowed Sanguine",
+              "flag": "D",
+              "description": "+40% undead damage; Night Vision; 10% Wither resist at night. Glowing always. Only meat restores hunger.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Holy Tamer",
+          "abilities": [
+            {
+              "slug": "holy_tamer",
+              "name": "Holy Tamer",
+              "flag": "D/S",
+              "description": "Holy Light 600t. Tame 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Solar Drain",
+          "abilities": [
+            {
+              "slug": "solar_drain",
+              "name": "Solar Drain",
+              "flag": "D",
+              "description": "20% Blind undead attacker 40t. Melee heal 0.5 hearts per 100t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Witness Brew",
+          "abilities": [
+            {
+              "slug": "witness_brew",
+              "name": "Witness Brew",
+              "flag": "D/S",
+              "description": "Witness 1200t. Brew 6000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Purify Scarlet",
+          "abilities": [
+            {
+              "slug": "purify_scarlet",
+              "name": "Purify Scarlet",
+              "flag": "D",
+              "description": "Purify + Scarlet 200t. **Purify grants Regeneration I 100t.** Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Sunrise",
+          "abilities": [
+            {
+              "slug": "sunrise",
+              "name": "Sunrise",
+              "flag": "S",
+              "description": "Undead damage → heal 1 heart, drain 0.5 hearts, fire 40t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Moonshadow",
+          "abilities": [
+            {
+              "slug": "moonshadow",
+              "name": "Moonshadow",
+              "flag": "S",
+              "description": "Night Vision in day. Wall vision 5 blocks at night.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Lunar Sanctuary",
+          "abilities": [
+            {
+              "slug": "lunar_sanctuary",
+              "name": "Lunar Sanctuary",
+              "flag": "S",
+              "description": "Sanctify at night drains 1 heart/40t from nearby enemies; heals self. Undead +2 dmg/sec. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Solar Drain",
+          "abilities": [
+            {
+              "slug": "solar_drain",
+              "name": "Solar Drain",
+              "flag": "S",
+              "description": "White Angel: self heal 1 HP/sec, undead +2 dmg/sec. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Eclipse",
+          "abilities": [
+            {
+              "slug": "the_eclipse",
+              "name": "The Eclipse",
+              "flag": "S",
+              "description": "Primary key. **Duration 1200t (60s). Cooldown 24000t.**",
+              "details": [
+                "Sun: 30-block fixed zone (no spawns, undead 6 dmg/sec, players Regeneration I, allies +1 heart/200t, **enemy players 1 dmg/sec**)",
+                "Moon: 15-block moving aura (hostiles −1 heart/sec, **enemy players −1 heart/60t**, heal drained cap 30 HP)",
+                "Overlap: undead burned+drained, drop double loot",
+                "Final pulse (1180t): 10 damage undead, 5 hearts allies, Blindness 300t enemy players"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "X",
+      "name": "The Walking Sanctuary",
+      "slug": "walking_sanctuary",
+      "family": "resonance",
+      "parents": [
+        "temperance",
+        "hierophant"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Wraith’s Prayer",
+          "abilities": [
+            {
+              "slug": "wraith_s_prayer",
+              "name": "Wraith’s Prayer",
+              "flag": "D",
+              "description": "Wraith’s Veil. −60% fall. Regeneration I every 800t to nearby players. No iron/diamond/netherite chest. No meat.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Madness Consecrate",
+          "abilities": [
+            {
+              "slug": "madness_consecrate",
+              "name": "Madness Consecrate",
+              "flag": "D/S",
+              "description": "10% Speed I 60t on damage. Consecrate 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Beast Contract",
+          "abilities": [
+            {
+              "slug": "beast_contract",
+              "name": "Beast Contract",
+              "flag": "D",
+              "description": "Beast Form 200t. Contract 12000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Rot Sanctum",
+          "abilities": [
+            {
+              "slug": "rot_sanctum",
+              "name": "Rot Sanctum",
+              "flag": "D",
+              "description": "Melee Hunger I 40t to **hostile mobs AND enemy players**. +5% XP sanctified.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Incorporeal Hymn",
+          "abilities": [
+            {
+              "slug": "incorporeal_hymn",
+              "name": "Incorporeal Hymn",
+              "flag": "D",
+              "description": "Secondary key: Incorporeal 60t + Hymn (Regeneration I 100t to players 8 blocks). **While incorporeal: 3-block Regeneration I pulse.** Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Consecrated Walk",
+          "abilities": [
+            {
+              "slug": "consecrated_walk",
+              "name": "Consecrated Walk",
+              "flag": "S",
+              "description": "Still 100t → 3-block consecrated 200t. Undead 1 dmg/sec (undead-specific).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Ghost Blessing",
+          "abilities": [
+            {
+              "slug": "ghost_blessing",
+              "name": "Ghost Blessing",
+              "flag": "S",
+              "description": "Phased → allies Regeneration I.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Mobile Sanctum",
+          "abilities": [
+            {
+              "slug": "mobile_sanctum",
+              "name": "Mobile Sanctum",
+              "flag": "S",
+              "description": "On Incorporeal: 3-block sanctum 200t. No hostile spawns, undead 2 dmg/sec, players Regeneration I. Cooldown 1200t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Spectral White Angel",
+          "abilities": [
+            {
+              "slug": "spectral_white_angel",
+              "name": "Spectral White Angel",
+              "flag": "S",
+              "description": "White Angel + phased: light 15, allies Regeneration II, undead 3 dmg/sec. Cooldown 3600t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Walking Sanctuary",
+          "abilities": [
+            {
+              "slug": "the_walking_sanctuary",
+              "name": "The Walking Sanctuary",
+              "flag": "S",
+              "description": "Primary key. **Duration 1200t (60s). Cooldown 24000t.**",
+              "details": [
+                "15-block sanctuary follows player",
+                "No hostile spawns",
+                "Undead 4 dmg/sec (undead-specific)",
+                "Allies Regeneration II",
+                "Hunger/saturation slow recovery",
+                "Player permanently phased (except `#tarot:unphasable`)",
+                "Free attacks (invisibility breaks 40t on attack)",
+                "**`#tarot:hostile` AND enemy players attacking allies inside take 3 damage + Blindness 40t**",
+                "Final 3s: 20-block radius, allies Regeneration III, undead 6 dmg/sec"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": "XI",
+      "name": "The Loaded Dice",
+      "slug": "loaded_dice",
+      "family": "resonance",
+      "parents": [
+        "high_priestess",
+        "wheel_of_fortune"
+      ],
+      "sequences": [
+        {
+          "sequence": 9,
+          "title": "Fated Reader",
+          "abilities": [
+            {
+              "slug": "fated_reader",
+              "name": "Fated Reader",
+              "flag": "D",
+              "description": "+35% XP. Luck +1. 15% chance −50% damage. −20% break without book. Fate’s Current.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "title": "Deduction Machine",
+          "abilities": [
+            {
+              "slug": "deduction_machine",
+              "name": "Deduction Machine",
+              "flag": "D",
+              "description": "20% +1 XP on kill. 10% chance on damage resets Fate’s Current.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "title": "Index of Luck",
+          "abilities": [
+            {
+              "slug": "index_of_luck",
+              "name": "Index of Luck",
+              "flag": "D/S",
+              "description": "Index book. Luck +1 (max +2).",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "title": "Cross-Reference Clockwork",
+          "abilities": [
+            {
+              "slug": "cross_reference_clockwork",
+              "name": "Cross-Reference Clockwork",
+              "flag": "D/S",
+              "description": "−1 lapis. Winning Streak.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "title": "Ritual Winning",
+          "abilities": [
+            {
+              "slug": "ritual_winning",
+              "name": "Ritual Winning",
+              "flag": "D",
+              "description": "Ritual Circle Regeneration I 100t + Luck I 200t to allies. Misfortune −60%. Cooldown 900t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "title": "Fated Deduction",
+          "abilities": [
+            {
+              "slug": "fated_deduction",
+              "name": "Fated Deduction",
+              "flag": "S",
+              "description": "30% kill → +1 XP AND guaranteed positive Fate’s Current.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "title": "Prophetic Vision",
+          "abilities": [
+            {
+              "slug": "prophetic_vision",
+              "name": "Prophetic Vision",
+              "flag": "S",
+              "description": "During Gaze: one random `#tarot:hostile` **OR enemy player** within 30 blocks glows green; kill → 3 banked positive rolls.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "title": "Rolled Archive",
+          "abilities": [
+            {
+              "slug": "rolled_archive",
+              "name": "Rolled Archive",
+              "flag": "S",
+              "description": "Accurate yes/no + reveal target health + 5s path.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "title": "Loaded Answer",
+          "abilities": [
+            {
+              "slug": "loaded_answer",
+              "name": "Loaded Answer",
+              "flag": "S",
+              "description": "Once per 12000t, ask fate-changing question: crit (yes), hostile dies (yes), player miss (yes). Cooldown 12000t.",
+              "details": [],
+              "implementation": "planned"
+            }
+          ]
+        },
+        {
+          "sequence": 0,
+          "title": "The Loaded Dice",
+          "abilities": [
+            {
+              "slug": "the_loaded_dice",
+              "name": "The Loaded Dice",
+              "flag": "S",
+              "description": "Primary key. **Duration 600t (30s). Cooldown 24000t.**",
+              "details": [
+                "Structures/ores/players within 100 blocks revealed",
+                "Read one inventory",
+                "3 yes/no questions",
+                "All rolls rerolled 3× take best",
+                "Attacks guaranteed critical",
+                "One fate-changing question during window (consumes remaining)",
+                "If unused on end: Luck III 1200t"
+              ],
+              "implementation": "planned"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
