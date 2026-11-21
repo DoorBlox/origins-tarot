@@ -60,10 +60,10 @@ class SecondWaveSourceTests(unittest.TestCase):
             self.assertEqual(found,{slug:set(names) for slug,names in expect.items()})
         self.assertEqual(len(allnew),37)
         self.assertEqual(len(set(allnew)),37)
-        self.assertEqual(len(self.powers),301)
+        self.assertEqual(len(self.powers),337)
         self.assertEqual(sum(m["status"]=="full" for m in self.manifest),73)
-        self.assertEqual(sum(m["status"]=="partial" for m in self.manifest),228)
-        self.assertEqual(sum(m["status"]=="blocked" for m in self.manifest),133)
+        self.assertEqual(sum(m["status"]=="partial" for m in self.manifest),264)
+        self.assertEqual(sum(m["status"]=="blocked" for m in self.manifest),97)
 
     def test_offensive_command_effects_do_not_target_player_selector(self):
         allnew=[]
@@ -113,8 +113,8 @@ class SecondWavePackTests(unittest.TestCase):
 
     def test_both_variants_contain_new_powers_but_still_lock_seq1(self):
         data=json.loads(Path(self.artifacts["manifest"]).read_text())
-        self.assertEqual(data["summary"]["compiled"],301)
-        self.assertEqual(data["summary"]["blocked"],133)
+        self.assertEqual(data["summary"]["compiled"],337)
+        self.assertEqual(data["summary"]["blocked"],97)
         newpower_ids=set()
         for module in (resonance2,individual3):
             items=[]

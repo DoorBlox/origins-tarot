@@ -681,6 +681,10 @@ def compile_powers(root):
     resonance3.register(add)
     from .batches import resonance4
     resonance4.register(add)
+    # New sourced individual powers and remaining resonance components.
+    from .batches import individual5, resonance5
+    individual5.register(add)
+    resonance5.register(add)
     # The Rev3 slot system can equip both a source bonus and its explicit
     # replacement at once. Keep grant ownership unchanged, but condition the
     # superseded effect on absence of its source-scoped upgrade power.
