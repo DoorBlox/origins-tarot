@@ -6,7 +6,7 @@ opposing-team or unrelated spectator must not activate these self buffs.
 """
 import unittest
 
-from arcane_rev3.powers import compile_powers
+from arcane_rev3.powers import compile_powers, norm
 from arcane_rev3.team_policy import ROOT, nearby_ally_condition, team_names
 
 
@@ -18,7 +18,7 @@ class TeamProximityTests(unittest.TestCase):
     def _ability(self, pathway, name):
         matches = [
             row for row in self.manifest
-            if row["pathway"] == pathway and row["name"] == name
+            if row["pathway"] == pathway and norm(row["name"]) == norm(name)
         ]
         self.assertEqual(len(matches), 1)
         return self.powers[matches[0]["power_id"]], matches[0]
