@@ -13,6 +13,14 @@ with a development pack.
 - `Arcane_Rev3_Resonance_Manual_Preview_TEST_ONLY_1.18.2.zip` is an OP-only **standalone disposable-world preview**, not a companion pack to place on SMP. Ordinary Sequence1 remains locked.
 - `tarot.json` is a Command Aliases 1.0.1 configuration file, not a datapack ZIP. Place it under the corresponding server's `config/commandaliases/` only after saving the previous configuration. Non-OP `/trigger a_help` remains the fallback without aliases.
 
+## Incremental Rev3-to-Rev3 upgrades while playing
+
+- Your current working Rev3 build can remain installed while development continues in GitHub. **New source commits do not change your live SMP** until you personally install a newer inner ZIP and restart/reload. Playing now does not force a world reset, but it does not guarantee every future migration will be possible.
+- As of PR #58, every future Arcane gameplay PR is checked against the exact base-commit build with **both** inner ZIP variants. `python3 -m scripts.arcane_ci_upgrade_guard --previous OLD_REV3.zip --candidate NEW_REV3.zip` reports static compatibility and fails closed if an existing power/origin/function ID, scoreboard objective criterion, pinned Origin power, player initializer mapping, or grant source is removed or changed unexpectedly. It does **not** edit a world. It does not certify actual saved-player NBT or progression migration.
+- Each release candidate requires **four CI checks**, an explicit *static upgrade PASS* and a backed-up clone-world restore/relog test. A new development artifact from the `Build Arcane V2 Rev3 22-Origin Dev Pack` workflow is not automatically production-approved. Preserve the **exact** previous working ZIP, `level.dat`, `scoreboard.dat`, `playerdata/`, `data/`, and mod/server configuration before installing an updated candidate.
+- If an update needs to change persisted IDs, objective types or path encoding, first implement and validate a separately versioned migration/rollback; do not bypass the comparison or clear players' saved data.
+- The **26** recently improved partial abilities are still PARTIAL. No update should claim the remaining 361 definitions are game-complete or automatically grant Seq1 Resonance.
+
 ## Before altering the world
 
 1. Stop the server cleanly. Make a **full, verified, restorable backup** of the entire world including `level.dat`, `scoreboard.dat`, `playerdata/`, `advancements/`, `stats/`, `data/` and `datapacks/`, plus current server config, previous Tarot ZIP(s), installed mod versions, relevant permission storage and Command Aliases config. Prefer a world clone on an isolated server first.
