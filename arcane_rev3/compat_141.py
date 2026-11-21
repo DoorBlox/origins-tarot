@@ -23,9 +23,19 @@ REQUIRED_COOLDOWN_TYPES = frozenset({
 UNSUPPORTED = frozenset({
     "origins:random_teleport", "origins:submerged", "origins:not",
 })
+ARMOR_ITEM_SLOTS = frozenset({"head", "chest", "legs", "feet"})
+ARMOR_RESTRICTION_TYPES = frozenset({
+    "origins:restrict_armor", "origins:conditioned_restrict_armor",
+})
 
 
-def _context_for_key(key, current):
+def _context_for_key(key, current, parent_type=None):
+    # Apoli 2.3.3 decodes these *slot fields* as ItemConditions, even though
+    # the JSON key is "chest", not the usual "item_condition". Without this
+    # rule the emitted restrict_armor ingredient.items list survives the
+    # adapter and two real powers fail loading.
+    if parent_type in ARMOR_RESTRICTION_TYPES and key in ARMOR_ITEM_SLOTS:
+        return "item_condition"
     if key in ("condition", "entity_condition"):
         return "item_condition" if current == "item_condition" else "entity_condition"
     if key == "item_condition":
@@ -120,7 +130,7 @@ def adapt_141(power):
 
         for key, subvalue in list(item.items()):
             if isinstance(subvalue, (list, dict)):
-                item[key] = walk(subvalue, _context_for_key(key, context))
+                item[key] = walk(subvalue, _context_for_key(key, context, kind))
         if kind in REQUIRED_COOLDOWN_TYPES and context == "power" and "cooldown" not in item:
             # An explicit one-second minimum prevents unbounded event spam.
             item["cooldown"] = 20
