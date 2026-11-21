@@ -14,5 +14,6 @@
         "compare_to": 7
       }
     ]
-  }
+  },
+  "render_armor": true
 }
