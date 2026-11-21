@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -62,41 +62,47 @@ public final class FoolAbilities {
         p.getServer().execute(() -> { /* decoy expiry is maintained by tick cleanup below */ });
     }
     public static void register() {
-        ServerLivingEntityEvents.ALLOW_DEATH.register((victim, source, amount) -> {
-            if(!(victim instanceof ServerPlayerEntity)) return true;
-            ServerPlayerEntity p=(ServerPlayerEntity)victim;
-            ArcaneSave.Record r=ArcaneMod.profile(p);
-            if(r==null || !enabled(r,1)) return true;
-            long now=p.getServerWorld().getTime();
-            if(!r.ready("history_substitution",now,7200)) return true;
-            p.setHealth(20);
-            p.requestTeleport(p.getX()+12,p.getY(),p.getZ());
-            effect(p,StatusEffects.INVISIBILITY,60,0);
-            effect(p,StatusEffects.SPEED,60,1);
-            ArcaneSave.get(p.getServer()).markDirty();
-            return false;
-        });
-        ServerLivingEntityEvents.AFTER_DAMAGE.register((living, source, base, taken, blocked) -> {
-            if(!(living instanceof ServerPlayerEntity)) return;
-            ServerPlayerEntity p=(ServerPlayerEntity)living;
-            ArcaneSave.Record r=ArcaneMod.profile(p);
-            if(r==null) return;
-            long now=p.getServerWorld().getTime();
-            r.combat(now);
-            if(enabled(r,9) && RANDOM.nextDouble()<0.20 && r.ready("clowns_mischief",now,100)
-                && source.getAttacker() instanceof LivingEntity)
-                effect((LivingEntity)source.getAttacker(),StatusEffects.BLINDNESS,20,0);
-            if(enabled(r,7) && RANDOM.nextDouble()<0.25 && r.ready("stage_magician",now,400)) {
-                Vec3d behind=p.getRotationVec(1).multiply(-3);
-                p.requestTeleport(p.getX()+behind.x,p.getY(),p.getZ()+behind.z);
-                decoy(p);
-            }
-            if(enabled(r,1) && RANDOM.nextDouble()<0.25 && r.ready("paper_figurine_substitute",now,6000)) {
-                effect(p,StatusEffects.SPEED,40,1);
-                decoy(p);
-            }
-            ArcaneSave.get(p.getServer()).markDirty();
-        });
+        // LivingEntityMixin installs the native 1.18.2 damage hooks.
+        // Fabric API 0.76.0 on 1.18.2 does not contain ServerLivingEntityEvents.
+    }
+
+    /**
+     * Head-of-damage interception. APPROX: raw incoming damage is checked before
+     * vanilla armor/protection processing, which may trigger rescue early.
+     */
+    public static boolean rescueIfLethal(ServerPlayerEntity p, DamageSource source, float damage) {
+        ArcaneSave.Record r=ArcaneMod.profile(p);
+        if(r==null || !enabled(r,1) || damage < p.getHealth()+p.getAbsorptionAmount()) return false;
+        long now=p.getServerWorld().getTime();
+        if(!r.ready("history_substitution",now,7200)) return false;
+        p.setHealth(20);
+        p.requestTeleport(p.getX()+12,p.getY(),p.getZ());
+        effect(p,StatusEffects.INVISIBILITY,60,0);
+        effect(p,StatusEffects.SPEED,60,1);
+        ArcaneSave.get(p.getServer()).markDirty();
+        return true;
+    }
+
+    public static void afterDamage(ServerPlayerEntity p, DamageSource source) {
+        ArcaneSave.Record r=ArcaneMod.profile(p);
+        if(r==null) return;
+        long now=p.getServerWorld().getTime();
+        r.combat(now);
+        Entity attacker=source.getAttacker();
+        if(enabled(r,9) && attacker instanceof LivingEntity && enemy(p,attacker)
+            && RANDOM.nextDouble()<0.20 && r.ready("clowns_mischief",now,100))
+            effect((LivingEntity)attacker,StatusEffects.BLINDNESS,20,0);
+        if(enabled(r,7) && RANDOM.nextDouble()<0.25 && r.ready("stage_magician",now,400)) {
+            Vec3d behind=p.getRotationVec(1).multiply(-3);
+            p.requestTeleport(p.getX()+behind.x,p.getY(),p.getZ()+behind.z);
+            decoy(p);
+        }
+        if(enabled(r,1) && attacker instanceof LivingEntity && enemy(p,attacker)
+            && RANDOM.nextDouble()<0.25 && r.ready("paper_figurine_substitute",now,6000)) {
+            effect(p,StatusEffects.SPEED,40,1);
+            decoy(p);
+        }
+        ArcaneSave.get(p.getServer()).markDirty();
     }
     public static void tick(ServerPlayerEntity p,ArcaneSave state,ArcaneSave.Record r) {
         long now=p.getServerWorld().getTime();
