@@ -4,6 +4,7 @@ These are compiled and source-audited but NEVER equipped by the release-locked
 Seq1 runtime. No fake 10/10-kit readiness is implied by this registry.
 """
 from ..powers import power, apply, mod, compound
+from ..team_policy import nearby_ally_condition
 from .shared import active, periodic, effect, mobs, players, combined, cmd
 
 
@@ -73,9 +74,7 @@ def register(add):
             fall=damage_taken(-0.70,{"type":"origins:name","name":"fall"}),
             armor=attribute("armor",3.0,"addition"),
             jump={"type":"origins:modify_jump","modifier":mod(0.20)}))
-    near_player={"type":"origins:command",
-                 "command":"execute at @s if entity @a[distance=0.01..8]",
-                 "comparison":">=","compare_to":1}
+    near_teammate=nearby_ally_condition(8)
     shield={"type":"origins:or","conditions":[
         {"type":"origins:equipped_item","equipment_slot":slot,
          "item_condition":{"type":"origins:ingredient",
@@ -88,7 +87,7 @@ def register(add):
             armor=attribute("armor",3.0,"addition"),
             knockback=attribute("knockback_resistance",0.40,"addition"),
             together={"type":"origins:conditioned_attribute","tick_rate":20,
-                      "condition":near_player,
+                      "condition":near_teammate,
                       "modifier":{**mod(0.05),"attribute":"minecraft:generic.movement_speed"}},
             burden={"type":"origins:conditioned_attribute","tick_rate":20,
                     "condition":shield,
@@ -99,7 +98,7 @@ def register(add):
                     "modifier":mod(0.35)},
             lonely_mining={"type":"origins:modify_break_speed","condition":alone,
                            "modifier":mod(-0.15)}),
-        "partial","Lacks +25% self-healing; nearby ANY player instead of teammate; shield penalty and loneliness modifiers can compound")
+        "partial","Lacks +25% self-healing; teammate detection only covers configured vanilla combat teams; shield penalty and loneliness modifiers can compound")
     add("binding_contract",9,"Hellborn Verdict",
         compound("Hellborn Verdict",
             immunity={"type":"origins:fire_immunity"},
