@@ -16,16 +16,18 @@ ROOT=Path(__file__).resolve().parent.parent
 SOURCE="tarot_arcane:slot_grants"
 PREFIX="tarot_arcane:"
 NUM={slug:i+1 for i,slug in enumerate(PATHWAYS)}
-# Every pathway has an identity drawback in Rev2. These 17 are already
+# Every pathway has an identity drawback in Rev2. These 19 are now
 # implemented as native Origins powers. Keep them on the PRIMARY Origin
 # independently of Sequence slots: unslotting Seq9 must not remove penalties.
-# The four remaining pathway drawbacks are tracked as blocked, not faked.
+# The two remaining pathway drawbacks are tracked as blocked, not faked.
 IDENTITY_DRAWBACK_NAMES = {
     "magician": "Full Moon Ravings",
     "high_priestess": "Dependent on Rituals",
     "empress": "Exposed Reflection",
     "emperor": "Weight of the Crown",
     "hierophant": "Sacred Dietary Vow",
+    "justice": "Compassionate Restraint",
+    "hanged_man": "Weight of Sin",
     "chariot": "Extinguished Fury",
     "strength": "The Giant Sinks",
     "hermit": "Forbidden Knowledge",
@@ -58,7 +60,7 @@ def pin_identity_drawbacks(compiled, kits):
             raise ValueError(f"Identity drawback absent from original kit: {ident}")
         kits[key] = [power for power in kits[key] if power != ident]
         result[slug] = ident
-    if len(result) != 17:
+    if len(result) != 19:
         raise ValueError("Native identity drawback extraction incomplete")
     return result
 

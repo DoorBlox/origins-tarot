@@ -578,6 +578,22 @@ def compile_powers(root):
                                           "action":apply("glowing",80)}}),
         "partial", "Exact always-on visual glow semantics and team visibility differ from periodic Glowing effects")
 
+    # The fixed primary identity penalties must be native, not removable
+    # by unequipping the player's Sequence 9 slot at Sequence 4.
+    add("justice", 9, "Compassionate Restraint", power(
+        "Compassionate Restraint",
+        "70% less damage against passive mobs (villagers/pets included in tarot:passive).",
+        "origins:modify_damage_dealt",
+        target_condition={"type":"origins:in_tag","tag":"tarot:passive"},
+        modifier=mod(-0.70)),
+        "partial", "Original also requires 30% less damage against unprovoked enemy players; provocation and team rules are unavailable")
+    add("hanged_man", 9, "Weight of Sin", power(
+        "Weight of Sin",
+        "Natural regeneration stops above 8 hearts (16 health points).",
+        "origins:disable_regen",
+        condition={"type":"origins:health","comparison":">","compare_to":16}),
+        "partial", "Rev2 temporary regen-cap unlocks by kills, Healing potions or remaining motionless in darkness are not implemented")
+
     # Manifest includes all 434, but only installed concrete effects count as implemented.
     manifest=[]
     kits={}
