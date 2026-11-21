@@ -5,6 +5,7 @@ emitted. Enemy-player debuffs and unsafe entity-AI hooks are withheld.
 Every missing element is disclosed in the 434-entry manifest.
 """
 from ..powers import power, apply, mod, compound
+from ..team_policy import enemy_effect, ally_effect
 from .shared import active, periodic, effect, mobs, players, combined, cmd
 from .resonance import attacked_by, night
 
@@ -51,13 +52,14 @@ def register(add):
         "partial","Only hostile mobs are targetable; direction indicator and Marked Prey linkage not implemented")
     add("marked_verdict",3,"Hunter's Stillness",
         periodic("Hunter's Stillness","Holding a bow while not sprinting slows nearby hostile mobs.",
-            close_target(6,"slowness",60),interval=100,
+            combined(close_target(6,"slowness",60),
+                     enemy_effect("slowness",60,6)),interval=100,
             condition={"type":"origins:and","conditions":[
                 {"type":"origins:sprinting","inverted":True},
                 {"type":"origins:equipped_item","equipment_slot":"mainhand",
                  "item_condition":{"type":"origins:ingredient",
                                    "ingredient":{"item":"minecraft:bow"}}}]}),
-        "partial","Does not enforce zero movement, does not target enemy players; periodic pulse differs from on-entry")
+        "partial","Not fully motionless (only no sprint); periodic 100t pulse differs from on-entry; player Slowness only to listed opposing teams")
     add("burning_archive",7,"Astrologer's Trail",
         periodic("Astrologer's Trail","While sprinting, ignite tagged hostile mobs within two blocks.",
             cmd("execute at @s as @e[type=#tarot:hostile,distance=..2] "
@@ -71,16 +73,20 @@ def register(add):
                            "action":cmd("execute if entity @s[level=..29] "
                                         "run experience add @s 1 levels")}),
         "partial","Recorded Step coordinate scroll unavailable; level 30 cap is a conservative fallback")
+    star_read_reaper = active("Star Read Reaper",
+        "At night illuminate tagged hostiles and listed enemy teams in 15 blocks.",
+        combined(effect(mobs(15),"glowing",100),
+                 enemy_effect("glowing",100,15)),600)
+    star_read_reaper["condition"] = night()
     add("burning_archive",5,"Star Read Reaper",
-        active("Star Read Reaper","At night reveal tagged hostiles in 15 blocks for 100 ticks.",
-            effect(mobs(15),"glowing",100),600,
-            crouch=False),
-        "partial","Reap's next-hit +30% and 60t ignition are not implemented; source restricts night activation, which is not enforced")
+        star_read_reaper,
+        "partial","Reap next-hit +30% and 60t ignition remain absent; night-locked Glowing substitutes for real health/name readout on mobs and listed enemy teams")
     add("burning_archive",3,"Insightful Flame",
         periodic("Insightful Flame","While sprinting slow hostile mobs within two blocks.",
-            close_target(2,"slowness",40),40,
+            combined(close_target(2,"slowness",40),
+                     enemy_effect("slowness",40,2)),40,
             condition={"type":"origins:sprinting"}),
-        "partial","Persistent flame trail, +1 damage and health reveal are omitted, as are enemy-player targets")
+        "partial","No persistent flame trail, exact +1 damage or health readout; nearby listed enemy teams receive the same bounded Slowness while sprinting")
     heads={"type":"origins:or","conditions":[
         {"type":"origins:block","block":f"minecraft:{x}"} for x in
         ("skeleton_skull","wither_skeleton_skull","zombie_head","player_head")]}
@@ -117,8 +123,10 @@ def register(add):
         "partial","Does not force AI pacification or auto-grow crops; native right-click lacks the 600t cooldown")
     add("benevolent_crown",6,"Corrupt Symbiosis",
         active("Corrupt Symbiosis","Secondary key Slowness I to tagged hostiles within five blocks.",
-            close_target(5,"slowness",100),1200),
-        "partial","Ground 5×5 persistent marker, ally Symbiosis and enemy-player targeting are unavailable")
+            combined(close_target(5,"slowness",100),
+                     enemy_effect("slowness",100,5),
+                     ally_effect("regeneration",100,5)),1200),
+        "partial","No persistent 5x5 ground field or passive health-max Symbiosis; listed teammates get one-shot Regen and listed enemy teams a bounded slow")
     add("benevolent_crown",5,"Decree of Nature",
         active("Decree of Nature","Secondary key Slowness II to tagged hostiles in six blocks.",
             close_target(6,"slowness",100,1),900),
@@ -151,9 +159,10 @@ def register(add):
         "partial","Witch's Venom on-hit Poison80/Hunger40 component is not included, and enemy players omitted")
     add("starless_poison",4,"Night Venom",
         periodic("Night Venom","At night periodically poison tagged hostiles in five blocks.",
-            close_target(5,"poison",60),120,
+            combined(close_target(5,"poison",60),
+                     enemy_effect("poison",60,5)),120,
             condition=night()),
-        "partial","Nightwatch bonus damage to poisoned targets omitted, and enemy players excluded")
+        "partial","Nightwatch conditional bonus damage to poisoned targets omitted; only listed opposing combat teams receive the nighttime Poison pulse")
     add("eclipse",5,"Purify Scarlet",
         active("Purify Scarlet","Secondary cleanses self and grants Regeneration I 100t.",
             combined({"type":"origins:clear_effect","effect":"minecraft:poison"},
