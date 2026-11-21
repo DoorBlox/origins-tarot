@@ -75,7 +75,7 @@ class BookContracts(unittest.TestCase):
         for card in CARDS:
             with self.subTest(pathway=card["slug"]):
                 pages = pathway_pages(card["slug"], compiled, manifest, kits)
-                body = json.dumps(pages)
+                body = json.dumps(pages, ensure_ascii=False)
                 self.assertLessEqual(len(pages), 100)
                 self.assertIn("PARTIAL", body)
                 self.assertIn("Current", body)
