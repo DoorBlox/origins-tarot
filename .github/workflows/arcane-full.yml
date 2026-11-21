@@ -17,6 +17,8 @@ jobs:
           python-version: '3.12'
       - name: Build both 22-Origin developer variants and non-OP aliases
         run: python3 -m arcane_rev3.full_build
+      - name: Display exact ability implementation coverage
+        run: python3 -c 'import json; print(json.load(open("output/arcane_ability_manifest.json"))["summary"])'
       - name: Check 434 handbook entries and scoreboard security contracts
         run: python3 -m unittest discover -s tests -p 'test_arcane_full.py' -v
       - name: Run legacy V2/V3/Rev3 structural regressions
