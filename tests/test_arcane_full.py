@@ -250,6 +250,36 @@ class FullBuildTests(unittest.TestCase):
                 triggers={criterion.get("trigger") for criterion in advancement.get("criteria",{}).values()}
                 self.assertNotIn("minecraft:player_hurt_entity",triggers,path)
 
+    def test_player_ui_shows_arcana_names_instead_of_opaque_codes(self):
+        names=set(self.z.namelist())
+        render="data/tarot_arcane/functions/ui/slot_render.mcfunction"
+        self.assertIn(render,names)
+        fn=self.z.read(render).decode()
+        self.assertIn("scoreboard players operation @s a_view_path = @s a_view_code",fn)
+        self.assertIn("scoreboard players operation @s a_view_path /= #100 a_const",fn)
+        self.assertIn("scoreboard players operation @s a_view_seq %= #100 a_const",fn)
+        self.assertIn("if score @s a_view_code matches 0",fn)
+        self.assertIn("The Fool",fn)
+        self.assertIn("The Hanged Man",fn)
+        self.assertEqual(sum("if score @s a_view_path matches " in l
+                             for l in fn.splitlines()),22)
+        root=self.z.read("data/tarot_arcane/functions/ui/slots.mcfunction").decode()
+        self.assertNotIn("Kit code:",root)
+        self.assertIn("function tarot_arcane:ui/slot_8",root)
+        for slot in range(1,9):
+            child=self.z.read(f"data/tarot_arcane/functions/ui/slot_{slot}.mcfunction").decode()
+            self.assertIn(f"scoreboard players set @s a_view_slot {slot}",child)
+            self.assertIn(f"scoreboard players operation @s a_view_code = @s a_s{slot}",child)
+            self.assertIn("function tarot_arcane:ui/slot_render",child)
+        primary=self.z.read("data/tarot_arcane/functions/ui/status_primary.mcfunction").decode()
+        partner=self.z.read("data/tarot_arcane/functions/ui/status_partner.mcfunction").decode()
+        for label in ("The Fool","The Hanged Man","The World","The Emperor"):
+            self.assertIn(label,primary)
+            self.assertIn(label,partner)
+        status=self.z.read("data/tarot_arcane/functions/ui/status.mcfunction").decode()
+        self.assertIn("Partner unlocks at Sequence 4",status)
+        self.assertIn("function tarot_arcane:ui/status_primary",status)
+
     def test_no_java_kubejs_or_elevated_actions(self):
         self.assertTrue(all(not path.lower().endswith((".java",".js",".jar"))
                             for path in self.z.namelist()))
