@@ -67,6 +67,10 @@ const blocked=T.onSequenceChange(p,2,1);
 assert(!blocked.ok && blocked.error.includes('Batch 2'));
 assert.equal(S.get(p).sequence,2);
 assert.equal(S.getMode(p),'slot');
-assert.equal(G.activeIds(S.get(p)).length,14);
+// Empty slots at Seq3 and Seq2 must not silently grant their powers.
+assert.equal(G.activeIds(S.get(p)).length,9);
+assert(S.setSlot(p,7,'tarot:fool',3).ok);
+assert(S.setSlot(p,8,'tarot:fool',2).ok);
+assert.equal(G.activeIds(S.get(p)).length,11);
 assert(p.commands.filter(x=>x.includes('power revokeall @s tarot_slot')).length>=10);
 console.log('Batch1 slot simulation PASS: identity isolation, Seq9→2, six/eight slots, blocked unfinished resonance');
