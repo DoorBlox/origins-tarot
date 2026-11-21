@@ -43,6 +43,31 @@ onEvent('command.registry',function(event){
             })))
       )
     )
+
+    .then(C.literal('bind')
+      .then(C.literal('primary')
+        .then(C.argument('ability',A.STRING.create(event)).executes(function(ctx){
+          var p=player(ctx),ability=String(A.STRING.getResult(ctx,'ability'));
+          var result=global.TarotFool.bind(p,'primary',ability);
+          return output(p,result);
+        })))
+      .then(C.literal('secondary')
+        .then(C.argument('ability',A.STRING.create(event)).executes(function(ctx){
+          var p=player(ctx),ability=String(A.STRING.getResult(ctx,'ability'));
+          var result=global.TarotFool.bind(p,'secondary',ability);
+          return output(p,result);
+        })))
+    )
+    .then(C.literal('cast')
+      .then(C.literal('primary').executes(function(ctx){
+        var p=player(ctx),name=p.persistentData.getString('tarot_bind_primary')||'full_faceless_disguise';
+        return output(p,{ok:global.TarotFool.activate(p,String(name)),error:'Ability did not activate.'});
+      }))
+      .then(C.literal('secondary').executes(function(ctx){
+        var p=player(ctx),name=p.persistentData.getString('tarot_bind_secondary')||'spirit_vision';
+        return output(p,{ok:global.TarotFool.activate(p,String(name)),error:'Ability did not activate.'});
+      }))
+    )
     .then(C.literal('debug').requires(function(src){return src.hasPermission(2);})
       .then(C.literal('sequence')
         .then(C.argument('seq',A.INTEGER.create(event)).executes(function(ctx){
