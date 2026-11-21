@@ -2,6 +2,12 @@
 
 **DO NOT install this pack in the live SMP.** This is a deliberately restricted **Fool Sequence 9 proof of concept** based on the supplied handbooks, not a release of all 434 abilities. Work is isolated from main V3 and does not replace its sequence/quest system.
 
+## Fool Spirit Vision sphere compatibility
+
+Origins/Apoli 1.4.1's `origins:area_of_effect` entity action has a radius but no `shape` field; it cannot natively guarantee Rev2's spherical 10-block reveal. Both the full developer pack and earlier Fool-only sandbox pack therefore use one **fixed, server-side** `origins:execute_command` action with permission level 2 and the vanilla target selector `@e[distance=..10]`. The ability still requires sneak + secondary key, applies Glowing for 2 seconds, includes the caster, and keeps the 100-tick cooldown. The static power action is **not exposed as an arbitrary operator command through /tarot**, which remains a non-OP /trigger bridge.
+
+This matches the handbook's radius geometry at the command level but must be verified against real Minecraft 1.18.2 behavior. The code explicitly tests the exact command and permission level; no unsupported action `shape` parameter is emitted.
+
 ## Scope actually implemented
 
 - **Rev3 pure state model** in arcane_rev3/model.py: 22 pathways, 11 exact pairs, one auto-filled slot at Seq9, auto-fill through Seq5, second partner at Seq4, six/seven/eight editable slots at Seq4/3/2, ten resonance kits at Seq1, and unchanged kit at Seq0. Validation prevents duplicate, unavailable, and locked assignments. **This is a Python reference model, not yet hooked into the Minecraft runtime.**

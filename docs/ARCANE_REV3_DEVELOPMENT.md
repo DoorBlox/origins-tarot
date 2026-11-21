@@ -26,6 +26,12 @@ Batch 2 implements 13 more native or partial abilities across Empress, Emperor, 
 
 **Only Solar Flare is classified a complete Rev2 translation** in this batch. The other twelve retain detailed per-ability `missing` descriptions in `arcane_ability_manifest.json` (for example, Rev2 does not define Fate's Current effect durations, and team-aware PvP targeting cannot yet be reproduced exactly without scripting). Structural JSON/power tests do not establish in-game compatibility.
 
+## Fool Spirit Vision sphere compatibility
+
+Origins/Apoli 1.4.1's `origins:area_of_effect` entity action has a radius but no `shape` field; it cannot natively guarantee Rev2's spherical 10-block reveal. Both the full developer pack and earlier Fool-only sandbox pack therefore use one **fixed, server-side** `origins:execute_command` action with permission level 2 and the vanilla target selector `@e[distance=..10]`. The ability still requires sneak + secondary key, applies Glowing for 2 seconds, includes the caster, and keeps the 100-tick cooldown. The static power action is **not exposed as an arbitrary operator command through /tarot**, which remains a non-OP /trigger bridge.
+
+This matches the handbook's radius geometry at the command level but must be verified against real Minecraft 1.18.2 behavior. The code explicitly tests the exact command and permission level; no unsupported action `shape` parameter is emitted.
+
 ## Higher-sequence upgrades
 
 This batch adds **six new native powers** (Demon Form, Ruin-Proof II, Wheel's Misfortune, Law's Weight II, Nightwatch II and Plague Touch) and **repairs four existing legacy templates** that were incorrectly suited to the old cumulative progression: Moon's Shaman, World's Cold Precision II, Sun's Unshadowed II and Hanged Man's Dark Blade.

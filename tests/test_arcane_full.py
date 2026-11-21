@@ -146,6 +146,22 @@ class CompleteCatalogTests(unittest.TestCase):
         self.assertEqual(powers["tarot:world/1_cold_precision_ii"]["modifier"]["value"],0.30)
         self.assertEqual(powers["tarot:sun/4_unshadowed_ii"]["modifier"]["value"],0.50)
 
+    def test_fool_spirit_vision_is_a_true_ten_block_sphere(self):
+        root=Path(__file__).resolve().parents[1]
+        powers,_,_=compile_powers(root)
+        skill=powers["tarot:fool/9_spirit_vision"]
+        self.assertEqual(skill["type"],"origins:active_self")
+        self.assertEqual(skill["cooldown"],100)
+        self.assertEqual(skill["condition"]["type"],"origins:sneaking")
+        self.assertEqual(skill["key"]["key"],"key.origins.secondary_active")
+        action=skill["entity_action"]
+        self.assertEqual(action["type"],"origins:execute_command")
+        self.assertEqual(action["permission_level"],2)
+        self.assertEqual(action["command"],
+                         "execute at @s run effect give @e[distance=..10] minecraft:glowing 2 0 true")
+        self.assertNotIn("@a",action["command"])
+        self.assertNotIn("op ",action["command"])
+
     def test_alias_is_nonop_and_player_scoped(self):
         doc=alias()
         self.assertEqual((doc["schemaVersion"],doc["commandMode"],doc["command"],doc["permission"]),
