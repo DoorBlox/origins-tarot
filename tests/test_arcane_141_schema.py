@@ -96,6 +96,21 @@ class Origins141CompatibilityTests(unittest.TestCase):
                 validated.add(name)
         self.assertGreaterEqual(len(validated),14)
 
+    def test_lovers_fertile_hands_uses_native_crop_speed_instead_of_missing_heal_api(self):
+        path="data/tarot/powers/lovers/9_fertile_hands.json"
+        power=json.loads(self.pack.read(path))
+        self.assertEqual(power["type"],"origins:modify_break_speed")
+        self.assertEqual(power["modifier"]["value"],0.20)
+        self.assertEqual(power["block_condition"]["type"],"origins:or")
+        self.assertGreaterEqual(len(power["block_condition"]["conditions"]),4)
+        self.assertNotIn("origins:modify_healing",str(power))
+        manifest=json.loads(Path(self.artifacts["manifest"]).read_text())
+        record=next(x for x in manifest["abilities"] if
+                    x["family"]=="individual" and x["pathway"]=="lovers"
+                    and x["name"]=="Fertile Hands")
+        self.assertEqual(record["status"],"partial")
+        self.assertIn("+25% self-healing",record["missing"])
+
     def test_standard_required_fields_are_not_missing(self):
         for path in self.pack.namelist():
             if not(path.startswith("data/tarot/powers/") and path.endswith(".json")):
