@@ -74,10 +74,10 @@ class UpgradeReplacementTests(unittest.TestCase):
                 self.assertNotIn("origins:power", json.dumps(value))
 
     def test_no_grant_changes_and_resonance_still_blocked(self):
-        self.assertEqual(len(self.powers), 272)
+        self.assertEqual(len(self.powers), 301)
         self.assertEqual(sum(x["status"] == "full" for x in self.manifest), 73)
-        self.assertEqual(sum(x["status"] == "partial" for x in self.manifest), 199)
-        self.assertEqual(sum(x["status"] == "blocked" for x in self.manifest), 162)
+        self.assertEqual(sum(x["status"] == "partial" for x in self.manifest), 228)
+        self.assertEqual(sum(x["status"] == "blocked" for x in self.manifest), 133)
         for lower, upper in REPLACEMENTS:
             self.assertIn(lower, [x for seq in self.kits.values() for x in seq])
             self.assertIn(upper, [x for seq in self.kits.values() for x in seq])
