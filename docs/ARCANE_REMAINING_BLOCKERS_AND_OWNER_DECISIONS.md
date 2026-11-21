@@ -20,6 +20,12 @@
 - **Runtime evidence:** after PR44 owner verified Moon Seq9 awakening and successful help/status/slots, with two residual chest.ingredient decoder errors. PR46 corrected these in source. The owner explicitly deferred that minor Minecraft server retest while source work continued. PR47, PR48 and PR49 are source-checked, not real in-game accepted. Offline mode intentional, initial Terralith worldgen heap OOM accepted caveat.
 - **No hosted SMP deployment** authorized by source CI. User authorizes source edits and merges after all four exact-head green workflows; not world/player data mutation.
 
+## Non-OP active key focus — source merged in PR #50
+
+- [PR #50](https://github.com/DoorBlox/origins-tarot/pull/50) merged `5614087df2c444ffd9db163da9a8580d8219314f` after four exact-head green CI workflows. Many active powers share the same native Origins hotkeys; the new **opt-in** focus menu lets a player select ONE currently held active ability to receive the keypress. `/tarot focus` and clickable `/trigger a_focus_menu` are non-OP; `/tarot focus legacy` restores normal all-active default. Never infer this is a new source handbook ability.
+- Key correctness: use client-synchronized hidden internal `origins:power` marker tokens rather than server-only `origins:scoreboard` entity conditions. Server validates parent-power ownership before selection; rollback revokes the internal focus source, and kit refresh/periodic reconciliation removes stale selections. No new mods or player OP authority.
+- **Source CI passed; real Fabric 1.18.2 client/runtime test NOT RUN** by owner's explicit preference. When testing later, check focus/legacy switching, concurrent keypresses, revoked powers, respawn/relog, multiplayer isolation, UI accessibility and client conflicts with Extra Keybinds/ReMorphed. Legacy behavior remains default until opting in.
+
 ## Next development priorities
 
 1. Raise *actual fidelity* of the highest-impact partial definitions, starting Sin, gameplay cooldowns, source identity, temporary-effect cleanup, AI/skin/mechanic fallback and full team/neutral safety.
