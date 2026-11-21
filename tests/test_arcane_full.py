@@ -287,10 +287,13 @@ class FullBuildTests(unittest.TestCase):
             if path.endswith(".mcfunction"):
                 commands=self.z.read(path).decode().splitlines()
                 for command in commands:
-                    self.assertNotIn("op @",command)
-                    self.assertNotIn("setblock ",command)
-                    self.assertNotIn("fill ",command)
-                    self.assertNotIn("power clear ",command)
+                    # tellraw JSON is inert text, never a command token. A UI
+                    # phrase like "auto-fill" must not trip the /fill safety gate.
+                    executable = command.split("tellraw @s ",1)[0]
+                    self.assertNotIn("op @",executable)
+                    self.assertNotIn("setblock ",executable)
+                    self.assertNotIn("fill ",executable)
+                    self.assertNotIn("power clear ",executable)
 
     def test_report_accuracy_and_no_unearned_claims(self):
         x=json.loads(Path(self.artifacts["manifest"]).read_text())
