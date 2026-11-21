@@ -154,8 +154,9 @@ def register(add):
         primary("Falling Tower", 2400,
                 {"type": "origins:add_velocity", "y": 1.25, "x": 0,
                  "z": 0, "space": "world"},
-                effect(mobs(6), "slowness", 100, 1)),
-        "partial", "Launch is not verified to reach eight blocks; no landing-synchronized slam, exact ten damage or enemy-player targeting; AoE Slowness fires at activation")
+                effect(mobs(6), "slowness", 100, 1),
+                enemy_effect("slowness", 100, 6, 1)),
+        "partial", "Launch distance and landing-synchronized 10 damage remain unsupported; only activation-time Slowness II affects hostile mobs and listed opposing teams")
     add("moon", 5, "Scarlet",
         active("Scarlet", "Secondary gives Regeneration I for 200t.",
                apply("regeneration", 200), 1200),
