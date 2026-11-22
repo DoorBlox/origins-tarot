@@ -46,7 +46,7 @@ class FocusBookTests(unittest.TestCase):
                     self.assertIn("ui/focus/index/1", menu)
                     self.assertIn("minecraft:written_book{", function(z, "ui/focus/index/1"))
                     self.assertNotIn("run tellraw @s", menu)
-                    self.assertIn("tarotArcaneFocusIndex:1b", menu)
+                    self.assertIn("tarotArcaneFocusIndex:1b", function(z, "ui/focus/index/1"))
                     self.assertIn("a_focus_kit", function(z, "load"))
                     tick = function(z, "player/tick")
                     self.assertIn("scoreboard players enable @s a_focus_kit", tick)
