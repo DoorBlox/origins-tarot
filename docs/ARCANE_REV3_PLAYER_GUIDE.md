@@ -12,7 +12,7 @@ The preferred way to read explanations in Minecraft 1.18.2 is the vanilla **writ
 2. Use **`/trigger a_tome`** or **`/trigger a_abilities`** to receive your **Pathway Tome**. Open it to see abilities, effects, activation controls and cooldowns, organized by Sequence.
 3. At **Sequence 4**, use **`/trigger a_partner_tome`** to receive the linked second-path Tome. This is a read-only reference: it doesn't equip locked abilities.
 4. To see your own **live progress**, type **`/trigger a_hud set 2`** (opt-in actionbar) or use **`/trigger a_roadmap`** for live acting marks, cooldown, next task and ritual status. Turn the HUD off using **`/trigger a_hud set 3`**, or toggle with **`/trigger a_hud set 1`**.
-5. **`/trigger a_slots`** and **`/trigger a_focus_menu`** remain chat interactions for modifying slots and focus. Written books are static and cannot display realtime scores or instantly open themselves by a datapack command.
+5. **`/trigger a_slots`** remains the live chat slot editor. **`/trigger a_focus_menu` now gives an Ability Focus written book** listing only your available slot numbers. Right-click it, choose an equipped slot, then open the matching kit book to see only that kit’s active abilities and click the ability you want to focus. Book listings are generated for kits; the server checks current ownership and slot assignment before granting a kit book or accepting a focus selection. As with other books, the datapack cannot open the GUI automatically.
 
 **You have not configured Command Aliases? That's fine.** All commands above are vanilla player `/trigger` commands, usable without OP privileges. The optional `tarot.json` shortcut file is not necessary. For any book, keep it in your inventory and right-click to open: datapacks cannot directly force the book GUI to open.
 
@@ -26,7 +26,7 @@ The HUD is **private and opt-in**, because a single server-wide bossbar cannot r
 4. Type **/tarot roadmap**, or **/trigger a_roadmap**, to see your next acting proof, required marks, offerings, altar conditions and next Sequence unlock.
 5. Use the clickable buttons in chat; non-OP players can navigate with vanilla triggers. To inspect directly, use **/trigger a_kit set 1** then **/trigger a_detail set 1**. With Command Aliases, **/tarot kit 1** and **/tarot detail 1** also work.
 
-Other commands: **/tarot status**, **/tarot slots**, **/tarot focus**, **/tarot ascend**, and **/tarot slot auto**. Bind the Origins Primary and Secondary active keys in Controls → Key Binds; key names vary by client setup. The optional Focus menu selects a currently owned active ability, or restores legacy shared-key behavior.
+Other commands: **/tarot status**, **/tarot slots**, **/tarot focus**, **/tarot ascend**, and **/tarot slot auto**. Bind the Origins Primary and Secondary active keys in Controls → Key Binds; key names vary by client setup. The Ability Focus book selects a currently owned active ability or restores legacy shared-key behavior. Focus does not assign new keyboard keys: configure the two Origins active keys under Controls → Key Binds. Passive abilities activate automatically and do not appear as selectable actions.
 
 ## Reading your ability Tome
 
