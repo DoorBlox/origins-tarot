@@ -43,7 +43,8 @@ class FocusBookTests(unittest.TestCase):
             for variant in ("only", "addon"):
                 with ZipFile(builds[variant]) as z:
                     menu = function(z, "ui/focus/menu")
-                    self.assertIn("minecraft:written_book{", menu)
+                    self.assertIn("ui/focus/index/1", menu)
+                    self.assertIn("minecraft:written_book{", function(z, "ui/focus/index/1"))
                     self.assertNotIn("run tellraw @s", menu)
                     self.assertIn("tarotArcaneFocusIndex:1b", menu)
                     self.assertIn("a_focus_kit", function(z, "load"))
