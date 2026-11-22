@@ -190,7 +190,7 @@ def general_pages():
             "> Origins: Primary & Secondary.",
             "Some active powers share keys.",
             "Use /trigger a_focus_menu",
-            "to choose the owned action.",
+            "for the Focus book.",
             "Passive powers work on their",
             "specified event/condition.",
             "Read Tome for each cooldown.",
