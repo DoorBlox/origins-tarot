@@ -159,7 +159,7 @@ def focus_index_pages(count):
 
 
 def focus_kit_pages(entries, kits):
-    """Each kit's book contains ONLY its activatable entries, not locked kits."""
+    """A short interactive contents page for each unlocked Sequence kit."""
     pages_by_kit = {}
     by_source = {}
     for entry in entries:
@@ -167,33 +167,56 @@ def focus_kit_pages(entries, kits):
     from .model import PATHWAYS
     for key, power_ids in sorted(kits.items()):
         if key[0] not in PATHWAYS or key[1] < 2 or key[1] > 9:
-            continue  # Resonance and locked Sequence 1/0 are not player-editable kits.
+            continue  # Never advertise locked Resonance or Sequence 1/0 kits.
         owned = [entry for ident in power_ids for entry in by_source.get(ident, [])]
         if not owned:
             continue
         pages = []
+        # Each index page has at most four short entries, preserving readability.
+        page_count = (len(owned) + 3) // 4
+        for index_page in range(page_count):
+            parts = [
+                {"text": "ABILITY FOCUS\n", "color": "dark_purple", "bold": True},
+                {"text": key[0].replace("_", " ").title() + " | S" + str(key[1]) + "\n",
+                 "color": "black"},
+                {"text": "Click an ability to inspect:\n\n", "color": "dark_gray"},
+            ]
+            for i in range(index_page * 4, min(len(owned), (index_page + 1) * 4)):
+                parts.extend([_part("[" + _trim(owned[i]["label"], 25) + "]",
+                                    page=page_count + i + 1),
+                              {"text": "\n", "color": "black"}])
+            parts.extend([{"text": "\n", "color": "black"}])
+            if index_page:
+                parts.append(_part("[Back]", page=index_page))
+            if index_page + 1 < page_count:
+                parts.extend([{"text": " ", "color": "black"},
+                              _part("[Next]", page=index_page + 2)])
+            pages.append({"text": "", "extra": parts})
         for i, entry in enumerate(owned):
             control = ("Primary key" if entry["key"] == "key.origins.primary_active"
                        else "Secondary key")
             parts = [
                 {"text": "FOCUS | " + key[0].replace("_", " ").title() +
                          " S" + str(key[1]) + "\n", "color": "dark_purple", "bold": True},
-                {"text": "\n" + entry["label"] + "\n", "color": "black", "bold": True},
+                {"text": "\n" + _trim(entry["label"], 40) + "\n",
+                 "color": "black", "bold": True},
                 {"text": control + "\n", "color": "dark_gray"},
-                {"text": _trim(entry.get("description", ""), 135) + "\n\n",
+                {"text": _trim(entry.get("description", ""), 115) + "\n\n",
                  "color": "black"},
                 _part("[Select this ability]", trigger="a_choose set " +
                       str(entry["code"])),
                 {"text": "\n\n", "color": "black"},
+                _part("[Contents]", page=1 + (i // 4)),
             ]
             if i > 0:
-                parts.append(_part("[Back]", page=i))
-            if i + 1 < len(owned):
-                parts.extend([{"text": "  ", "color": "black"},
-                              _part("[Next]", page=i+2)])
+                parts.extend([{"text": " ", "color": "black"},
+                              _part("[Back]", page=page_count+i)])
+            if i+1 < len(owned):
+                parts.extend([{"text": " ", "color": "black"},
+                              _part("[Next]", page=page_count+i+2)])
             pages.append({"text": "", "extra": parts})
         if len(pages) > 100:
-            raise ValueError("Focus kit has over 100 active abilities")
+            raise ValueError("Focus kit has over 100 pages")
         pages_by_kit[key] = pages
     return pages_by_kit
 
