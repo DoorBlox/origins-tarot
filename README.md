@@ -1,5 +1,7 @@
 # The Tarot Club — 22 Major Arcana Origins
 
+> **PLAYER HANDBOOK:** [Start here — Complete Arcane Rev3 Player Wiki](docs/player/README.md). This is the current player entry point, with a clickable table of contents, keybinds/Focus, ascension requirements, 22 linked pathway pages, every normal Sequence 9–2 compiled ability, permanent weaknesses and troubleshooting. [Quick start](docs/player/START_HERE.md) · [Controls](docs/player/CONTROLS.md) · [All pathways](docs/player/PATHWAYS.md) · [Full ability index](docs/player/README.md#all-22-pathways).
+
 > **Arcane Rev3 is a separate datapack from legacy Tarot V2/V3.** Begin at Sequence 9, learn your abilities with the Handbook and Pathway Tome, and advance toward Sequence 2. Sequence 1 cannot currently be unlocked through normal play. Before updating an existing SMP world, make a full backup and use only one matching Arcane Rev3 ZIP. For engineering status and compatibility caveats, see the [developer handoff](CHATGPT_HANDOFF.md) and [release tracker](https://github.com/DoorBlox/origins-tarot/issues/20).
 
 ## Arcane Rev3 — written books (no Command Aliases needed)
