@@ -71,8 +71,9 @@ def _event(value):
 def general_pages(compiled=None):
     """Navigable Handbook, with source-backed descriptions of all 22 drawbacks."""
     if compiled is None:
-        from .powers import compile_powers, ROOT
-        compiled, _, _ = compile_powers(ROOT)
+        from .powers import compile_powers
+        from pathlib import Path
+        compiled, _, _ = compile_powers(Path(__file__).resolve().parents[1])
     pages = []
     pages.append(_page("ARCANE REV3", [
         "THE TAROT HANDBOOK",
