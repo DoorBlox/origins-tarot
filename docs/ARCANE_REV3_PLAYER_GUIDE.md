@@ -1,4 +1,6 @@
-> **New linked player documentation:** [Arcane Rev3 Complete Player Handbook](player/README.md) · [Start here](player/START_HERE.md) · [Keybinds and interactive books](player/CONTROLS.md) · [All 22 pathway ability pages](player/PATHWAYS.md) · [Acting and rituals](player/ASCENSION.md) · [FAQ](player/TROUBLESHOOTING.md). The material below is retained as the longer original roadmap.\n\n# Arcane Rev3 — Player Guide and Ascension Roadmap
+> **New linked player documentation:** [Arcane Rev3 Complete Player Handbook](player/README.md) · [Start here](player/START_HERE.md) · [Keybinds and interactive books](player/CONTROLS.md) · [All 22 pathway ability pages](player/PATHWAYS.md) · [Acting and rituals](player/ASCENSION.md) · [FAQ](player/TROUBLESHOOTING.md). The material below is retained as the longer original roadmap.
+
+# Arcane Rev3 — Player Guide and Ascension Roadmap
 
 **Minecraft Java 1.18.2 • Fabric • Origins 1.4.1 • Arcane V2 Rev3**
 
