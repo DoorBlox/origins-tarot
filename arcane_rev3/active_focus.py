@@ -164,7 +164,10 @@ def focus_kit_pages(entries, kits):
     by_source = {}
     for entry in entries:
         by_source.setdefault(entry["source_id"], []).append(entry)
+    from .model import PATHWAYS
     for key, power_ids in sorted(kits.items()):
+        if key[0] not in PATHWAYS or key[1] < 2 or key[1] > 9:
+            continue  # Resonance and locked Sequence 1/0 are not player-editable kits.
         owned = [entry for ident in power_ids for entry in by_source.get(ident, [])]
         if not owned:
             continue
