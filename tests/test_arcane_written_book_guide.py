@@ -216,6 +216,38 @@ class BookContracts(unittest.TestCase):
                         self.assertGreaterEqual(int(action["value"]), 1)
                         self.assertLessEqual(int(action["value"]), len(pages))
 
+    def test_all_pathways_expose_clickable_ability_contents_and_weaknesses(self):
+        compiled, manifest, kits = compile_powers(Path(__file__).resolve().parents[1])
+        for card in CARDS:
+            pages = pathway_pages(card["slug"], compiled, manifest, kits)
+            links = [(part["text"], int(part["clickEvent"]["value"]))
+                     for page in pages for part in page.get("extra", [])
+                     if part.get("clickEvent", {}).get("action") == "change_page"]
+            self.assertTrue(any("Weakness" in label for label, _ in links), card["slug"])
+            self.assertTrue(any("Sequence 9" in label for label, _ in links), card["slug"])
+            self.assertTrue(any("Sequence 2" in label for label, _ in links), card["slug"])
+            self.assertTrue(any("Ability list" in label for label, _ in links), card["slug"])
+            body = json.dumps(pages, ensure_ascii=False)
+            self.assertIn("YOUR WEAKNESS", body)
+            self.assertIn("What it does:", body)
+            self.assertIn("How to use:", body)
+            self.assertNotIn("PARTIAL", body)
+
+    def test_handbook_has_clickable_all_pathway_index_and_explains_drawbacks(self):
+        pages = general_pages()
+        links = [(part["text"], int(part["clickEvent"]["value"]))
+                 for page in pages for part in page.get("extra", [])
+                 if part.get("clickEvent", {}).get("action") == "change_page"]
+        for card in CARDS:
+            self.assertTrue(any(card["name"] in name for name, _ in links),
+                            card["name"])
+        for page in pages:
+            flattened = json.dumps(page)
+            if "PERMANENT WEAKNESS" in flattened:
+                self.assertIn("ACTING TASKS", flattened)
+        self.assertGreaterEqual(sum("PERMANENT WEAKNESS" in json.dumps(p)
+                                    for p in pages), 22)
+
     def test_book_nbt_does_not_use_modern_item_component_syntax(self):
         nbt = book_nbt("Test", [{"text": "Hello"}], marker="tarotArcaneGuide:1b")
         self.assertIn('pages:[', nbt)
