@@ -68,8 +68,12 @@ def _event(value):
         value, value.replace("_", " "))
 
 
-def general_pages():
-    """Index, how-to, milestone pages and all 22 pathway acting quests."""
+def general_pages(compiled=None):
+    """Navigable Handbook, with source-backed descriptions of all 22 drawbacks."""
+    if compiled is None:
+        from .powers import compile_powers
+        from pathlib import Path
+        compiled, _, _ = compile_powers(Path(__file__).resolve().parents[1])
     pages = []
     pages.append(_page("ARCANE REV3", [
         "THE TAROT HANDBOOK",
@@ -154,14 +158,15 @@ def general_pages():
         ], prev=len(pages), next_=len(pages)+2))
     # Pages 17-38: all 22 individual pathway acting quests.
     for card in CARDS:
+        weak_name, weak_effect = _weakness(card["slug"], compiled)
         pages.append(_page(card["name"], [
-            f"Primary path: {card['slug']}",
-            "Alternating proof tasks:",
-            f"Item: {card['acting_item'].replace('_', ' ')}",
+            "YOUR PERMANENT WEAKNESS:",
+            weak_name,
+            _short(weak_effect, 115),
+            "ACTING TASKS:",
+            "Item: " + card["acting_item"].replace("_", " "),
             "Event: " + _event(card["acting_event"]),
             "2 min cooldown per proof.",
-            "At Seq4, partner unlocks.",
-            "For abilities: /trigger a_tome",
         ], prev=len(pages), next_=(len(pages)+2 if card is not CARDS[-1] else None)))
     # Read-only tutorial pages with optional vanilla-trigger shortcuts:
     # clickable triggers never confer OP or bypass existing kit validation.
@@ -190,7 +195,7 @@ def general_pages():
             "> Origins: Primary & Secondary.",
             "Some active powers share keys.",
             "Use /trigger a_focus_menu",
-            "to choose the owned action.",
+            "for the Focus book.",
             "Passive powers work on their",
             "specified event/condition.",
             "Read Tome for each cooldown.",
@@ -217,12 +222,27 @@ def general_pages():
         part for part in pages[-1]["extra"]
         if not (isinstance(part, dict) and part.get("text") == "Next >")
     ]
-    # Main-page jump links avoid clicking through 38 sequential pages.
+    # Index pages list four pathways each, with jumps to their full
+    # permanent-weakness and acting-task descriptions on pages 17–38.
+    first_pathway_index = len(pages) + 1
+    for first in range(0, len(CARDS), 4):
+        pieces = [_text("PATHWAY INDEX\n", "dark_purple", True),
+                  _text("Tap a pathway to jump:\n\n")]
+        for offset in range(first, min(first+4, len(CARDS))):
+            pieces.extend([_jump("[" + CARDS[offset]["name"] + "]", 17 + offset),
+                           _text("\n")])
+        pieces.append(_text("\n"))
+        if first:
+            pieces.append(_jump("[Back]", first_pathway_index + (first // 4) - 1))
+        if first+4 < len(CARDS):
+            pieces.extend([_text(" "), _jump("[Next]", first_pathway_index + (first // 4) + 1)])
+        pieces.extend([_text("\n"), _jump("[Handbook home]", 1)])
+        pages.append({"text": "", "extra": pieces})
     pages[0]["extra"].extend([
         _text("\n\n"),
         _jump("[Getting Started]", 2), _text("\n"),
         _jump("[Ascension Costs]", 9), _text("\n"),
-        _jump("[All 22 Pathways]", 17), _text("\n"),
+        _jump("[All 22 Pathways]", first_pathway_index), _text("\n"),
         _jump("[Power Setup Tutorial]", 39),
     ])
     if len(pages) > 100:
@@ -230,55 +250,100 @@ def general_pages():
     return pages
 
 
+def _weakness(slug, compiled):
+    """Explain the innate, non-removable drawback without developer terminology."""
+    if slug == "fool":
+        return ("Spiritual Expenditure",
+                "Sprinting and Elytra flight use 25% more exhaustion.")
+    # Imported lazily: full_build imports this module only inside build().
+    from .full_build import IDENTITY_DRAWBACK_NAMES
+    name = IDENTITY_DRAWBACK_NAMES.get(slug)
+    if not name:
+        raise ValueError("Missing pathway weakness")
+    matches = [power for ident, power in compiled.items()
+               if ident.startswith("tarot:" + slug + "/9_") and
+               power.get("name", "").casefold() == name.casefold()]
+    if len(matches) != 1:
+        raise ValueError("Missing source-backed weakness: " + slug)
+    return name, player_effect_text(matches[0])
+
+
 def pathway_pages(slug, compiled, manifest, kits):
-    """Compact, source-honest overview of every Seq9..2 ability of one pathway."""
+    """Readable clickable contents, exact ability links and permanent weakness.
+
+    Sequence indexes are split across two short pages; ability names are
+    clickable on each Sequence page. Only normal Seq9..2 skills appear.
+    """
     card = next((c for c in CARDS if c["slug"] == slug), None)
     if card is None:
         raise ValueError("Unknown Arcana")
     rows = [r for r in manifest if r["family"] == "individual"
             and r["pathway"] == slug and r["sequence"] >= 2]
-    pages = [_page(card["name"].upper(), [
-        "YOUR PATHWAY TOME",
-        f"Primary acting item:",
-        card["acting_item"].replace("_", " "),
-        "Event: " + _event(card["acting_event"]),
-        "Each proof: +1 mark, 120s CD.",
-        "Sequence 1 is not unlocked.",
-        "Turn pages to learn your",
-        "abilities and how to use them."
-    ], home=None, next_=2)]
-    for seq in range(9, 1, -1):
-        chunk = [r for r in rows if r["sequence"] == seq]
-        pages.append(_page(f"SEQUENCE {seq}", [
-            "Your pathway abilities:",
-            *[r["name"] for r in chunk],
-            "Turn pages to read what",
-            "each ability does."
-        ], prev=len(pages), next_=len(pages)+2))
-        for row in chunk:
-            power = compiled.get(row["power_id"], {})
-            summary = _short(player_effect_text(power), 135)
-            usage = _short(how_to_use(power), 105)
-            lines = [
-                row["name"],
-                "What it does: " + summary,
-                "How to use: " + usage,
-            ]
-            pages.append(_page("ABILITY DETAILS", lines,
-                               prev=len(pages), next_=len(pages)+2))
-    # Contents page shortcuts to each source-kit Sequence section, even
-    # when each section has a different number of ability detail pages.
-    target = 2
-    for seq in range(9, 1, -1):
-        chunk = [r for r in rows if r["sequence"] == seq]
-        pages[0]["extra"].extend([_text("\n"), _jump(f"[Sequence {seq}]", target)])
-        target += 1 + len(chunk)
-    # Repair the last forward link so it does not point beyond this book.
-    last = pages[-1]
-    last["extra"] = [
-        part for part in last["extra"]
-        if not (isinstance(part, dict) and part.get("text") == "Next >")
+    weak_name, weak_effect = _weakness(slug, compiled)
+    pages = [
+        _page(card["name"].upper(), [
+            "PATHWAY GUIDE",
+            "Tap a blue link to jump.",
+            "Read your abilities and",
+            "permanent weakness.",
+            "Primary quest item:",
+            card["acting_item"].replace("_", " "),
+            "Quest action: " + _event(card["acting_event"]),
+        ], home=None, next_=2),
+        _page("CONTENTS 1/2", ["Choose a Sequence:"], prev=1, next_=3),
+        _page("CONTENTS 2/2", ["More abilities:"], prev=2, next_=4),
+        _page("YOUR WEAKNESS", [
+            weak_name,
+            _short(weak_effect, 190),
+            "This weakness stays with",
+            "your original pathway.",
+        ], prev=3, next_=5),
     ]
+    sections = {}
+    for seq in range(9, 1, -1):
+        chunk = [r for r in rows if r["sequence"] == seq]
+        section = len(pages) + 1
+        sections[seq] = section
+        # Page contents are links, not one long overflowing text list.
+        section_parts = [_text("SEQUENCE " + str(seq) + "\n", "dark_purple", True),
+                         _text("Choose an ability:\n", "black")]
+        for index, row in enumerate(chunk):
+            target = section + 1 + index
+            section_parts.extend([_jump("[" + _short(row["name"], 29) + "]", target),
+                                  _text("\n")])
+        section_parts.extend([
+            _text("\n"),
+            _jump("[Contents]", 2 if seq >= 6 else 3),
+            _text(" "), _jump("[Weakness]", 4),
+        ])
+        pages.append({"text": "", "extra": section_parts})
+        for index, row in enumerate(chunk):
+            power = compiled.get(row["power_id"], {})
+            summary = _short(player_effect_text(power), 110)
+            usage = _short(how_to_use(power), 78)
+            detail = _page("ABILITY | S" + str(seq), [
+                _short(row["name"], 35),
+                "What it does:",
+                summary,
+                "How to use:",
+                usage,
+            ], home=2, prev=section if index == 0 else section + index,
+               next_=(section + index + 2) if index+1 < len(chunk) else None)
+            # Dedicated jump to the relevant Sequence's full list.
+            detail["extra"].extend([_text(" "), _jump("[Ability list]", section)])
+            pages.append(detail)
+    # Avoid more than four choices per page and use true destination pages.
+    for toc_idx, sequences in ((1, (9, 8, 7, 6)), (2, (5, 4, 3, 2))):
+        parts = pages[toc_idx]["extra"]
+        parts.extend([_text("\n")])
+        for seq in sequences:
+            parts.extend([_jump("[Sequence " + str(seq) + "]", sections[seq]),
+                          _text("\n")])
+        parts.extend([_text("\n"), _jump("[Permanent weakness]", 4)])
+    pages[0]["extra"].extend([
+        _text("\n"), _jump("[Ability contents]", 2),
+        _text("\n"), _jump("[Weakness]", 4),
+    ])
     if len(pages) > 100:
         raise ValueError("Pathway abilities exceed book page limit")
     return pages
@@ -306,7 +371,7 @@ def emit_books(w, compiled, manifest, kits):
     """
     from .model import PATHWAYS
 
-    guide = book_nbt("Arcane Rev3 Handbook", general_pages(),
+    guide = book_nbt("Arcane Rev3 Handbook", general_pages(compiled),
                      marker="tarotArcaneGuide:1b")
     w.f("ui/book/give",
         "execute store result score @s a_probe run clear @s minecraft:written_book{tarotArcaneGuide:1b} 0",
