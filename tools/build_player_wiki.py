@@ -23,6 +23,34 @@ def event(s):
     if s.startswith("dimension:"): return "Enter the Nether" if s.endswith("the_nether") else "Enter " + s[10:].replace("_"," ")
     return {"trade":"Trade with a villager","breed":"Breed animals"}.get(s,s)
 
+# Readable descriptions for older compound/native powers whose compiler's
+# fallback description is only their own name. Each effect was verified
+# against the generated 1.18.2 power JSON, not the lore-only catalogue.
+READABLE_EFFECTS = {
+    ("high_priestess", 9, "Scripted Insight"): ("Deal 20% more projectile damage.", "Automatic projectile bonus."),
+    ("emperor", 9, "Weight of the Crown"): ("Holding a shield slows movement by 25%; sprinting costs 50% more exhaustion.", "Permanent conditional drawback; active without a key."),
+    ("hierophant", 9, "Scripture and Study"): ("Earn 40% more experience.", "Automatic experience bonus."),
+    ("hierophant", 9, "Consecrated Workspace"): ("Within eight blocks of a lectern or enchanting table, periodically gain Haste I and use 15% less exhaustion.", "Automatic proximity-based passive."),
+    ("lovers", 9, "Separation Anxiety"): ("After the alone-time counter passes 30 seconds, use 35% more exhaustion and mine 15% slower.", "Permanent conditional drawback while flagged as alone."),
+    ("chariot", 9, "Pyromaniac"): ("Fire immunity; while on fire, briefly gain Strength I.", "Automatic passive; no key."),
+    ("strength", 9, "Steel Frame"): ("Gain 2 additional armor points.", "Automatic passive; no key."),
+    ("strength", 9, "The Giant Sinks"): ("Swim 45% slower and cannot use bows or crossbows.", "Permanent weakness; no key."),
+    ("hermit", 9, "Mystery Prying"): ("Earn 35% more experience.", "Automatic experience bonus."),
+    ("hermit", 9, "Astral Calculation"): ("Deal 20% more projectile damage and receive Night Vision in dim light.", "Automatic conditional buffs; no key."),
+    ("wheel_of_fortune", 9, "Gentle Fortune"): ("Earn 10% more experience and gain +1 Luck.", "Automatic passive."),
+    ("hanged_man", 9, "Shadow of Degeneration"): ("In low light, gain Resistance I and move 5% faster.", "Automatic low-light passive."),
+    ("hanged_man", 7, "Shadow Cloak"): ("In low light, gain Resistance I and move 5% faster.", "Automatic low-light passive."),
+    ("hanged_man", 2, "Profane Aura"): ("10% chance on a qualifying hostile hit to give that attacker Weakness; on a kill, nearby hostile mobs are slowed.", "Automatic combat passive."),
+    ("death", 3, "Ferry"): ("Secondary key grants Speed for five seconds; walking on water works while Speed is active.", "Press Secondary Origins key; 60-second cooldown."),
+    ("temperance", 9, "Ethereal Landing"): ("Take 60% less fall damage and become immune to Slowness.", "Automatic passive."),
+    ("tower", 9, "Falling Tower"): ("Take 75% more fall damage and have 0.2 less knockback resistance.", "Permanent weakness; no key."),
+    ("star", 9, "Nightwatch"): ("At night, move 15% faster and deal 15% extra damage to undead.", "Automatic nighttime buff."),
+    ("star", 4, "Nightwatch II"): ("In low light, move 15% faster and deal 15% extra damage to undead.", "Automatic low-light buff."),
+    ("moon", 9, "Sanguine Sight"): ("Permanent Night Vision; at night, move 15% faster.", "Automatic passive; no key."),
+    ("sun", 9, "Inner Radiance"): ("Permanent Night Vision and fire immunity.", "Automatic passive; no key."),
+    ("world", 9, "Cold Precision"): ("Deal 25% more projectile damage while this base power is active.", "Automatic projectile bonus."),
+}
+
 def parse(path):
     data = {}
     cur = None
@@ -46,6 +74,14 @@ def parse(path):
             power["effect"] = line[18:].strip()
         elif line.startswith("  - How to use: ") and power:
             power["usage"] = line[16:].strip()
+    for slug, pathway in data.items():
+        for level, powers in pathway["sequences"].items():
+            for power in powers:
+                if power["effect"].casefold() == power["name"].casefold():
+                    key = (slug, level, power["name"])
+                    if key not in READABLE_EFFECTS:
+                        raise ValueError("Compiled player description is opaque: " + str(key))
+                    power["effect"], power["usage"] = READABLE_EFFECTS[key]
     data["fool"]["weakness"] = {"name":"Spiritual Expenditure",
         "effect":"Sprinting and Elytra flight use 25% more exhaustion."}
     if set(data) != {c["slug"] for c in CARDS}: raise ValueError("Expected 22 pathways")
