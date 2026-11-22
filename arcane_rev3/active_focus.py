@@ -80,6 +80,7 @@ def apply_active_focus(compiled):
             entries.append({
                 "focus_id": focus_id, "source_id": ident, "code": code,
                 "token": token, "label": str(source_name) + extra,
+                "description": str(active.get("description") or obj.get("description") or ""),
                 "key": active.get("key", {}).get(
                     "key", "key.origins.primary_active"),
             })
@@ -102,8 +103,100 @@ def _clickable(label, trigger):
         separators=(",", ":"), ensure_ascii=False)
 
 
-def emit_focus(w, entries):
-    """Server-only binding UI and client-synced power token definitions."""
+def _book_nbt(title, pages, marker, extra_nbt=""):
+    """1.18.2 written-book pages; each page is a JSON component stored as SNBT."""
+    if not 1 <= len(pages) <= 100:
+        raise ValueError("Focus book exceeds 1.18.2 page limits")
+    page_strings = [json.dumps(json.dumps(page, ensure_ascii=True), ensure_ascii=True)
+                    for page in pages]
+    return ("{" + marker + extra_nbt + ",title:" + json.dumps(title) +
+            ',author:"Tarot Club",generation:0,pages:[' +
+            ",".join(page_strings) + "]}")
+
+
+def _part(label, *, page=None, trigger=None):
+    obj = {"text": label, "color": "dark_blue", "underlined": True}
+    if page is not None:
+        obj["clickEvent"] = {"action": "change_page", "value": str(page)}
+    if trigger is not None:
+        obj["color"] = "dark_green"
+        obj["clickEvent"] = {"action": "run_command", "value": "/trigger " + trigger}
+    return obj
+
+
+def _trim(value, length=125):
+    value = " ".join(str(value).split())
+    return value if len(value) <= length else value[:length-3].rsplit(" ", 1)[0] + "..."
+
+
+def focus_index_pages(count):
+    """Index exposes available slot NUMBERS, never the global ability catalogue."""
+    if not isinstance(count, int) or not 1 <= count <= 8:
+        raise ValueError("Invalid available slot count")
+    pages = []
+    for first in range(1, count + 1, 4):
+        parts = [
+            {"text": "ABILITY FOCUS\n", "color": "dark_purple", "bold": True},
+            {"text": "Open one of your equipped slots:\n\n", "color": "black"},
+        ]
+        for slot in range(first, min(count + 1, first + 4)):
+            parts.extend([_part("[Slot " + str(slot) + "]",
+                                trigger="a_focus_kit set " + str(slot)),
+                          {"text": "\n", "color": "black"}])
+        parts.extend([{"text": "\n", "color": "black"},
+                      _part("[Allow shared hotkeys]", trigger="a_choose set 1"),
+                      {"text": "\n", "color": "black"},
+                      {"text": "Open the selected slot book to pick an active power.",
+                       "color": "dark_gray"}])
+        if first > 1:
+            parts.extend([{"text": "\n", "color": "black"},
+                          _part("[Back]", page=len(pages))])
+        if first + 4 <= count:
+            parts.extend([{"text": "  ", "color": "black"},
+                          _part("[Next]", page=len(pages)+2)])
+        pages.append({"text": "", "extra": parts})
+    return pages
+
+
+def focus_kit_pages(entries, kits):
+    """Each kit's book contains ONLY its activatable entries, not locked kits."""
+    pages_by_kit = {}
+    by_source = {}
+    for entry in entries:
+        by_source.setdefault(entry["source_id"], []).append(entry)
+    for key, power_ids in sorted(kits.items()):
+        owned = [entry for ident in power_ids for entry in by_source.get(ident, [])]
+        if not owned:
+            continue
+        pages = []
+        for i, entry in enumerate(owned):
+            control = ("Primary key" if entry["key"] == "key.origins.primary_active"
+                       else "Secondary key")
+            parts = [
+                {"text": "FOCUS | " + key[0].replace("_", " ").title() +
+                         " S" + str(key[1]) + "\n", "color": "dark_purple", "bold": True},
+                {"text": "\n" + entry["label"] + "\n", "color": "black", "bold": True},
+                {"text": control + "\n", "color": "dark_gray"},
+                {"text": _trim(entry.get("description", ""), 135) + "\n\n",
+                 "color": "black"},
+                _part("[Select this ability]", trigger="a_choose set " +
+                      str(entry["code"])),
+                {"text": "\n\n", "color": "black"},
+            ]
+            if i > 0:
+                parts.append(_part("[Back]", page=i))
+            if i + 1 < len(owned):
+                parts.extend([{"text": "  ", "color": "black"},
+                              _part("[Next]", page=i+2)])
+            pages.append({"text": "", "extra": parts})
+        if len(pages) > 100:
+            raise ValueError("Focus kit has over 100 active abilities")
+        pages_by_kit[key] = pages
+    return pages_by_kit
+
+
+def emit_focus(w, entries, kits):
+    """Generate 1.18.2 focus books with server-gated kit and ability selection."""
     w.j("data/tarot_arcane/powers/focus/enabled.json", {
         "type": "origins:simple", "hidden": True,
         "name": "Arcane internal focus enabled",
@@ -121,35 +214,72 @@ def emit_focus(w, entries):
         "power revokeall @s " + FOCUS_SOURCE,
         "scoreboard players set @s a_focus 0",
         "scoreboard players set @s a_ok 1",
-        _msg("Legacy hotkeys restored; multiple equipped actives may share a key.", "yellow"))
+        _msg("Shared hotkeys enabled; multiple equipped active abilities may activate.", "yellow"))
+
+    # Do not give multiple copies on repeated menu requests, or expose
+    # unavailable kits in a giant chat list. A newly unlocked slot count
+    # receives a different index book without deleting earlier books.
+    for count in range(1, 9):
+        marker = "tarotArcaneFocusIndex:1b"
+        extra = ",tarotFocusSlotCount:" + str(count)
+        nbt = _book_nbt("Ability Focus", focus_index_pages(count), marker, extra)
+        query = "minecraft:written_book{" + marker + extra + "}"
+        w.f("ui/focus/index/" + str(count),
+            "execute store success score @s a_has run clear @s " + query + " 0",
+            "execute unless score @s a_has matches 1 run give @s minecraft:written_book" + nbt + " 1")
 
     menu = [
-        _msg("Choose one equipped active ability to prevent shared-key collisions."),
-        _clickable("[Legacy hotkeys: allow all active powers]", 1),
-        _msg("Only currently owned abilities appear; choosing does not grant new skills.", "gray"),
+        "execute if score @s a_init matches 1 if score @s a_max matches 1..8 "
+        "run scoreboard players set @s a_ok 1",
     ]
+    menu.extend(
+        f"execute if score @s a_init matches 1 if score @s a_max matches {n} "
+        f"run function tarot_arcane:ui/focus/index/{n}"
+        for n in range(1, 9))
+    w.f("ui/focus/menu", menu)
+
+    # Kit selection is resolved from the player's current, server-managed
+    # a_sN slot code and maximum slot count, never from book-supplied paths.
+    select = ["scoreboard players set @s a_focus_lookup 0"]
+    for slot in range(1, 9):
+        select.append(
+            f"execute if score @s a_init matches 1 if score @s a_max matches {slot}.. "
+            f"if score @s a_focus_kit matches {slot} "
+            f"run scoreboard players operation @s a_focus_lookup = @s a_s{slot}")
+    for (slug, seq), pages in focus_kit_pages(entries, kits).items():
+        from .model import PATHWAYS
+        slot_code = (PATHWAYS.index(slug) + 1) * 100 + seq
+        name = slug + "_s" + str(seq)
+        marker = "tarotArcaneFocusKit:1b"
+        extra = ",tarotArcaneFocusKitId:" + json.dumps(name)
+        book = _book_nbt("Focus: " + slug.replace("_", " ").title() +
+                         " S" + str(seq), pages, marker, extra)
+        query = "minecraft:written_book{" + marker + extra + "}"
+        w.f("ui/focus/book/" + name,
+            "execute store success score @s a_has run clear @s " + query + " 0",
+            "execute unless score @s a_has matches 1 run give @s minecraft:written_book" + book + " 1")
+        select.append(
+            f"execute if score @s a_focus_lookup matches {slot_code} "
+            f"run function tarot_arcane:ui/focus/book/{name}")
+    select.append(
+        "execute if score @s a_focus_lookup matches 0 run " +
+        _msg("This slot is empty or not unlocked.", "red"))
+    w.f("ui/focus/open_kit", select)
+
     choose = [
         "scoreboard players set @s a_ok 0",
         "execute if score @s a_choose matches 1 run function tarot_arcane:ui/focus/legacy",
     ]
     validate = ["scoreboard players set @s a_ok 0"]
     for entry in entries:
-        code, ident, token = (
-            entry["code"], entry["source_id"], entry["token"]
-        )
+        code, ident, token = entry["code"], entry["source_id"], entry["token"]
         w.f(f"ui/focus/set/{code}",
             "power revokeall @s " + FOCUS_SOURCE,
             "power grant @s " + FOCUS_ENABLED + " " + FOCUS_SOURCE,
             "power grant @s " + token + " " + FOCUS_SOURCE,
             f"scoreboard players set @s a_focus {code}",
             _msg("Focused: " + entry["label"] +
-                 ". Press the ability's existing Origins key.", "green"))
-
-        menu.extend([
-            "execute store success score @s a_has run power has @s " + ident,
-            "execute if score @s a_has matches 1 run " +
-            _clickable("[" + entry["label"] + "]", code),
-        ])
+                 ". Press the corresponding Origins active key.", "green"))
         choose.extend([
             f"execute if score @s a_choose matches {code} "
             "store success score @s a_ok run power has @s " + ident,
@@ -160,23 +290,16 @@ def emit_focus(w, entries):
         validate.append(
             f"execute if score @s a_focus matches {code} "
             "store success score @s a_ok run power has @s " + ident)
-
     choose.append(
         "execute unless score @s a_ok matches 1 run " +
-        _msg("That active ability is not currently owned.", "red"))
-
+        _msg("That ability is not currently equipped.", "red"))
     validate.extend([
         "execute if score @s a_focus matches 2.. "
         "unless score @s a_ok matches 1 run function tarot_arcane:ui/focus/legacy",
-        # A stale marker with no scoreboard choice can appear after
-        # interrupted restore; reset to safe legacy rather than disabling
-        # other active powers until an admin manually fixes the source.
         "execute if score @s a_focus matches 0 "
         "store success score @s a_has run power has @s " + FOCUS_ENABLED,
         "execute if score @s a_focus matches 0 "
         "if score @s a_has matches 1 run function tarot_arcane:ui/focus/legacy",
     ])
-
-    w.f("ui/focus/menu", menu)
     w.f("ui/focus/choose", choose)
     w.f("ui/focus/validate", validate)
