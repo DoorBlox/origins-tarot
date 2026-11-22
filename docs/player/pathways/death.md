@@ -184,9 +184,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-3-ferry"></a>
 ### Ferry
 
-**What it does:** Ferry
+**What it does:** Secondary key grants Speed for five seconds; walking on water works while Speed is active.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Press Secondary Origins key; 60-second cooldown.
 
 [↑ Sequence 3](#sequence-3) · [↑ Contents](#table-of-contents)
 

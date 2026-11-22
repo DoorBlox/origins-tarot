@@ -30,7 +30,7 @@
 
 ## Permanent weakness
 
-**The Giant Sinks:** The Giant Sinks
+**The Giant Sinks:** Swim 45% slower and cannot use bows or crossbows.
 
 This is attached to your original Origin and persists when you edit Sequence slots. Read the individual ability conditions below for other situational penalties.
 
@@ -70,9 +70,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-steel-frame"></a>
 ### Steel Frame
 
-**What it does:** Steel Frame
+**What it does:** Gain 2 additional armor points.
 
-**How to use:** Passive or condition-driven.
+**How to use:** Automatic passive; no key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 
@@ -88,9 +88,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-the-giant-sinks"></a>
 ### The Giant Sinks
 
-**What it does:** The Giant Sinks
+**What it does:** Swim 45% slower and cannot use bows or crossbows.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Permanent weakness; no key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

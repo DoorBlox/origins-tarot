@@ -51,9 +51,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-shadow-of-degeneration"></a>
 ### Shadow of Degeneration
 
-**What it does:** Shadow of Degeneration
+**What it does:** In low light, gain Resistance I and move 5% faster.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic low-light passive.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 
@@ -110,9 +110,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-7-shadow-cloak"></a>
 ### Shadow Cloak
 
-**What it does:** Shadow Cloak
+**What it does:** In low light, gain Resistance I and move 5% faster.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic low-light passive.
 
 [↑ Sequence 7](#sequence-7) · [↑ Contents](#table-of-contents)
 
@@ -190,9 +190,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-2-profane-aura"></a>
 ### Profane Aura
 
-**What it does:** Profane Aura
+**What it does:** 10% chance on a qualifying hostile hit to give that attacker Weakness; on a kill, nearby hostile mobs are slowed.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic combat passive.
 
 [↑ Sequence 2](#sequence-2) · [↑ Contents](#table-of-contents)
 

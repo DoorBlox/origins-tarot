@@ -52,9 +52,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-cold-precision"></a>
 ### Cold Precision
 
-**What it does:** Cold Precision
+**What it does:** Deal 25% more projectile damage while this base power is active.
 
-**How to use:** Passive or condition-driven.
+**How to use:** Automatic projectile bonus.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

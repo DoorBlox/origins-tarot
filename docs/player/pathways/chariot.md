@@ -70,9 +70,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-pyromaniac"></a>
 ### Pyromaniac
 
-**What it does:** Pyromaniac
+**What it does:** Fire immunity; while on fire, briefly gain Strength I.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic passive; no key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

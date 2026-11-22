@@ -51,18 +51,18 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-mystery-prying"></a>
 ### Mystery Prying
 
-**What it does:** Mystery Prying
+**What it does:** Earn 35% more experience.
 
-**How to use:** Passive or condition-driven.
+**How to use:** Automatic experience bonus.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 
 <a id="seq-9-astral-calculation"></a>
 ### Astral Calculation
 
-**What it does:** Astral Calculation
+**What it does:** Deal 20% more projectile damage and receive Night Vision in dim light.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic conditional buffs; no key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

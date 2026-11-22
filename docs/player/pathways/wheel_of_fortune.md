@@ -61,9 +61,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-gentle-fortune"></a>
 ### Gentle Fortune
 
-**What it does:** Gentle Fortune
+**What it does:** Earn 10% more experience and gain +1 Luck.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic passive.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

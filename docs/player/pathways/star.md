@@ -61,9 +61,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-nightwatch"></a>
 ### Nightwatch
 
-**What it does:** Nightwatch
+**What it does:** At night, move 15% faster and deal 15% extra damage to undead.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic nighttime buff.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 
@@ -168,9 +168,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-4-nightwatch-ii"></a>
 ### Nightwatch II
 
-**What it does:** Nightwatch II
+**What it does:** In low light, move 15% faster and deal 15% extra damage to undead.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic low-light buff.
 
 [↑ Sequence 4](#sequence-4) · [↑ Contents](#table-of-contents)
 

@@ -30,7 +30,7 @@
 
 ## Permanent weakness
 
-**Falling Tower:** Falling Tower
+**Falling Tower:** Take 75% more fall damage and have 0.2 less knockback resistance.
 
 This is attached to your original Origin and persists when you edit Sequence slots. Read the individual ability conditions below for other situational penalties.
 
@@ -88,9 +88,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-falling-tower"></a>
 ### Falling Tower
 
-**What it does:** Falling Tower
+**What it does:** Take 75% more fall damage and have 0.2 less knockback resistance.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Permanent weakness; no key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

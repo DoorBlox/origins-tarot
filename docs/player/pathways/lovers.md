@@ -30,7 +30,7 @@
 
 ## Permanent weakness
 
-**Separation Anxiety:** Separation Anxiety
+**Separation Anxiety:** After the alone-time counter passes 30 seconds, use 35% more exhaustion and mine 15% slower.
 
 This is attached to your original Origin and persists when you edit Sequence slots. Read the individual ability conditions below for other situational penalties.
 
@@ -78,9 +78,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-separation-anxiety"></a>
 ### Separation Anxiety
 
-**What it does:** Separation Anxiety
+**What it does:** After the alone-time counter passes 30 seconds, use 35% more exhaustion and mine 15% slower.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Permanent conditional drawback while flagged as alone.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

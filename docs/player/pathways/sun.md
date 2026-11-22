@@ -61,9 +61,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-inner-radiance"></a>
 ### Inner Radiance
 
-**What it does:** Inner Radiance
+**What it does:** Permanent Night Vision and fire immunity.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic passive; no key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

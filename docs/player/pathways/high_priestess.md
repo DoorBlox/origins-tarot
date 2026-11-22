@@ -79,9 +79,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-scripted-insight"></a>
 ### Scripted Insight
 
-**What it does:** Scripted Insight
+**What it does:** Deal 20% more projectile damage.
 
-**How to use:** Passive or condition-driven.
+**How to use:** Automatic projectile bonus.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

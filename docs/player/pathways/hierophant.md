@@ -52,18 +52,18 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-scripture-and-study"></a>
 ### Scripture and Study
 
-**What it does:** Scripture and Study
+**What it does:** Earn 40% more experience.
 
-**How to use:** Passive or condition-driven.
+**How to use:** Automatic experience bonus.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 
 <a id="seq-9-consecrated-workspace"></a>
 ### Consecrated Workspace
 
-**What it does:** Consecrated Workspace
+**What it does:** Within eight blocks of a lectern or enchanting table, periodically gain Haste I and use 15% less exhaustion.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic proximity-based passive.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

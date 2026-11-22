@@ -60,9 +60,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-ethereal-landing"></a>
 ### Ethereal Landing
 
-**What it does:** Ethereal Landing
+**What it does:** Take 60% less fall damage and become immune to Slowness.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic passive.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

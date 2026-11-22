@@ -52,9 +52,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-sanguine-sight"></a>
 ### Sanguine Sight
 
-**What it does:** Sanguine Sight
+**What it does:** Permanent Night Vision; at night, move 15% faster.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Automatic passive; no key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 

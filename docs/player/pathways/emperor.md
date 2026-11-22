@@ -30,7 +30,7 @@
 
 ## Permanent weakness
 
-**Weight of the Crown:** Weight of the Crown
+**Weight of the Crown:** Holding a shield slows movement by 25%; sprinting costs 50% more exhaustion.
 
 This is attached to your original Origin and persists when you edit Sequence slots. Read the individual ability conditions below for other situational penalties.
 
@@ -88,9 +88,9 @@ Configure Primary/Secondary Active Power in Options → Controls → Key Binds �
 <a id="seq-9-weight-of-the-crown"></a>
 ### Weight of the Crown
 
-**What it does:** Weight of the Crown
+**What it does:** Holding a shield slows movement by 25%; sprinting costs 50% more exhaustion.
 
-**How to use:** Multiple automatic/conditional components.
+**How to use:** Permanent conditional drawback; active without a key.
 
 [↑ Sequence 9](#sequence-9) · [↑ Contents](#table-of-contents)
 
