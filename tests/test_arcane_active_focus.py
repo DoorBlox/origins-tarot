@@ -115,7 +115,7 @@ class ActiveFocusContracts(unittest.TestCase):
                     self.assertIn("run power has @s tarot:", choose)
                     self.assertIn(FOCUS_SOURCE, z.read(
                         "data/tarot_arcane/functions/ui/focus/legacy.mcfunction").decode())
-                    self.assertIn("run tellraw @s", menu)
+                    self.assertIn("minecraft:written_book{", menu)
                     self.assertIn("a_focus matches", validate)
                     self.assertIn("ui/focus/validate", z.read(
                         "data/tarot_arcane/functions/powers/refresh.mcfunction").decode())
