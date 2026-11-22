@@ -68,8 +68,11 @@ def _event(value):
         value, value.replace("_", " "))
 
 
-def general_pages():
-    """Index, how-to, milestone pages and all 22 pathway acting quests."""
+def general_pages(compiled=None):
+    """Navigable Handbook, with source-backed descriptions of all 22 drawbacks."""
+    if compiled is None:
+        from .powers import compile_powers, ROOT
+        compiled, _, _ = compile_powers(ROOT)
     pages = []
     pages.append(_page("ARCANE REV3", [
         "THE TAROT HANDBOOK",
@@ -154,14 +157,15 @@ def general_pages():
         ], prev=len(pages), next_=len(pages)+2))
     # Pages 17-38: all 22 individual pathway acting quests.
     for card in CARDS:
+        weak_name, weak_effect = _weakness(card["slug"], compiled)
         pages.append(_page(card["name"], [
-            f"Primary path: {card['slug']}",
-            "Alternating proof tasks:",
-            f"Item: {card['acting_item'].replace('_', ' ')}",
+            "YOUR PERMANENT WEAKNESS:",
+            weak_name,
+            _short(weak_effect, 115),
+            "ACTING TASKS:",
+            "Item: " + card["acting_item"].replace("_", " "),
             "Event: " + _event(card["acting_event"]),
             "2 min cooldown per proof.",
-            "At Seq4, partner unlocks.",
-            "For abilities: /trigger a_tome",
         ], prev=len(pages), next_=(len(pages)+2 if card is not CARDS[-1] else None)))
     # Read-only tutorial pages with optional vanilla-trigger shortcuts:
     # clickable triggers never confer OP or bypass existing kit validation.
@@ -217,12 +221,27 @@ def general_pages():
         part for part in pages[-1]["extra"]
         if not (isinstance(part, dict) and part.get("text") == "Next >")
     ]
-    # Main-page jump links avoid clicking through 38 sequential pages.
+    # Index pages list four pathways each, with jumps to their full
+    # permanent-weakness and acting-task descriptions on pages 17–38.
+    first_pathway_index = len(pages) + 1
+    for first in range(0, len(CARDS), 4):
+        pieces = [_text("PATHWAY INDEX\n", "dark_purple", True),
+                  _text("Tap a pathway to jump:\n\n")]
+        for offset in range(first, min(first+4, len(CARDS))):
+            pieces.extend([_jump("[" + CARDS[offset]["name"] + "]", 17 + offset),
+                           _text("\n")])
+        pieces.append(_text("\n"))
+        if first:
+            pieces.append(_jump("[Back]", first_pathway_index + (first // 4) - 1))
+        if first+4 < len(CARDS):
+            pieces.extend([_text(" "), _jump("[Next]", first_pathway_index + (first // 4) + 1)])
+        pieces.extend([_text("\n"), _jump("[Handbook home]", 1)])
+        pages.append({"text": "", "extra": pieces})
     pages[0]["extra"].extend([
         _text("\n\n"),
         _jump("[Getting Started]", 2), _text("\n"),
         _jump("[Ascension Costs]", 9), _text("\n"),
-        _jump("[All 22 Pathways]", 17), _text("\n"),
+        _jump("[All 22 Pathways]", first_pathway_index), _text("\n"),
         _jump("[Power Setup Tutorial]", 39),
     ])
     if len(pages) > 100:
@@ -351,7 +370,7 @@ def emit_books(w, compiled, manifest, kits):
     """
     from .model import PATHWAYS
 
-    guide = book_nbt("Arcane Rev3 Handbook", general_pages(),
+    guide = book_nbt("Arcane Rev3 Handbook", general_pages(compiled),
                      marker="tarotArcaneGuide:1b")
     w.f("ui/book/give",
         "execute store result score @s a_probe run clear @s minecraft:written_book{tarotArcaneGuide:1b} 0",
